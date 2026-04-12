@@ -16,6 +16,7 @@
 /node_modules
 /public/build
 /public/learn
+/public/staging
 /public/index.html
 /site/_site
 /site/node_modules

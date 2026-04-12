@@ -9,6 +9,7 @@
   <link rel="icon" type="image/png" href="/images/CZ.png">
   <link rel="apple-touch-icon" href="/images/CZ.png">
   <link rel="canonical" href="{{ canonical }}">
+  {% if noindex %}<meta name="robots" content="noindex, nofollow">{% endif %}
   <meta property="og:type" content="{{ og_type if og_type else 'website' }}">
   <meta property="og:url" content="{{ canonical }}">
   <meta property="og:title" content="{{ title }}">
