@@ -2,7 +2,8 @@
 layout: default.njk
 ---
 <main class="article-wrap">
-  <a href="/" class="article-back">&larr; CryptoZing</a>
+  <a href="/learn/" class="article-back">&larr; Guides</a>
   <h1>{{ title }}</h1>
+  {% if subtitle %}<p class="article-subtitle">{{ subtitle }}</p>{% endif %}
   {{ content | safe }}
 </main>
