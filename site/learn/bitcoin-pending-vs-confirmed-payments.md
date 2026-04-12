@@ -1,6 +1,7 @@
 ---
 layout: article.njk
-title: "Bitcoin Payments. What makes them trustworthy?"
+title: "Bitcoin Payment Confirmations Explained: What Pending Means"
+subtitle: "Bitcoin Payments. What makes them trustworthy?"
 description: "Learn what pending and confirmed Bitcoin payments mean, why confirmations matter, and how to think about settlement risk when sending or receiving a Bitcoin invoice."
 canonical: "https://cryptozing.app/learn/bitcoin-pending-vs-confirmed-payments/"
 ---
