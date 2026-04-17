@@ -1,5 +1,5 @@
 # PLAN
-_Last updated: 2026-04-09_
+_Last updated: 2026-04-18_
 
 This is the human-facing execution dashboard for Release Candidate work.
 
@@ -10,11 +10,14 @@ Use supporting specs under `docs/specs/` for detailed local requirements.
 Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 
 ## Current
-- Active milestone: **MS18 - Pre-Release Content & SEO**
+- Active milestone: **MS18 - Pre-Release Content & SEO** (Phase 2 — Content Audit & Production)
 - Status: `active`
-- Next action: Audit Helpful Notes as raw material; decide what to publish, adapt, or use as article inspiration; draft content plan.
+- Next action: Research and draft article 3 (BTCPay Server alternatives).
 - Primary next doc: [`docs/milestones/18_PRERELEASE_CONTENT_SEO.md`](milestones/18_PRERELEASE_CONTENT_SEO.md)
 - Most recently completed milestone doc: [`docs/milestones/17_PRODUCT_READINESS.md`](milestones/17_PRODUCT_READINESS.md)
+
+## Published Release Target
+- **First public release: mid-to-late 2027.** The RC milestone timeline (MS21, targeting 2026-06-21) covers the release candidate. The published release target accounts for post-RC work needed before an official first release.
 
 ## Active and Upcoming Milestones
 | Status | ID | Milestone | Short intent | Target | Primary doc |
