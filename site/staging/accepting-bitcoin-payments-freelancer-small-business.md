@@ -16,7 +16,7 @@ This is the part that surprises people who are used to things like Stripe or Pay
 
 With cards and traditional rails, a payment processor is not optional. There is always somebody in the middle — taking a cut they expect you to absorb, applying chargeback rules, deciding when you actually get your money, and occasionally deciding you do not get it at all. With Bitcoin, you have a choice. There are Bitcoin payment processors and services you can use if you want one, but the underlying network does not require any of them. You *can* receive a payment without one.
 
-That choice sounds like a small thing until you have had a payment processor freeze your account, or hold a deposit for "review," or charge you 2.9% plus thirty cents on a $50 invoice. For small operations, those fees and delays are not rounding errors. They are real friction.
+That choice sounds like a small thing until you have had a payment processor freeze your account, or hold a deposit for "review," or charge you 2.9% plus thirty cents on a $50 invoice. For small operations, those fees and delays are not a hit you keep accepting. They add up fast enough to hurt.
 
 The Bitcoin network itself has no payment processor role built into it. When a sender pays, the on-chain fee they include goes to miners — that is the cost of getting the transaction recorded, not a service fee. Once a payment confirms on-chain, it cannot be clawed back or reversed.
 
@@ -32,15 +32,15 @@ The way most freelancers and small businesses deal with this is **USD-denominate
 
 It does not eliminate volatility entirely — there is still a window between when the invoice is created and when the payment confirms — but it shrinks the exposure from "who knows" to a narrow, predictable window.
 
-If you plan to hold Bitcoin long-term, the volatility is just part of the deal and you have already made peace with it. If you plan to convert to dollars regularly, USD-denominated invoicing is how most people keep their pricing sane.
+If you plan to hold Bitcoin long-term, volatility is part of the deal and you have already made peace with it. If you have not, USD-denominated invoicing keeps your pricing stable; that said, you will still want a plan for converting to dollars. Sweeping strategies, converting Bitcoin to dollars on a schedule that works for you, are worth looking into.
 
 ## What a Bitcoin invoice actually looks like
 
-A Bitcoin invoice is not a PDF you email to someone.
+If you are thinking of a bill in an envelope, that is the wrong picture. A Bitcoin invoice is a live payment request. Picture a checkout screen, not a piece of paper.
 
-It is a payment request — usually a QR code or a clickable link — that encodes a Bitcoin address, an amount, and sometimes an expiration window. The client opens it in their wallet, confirms the amount, and sends.
+It is usually a QR code or a clickable link that encodes a Bitcoin address, an amount, and sometimes an expiration window. The client opens it in their wallet, confirms the amount, and sends.
 
-From the client's side, it looks something like: scan, verify, send. From your side, it looks something like: create invoice, share the link, wait for the payment to show up, then wait for it to confirm.
+From the client's side, it looks something like: scan, verify, send. From your side, it looks something like: create invoice, share the link, wait for the payment to show up, then wait for confirmation.
 
 The mechanics are not complicated. The part that takes some thought is what happens between "the payment showed up" and "I can trust that it is settled." Bitcoin transactions go through a pending stage before they are confirmed on-chain. If you have read about [how Bitcoin confirmation works](/learn/bitcoin-pending-vs-confirmed-payments/), this is where that applies.
 
@@ -48,30 +48,28 @@ For most ordinary invoices, you are probably watching for one to three confirmat
 
 ## Who holds the money?
 
-This is a question that does not come up with traditional invoicing because the answer is always "your payment processor, until they release it to you."
+This is a question that rarely comes up with traditional invoicing because the answer is always "your payment processor, until they release it to you."
 
-With Bitcoin, you have a choice.
+With Bitcoin, we have a choice.
 
-**Custodial** tools hold the Bitcoin for you. You get a dashboard, you can see your balance, and at some point you withdraw. This is convenient, but it also means you are trusting a third party with your money. If they get hacked, lock your account, or go under, your funds are at risk. You have probably heard stories.
+**Custodial** tools mean someone else holds the Bitcoin for you. You get a dashboard, you can see your balance, and at some point you withdraw. This is convenient, but it also means you are trusting a third party with your money. If they get hacked, lock your account, or go under, your funds are at risk. You have probably heard stories.
 
-**Noncustodial** tools send the Bitcoin directly to your own wallet. You hold the keys. Nobody else can touch it. The tradeoff is that you are responsible for your own wallet security — but for most people with a decent wallet setup, that is not as scary as it sounds.
+**Noncustodial** tools send the Bitcoin directly to your own wallet. You hold the keys. Nobody else can touch it. The tradeoff is that you are responsible for your own wallet security — and that responsibility is real. Use a reputable wallet, back up your seed phrase, and keep your keys private. Do that and it is not nearly as scary as it sounds.
 
-This matters more than it seems at first glance, especially for a small business. The whole point of accepting Bitcoin is that it is supposed to be more direct and less dependent on intermediaries. Using a custodial service puts an intermediary right back in the middle.
+This is more significant than it seems at first glance, especially for a small business. The whole point of accepting Bitcoin is that it is supposed to be more direct and less dependent on intermediaries. Using a custodial service puts an intermediary right back in the middle.
 
 ## Bookkeeping and taxes
 
-This is less exciting but you will have to deal with it.
+Not the fun part, but it comes with the territory.
 
-In most jurisdictions, receiving Bitcoin as payment for goods or services is a taxable event. The amount you report is the fair market value in your local currency at the time you received it. If you later sell or convert the Bitcoin at a different price, that is a separate taxable event — a capital gain or loss.
+Receiving Bitcoin as payment has tax implications that vary by jurisdiction. Think of it like receiving payment in a foreign currency. USD-denominated invoicing helps because the dollar value is already baked in.
 
-In practice, most freelancers treat it like receiving payment in a foreign currency. You note the dollar value at the time of receipt, and that is your income. If you use USD-denominated invoicing, that number is already right there.
-
-Keep records. Your future self will thank you.
+Talk to an accountant or look into crypto tax services. Keep records. Future you sends your thanks through time.
 
 ## So is it complicated?
 
-Less than it looks from the outside.
+It used to be. The lack of good tooling meant it was mostly restricted to hard-core nerds. That has changed — modern tools handle enough of the mechanics that the interesting part is choosing your setup, not wrestling with it.
 
-The actual flow is: set up a wallet, pick a tool that generates invoices, share payment links with clients, and watch for confirmations. The concepts — things like pending vs confirmed, custody, and exchange rate handling — take a little learning, but none of it is deep technical knowledge. If you can set up a Stripe account, you can figure this out.
+The actual flow is: set up a wallet, pick a tool that generates invoices, share payment links with clients, and watch for confirmations. The right tool makes most of that feel obvious.
 
-The real question is not whether you *can* accept Bitcoin. It is whether your clients would use it. If even one or two would, the setup cost is low enough that it is worth having the option. And if you are the kind of person who likes the idea of getting paid without a middleman deciding when you get your money — well, that part is exactly as good as it sounds.
+The real question is not whether you *can* accept Bitcoin. It is whether your clients would use it. If even one or two would, it is worth exploring. And if you are the kind of person who likes the idea of getting paid without a middleman deciding when you get your money — well, that part is exactly as good as it sounds.
