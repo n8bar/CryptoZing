@@ -14,13 +14,13 @@ That is a better question anyway. The "why" stuff tends to turn into ideology pr
 
 This is the part that surprises people who are used to things like Stripe or PayPal.
 
-Bitcoin is peer-to-peer. When a client pays a Bitcoin invoice, the money moves from their wallet to yours. There is no company in the middle holding the funds, taking a cut, or deciding whether to release your money on Thursday or next Tuesday.
+With cards and traditional rails, a payment processor is not optional. There is always somebody in the middle — taking a cut they expect you to absorb, applying chargeback rules, deciding when you actually get your money, and occasionally deciding you do not get it at all. With Bitcoin, you have a choice. There are Bitcoin payment processors and services you can use if you want one, but the underlying network does not require any of them. You *can* receive a payment without one.
 
-That sounds like a small thing until you have had a payment processor freeze your account, or hold a deposit for "review," or charge you 2.9% plus thirty cents on a $50 invoice. For small operations, those fees and delays are not rounding errors. They are real friction.
+That choice sounds like a small thing until you have had a payment processor freeze your account, or hold a deposit for "review," or charge you 2.9% plus thirty cents on a $50 invoice. For small operations, those fees and delays are not rounding errors. They are real friction.
 
-With Bitcoin, the transaction fee is paid by the sender and goes to the network — not to a middleman. And once it confirms, the money is in your wallet. Nobody can claw it back, reverse it, or put it on hold.
+The Bitcoin network itself has no payment processor role built into it. When a sender pays, the on-chain fee they include goes to miners — that is the cost of getting the transaction recorded, not a service fee. Once a payment confirms on-chain, it cannot be clawed back or reversed.
 
-That does not mean there is zero overhead. You still need a way to generate invoices, track payments, and know when something has actually settled. But the point is that the payment itself does not require anyone's permission or infrastructure besides the Bitcoin network.
+That does not mean accepting Bitcoin is free of overhead. You still need a way to generate invoices, track payments, and know when something has actually settled. The tools that handle those pieces vary — some sit lightly on top of the network, some are more involved. Some are free, some charge a fee, and the model often depends on what you need. We will get to that. The important point here is that the *underlying payment* does not depend on any one company being in the middle.
 
 ## The volatility question
 
