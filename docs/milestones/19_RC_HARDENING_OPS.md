@@ -11,14 +11,16 @@ Supporting ops doc: [`docs/ops/DOCS_DX.md`](../ops/DOCS_DX.md)
 - Add auth and password policy hardening: 419-to-login redirect, site-wide session expiry logout.
 - Keep contributor docs current.
 - Implement any UI code changes deferred from MS20 legal scoping (disclaimer placement, footer ToS/Privacy Policy links).
+- Reconcile the content promises catalog against the finished product — confirm every open entry is honored or trigger a content/product revision.
 
 ## Phases
 _(Phase strategy docs to be written when this milestone becomes active.)_
 
-- Phase 1 — Notification coverage documentation
+- Phase 1 — Notification coverage audit
 - Phase 2 — Auth/password policy hardening
 - Phase 3 — Legal disclaimer UI implementation (deferred from MS20 scoping)
-- Phase 4 — Contributor docs review and update
+- Phase 4 — Content promises reconciliation
+- Phase 5 — Contributor docs review and update
 
 ## Exit Criteria
 _(To be detailed when active.)_
@@ -27,4 +29,5 @@ _(To be detailed when active.)_
 - [ ] 419-to-login redirect implemented and tested.
 - [ ] Site-wide session expiry logout implemented and tested.
 - [ ] Disclaimer copy present at signup, wallet onboarding, and invoice/payment surfaces; footer links to ToS and Privacy Policy on every page.
+- [ ] Content promises catalog reconciled — every open entry confirmed honored or resolved (content revised or product adjusted).
 - [ ] Contributor docs reviewed and current.
