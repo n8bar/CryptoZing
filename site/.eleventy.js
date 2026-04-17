@@ -11,6 +11,7 @@ module.exports = function (eleventyConfig) {
     eleventyConfig.addPassthroughCopy("robots.txt");
     eleventyConfig.addPassthroughCopy(".nojekyll");
     eleventyConfig.addPassthroughCopy("sitemap.xml");
+    eleventyConfig.addPassthroughCopy("465536a63a3c14ac146077111999e458.txt");
   }
 
   return {
