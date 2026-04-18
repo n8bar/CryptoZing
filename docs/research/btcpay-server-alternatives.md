@@ -122,7 +122,7 @@ The core pattern: **people want to accept Bitcoin, not become a sysadmin.** BTCP
 - Hosted SaaS.
 - 1% of received volume, billed monthly from pre-loaded BTC credit. First 20 tx free.
 - Invoice tool with fiat currency support and dynamic rates. Invoices encrypted in-browser.
-- Lightning support: unconfirmed — appears on-chain only.
+- Lightning: No. Staff confirmed on community forum: "We do not support payments through the lightning network. Only BTC mainnet is supported."
 - Active. 20+ e-commerce plugins.
 - Notable: encrypted invoices (Blockonomics can't see contents).
 
@@ -181,7 +181,7 @@ The core pattern: **people want to accept Bitcoin, not become a sysadmin.** BTCP
 - Hosted SaaS.
 - 1% per tx. Fiat conversion via Coinbase exchange adds ~0.5-1.5%.
 - Basic: payment buttons, hosted checkout, API. Not a full invoicing platform.
-- Lightning support: unconfirmed for Commerce specifically.
+- Lightning: No. Coinbase exchange supports Lightning for BTC transfers, but Commerce (the merchant product) does not offer Lightning checkout. Merchants receive on-chain BTC or supported tokens.
 - Active. Shopify x Coinbase x Stripe partnership (2026).
 - Notable: Coinbase brand. Focus shifting toward USDC/Base network.
 
@@ -199,7 +199,7 @@ The core pattern: **people want to accept Bitcoin, not become a sysadmin.** BTCP
 **Strike** — strike.me/en/business
 - Custodial. USD balances FDIC-insured. BTC not insured.
 - Hosted SaaS / API-driven.
-- ~0.3-1% spread on Lightning tx.
+- ~1% spread on currency conversion, plus volume-tiered trading fees. No flat per-tx fee.
 - Limited invoicing — primarily a payment rail / API. Shopify/NCR partnerships.
 - Lightning is core technology.
 - Very active. BitLicense (March 2026). BTC-backed loans, bill pay.
@@ -237,7 +237,7 @@ The core pattern: **people want to accept Bitcoin, not become a sysadmin.** BTCP
 - Hosted SaaS.
 - 0.5% same-currency. ~1% with auto-conversion. Volume discounts.
 - Invoice creation, payment links, API.
-- Lightning support: unconfirmed.
+- Lightning: No. NOWPayments explored Lightning integration but has not shipped it. BTC payments are on-chain only.
 - Active. 350+ supported cryptocurrencies.
 - Notable: broadest crypto support. Lowest base fee. Strong altcoin focus.
 
@@ -274,28 +274,28 @@ The core pattern: **people want to accept Bitcoin, not become a sysadmin.** BTCP
 |------|---------|-----------|-----|-----------|-------------|-----------|-----------|
 | BTCPay Server | Non | Yes | 0% | Full | No | Yes (export, reporting) | Yes (+ hosted) |
 | **CryptoZing** | **Non** | **No (on-chain only)** | **0% (TBD)** | **Full** | **Minimal** | **Dashboard only** | **Yes (+ hosted)** |
-| Blockonomics | Non | Unconfirmed | 1% | Yes | No | Unknown | No |
+| Blockonomics | Non | No | 1% | Yes | No | Unknown | No |
 | Swiss Bitcoin Pay | Non | Yes | 0-1% | Basic | No | Yes (auto tax reports) | No |
 | Zaprite | Non | Yes | $25/mo flat | Full platform | Yes | Yes (income tracking) | No |
 | Coinsnap | Non | Yes | 1% | Basic (plugins) | No | Unknown | No |
 | Flash | Non | Yes | 0% | Basic | No | Unknown | No |
 | Breez | Non | Yes (only) | 0.4-0.75% setup | POS only | No | Export only | No |
-| Coinbase Commerce | Non | Unconfirmed | 1% | Basic | No | Unknown | No |
+| Coinbase Commerce | Non | No | 1% | Basic | No | Unknown | No |
 | OpenNode | Custodial | Yes | 1% | Yes | No | Yes | No |
-| Strike | Custodial | Yes | 0.3-1% | Limited | No | Unknown | No |
+| Strike | Custodial | Yes | ~1% spread | Limited | No | Unknown | No |
 | CoinGate | Custodial | Yes | 1% | Yes | No | Yes (export) | No |
 | BitPay | Custodial | Yes | 2%+$0.25 | Full | No | Yes (full) | No |
 | Speed | Custodial | Yes | 1% | Yes | No | Unknown | No |
-| NOWPayments | Both | Unconfirmed | 0.5-1% | Yes | No | Unknown | No |
+| NOWPayments | Both | No | 0.5-1% | Yes | No | Unknown | No |
 
 ## Open Questions
 
-- [ ] Blockonomics Lightning support — need to verify directly
-- [ ] Coinbase Commerce Lightning support — need to verify
-- [ ] NOWPayments Lightning support — need to verify
-- [ ] Exact Strike merchant API pricing
-- [ ] Are there other noncustodial tools we're missing?
-- [ ] How does CZ's feature set compare to Zaprite specifically? (client management, fiat+BTC invoicing, etc.)
+- [x] Blockonomics Lightning support — **No.** Staff confirmed on community forum.
+- [x] Coinbase Commerce Lightning support — **No.** Exchange has it; Commerce product does not.
+- [x] NOWPayments Lightning support — **No.** Explored but not shipped.
+- [x] Exact Strike merchant API pricing — **~1% spread** on conversion, volume-tiered trading fees, no flat per-tx fee.
+- [x] How does CZ's feature set compare to Zaprite specifically? — CZ entry added to Comparison Summary. CZ has minimal client management (vs Zaprite's shallow), no Lightning (vs Zaprite's broad support), no export (vs Zaprite's CSV + QuickBooks). CZ wins on self-hostability and zero cost.
+- [ ] Are there other noncustodial tools we're missing? — Nothing major surfaced during research. Comfortable proceeding.
 
 ## Observations for the Article
 
@@ -303,7 +303,7 @@ The core pattern: **people want to accept Bitcoin, not become a sysadmin.** BTCP
 
 2. **The noncustodial field is smaller than it looks.** Many "Bitcoin payment" tools are custodial. The real alternatives in CZ's space: BTCPay, Blockonomics, Zaprite, Coinsnap, Swiss Bitcoin Pay.
 
-3. **Lightning support is not universal** even among active tools. This is a real differentiator.
+3. **Lightning support is not universal** even among active tools. Blockonomics, Coinbase Commerce, NOWPayments, and CZ are all on-chain only. This is a real differentiator — but also means CZ isn't alone in lacking it.
 
 4. **Fee structures vary widely.** 0% (BTCPay, Flash) to 2%+$0.25 (BitPay). Most cluster around 1%.
 
