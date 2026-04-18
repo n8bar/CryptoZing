@@ -23,7 +23,7 @@ Supporting ops doc: [`docs/ops/RC_ROLLOUT_CHECKLIST.md`](../ops/RC_ROLLOUT_CHECK
 ## Phases
 _(Phase strategy docs to be written when this milestone becomes active.)_
 
-- Phase 1 — Pre-deploy verification: env, wallet, mail, DNS, SEO baseline check
+- Phase 1 — Pre-deploy verification: env, wallet, mail, DNS, SEO baseline check, self-host verification
 - Phase 2 — Deploy and cutover
 - Phase 3 — Post-deploy verification and rollout sign-off
 
@@ -33,4 +33,5 @@ _(To be detailed when active.)_
 - [ ] RC deployed and reachable under `cryptozing.app`.
 - [ ] Live app landing page replaces GitHub Pages placeholder at `/`; SEO baseline intact (canonical, sitemap, robots, indexed URLs).
 - [ ] Temporary mail aliasing removed; outbound mail routes through production config.
+- [ ] Self-host deployment verified — a clean instance can be stood up independently from the production environment.
 - [ ] All RC rollout checklist items completed and signed off.
