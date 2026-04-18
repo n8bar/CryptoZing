@@ -70,6 +70,49 @@ Exact volumes from paid tools (Ahrefs/Semrush) not available. Estimates triangul
 - **Integrations:** 20+ e-commerce (WooCommerce, Shopify, Magento, etc.). Full REST API (Greenfield). POS app, crowdfunding app, payment buttons.
 - **Standout:** The gold standard for self-sovereign Bitcoin payments. Case studies at scale (Namecheap: $73M+ BTC revenue).
 
+## Why People Search for BTCPay Alternatives
+
+The core pattern: **people want to accept Bitcoin, not become a sysadmin.** BTCPay's sovereignty-for-complexity tradeoff is one most small merchants and freelancers aren't equipped or willing to make.
+
+### Setup complexity (#1 complaint)
+- One user offered **$100 for someone to teach them how to install it** — even after paying for LunaNode hosting, couldn't connect to their e-commerce store.
+- Another posted "btcpay server is too complicated to install" asking for a PHP version you can drop into public_html like WordPress.
+- A milkweed seed merchant took **three years** from first attempt to getting BTCPay working.
+- BTCPay's own docs acknowledge: "some technical understanding is required for initial setup."
+
+### Docker deployment is non-standard
+- BTCPay's Docker setup takes over the entire machine — you can't drop it into an existing Docker Compose stack alongside other services. This eliminates people who already have a VPS running other things.
+
+### Hidden infrastructure costs
+- Full Bitcoin node: 600GB+ storage, growing. Pruned: ~60GB minimum, 2 CPUs, 4GB RAM.
+- VPS: $8-65/mo depending on setup. Initial blockchain sync: 1-5 days on VPS, potentially weeks on a Pi.
+- A BTCPay maintainer said he "wouldn't recommend [Raspberry Pi] setup for eCommerce."
+
+### Lightning is a second job
+- A technically capable user in Guatemala spent a month trying to get Lightning working and still couldn't reliably receive payments. Lost "a few hundred dollars of inbound liquidity."
+- BTCPay's own FAQ: "One of the biggest UX struggles when it comes to LN is inbound liquidity."
+- Their docs warn: "the Lightning Network is still in an experimental phase and do not put funds into it, which you're not willing to lose."
+
+### Ongoing maintenance never stops
+- Updates can break things (v1.4.0 caused widespread failures on 32-bit Pi systems).
+- Plugin conflicts crash BTCPay at startup in loops.
+- SSL certificates, LND authentication, Lightning channel management — all perpetual.
+- Milkweed merchant: "Without conversion to sales the BTC server node fees and lightning channel fees will drain my funds in a couple years."
+
+### No fiat conversion, no support team
+- No built-in fiat off-ramp — manual exchange conversion required.
+- Support is community-driven (GitHub, Mattermost). No hotline, no SLA.
+- A 1-star Trustpilot review from someone whose payment was "lost" highlights the misunderstanding problem — BTCPay is software, not a company, but users don't always know that.
+
+### Who BTCPay is NOT for
+- Non-technical merchants who can't manage Docker/SSH
+- Small operators who just want a "Pay with Bitcoin" button
+- Anyone who needs fiat conversion in the payment flow
+- Merchants on Wix/Squarespace/basic Shopify without developer resources
+- People who can't commit to ongoing server maintenance
+- Freelancers and sole proprietors who don't have a sysadmin hat
+- Low-volume Bitcoin merchants (hosting costs may exceed revenue)
+
 ## Alternatives
 
 ### Noncustodial
@@ -93,13 +136,18 @@ Exact volumes from paid tools (Ahrefs/Semrush) not available. Estimates triangul
 - Notable: strong physical retail / POS focus.
 
 **Zaprite** — zaprite.com
-- Noncustodial. Not a payment processor — a payment *gateway*. Connects to your wallets/nodes.
-- Hosted SaaS.
-- $25/mo flat (includes $25/mo in tx fees). No percentage fee from Zaprite. Fiat via connected Stripe.
-- Full invoicing platform: client management, payment links, ticketing, virtual POS, API. Supports surcharges/discounts by payment method. Income tracking.
-- Lightning (own node or Alby/Strike/Zebedee) + on-chain via xpub.
-- Active.
-- Notable: the most invoice/business-management-focused tool on this list. Can accept fiat and Bitcoin side-by-side on the same invoice. **Closest competitor to CZ.**
+- Noncustodial. Payment gateway, not processor. Connects to your wallets/nodes. xpub for on-chain (BIP84, hardware wallet support: ColdCard, Ledger, Trezor, Sparrow). Multi-sig support (Casa, BitGo).
+- Hosted SaaS. No mobile app — web only (app.zaprite.com).
+- $25/mo ($240/yr). Invoicing/payment links/POS: no tx fee. API/WooCommerce/tickets: 1% on BTC volume, capped at $15/tx, offset by subscription. No Zaprite fee on fiat — only processor's standard fees (Stripe, PayPal, Square, Authorize.net, ACH, SEPA, Interac).
+- Invoicing: USD-denominated, line items, tax %, recurring invoices, payment requests (lightweight quick-send). Signature feature: fiat AND Bitcoin on same checkout — customer chooses. Premium/discount by payment method.
+- Client management: shallow. Contacts with name/email. No client portal, no balance tracking across invoices, no client history dashboard. 1 help doc article for Contacts.
+- Lightning: bring your own node (LND, LNbits), Breez SDK/LNURL (self-custodial without running a node), or custodial options (Strike, ZEBEDEE, CoinCorner, Speed, Alby, Blink). Voltage "coming soon."
+- Reporting: CSV export with fiat cost basis tracking. QuickBooks integration (shipped Nov 2025). Xero coming soon. No standalone tax reporting.
+- Active. Austin, TX. Bitcoin-only (no altcoins). "#DropFiat" branding. $4M/mo payment volume reported.
+- Help docs sparse (most collections 1-4 articles, many not updated since June 2024).
+- No Shopify plugin. WooCommerce only for e-commerce.
+- BTCPay integration listed as "coming soon."
+- Notable: **closest competitor to CZ** in form and function. Key advantages over CZ: fiat+BTC unified checkout, breadth of wallet/processor connections, QuickBooks, recurring invoices. Key weaknesses vs CZ: $25/mo barrier for small operators, thin client management, no mobile app, sparse docs.
 
 **Coinsnap** — coinsnap.io
 - Noncustodial ("Self-Custody Bitcoin Provider"). Payments forward to your Lightning address.
