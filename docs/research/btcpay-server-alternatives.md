@@ -141,6 +141,21 @@ Internal notes for article 3. Not published. Researched 2026-04-18.
 - Active. 350+ supported cryptocurrencies.
 - Notable: broadest crypto support. Lowest base fee. Strong altcoin focus.
 
+### CryptoZing (that's us)
+
+**CryptoZing** — cryptozing.app
+- Noncustodial. Watch-only architecture using xpub/zpub for per-invoice address derivation. Never holds, requires, or processes private keys.
+- Self-hostable (Laravel/Sail/Docker) or hosted SaaS. Shares self-hostability with BTCPay only among tools researched.
+- No fees currently. Monetization strategy TBD — content already leaves room for future fees.
+- Full invoice management: CRUD, status lifecycle (draft → sent → pending → partial → paid → void), USD-denominated with BTC computed at current rates, rate snapshots per payment.
+- Lightweight client management: contact database with name/email/notes, invoice association, soft-delete.
+- Lightning: not implemented. On-chain only for RC and MVP. Explicitly deferred.
+- Active development. RC targeting mid-2026, first public release mid-to-late 2027.
+- Payment detection: automatic on-chain watching via Mempool.space API, confirmation-gated, unconfirmed tracking, idempotent.
+- Email: manual invoice send, payment acknowledgments, receipts (owner-reviewed before sending), past-due alerts, overpayment/underpayment alerts, delivery logging with Mailgun webhooks.
+- Notable: payment attribution hardening (key-aware lineage, collision detection, explicit correction UI), truthful payment communication (no auto-receipts until owner reviews), audit trails on all corrections.
+- Self-host verification pending (MS21 exit criterion).
+
 ### Infrastructure / Not Merchant-Facing
 
 **Spark (Lightspark)** — spark.money
@@ -154,22 +169,23 @@ Internal notes for article 3. Not published. Researched 2026-04-18.
 
 ## Comparison Summary
 
-| Tool | Custody | Lightning | Fee | Invoicing | Self-host |
-|------|---------|-----------|-----|-----------|-----------|
-| BTCPay Server | Non | Yes | 0% | Full | Yes (+ hosted) |
-| Blockonomics | Non | Unconfirmed | 1% | Yes | No |
-| Swiss Bitcoin Pay | Non | Yes | 0-1% | Basic | No |
-| Zaprite | Non | Yes | $25/mo flat | Full platform | No |
-| Coinsnap | Non | Yes | 1% | Basic (plugins) | No |
-| Flash | Non | Yes | 0% | Basic | No |
-| Breez | Non | Yes (only) | 0.4-0.75% setup | POS only | No |
-| Coinbase Commerce | Non | Unconfirmed | 1% | Basic | No |
-| OpenNode | Custodial | Yes | 1% | Yes | No |
-| Strike | Custodial | Yes | 0.3-1% | Limited | No |
-| CoinGate | Custodial | Yes | 1% | Yes | No |
-| BitPay | Custodial | Yes | 2%+$0.25 | Full | No |
-| Speed | Custodial | Yes | 1% | Yes | No |
-| NOWPayments | Both | Unconfirmed | 0.5-1% | Yes | No |
+| Tool | Custody | Lightning | Fee | Invoicing | Client Mgmt | Self-host |
+|------|---------|-----------|-----|-----------|-------------|-----------|
+| BTCPay Server | Non | Yes | 0% | Full | No | Yes (+ hosted) |
+| **CryptoZing** | **Non** | **No (on-chain only)** | **0% (TBD)** | **Full** | **Yes** | **Yes (+ hosted)** |
+| Blockonomics | Non | Unconfirmed | 1% | Yes | No | No |
+| Swiss Bitcoin Pay | Non | Yes | 0-1% | Basic | No | No |
+| Zaprite | Non | Yes | $25/mo flat | Full platform | Yes | No |
+| Coinsnap | Non | Yes | 1% | Basic (plugins) | No | No |
+| Flash | Non | Yes | 0% | Basic | No | No |
+| Breez | Non | Yes (only) | 0.4-0.75% setup | POS only | No | No |
+| Coinbase Commerce | Non | Unconfirmed | 1% | Basic | No | No |
+| OpenNode | Custodial | Yes | 1% | Yes | No | No |
+| Strike | Custodial | Yes | 0.3-1% | Limited | No | No |
+| CoinGate | Custodial | Yes | 1% | Yes | No | No |
+| BitPay | Custodial | Yes | 2%+$0.25 | Full | No | No |
+| Speed | Custodial | Yes | 1% | Yes | No | No |
+| NOWPayments | Both | Unconfirmed | 0.5-1% | Yes | No | No |
 
 ## Open Questions
 
