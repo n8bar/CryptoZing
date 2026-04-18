@@ -9,6 +9,9 @@ Use milestone docs under `docs/milestones/` when a milestone is large or active 
 Use supporting specs under `docs/specs/` for detailed local requirements.
 Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 
+## Milestone Conventions
+- Every milestone's exit criteria must include a content promises check: confirm no work in the milestone introduced or violated a [`docs/CONTENT_PROMISES.md`](CONTENT_PROMISES.md) entry.
+
 ## Current
 - Active milestone: **MS18 - Pre-Release Content & SEO** (Phase 2 — Content Audit & Production)
 - Status: `active`

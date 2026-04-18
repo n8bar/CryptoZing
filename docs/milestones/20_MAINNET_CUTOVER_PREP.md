@@ -30,3 +30,4 @@ _(To be detailed when active.)_
 - [ ] Disclaimer copy present at signup, wallet onboarding, and invoice/payment surfaces.
 - [ ] Existing UI and mail copy reviewed for overstatements, financial advice language, and pricing commitments — issues resolved.
 - [ ] Monetization-safe language guide produced for future copy decisions.
+- [ ] Content promises catalog checked — no work in this milestone introduced or violated an entry.

@@ -34,4 +34,5 @@ _(To be detailed when active.)_
 - [ ] Live app landing page replaces GitHub Pages placeholder at `/`; SEO baseline intact (canonical, sitemap, robots, indexed URLs).
 - [ ] Temporary mail aliasing removed; outbound mail routes through production config.
 - [ ] Self-host deployment verified — a clean instance can be stood up independently from the production environment.
+- [ ] Content promises catalog checked — no work in this milestone introduced or violated an entry.
 - [ ] All RC rollout checklist items completed and signed off.
