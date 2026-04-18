@@ -2,6 +2,58 @@
 
 Internal notes for article 3. Not published. Researched 2026-04-18.
 
+## Keyword Validation
+
+**Primary keyword: "BTCPay Server alternatives"** — confirmed as the right target.
+
+- ~400-800 monthly searches across the cluster (including "BTCPay alternative," "BTCPay alternative small business," "BTCPay vs" queries)
+- Difficulty: low-medium (30-45). Page 1 is aggregator sites (G2, AlternativeTo) with no depth, plus blogs with DA 25-40. Beatable with an opinionated comparison article.
+- Intent: commercial investigation — searchers have heard of BTCPay, decided it's too much or are cross-shopping. CZ's wedge.
+- One article can capture secondary clusters: "Bitcoin invoicing tools," "noncustodial Bitcoin payments," "how to invoice in Bitcoin" fit naturally in the body.
+- Pure "Bitcoin invoicing" keywords have lower volume AND weaker commercial intent. BTCPay provides a recognizable anchor to draft behind.
+
+**Proposed title:** "BTCPay Server Alternatives: Simpler Bitcoin Invoicing for Small Businesses"
+- Hits primary keyword, pulls in invoicing cluster, signals audience.
+
+**Secondary article opportunity (future):** "How to Invoice in Bitcoin" — standalone informational piece targeting the invoicing cluster, linking back to this comparison.
+
+### Google Autocomplete Signals
+
+- "BTCPay Server" → login, plugins, github, setup, **alternative**, docker
+- "BTCPay vs" → **bitpay** (dominant comparison)
+- "Bitcoin invoice" → email, address, template, payment
+- "Crypto invoicing" → platform, solutions, saas
+- "How to accept bitcoin" → **as a business**, **payments for business**
+- "Self hosted bitcoin" → wallet, node, **payment gateway**
+
+### People Also Ask (from SERPs)
+
+- What is the best alternative to BTCPay Server?
+- Is BTCPay Server really free?
+- BTCPay vs BitPay — what's the difference?
+- Does BTCPay Server require self-hosting?
+- What is the easiest Bitcoin payment processor?
+- How do freelancers invoice in Bitcoin?
+
+### SERP Competition
+
+Page 1 for "BTCPay Server alternatives" is dominated by aggregator/comparison sites:
+1. AlternativeTo.net (DA ~70)
+2. G2.com (DA ~90)
+3. SourceForge.net (DA ~85)
+4. ProductHunt.com (DA ~90)
+5. BTCPayServer.org docs (DA ~60)
+6. SaaSHub.com (DA ~55)
+7. Kyrrex.com blog (DA ~35)
+8. BeycanPress.com (DA ~25)
+9. InstaWP.com (DA ~40)
+
+Bottom half of page 1 is blogs with DA 25-40 — achievable range for cryptozing.app.
+
+### Volume Disclaimer
+
+Exact volumes from paid tools (Ahrefs/Semrush) not available. Estimates triangulated from: confirmed data point ("crypto payment" = 2,400/mo, difficulty 68 via Clicks.so), Google autocomplete depth as proxy, SERP composition, and market size context (BTCPay ~1M GitHub downloads, #435K SimilarWeb).
+
 ## BTCPay Server
 
 - **URL:** btcpayserver.org
@@ -65,7 +117,7 @@ Internal notes for article 3. Not published. Researched 2026-04-18.
 - Payment links, POS, paywalls, subscriptions. Not full invoicing.
 - Lightning-native.
 - Early-stage (500-user early access as of 2026). Maturity uncertain.
-- Notable: zero fees, digital content / SaaS focus.
+- Notable: zero fees, digital content / SaaS focus. Covered by Nasdaq (press release). Keyword research flagged Flash as a close positional competitor to CZ — free, noncustodial, no KYC, freelancer-targeted. Maturity and sustainability of 0% model are open questions.
 
 **Breez** — breez.technology
 - Noncustodial (self-custodial, user holds keys).
