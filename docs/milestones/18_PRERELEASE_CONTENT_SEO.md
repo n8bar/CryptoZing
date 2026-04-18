@@ -8,7 +8,7 @@ Parent execution doc: [`docs/PLAN.md`](../PLAN.md)
 ## Milestone Objectives
 - Extend `cryptozing.app` from a single placeholder page to a lightweight content site with multiple crawlable, indexed pages.
 - Assess the existing Helpful Notes as raw material — publish, adapt/customize for a general audience, or use as inspiration for original articles depending on how product-agnostic they turn out to be.
-- Produce educational articles targeting stable, query-matchable concepts: Bitcoin invoicing, USD-denominated invoices, on-chain payment confirmation, and related topics that prospective users are already searching. Most content is product-agnostic; articles may name specific products when the SEO value justifies it (e.g., comparison/alternatives pieces).
+- Produce educational articles targeting stable, query-matchable concepts: Bitcoin invoicing, USD-denominated invoices, on-chain payment confirmation, and related topics that prospective users are already searching. Most content is product-agnostic; the strategy doc may allow article-specific exceptions for SEO value.
 - Establish a staging/pre-publish path so content can be reviewed before going live.
 - Update `sitemap.xml` and `lastmod` as content ships.
 - Consider video content if time allows; explicitly defer to post-RC if not — document the outcome either way.
