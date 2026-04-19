@@ -15,7 +15,7 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 ## Current
 - Active milestone: **MS18 - Pre-Release Content & SEO** (Phase 2 — Content Audit & Production)
 - Status: `active`
-- Next action: Research and draft article 3 (BTCPay Server alternatives).
+- Next action: Research and draft article 4 (What is a Bitcoin invoice?).
 - Primary next doc: [`docs/milestones/18_PRERELEASE_CONTENT_SEO.md`](milestones/18_PRERELEASE_CONTENT_SEO.md)
 - Most recently completed milestone doc: [`docs/milestones/17_PRODUCT_READINESS.md`](milestones/17_PRODUCT_READINESS.md)
 
