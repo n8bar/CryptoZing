@@ -1,0 +1,35 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//CryptoZing//Milestones//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:CZ Milestones
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20260502
+DTEND;VALUE=DATE:20260503
+SUMMARY:MS18 — Pre-Release Content & SEO
+DESCRIPTION:Extend the site from a single placeholder to a lightweight content site with educational articles and a staging path.
+UID:cz-ms18@cryptozing.app
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20260528
+DTEND;VALUE=DATE:20260529
+SUMMARY:MS19 — RC Hardening & Ops
+DESCRIPTION:Document notification coverage, add auth/password policy hardening, and keep contributor docs current.
+UID:cz-ms19@cryptozing.app
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20260609
+DTEND;VALUE=DATE:20260610
+SUMMARY:MS20 — Mainnet Cutover Preparation
+DESCRIPTION:Define and rehearse env flips, wallet validation, mail sanity, and backout steps. Legal layer: ToS, Privacy Policy, disclaimers.
+UID:cz-ms20@cryptozing.app
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20260621
+DTEND;VALUE=DATE:20260622
+SUMMARY:MS21 — CryptoZing.app Deployment (RC)
+DESCRIPTION:Deploy the RC under cryptozing.app, replace GitHub Pages placeholder, remove temporary mail aliasing, complete rollout verification.
+UID:cz-ms21@cryptozing.app
+END:VEVENT
+END:VCALENDAR

@@ -11,6 +11,7 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 
 ## Milestone Conventions
 - Every milestone's exit criteria must include a content promises check: confirm no work in the milestone introduced or violated a [`docs/CONTENT_PROMISES.md`](CONTENT_PROMISES.md) entry.
+- When milestone target dates change or milestones are added/removed, update [`docs/milestones.ics`](milestones.ics) in the same commit. This file feeds a Proton Calendar subscription.
 
 ## Current
 - Active milestone: **MS18 - Pre-Release Content & SEO** (Phase 2 — Content Audit & Production)
