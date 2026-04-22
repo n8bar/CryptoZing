@@ -126,8 +126,8 @@ What we do not have (or have yet): Lightning support (we're on-chain only), CSV/
 | Noncustodial tool | Lightning | Fee | Invoicing | Client Mgmt | Reporting | Self-host |
 |-------------------|-----------|-----|-----------|-------------|-----------|-----------|
 | BTCPay Server | Yes | 0% | Full | No | Export + reporting | Yes |
-| **CryptoZing** | **No** | **0%** | **Full** | **Minimal** | **Dashboard only** | **Yes** |
-| Zaprite | Yes | $25/mo | Full | Shallow | CSV + QuickBooks | No |
+| **CryptoZing** | **No** | **0%** | **Full** | **Basic** | **Dashboard only** | **Yes** |
+| Zaprite | Yes | $25/mo | Full | Basic | CSV + QuickBooks | No |
 | Blockonomics | No | 1% | Yes | No | Unknown | No |
 | Coinsnap | Yes | 1% | Basic (plugins) | No | Unknown | No |
 | Swiss Bitcoin Pay | Yes | 0–1% | Basic | No | Auto tax reports | No |
@@ -146,7 +146,7 @@ Zaprite. It is the only noncustodial tool here that does this well. $25/month.
 Zaprite if you want to bring your own node. Swiss Bitcoin Pay or Coinsnap if you want it handled for you. On the custodial side, OpenNode and Strike are Lightning-native.
 
 **"I want to self-host but BTCPay is too much."**
-CryptoZing is self-hostable via Docker without requiring a full Bitcoin node. BTCPay is the only other self-hostable option in this comparison.
+CryptoZing is self-hostable via Docker without requiring a full Bitcoin node. BTCPay is the only other self-hostable option we're aware of.
 
 **"I need a recognized company behind it."**
 BitPay (oldest, most expensive), OpenNode (well-funded), or CoinGate (EU-regulated).
