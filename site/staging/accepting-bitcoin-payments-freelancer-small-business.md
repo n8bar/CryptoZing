@@ -38,7 +38,7 @@ If you plan to hold Bitcoin long-term, volatility is part of the deal and you ha
 
 ## What a Bitcoin invoice actually looks like
 
-If you are thinking of a bill in an envelope, that is the wrong picture. A Bitcoin invoice is a live payment request. Picture a checkout screen, not a piece of paper.
+If you are thinking of a bill in an envelope, that is the wrong picture. A [Bitcoin invoice](/learn/what-is-a-bitcoin-invoice/) is a live payment request. Picture a checkout screen, not a piece of paper.
 
 It is usually a QR code or a clickable link that encodes a Bitcoin address, an amount, and sometimes an expiration window. The client opens it in their wallet, confirms the amount, and sends.
 

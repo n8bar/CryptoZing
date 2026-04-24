@@ -28,7 +28,7 @@ Content and doc changes go straight to `main`. Branches and PRs are reserved for
 
 _(Ordered by SEO and traffic potential. Pick from the top when starting a new article.)_
 
-4. [ ] What is a Bitcoin invoice?
+4. [x] What is a Bitcoin invoice? — `/learn/what-is-a-bitcoin-invoice/`
 5. [ ] Custodial vs noncustodial Bitcoin payments explained
 6. [ ] How Bitcoin payment confirmation works
 7. [ ] On-chain vs Lightning: what merchants need to know

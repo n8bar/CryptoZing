@@ -4,6 +4,8 @@ title: "How to Accept Bitcoin Payments as a Freelancer or Small Business"
 subtitle: "Accepting Bitcoin. No Middleman. What does that look like?"
 description: "A practical look at what it takes to accept Bitcoin as a freelancer or small business — what is simpler than you would expect, what is not, and what you actually need to figure out."
 canonical: "https://cryptozing.app/learn/accepting-bitcoin-payments-freelancer-small-business/"
+author: "Nate Barlow, CryptoZing"
+date: 2026-04-16
 ---
 
 If you freelance or run a small business, at some point you have probably thought about accepting Bitcoin. Maybe a client asked. Maybe you are just curious. Either way, the first question is usually not "why should I?" — it is "what does this actually look like?"
@@ -36,7 +38,7 @@ If you plan to hold Bitcoin long-term, volatility is part of the deal and you ha
 
 ## What a Bitcoin invoice actually looks like
 
-If you are thinking of a bill in an envelope, that is the wrong picture. A Bitcoin invoice is a live payment request. Picture a checkout screen, not a piece of paper.
+If you are thinking of a bill in an envelope, that is the wrong picture. A [Bitcoin invoice](/learn/what-is-a-bitcoin-invoice/) is a live payment request. Picture a checkout screen, not a piece of paper.
 
 It is usually a QR code or a clickable link that encodes a Bitcoin address, an amount, and sometimes an expiration window. The client opens it in their wallet, confirms the amount, and sends.
 
