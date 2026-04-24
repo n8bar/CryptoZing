@@ -1,6 +1,15 @@
 const isCI = process.env.CI === 'true';
 
 module.exports = function (eleventyConfig) {
+  eleventyConfig.addFilter("date", function (value, format) {
+    const d = new Date(value);
+    const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+    return format
+      .replace("%B", months[d.getUTCMonth()])
+      .replace("%d", String(d.getUTCDate()).padStart(2, "0"))
+      .replace("%Y", d.getUTCFullYear());
+  });
+
   // Passthroughs are only needed for the GitHub Pages build.
   // In local dev these files already exist in public/ and don't need copying.
   if (isCI) {

@@ -70,6 +70,13 @@ eleventyExcludeFromCollections: true
     border-radius: 0.75rem;
   }
 
+  .article-card-meta {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    opacity: 0.6;
+    margin: 0 0 0.5rem;
+  }
+
   .article-card p {
     font-size: 1.125rem;
     color: var(--text-secondary);
@@ -82,16 +89,12 @@ eleventyExcludeFromCollections: true
   <h1>Staging</h1>
   <p class="staging-intro">Content staged for review. Nothing here is published or indexed.</p>
 
-  {% set allPosts = collections.learn | list %}
-  {% for post in collections.staging %}
-    {% set allPosts = (allPosts.push(post), allPosts) %}
-  {% endfor %}
-
   <ul class="article-list">
-    {% for post in allPosts | reverse %}
+    {% for post in collections.staging | reverse %}
     <li>
       <article class="article-card">
         <h2><a href="{{ post.url }}">{{ post.data.title }}</a></h2>
+        {% if post.data.author or post.data.date %}<p class="article-card-meta">{% if post.data.author %}{{ post.data.author }}{% endif %}{% if post.data.author and post.data.date %} · {% endif %}{% if post.data.date %}{{ post.data.date | date("%B %d, %Y") }}{% endif %}</p>{% endif %}
         <p>{{ post.data.description }}</p>
       </article>
     </li>

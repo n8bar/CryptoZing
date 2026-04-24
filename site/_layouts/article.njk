@@ -5,5 +5,6 @@ layout: default.njk
   <a href="/learn/" class="article-back">&larr; Guides</a>
   <h1>{{ title }}</h1>
   {% if subtitle %}<p class="article-subtitle">{{ subtitle }}</p>{% endif %}
+  {% if author or date %}<p class="article-meta">{% if author %}By {{ author }}{% endif %}{% if author and date %} · {% endif %}{% if date %}{{ date | date("%B %d, %Y") }}{% endif %}</p>{% endif %}
   {{ content | safe }}
 </main>
