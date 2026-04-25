@@ -23,38 +23,32 @@ Do not add facts about Bitcoin or other external systems that the product cannot
 3. **Critical omission** — silence on something a reader will assume. _Not mentioning a service fee implies there isn't one._
 4. **Potential hypocrisy** — criticizing a behavior in others that, if CZ does the same thing, would make the content hypocritical. The most insidious flavor — easy to commit while focused on landing the criticism, and tends to bind the product more strictly than positive promises.
 
+## Major vs Minor
+
+**Major** entries could bite us through inattention, drift, or an unresolved product decision. These need individual reconciliation in MS19 — walk each one, confirm the product honors it or revise the content.
+
+**Minor** entries describe core functionality or criticize patterns CZ would only replicate through deliberate, conscious action. Verify in bulk during MS19 (a single pass confirming the product still does what it does), but don't burn time on individual reconciliation.
+
 ## Entry format
 
-Each entry gets a stable ID of the form `section.entry` (e.g. `2.1`). IDs are assigned in catalog order and never reused or renumbered after assignment, so references from MS19 audits, commits, and conversations remain valid.
+Each entry gets a stable ID. IDs are never reused or renumbered after assignment, so references from MS19 audits, commits, and conversations remain valid.
 
-For direct claims, implicit framing, and critical omissions:
+Major entries use the full format:
 
 ```
-**N.M [Flavor]** — short summary
+**ID [Flavor]** — short summary
 - Source: file:line (and quoted text if useful)
-- Implies: what the reader takes away
-- Required product behavior: what the product must do (or not do) to honor this
-```
-
-For potential hypocrisy:
-
-```
-**N.M [Potential hypocrisy]** — short summary
-- Source: file:line (and quoted text)
-- We criticized: what behavior, in whom
-- Corollary that binds CZ: what CZ must avoid
-- Resolution path: (a) commit to avoiding the pattern — with what that means concretely, or (b) revise the content to be narrower
+- Binding detail (flavor-dependent: Implies/We criticized/etc.)
+- Required product behavior or resolution path
 - Status: [open | committed | content revised]
 ```
 
-For low-risk entries — where the bound behavior would only happen through deliberate, conscious action, not by accident, carelessness, or negligence — use the abbreviated format:
+Minor entries use the abbreviated format:
 
 ```
-**N.M [Flavor, low risk]** — short summary
+**ID [Flavor]** — short summary
 - Source: file:line
 ```
-
-Core CryptoZing functionality automatically qualifies as low-risk.
 
 ## Resolution philosophy
 
@@ -62,67 +56,124 @@ When an entry is a **critical omission** about a future product decision (for ex
 
 ## Reconciliation
 
-Every entry needs to be reconciled before RC. MS19 will include a phase to walk this catalog, audit the product against it, and either confirm the product honors each entry or trigger a content revision, copy tweak, or a light behavior tweak if it fits in the scope. New entries added after MS19 reconciliation will need to be caught in the next pre-release pass.
+Every major entry needs individual reconciliation before RC. Minor entries get a bulk verification pass. MS19 will include a phase to walk this catalog and either confirm the product honors each entry or trigger a content revision. New entries added after MS19 reconciliation will need to be caught in the next pre-release pass.
 
 ---
 
 # Catalog
 
-## 1. Custody model
+## 1. Major
 
-**1.1 [Potential hypocrisy]** — Custodial framing as "an intermediary right back in the middle"
-- Source: `site/staging/accepting-bitcoin-payments-freelancer-small-business.md:59` — _"Using a custodial service puts an intermediary right back in the middle."_
+Entries that need active reconciliation — product decisions pending, content that could contradict the product through drift, or hypocrisy bindings with real teeth.
+
+**1. [Potential hypocrisy]** — Custodial framing as "an intermediary right back in the middle"
+- Source: `site/learn/accepting-bitcoin-payments-freelancer-small-business.md:59` — _"Using a custodial service puts an intermediary right back in the middle."_
 - We criticized: custodial Bitcoin tools, framed unfavorably (lock-out risk, hack risk, "trusting a third party with your money")
-- Corollary that binds CZ: CZ should not be expanded to be a custodial service, or this article makes us hypocritical
-- Resolution path: (a) commit to noncustodial design — Bitcoin goes directly to user-controlled wallet, CZ never holds funds — and verify product enforces this; or (b) revise the article to soften the custodial criticism (loses positioning value)
-- Status: open — awaiting product confirmation
+- Corollary that binds CZ: CZ must not become custodial, or this article makes us hypocritical
+- Resolution path: (a) commit to noncustodial design — Bitcoin goes directly to user-controlled wallet, CZ never holds funds; or (b) revise the article to soften the custodial criticism (loses positioning value)
+- Product verification: confirmed — watch-only xpub architecture, no signing capability, no key storage
+- Status: open — awaiting formal product commitment
 
-**1.2 [Implicit framing]** — Noncustodial framed as "more direct and less dependent on intermediaries"
-- Source: `site/staging/accepting-bitcoin-payments-freelancer-small-business.md:59` — _"The whole point of accepting Bitcoin is that it is supposed to be more direct and less dependent on intermediaries."_
-- Implies: CZ aligns with the noncustodial model and the values it represents
-- Required product behavior: CZ does not insert itself as custodial intermediary; user holds keys; payments flow directly to user-controlled addresses
-- Status: open
+**2. [Potential hypocrisy]** — "taking a cut they expect you to absorb"
+- Source: `site/learn/accepting-bitcoin-payments-freelancer-small-business.md:17`
+- We criticized: traditional payment processors for taking hidden, absorbed fees
+- Corollary that binds CZ: if CZ takes a per-transaction cut the same way, we are hypocritical
+- Resolution path: (a) make any CZ fee structurally different — customer-visible, or non-per-transaction (subscription, freemium, etc.); or (b) narrow the criticism in content
+- Status: open — pending monetization decision
 
-## 2. Pricing and fees
-
-**2.1 [Potential hypocrisy]** — "taking a cut they expect you to absorb"
-- Source: `site/staging/accepting-bitcoin-payments-freelancer-small-business.md:17`
-- We criticized: traditional payment processors for taking fees that the merchant is expected to absorb (and effectively hide from the customer)
-- Corollary that binds CZ: if CZ takes a per-transaction cut and expects the merchant to absorb it the same way, we are hypocritical
-- Resolution path: (a) make any CZ fee structurally different — customer-visible line item on the invoice, or non-per-transaction model (subscription, freemium, etc.); or (b) revise the content to narrow the criticism (e.g., focus on the layered/surprise nature, not the absorption pattern)
-- Status: open — pending monetization decision (see "Leave Room for CZ Monetization" memory)
-
-**2.2 [Critical omission, resolved proactively]** — silence on CZ fees
-- Source: `site/staging/accepting-bitcoin-payments-freelancer-small-business.md` (article-wide)
-- Implied (originally): by not mentioning any CZ service fee, reader may assume there isn't one
-- Resolution: added neutral acknowledgment in section 1 — _"Some are free, some charge a fee, and the model often depends on what you need."_ This breaks the silence without committing CZ to either model.
+**3. [Critical omission, resolved proactively]** — silence on CZ fees
+- Source: `site/learn/accepting-bitcoin-payments-freelancer-small-business.md` (article-wide)
+- Resolution: added neutral acknowledgment — _"Some are free, some charge a fee, and the model often depends on what you need."_
 - Status: content revised
 
-## 3. Reversibility and settlement
+**4. [Direct claim]** — "open-source"
+- Source: `site/index.html:4` (meta description), `:22` (JSON-LD) — _"CryptoZing is an open-source Bitcoin invoicing app"_
+- Required product behavior: repository must remain public under an open-source license at launch
+- Product verification: confirmed — MIT license, public GitHub repo
+- Status: open — verify license choice is final before RC
 
-**3.1 [Potential hypocrisy, low risk]** — criticism of "applying chargeback rules"
-- Source: `site/staging/accepting-bitcoin-payments-freelancer-small-business.md:17`
+**5. [Direct claim]** — CZ charges 0% fee (beta only)
+- Source: `site/learn/btcpay-server-alternatives.md:129` (comparison table: "0% (beta)"), `:124` (_"No fees during beta. Pricing for the general release has not been decided."_), `:140` (_"CryptoZing is in open beta and free"_)
+- Required product behavior: CZ must not charge fees during beta. Post-beta pricing is explicitly left open in copy.
+- Product verification: confirmed — no fee logic in codebase
+- Status: open — pending monetization decision. Related to 2. Copy now scoped to beta only.
 
-## 4. Account control and gatekeeping
+**6. [Direct claim]** — self-hostable via Docker without requiring a full Bitcoin node
+- Source: `site/learn/btcpay-server-alternatives.md:122`, `:149`
+- Required product behavior: Docker self-host path must not require a local full node
+- Product verification: confirmed — uses Mempool.space API, no bitcoind dependency
+- Status: open — verify this remains true if payment detection architecture changes
 
-**4.1 [Potential hypocrisy, low risk]** — criticism of "deciding when you actually get your money"
-- Source: `site/staging/accepting-bitcoin-payments-freelancer-small-business.md:17`
+**7. [Direct claim]** — hosted option with simple onboarding
+- Source: `site/learn/btcpay-server-alternatives.md:122` — _"just sign up, complete the quick walk-through and send an invoice"_
+- Required product behavior: hosted CZ must offer a streamlined signup-to-first-invoice flow
+- Status: open — hosted offering must exist at launch for this to hold
 
-**4.2 [Potential hypocrisy, low risk]** — criticism of "occasionally deciding you do not get it at all"
-- Source: `site/staging/accepting-bitcoin-payments-freelancer-small-business.md:17`
+**8. [Implicit framing]** — "Full" invoicing (comparison table tier)
+- Source: `site/learn/btcpay-server-alternatives.md:129` (table: Invoicing = "Full")
+- Implies: CZ invoicing is on par with BTCPay and Zaprite — line items, client details, payment tracking
+- Status: open — verify feature set justifies "Full" label at RC
 
-## 5. Workflow expectations
+**9. [Direct claim]** — stated current limitations
+- Source: `site/learn/btcpay-server-alternatives.md:124`, `:129` (comparison table)
+- Lists: no Lightning, no CSV/JSON export, no recurring invoices, no QuickBooks, basic client management, dashboard-only reporting
+- Required product behavior: if any of these ship before launch, update the article to match
+- Status: open
 
-**5.1 [Implicit framing, low risk]** — USD-denominated invoicing as the standard solution
-- Source: `site/staging/accepting-bitcoin-payments-freelancer-small-business.md:31`
+## 2. Minor
 
-**5.2 [Implicit framing, low risk]** — invoices have an expiration window
-- Source: `site/staging/accepting-bitcoin-payments-freelancer-small-business.md:41`
+Entries describing core product behavior or criticizing patterns CZ would only replicate through deliberate action. Verify in bulk during MS19.
 
-## 6. Pilot article — bitcoin-pending-vs-confirmed-payments
+**1. [Implicit framing]** — Noncustodial framed as "more direct and less dependent on intermediaries"
+- Source: `site/learn/accepting-bitcoin-payments-freelancer-small-business.md:59`
 
-**6.1 [Implicit framing, low risk]** — good invoicing workflow distinguishes pending vs confirmed
+**2. [Potential hypocrisy]** — criticism of "applying chargeback rules"
+- Source: `site/learn/accepting-bitcoin-payments-freelancer-small-business.md:17`
+
+**3. [Potential hypocrisy]** — criticism of "deciding when you actually get your money"
+- Source: `site/learn/accepting-bitcoin-payments-freelancer-small-business.md:17`
+
+**4. [Potential hypocrisy]** — criticism of "occasionally deciding you do not get it at all"
+- Source: `site/learn/accepting-bitcoin-payments-freelancer-small-business.md:17`
+
+**5. [Implicit framing]** — USD-denominated invoicing as the standard solution
+- Source: `site/learn/accepting-bitcoin-payments-freelancer-small-business.md:31`
+
+**6. [Implicit framing]** — invoices have an expiration window
+- Source: `site/learn/accepting-bitcoin-payments-freelancer-small-business.md:41`
+
+**7. [Implicit framing]** — good invoicing workflow distinguishes pending vs confirmed
 - Source: `site/learn/bitcoin-pending-vs-confirmed-payments.md:87`
 
-**6.2 [Implicit framing, low risk]** — invoice attribution matters (right transaction, right amount, right invoice)
+**8. [Implicit framing]** — invoice attribution matters (right transaction, right amount, right invoice)
 - Source: `site/learn/bitcoin-pending-vs-confirmed-payments.md:85`
+
+**9. [Implicit framing]** — self-custody ethos as brand identity ("not your keys, not your coins")
+- Source: `site/index.html:240`
+
+**10. [Direct claim]** — USD-first invoices with unique Bitcoin addresses
+- Source: `site/index.html:225`
+
+**11. [Direct claim]** — QR payments
+- Source: `site/index.html:235`
+
+**12. [Direct claim]** — live BTC conversion
+- Source: `site/index.html:235`
+
+**13. [Direct claim]** — on-chain payment tracking via dedicated receiving addresses
+- Source: `site/index.html:225`, `:235`
+
+**14. [Direct claim]** — watch-only xpub architecture; never holds or accesses private keys
+- Source: `site/learn/btcpay-server-alternatives.md:122`
+
+**15. [Direct claim]** — automatic on-chain payment detection
+- Source: `site/learn/btcpay-server-alternatives.md:122`
+
+**16. [Direct claim]** — noncustodial (listed alongside BTCPay, Blockonomics, etc.)
+- Source: `site/learn/btcpay-server-alternatives.md:49`
+
+**17. [Implicit framing]** — good invoicing tools generate a unique address per invoice
+- Source: `site/learn/what-is-a-bitcoin-invoice.md:60`
+
+**18. [Implicit framing]** — noncustodial settlement means no intermediary holds funds
+- Source: `site/learn/what-is-a-bitcoin-invoice.md:68`

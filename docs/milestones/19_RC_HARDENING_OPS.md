@@ -12,6 +12,7 @@ Supporting ops doc: [`docs/ops/DOCS_DX.md`](../ops/DOCS_DX.md)
 - Keep contributor docs current.
 - Implement any UI code changes deferred from MS20 legal scoping (disclaimer placement, footer ToS/Privacy Policy links).
 - Reconcile the content promises catalog against the finished product — confirm every open entry is honored or trigger a content/product revision.
+- Refactor public-facing copy from "pre-release" / "Release Candidate" to "open beta" across all published pages.
 
 ## Phases
 _(Phase strategy docs to be written when this milestone becomes active.)_
