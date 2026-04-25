@@ -16,7 +16,7 @@ Add to this catalog whenever you write or revise content that:
 
 Do not add facts about Bitcoin or other external systems that the product cannot affect — those are not promises, they are statements of fact.
 
-This catalog is curated, not exhaustive. Entries that describe core architectural commitments CZ would only violate through a deliberate, conscious redesign (e.g., going custodial, adding chargebacks) are intentionally excluded — cataloging them adds noise without reducing risk. If a future scan surfaces a promise that isn't listed here, check whether it was already considered and excluded before adding it.
+This catalog is curated, not exhaustive. Entries that describe core architectural commitments CZ would only violate through a deliberate, conscious redesign (e.g., going custodial, adding chargebacks) are intentionally excluded — cataloging them adds noise without reducing risk. If a future scan surfaces a promise that isn't listed here, check [`DELETED_PROMISES.md`](DELETED_PROMISES.md) before adding it.
 
 ## Four flavors of promise
 
