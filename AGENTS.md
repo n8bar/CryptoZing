@@ -2,21 +2,7 @@
 
 ## Working Style
 - Always run artisan/composer/npm commands through Sail (`./vendor/bin/sail ...`).
-- Keep canonical docs in sync with every merge or scope change:
-  - `docs/PLAN.md` for RC milestone order/status/current focus and the primary next doc
-  - `docs/PRODUCT_SPEC.md` for global product behavior and invariants
-  - `docs/BACKLOG.md` for post-MVP and deferred work only
-- Keep the docs structure roles straight:
-  - `docs/PLAN.md` lays out milestone-level progress only; each milestone should check off once there
-  - if `docs/PLAN.md` has a `Next action`, keep it milestone-level too; do not pull phase-level or strategy-detail steps into it
-  - `docs/milestones/**` expand a milestone into phase-level execution docs: objective/status summary, phase rollup, current focus, phase-level next actions, phase checkoffs, and milestone exit criteria
-  - if a milestone doc has a current focus or next action, keep it phase-level; it may say to review the current phase strategy, but do not pull strategy-level checklist detail into the milestone doc
-  - `docs/specs/**` for detailed feature and domain requirements
-  - `docs/strategies/**` expand one milestone phase into the ordered implementation checklist, sequencing, and verification steps; these are the “do this in this order” docs for active execution
-  - `docs/ops/**` for rollout, contributor, and deployment runbooks
-  - `docs/qa/**` for findings, test plans, verification notes, and archive material
-- Keep `docs/CHANGELOG.log` updated alongside canonical docs when scope or doc structure shifts.
-- Maintain `docs/CHANGELOG.log` as plain text in chronological order (oldest first); append new entries at the bottom instead of prepending.
+- Doc-tree roles, canonical docs, strategy doc rules, checklist-depth separation, and CHANGELOG conventions all live in [`docs/DOC_ROLES.md`](docs/DOC_ROLES.md). Read it when navigating docs or deciding where new content belongs.
 - Where dates are necessary in docs, use the date from the system you're running on.
 - When adding features, update or create migrations + tests, then run `./vendor/bin/sail artisan test`.
 - Also keep AGENTS.md updated to save on churn from session switching.
@@ -25,12 +11,6 @@
 - Sail Compose includes a dedicated `scheduler` service that runs `php artisan schedule:work`; `./vendor/bin/sail up -d` keeps the watcher alive automatically.
 - Specs come first: align on the requirement in the spec docs, implement, then update the docs to reflect what shipped; only reverse-engineer specs from existing code when we’ve explicitly agreed to do so.
 - Docs are primarily internal architecture/engineering notes for us and future maintainers, not end-user documentation.
-- Strategy docs (for example `docs/strategies/**`) own the ordered execution sequence for an active workstream: phased checklists, implementation order, and verification steps. They are authoritative for “what do we do next?” and resumption context, but they are not canonical for product scope or behavior; canonical requirements still live in `docs/PLAN.md`, `docs/PRODUCT_SPEC.md`, and the relevant docs under `docs/specs/**`. Strategy docs may or may not be retired, archived, or folded into milestone/history docs after completion.
-- Even when a workstream has one primary critical path, future strategy docs should be written with subagent use in mind: keep the main ordered sequence explicit, but call out any known safe parallel sidecars or path-scoped tasks so multi-agent execution does not have to improvise around the strategy.
-- When strategy docs assign work by owner, use `Guided User` for tasks that still require user-side account access or clicks but where the user should be coached through unfamiliar tooling; reserve plain `User` for work the user can drive directly without specialized coaching.
-- Keep checklist depth separated: `docs/PLAN.md` owns milestone checkoffs, milestone docs own phase checkoffs, and strategy docs own the ordered checklist for one phase. Higher-level docs should roll up lower-level completion with a single checkoff instead of duplicating lower-level checklist items.
-- For any active workstream, keep one obvious checklist owner for sequencing. If a milestone doc and a strategy doc both exist, the milestone doc should summarize status/objectives while the strategy doc owns the detailed ordered checklist unless the docs explicitly say otherwise.
-- Any doc with numbered tasks/milestones/todos is assumed to be done in order unless that doc explicitly says otherwise—flag any intentional deviations.
 - If the user is asking for your input/feedback (e.g. “what do you think?”, “should we…?”, “does this make sense?”), answer first and confirm before making changes—even if the request sounds actionable.
 - If asked to implement code before a spec exists, pause to confirm and recommend documenting the scope first (write the spec, then ship the code) unless the user explicitly insists otherwise.
 - If you create a new doc/spec that shapes future implementation scope, pause for user review before treating that doc as approved implementation direction.
