@@ -74,7 +74,6 @@
 - Keep the Sail stack (`./vendor/bin/sail up -d`) running during active work/testing unless there’s a clear reason to tear it down.
 - Codex owns the terminal tooling: you drive Sail, git, and related commands—assume the user doesn’t have a shell open unless they say otherwise.
 - For `.cybercreek/` changelog/findings handling, follow `.cybercreek/AGENTS_LOCAL.md`.
-- Whenever `docs/**` changes, commit/push those updates right away. Exception: single-item checklist checkoffs in the same active workstream do not need to be pushed right away and may be committed together later.
 - When you add or rename spec docs, update the README’s documentation section in the same commit so GitHub viewers always see the latest links.
 
 ## Roles
