@@ -123,7 +123,7 @@ This is us! We're partial but we'll try to be objective. Still, take this with t
 
 CryptoZing is a noncustodial Bitcoin invoicing tool built for freelancers and small businesses. USD-denominated invoices with BTC computed at current rates. Watch-only architecture using your xpub so we never hold or have access to your private keys. Automatic on-chain payment detection. Self-hostable (Laravel/Docker) or hosted if you don't want to worry about servers or installs — just sign up, complete the quick walk-through and send an invoice.
 
-What we do not have (or have yet): Lightning support (we're on-chain only), CSV/JSON export, recurring invoices, or a QuickBooks integration. Client management is minimal. Reporting is dashboard-only for now. We are pre-release, with an open beta projected around mid-2026 and a first public release around mid-to-late 2027. No fees during beta. Long-term pricing hasn't been decided; free is still on the table, and if not, the intent is to keep it very low.
+What we do not have (or have yet): Lightning support (we're on-chain only), CSV/JSON export, recurring invoices, or a QuickBooks integration. Client management is minimal. Reporting is dashboard-only for now. We are pre-release, with an open beta projected around late 2026 and a first public release around mid-to-late 2027. No fees during beta. Long-term pricing hasn't been decided; free is still on the table, and if not, the intent is to keep it very low.
 
 | Noncustodial tool | Lightning | Fee | Invoicing | Client Mgmt | Reporting | Self-host |
 |-------------------|-----------|-----|-----------|-------------|-----------|-----------|
