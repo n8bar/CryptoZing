@@ -11,6 +11,7 @@ Supporting ops doc: [`docs/ops/DOCS_DX.md`](../ops/DOCS_DX.md)
 - Put a minimum legal layer in place before mainnet cutover: Terms of Service draft, Privacy Policy draft, disclaimer copy at key user touchpoints, monetization-neutral copy review across existing UI and mail, and UI placement (disclaimer surfaces + footer ToS/Privacy Policy links).
 - Reconcile the content promises catalog against the finished product — confirm every open entry is honored or trigger a content/product revision.
 - Refactor public-facing copy from "pre-release" / "Release Candidate" to "open beta" across all published pages.
+- Add 2FA capability for RC: email-based 2FA as the baseline, TOTP opportunistically if MS19 time allows, with a recommendation surface for users without 2FA enabled.
 
 ## Decisions recorded
 - **Legal approach:** No lawyer for RC1. Self-drafted ToS and Privacy Policy covering the essential bases — not financial advice, no custody of funds, user responsibility for keys, no warranty on BTC/USD values.
@@ -24,6 +25,7 @@ Supporting ops doc: [`docs/ops/DOCS_DX.md`](../ops/DOCS_DX.md)
 - Phase 3: [`docs/strategies/19.3_LEGAL_LAYER.md`](../strategies/19.3_LEGAL_LAYER.md)
 - Phase 4: [`docs/strategies/19.4_CONTENT_PROMISES_RECONCILIATION.md`](../strategies/19.4_CONTENT_PROMISES_RECONCILIATION.md)
 - Phase 5: [`docs/strategies/19.5_CONTRIBUTOR_DOCS.md`](../strategies/19.5_CONTRIBUTOR_DOCS.md)
+- Phase 6: [`docs/strategies/19.6_TWO_FACTOR_AUTHENTICATION.md`](../strategies/19.6_TWO_FACTOR_AUTHENTICATION.md)
 
 ## Phase Rollup
 
@@ -42,6 +44,9 @@ Walk every open entry in `CONTENT_PROMISES.md` against the finished product; res
 ### [ ] Phase 5 — Contributor Docs Review
 Refresh AGENTS.md, CLAUDE.md, AgentRoles/, and contributor-facing ops docs for currency before RC.
 
+### [ ] Phase 6 — Two-Factor Authentication
+Add 2FA to the RC. Email-based 2FA as the baseline; TOTP / authenticator-app 2FA opportunistically if MS19 time allows (deferred to the 2028 release otherwise). Includes a non-blocking recommendation surface for users without 2FA enabled. **Positionally last by design** — if additional phases are ever added to MS19, this one stays at the end.
+
 ## Exit Criteria
 _(To be detailed when active.)_
 
@@ -54,3 +59,6 @@ _(To be detailed when active.)_
 - [ ] Monetization-safe language guide produced for future copy decisions.
 - [ ] Content promises catalog reconciled — every open entry confirmed honored or resolved (content revised or product adjusted).
 - [ ] Contributor docs reviewed and current.
+- [ ] Email 2FA available as opt-in; recovery flow per the Phase 6 decision in place.
+- [ ] Recommendation surface for users without 2FA enabled is shipped.
+- [ ] TOTP shipped if MS19 time-cutoff met; otherwise explicitly deferred to the 2028 release.
