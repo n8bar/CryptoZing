@@ -15,14 +15,14 @@ BEGIN:VEVENT
 DTSTART;VALUE=DATE:20260516
 DTEND;VALUE=DATE:20260612
 SUMMARY:MS19 — RC Hardening & Ops
-DESCRIPTION:Document notification coverage, add auth/password policy hardening, and keep contributor docs current.
+DESCRIPTION:RC hardening: notification coverage, auth/password policy, legal layer (ToS, Privacy Policy, disclaimers, monetization-neutral copy), content promises reconciliation, contributor docs.
 UID:cz-ms19@cryptozing.app
 END:VEVENT
 BEGIN:VEVENT
 DTSTART;VALUE=DATE:20260611
 DTEND;VALUE=DATE:20260624
 SUMMARY:MS20 — Mainnet Cutover Preparation
-DESCRIPTION:Define and rehearse env flips, wallet validation, mail sanity, and backout steps. Legal layer: ToS, Privacy Policy, disclaimers.
+DESCRIPTION:Define and rehearse env flips, wallet validation, mail sanity, and backout steps for mainnet cutover.
 UID:cz-ms20@cryptozing.app
 END:VEVENT
 BEGIN:VEVENT
