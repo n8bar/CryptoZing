@@ -1,6 +1,6 @@
 # MS19 - RC Hardening & Ops
 
-Status: Active — running in parallel with MS18 per the 2026-05-08 parallelism exception (MS18 is blocked end-to-end on Rachel's video deliverable through the 2026-05-31 hard cap; MS19 phases are independent of that work). Phase strategy doc skeletons in place; decisions pending before flesh-out.
+Status: Active — running in parallel with MS18 (no hard dependencies between the two; MS18 is blocked on Rachel's video through the 2026-05-31 hard cap, MS19 phases are independent of that work). Phase strategy doc skeletons in place; decisions pending before flesh-out.
 Parent execution doc: [`docs/PLAN.md`](../PLAN.md)
 Supporting ops doc: [`docs/ops/DOCS_DX.md`](../ops/DOCS_DX.md)
 

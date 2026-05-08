@@ -15,7 +15,7 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 - A new milestone cannot begin unless at least one article from [`docs/CONTENT_PLAN.md`](CONTENT_PLAN.md) has been published since the previous milestone started. Content production is a parallel track; milestone transitions are the checkpoint.
 
 ## Current
-- Active milestones (running in parallel per the 2026-05-08 exception):
+- Active milestones (running in parallel — no hard dependencies between them):
   - **MS18 - Pre-Release Content & SEO** — Phase 3, blocked end-to-end on Rachel's video through the 2026-05-31 hard cap.
   - **MS19 - RC Hardening & Ops** — pre-flight; strategy doc skeletons drafted, decisions awaiting user input before flesh-out.
 - Status: `active`
