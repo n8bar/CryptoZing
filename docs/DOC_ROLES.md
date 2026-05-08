@@ -42,3 +42,8 @@ Keep these in sync with every merge or scope change.
 
 - Keep [`docs/CHANGELOG.log`](CHANGELOG.log) updated alongside canonical docs when scope or doc structure shifts.
 - Maintain `CHANGELOG.log` as plain text in chronological order (oldest first); append new entries at the bottom instead of prepending.
+
+## Findings conventions
+
+- Each finding under `docs/qa/Finding*.md` records `Date:` (when reported) near the top, and adds a `Date fixed:` line once resolved with a brief reference to the milestone, PR, or commit that resolved it.
+- A finding without a `Date fixed:` line is treated as still open.

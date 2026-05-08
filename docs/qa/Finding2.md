@@ -1,6 +1,7 @@
 # Finding 2: "Use current rate" button label misrepresents invoice rate behavior
 
 Date: 2026-05-08
+Date fixed: 2026-05-08 (commit 33489f2)
 
 ## Summary
 

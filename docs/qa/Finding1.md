@@ -1,6 +1,7 @@
 # Finding 1: Shared xpub/account causes false on-chain payment attribution
 
 Date: 2026-02-25
+Date fixed: 2026-03-26 (via MS14 — On-Chain Payment Attribution Hardening)
 
 ## Summary
 
