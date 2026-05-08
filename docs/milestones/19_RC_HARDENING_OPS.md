@@ -1,8 +1,6 @@
 # MS19 - RC Hardening & Ops
 
-> **Stub** — high-level scope and decisions recorded. Phase strategy docs and detailed exit criteria to be written when this milestone becomes active.
-
-Status: Not started.
+Status: Not started — phase strategy doc skeletons in place; decisions pending before flesh-out.
 Parent execution doc: [`docs/PLAN.md`](../PLAN.md)
 Supporting ops doc: [`docs/ops/DOCS_DX.md`](../ops/DOCS_DX.md)
 
@@ -19,14 +17,30 @@ Supporting ops doc: [`docs/ops/DOCS_DX.md`](../ops/DOCS_DX.md)
 - **Disclaimer surfaces:** Account signup, wallet onboarding, and invoice/payment screens are the three required touchpoints. Footer links to ToS and Privacy Policy on every page.
 - **Monetization-neutral language:** Avoid language that permanently forecloses pricing options ("always free," "no fees ever"). Leave room for future paid tiers or feature gating without requiring a ToS rewrite.
 
-## Phases
-_(Phase strategy docs to be written when this milestone becomes active.)_
+## Current Focus
+- Active phase: _(MS19 begins on activation — pending MS18 close-out.)_
+- Phase 1: [`docs/strategies/19.1_NOTIFICATION_COVERAGE_AUDIT.md`](../strategies/19.1_NOTIFICATION_COVERAGE_AUDIT.md)
+- Phase 2: [`docs/strategies/19.2_AUTH_HARDENING.md`](../strategies/19.2_AUTH_HARDENING.md)
+- Phase 3: [`docs/strategies/19.3_LEGAL_LAYER.md`](../strategies/19.3_LEGAL_LAYER.md)
+- Phase 4: [`docs/strategies/19.4_CONTENT_PROMISES_RECONCILIATION.md`](../strategies/19.4_CONTENT_PROMISES_RECONCILIATION.md)
+- Phase 5: [`docs/strategies/19.5_CONTRIBUTOR_DOCS.md`](../strategies/19.5_CONTRIBUTOR_DOCS.md)
 
-- Phase 1 — Notification coverage audit
-- Phase 2 — Auth/password policy hardening
-- Phase 3 — Legal layer: ToS draft, Privacy Policy draft, disclaimer copy, monetization-neutral copy review, UI placement
-- Phase 4 — Content promises reconciliation
-- Phase 5 — Contributor docs review and update
+## Phase Rollup
+
+### [ ] Phase 1 — Notification Coverage Audit
+Document every outbound mail type — trigger, recipient, delivery-log behavior — so the full mail surface is explicitly accounted for before RC.
+
+### [ ] Phase 2 — Auth/Password Policy Hardening
+Implement 419-to-login redirect and site-wide session-expiry logout.
+
+### [ ] Phase 3 — Legal Layer
+Draft ToS, Privacy Policy, disclaimer copy; review existing UI/mail copy for monetization-neutral language; place all in the UI.
+
+### [ ] Phase 4 — Content Promises Reconciliation
+Walk every open entry in `CONTENT_PROMISES.md` against the finished product; resolve each as honored, content-revised, or product-revised.
+
+### [ ] Phase 5 — Contributor Docs Review
+Refresh AGENTS.md, CLAUDE.md, AgentRoles/, and contributor-facing ops docs for currency before RC.
 
 ## Exit Criteria
 _(To be detailed when active.)_
