@@ -1,5 +1,5 @@
 # PLAN
-_Last updated: 2026-04-29_
+_Last updated: 2026-05-08_
 
 This is the human-facing execution dashboard for Release Candidate work.
 
@@ -15,9 +15,9 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 - A new milestone cannot begin unless at least one article from [`docs/CONTENT_PLAN.md`](CONTENT_PLAN.md) has been published since the previous milestone started. Content production is a parallel track; milestone transitions are the checkpoint.
 
 ## Current
-- Active milestone: **MS18 - Pre-Release Content & SEO** (Phase 2 — Content Audit & Production)
+- Active milestone: **MS18 - Pre-Release Content & SEO** (Phase 3 — Site Architecture, Publishing & SEO Hygiene)
 - Status: `active`
-- Next action: Phase 3 — site architecture, SEO verification, video production, and MS18 close-out.
+- Next action: Phase 3 video production (blocked on Rachel's availability through 2026-05-31 hard cap) and MS18 close-out. Phase 3 sections 1–2 (SEO verification, content promises catalog review) complete.
 - Primary next doc: [`docs/milestones/18_PRERELEASE_CONTENT_SEO.md`](milestones/18_PRERELEASE_CONTENT_SEO.md)
 - Most recently completed milestone doc: [`docs/milestones/17_PRODUCT_READINESS.md`](milestones/17_PRODUCT_READINESS.md)
 
@@ -27,7 +27,7 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 ## Active and Upcoming Milestones
 | Status | ID | Milestone | Short intent | Target | Primary doc |
 |---|---|---|---|---|---|
-| [ ] | 18 | Pre-Release Content & SEO | Extend the site from a single placeholder to a lightweight content site with educational articles, adapted Helpful Notes, and a staging path — giving search engines substance to rank before RC1 ships. | 2026-05-16 | [`docs/milestones/18_PRERELEASE_CONTENT_SEO.md`](milestones/18_PRERELEASE_CONTENT_SEO.md) |
+| [ ] | 18 | Pre-Release Content & SEO | Extend the site from a single placeholder to a lightweight content site with educational articles, adapted Helpful Notes, and a staging path — giving search engines substance to rank before RC1 ships. | 2026-05-31 | [`docs/milestones/18_PRERELEASE_CONTENT_SEO.md`](milestones/18_PRERELEASE_CONTENT_SEO.md) |
 | [ ] | 19 | RC Hardening & Ops | Document notification coverage, add auth/password policy hardening (including 419-to-login redirect and site-wide session expiry logout), and keep contributor docs current. | 2026-06-11 | [`docs/milestones/19_RC_HARDENING_OPS.md`](milestones/19_RC_HARDENING_OPS.md) |
 | [ ] | 20 | Mainnet Cutover Preparation | Define and rehearse env flips, wallet validation, mail sanity, and backout steps for mainnet. Includes legal layer: ToS, Privacy Policy, disclaimer placement at key UI touchpoints, and monetization-neutral copy review. | 2026-06-23 | [`docs/milestones/20_MAINNET_CUTOVER_PREP.md`](milestones/20_MAINNET_CUTOVER_PREP.md) |
 | [ ] | 21 | CryptoZing.app Deployment (RC) | Deploy the RC under `cryptozing.app`, replace the GitHub Pages placeholder at `/` with the live app landing page without breaking the SEO baseline established in MS15, remove temporary mail aliasing, and complete rollout verification. | 2026-07-05 | [`docs/milestones/21_RC_DEPLOYMENT.md`](milestones/21_RC_DEPLOYMENT.md) |

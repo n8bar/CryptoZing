@@ -1,6 +1,6 @@
 # MS18 - Pre-Release Content for SEO
 
-Status: Active as of 2026-04-09.
+Status: Active as of 2026-04-09. Target: **2026-05-31 hard cap** — Rachel's nursing program starts 2026-06-01 and removes her availability for the foreseeable timeline; the video either records by 2026-05-31 or is dropped from MS18 scope rather than slipping the milestone.
 Parent execution doc: [`docs/PLAN.md`](../PLAN.md)
 
 **Relationship to MS15:** MS15 established the technical SEO foundation — domain verification, sitemap submission, canonical signals, robots, and controlled inbound links. That milestone asked "can Google find us?" This milestone asks "when someone searches, do we have an answer worth surfacing?" MS15 is a prerequisite; MS18 builds on it with substance.
@@ -14,9 +14,9 @@ Parent execution doc: [`docs/PLAN.md`](../PLAN.md)
 - Consider video content if time allows; explicitly defer to post-RC if not — document the outcome either way.
 
 ## Current Focus
-- Active phase: **Phase 2 — Content Audit & Production**
+- Active phase: **Phase 3 — Site Architecture, Publishing & SEO Hygiene**
 - Phase 1: [`docs/strategies/x18.1_CMS_AND_STAGING.md`](../strategies/x18.1_CMS_AND_STAGING.md) ✓
-- Phase 2: [`docs/strategies/18.2_CONTENT_AUDIT_AND_PRODUCTION.md`](../strategies/18.2_CONTENT_AUDIT_AND_PRODUCTION.md)
+- Phase 2: [`docs/strategies/18.2_CONTENT_AUDIT_AND_PRODUCTION.md`](../strategies/18.2_CONTENT_AUDIT_AND_PRODUCTION.md) ✓
 - Phase 3: [`docs/strategies/18.3_SITE_ARCHITECTURE_AND_PUBLISHING.md`](../strategies/18.3_SITE_ARCHITECTURE_AND_PUBLISHING.md)
 
 ## Phase Rollup
@@ -24,7 +24,7 @@ Parent execution doc: [`docs/PLAN.md`](../PLAN.md)
 ### [x] Phase 1 — CMS Selection & Staging Setup
 Select a CMS and staging workflow as joint decisions — staging requirements may influence the CMS choice and vice versa. Set both up and confirm the full publish pipeline works end-to-end before any content is written.
 
-### [ ] Phase 2 — Content Audit & Production
+### [x] Phase 2 — Content Audit & Production
 Audit the existing Helpful Notes, make Adapt/Inspire/Skip decisions, and produce all planned content. Move directly from audit decision to writing for each piece. Video at the end if time allows.
 
 ### [ ] Phase 3 — Site Architecture, Publishing & SEO Hygiene
@@ -32,9 +32,9 @@ Wire up the full multi-page structure, internal linking, and navigation around t
 
 ## Exit Criteria
 - [x] CMS and staging workflow selected, set up, and verified end-to-end (Phase 1).
-- [ ] Content plan approved before Phase 2 writing begins.
-- [ ] At least 4 articles or adapted Helpful Notes published on the live site, targeting stable educational queries.
-- [ ] `site/` supports multiple pages with a working staging path.
-- [ ] `sitemap.xml` reflects all published content with accurate `lastmod`.
-- [ ] MS15 SEO baseline intact and extended — no regressions in indexing, canonical, robots, or sitemap signals.
+- [x] Content plan approved before Phase 2 writing begins.
+- [x] At least 4 articles or adapted Helpful Notes published on the live site, targeting stable educational queries.
+- [x] `site/` supports multiple pages with a working staging path.
+- [x] `sitemap.xml` reflects all published content with accurate `lastmod`.
+- [x] MS15 SEO baseline intact and extended — no regressions in indexing, canonical, robots, or sitemap signals.
 - [ ] Video: shipped if time allowed; explicitly deferred and documented if not.

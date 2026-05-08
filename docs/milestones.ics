@@ -6,7 +6,7 @@ METHOD:PUBLISH
 X-WR-CALNAME:CZ Milestones
 BEGIN:VEVENT
 DTSTART;VALUE=DATE:20260409
-DTEND;VALUE=DATE:20260517
+DTEND;VALUE=DATE:20260601
 SUMMARY:MS18 — Pre-Release Content & SEO
 DESCRIPTION:Extend the site from a single placeholder to a lightweight content site with educational articles and a staging path.
 UID:cz-ms18@cryptozing.app
