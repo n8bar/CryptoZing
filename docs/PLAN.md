@@ -15,10 +15,12 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 - A new milestone cannot begin unless at least one article from [`docs/CONTENT_PLAN.md`](CONTENT_PLAN.md) has been published since the previous milestone started. Content production is a parallel track; milestone transitions are the checkpoint.
 
 ## Current
-- Active milestone: **MS18 - Pre-Release Content & SEO** (Phase 3 — Site Architecture, Publishing & SEO Hygiene)
+- Active milestones (running in parallel per the 2026-05-08 exception):
+  - **MS18 - Pre-Release Content & SEO** — Phase 3, blocked end-to-end on Rachel's video through the 2026-05-31 hard cap.
+  - **MS19 - RC Hardening & Ops** — pre-flight; strategy doc skeletons drafted, decisions awaiting user input before flesh-out.
 - Status: `active`
-- Next action: Phase 3 video production (blocked on Rachel's availability through 2026-05-31 hard cap) and MS18 close-out. Phase 3 sections 1–2 (SEO verification, content promises catalog review) complete.
-- Primary next doc: [`docs/milestones/18_PRERELEASE_CONTENT_SEO.md`](milestones/18_PRERELEASE_CONTENT_SEO.md)
+- Next action: MS19 strategy doc decision answers (user) → flesh-out (Claude). MS18 video gated on Rachel.
+- Primary next doc: [`docs/milestones/19_RC_HARDENING_OPS.md`](milestones/19_RC_HARDENING_OPS.md)
 - Most recently completed milestone doc: [`docs/milestones/17_PRODUCT_READINESS.md`](milestones/17_PRODUCT_READINESS.md)
 
 ## Published Release Target
