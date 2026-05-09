@@ -15,7 +15,7 @@ BEGIN:VEVENT
 DTSTART;VALUE=DATE:20260516
 DTEND;VALUE=DATE:20260612
 SUMMARY:MS19 — RC Hardening & Ops
-DESCRIPTION:RC hardening: notification coverage, auth/password policy, legal layer (ToS, Privacy Policy, disclaimers, monetization-neutral copy), content promises reconciliation, contributor docs.
+DESCRIPTION:RC hardening: notification coverage, auth/password policy, LLC formation, legal layer (ToS, Privacy Policy, disclaimers, monetization-neutral copy), content promises reconciliation, contributor docs, 2FA (email baseline, optional TOTP).
 UID:cz-ms19@cryptozing.app
 END:VEVENT
 BEGIN:VEVENT
