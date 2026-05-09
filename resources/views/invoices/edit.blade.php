@@ -76,14 +76,14 @@
                     </div>
                     <button type="button" id="useCurrentRate"
                             class="mt-2 inline-flex items-center rounded-md border border-gray-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50">
-                        Use current rate
+                        Refresh rate
                     </button>
                     <small id="rateStamp" class="ml-2 text-xs text-gray-500"></small>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Amount (BTC)</label>
                         <input type="number" step="0.00000001" min="0" name="amount_btc" id="amount_btc" value="{{ old('amount_btc',$invoice->amount_btc) }}"
                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"/>
-                        <p class="mt-1 text-xs text-gray-500">Amounts auto-calculate as you type. Use “Use current rate” to refresh.</p>
+                        <p class="mt-1 text-xs text-gray-500">Amounts auto-calculate as you type. Press “Refresh rate” to update.</p>
                         @error('amount_btc')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
                     </div>
                 </div>
@@ -264,7 +264,7 @@
                     }
                     if(data.as_of) stampEl.textContent = `as of ${new Date(data.as_of).toLocaleString()}`;
                 }catch(e){ alert(e.message || 'Could not fetch rate.'); }
-                finally{ btn.disabled = false; btn.textContent = 'Use current rate'; }
+                finally{ btn.disabled = false; btn.textContent = 'Refresh rate'; }
             }
             btn?.addEventListener('click', fetchRate);
         })();

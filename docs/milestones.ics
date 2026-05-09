@@ -6,28 +6,28 @@ METHOD:PUBLISH
 X-WR-CALNAME:CZ Milestones
 BEGIN:VEVENT
 DTSTART;VALUE=DATE:20260409
-DTEND;VALUE=DATE:20260510
+DTEND;VALUE=DATE:20260601
 SUMMARY:MS18 — Pre-Release Content & SEO
 DESCRIPTION:Extend the site from a single placeholder to a lightweight content site with educational articles and a staging path.
 UID:cz-ms18@cryptozing.app
 END:VEVENT
 BEGIN:VEVENT
-DTSTART;VALUE=DATE:20260509
-DTEND;VALUE=DATE:20260605
+DTSTART;VALUE=DATE:20260516
+DTEND;VALUE=DATE:20260612
 SUMMARY:MS19 — RC Hardening & Ops
-DESCRIPTION:Document notification coverage, add auth/password policy hardening, and keep contributor docs current.
+DESCRIPTION:RC hardening: notification coverage, auth/password policy, LLC formation, legal layer (ToS, Privacy Policy, disclaimers, monetization-neutral copy), content promises reconciliation, contributor docs, 2FA (email baseline, optional TOTP).
 UID:cz-ms19@cryptozing.app
 END:VEVENT
 BEGIN:VEVENT
-DTSTART;VALUE=DATE:20260604
-DTEND;VALUE=DATE:20260617
+DTSTART;VALUE=DATE:20260611
+DTEND;VALUE=DATE:20260624
 SUMMARY:MS20 — Mainnet Cutover Preparation
-DESCRIPTION:Define and rehearse env flips, wallet validation, mail sanity, and backout steps. Legal layer: ToS, Privacy Policy, disclaimers.
+DESCRIPTION:Define and rehearse env flips, wallet validation, mail sanity, and backout steps for mainnet cutover.
 UID:cz-ms20@cryptozing.app
 END:VEVENT
 BEGIN:VEVENT
-DTSTART;VALUE=DATE:20260616
-DTEND;VALUE=DATE:20260629
+DTSTART;VALUE=DATE:20260623
+DTEND;VALUE=DATE:20260706
 SUMMARY:MS21 — CryptoZing.app Deployment (RC)
 DESCRIPTION:Deploy the RC under cryptozing.app, replace GitHub Pages placeholder, remove temporary mail aliasing, complete rollout verification.
 UID:cz-ms21@cryptozing.app

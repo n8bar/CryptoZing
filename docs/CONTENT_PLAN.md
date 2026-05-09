@@ -43,5 +43,4 @@ _(Ordered by SEO and traffic potential. Pick from the top when starting a new ar
 
 ## Video
 
-- [ ] Scope video content after enough articles exist to inform it.
-- [ ] Produce if time allows; explicitly defer and document if not.
+Tracked in MS18 Phase 3 — see [`strategies/18.3_SITE_ARCHITECTURE_AND_PUBLISHING.md`](strategies/18.3_SITE_ARCHITECTURE_AND_PUBLISHING.md) section 3.

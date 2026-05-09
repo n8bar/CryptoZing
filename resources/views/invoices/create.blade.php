@@ -136,7 +136,7 @@
                     <button type="button"
                             id="useCurrentRate"
                             class="mt-2 inline-flex h-10 items-center justify-center rounded-md border border-gray-300 bg-white px-3 py-2 text-center text-sm font-semibold leading-5 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-60">
-                        Use current rate
+                        Refresh rate
                     </button>
                     <small id="rateStamp" class="ml-2 text-xs text-gray-500"></small>
 
@@ -144,7 +144,7 @@
                         <label class="block text-sm font-medium text-gray-700">Amount (BTC)</label>
                         <input type="number" step="0.00000001" min="0" name="amount_btc" id="amount_btc" value="{{ old('amount_btc') }}"
                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"/>
-                        <p class="mt-1 text-xs text-gray-500">Amounts auto-calculate as you type. Use “Use current rate” to refresh.</p>
+                        <p class="mt-1 text-xs text-gray-500">Amounts auto-calculate as you type. Press “Refresh rate” to update.</p>
                         @error('amount_btc')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
                     </div>
                 </div>
@@ -284,7 +284,7 @@
                 alert(e.message || 'Could not fetch rate.');
             } finally {
                 btn.disabled = false;
-                btn.textContent = 'Use current rate';
+                btn.textContent = 'Refresh rate';
             }
         }
 
