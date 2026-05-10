@@ -65,6 +65,66 @@ class InvoiceDeliveryTest extends TestCase
         });
     }
 
+    public function test_sending_draft_invoice_transitions_status_to_sent(): void
+    {
+        Queue::fake();
+        $owner = User::factory()->create();
+        $client = Client::create([
+            'user_id' => $owner->id,
+            'name' => 'Acme Co',
+            'email' => 'billing@example.com',
+        ]);
+
+        $invoice = Invoice::create([
+            'user_id' => $owner->id,
+            'client_id' => $client->id,
+            'number' => 'INV-1001-DRAFT-SEND',
+            'amount_usd' => 200,
+            'btc_rate' => 40_000,
+            'amount_btc' => 0.005,
+            'payment_address' => 'tb1qq0exampledraftsend',
+            'status' => 'draft',
+            'invoice_date' => now()->toDateString(),
+        ]);
+        $invoice->enablePublicShare();
+
+        $this->actingAs($owner)
+            ->post(route('invoices.deliver', $invoice))
+            ->assertRedirect();
+
+        $this->assertSame('sent', $invoice->fresh()->status);
+    }
+
+    public function test_sending_does_not_regress_status_for_non_draft_invoice(): void
+    {
+        Queue::fake();
+        $owner = User::factory()->create();
+        $client = Client::create([
+            'user_id' => $owner->id,
+            'name' => 'Acme Co',
+            'email' => 'billing@example.com',
+        ]);
+
+        $invoice = Invoice::create([
+            'user_id' => $owner->id,
+            'client_id' => $client->id,
+            'number' => 'INV-1001-PAID-SEND',
+            'amount_usd' => 200,
+            'btc_rate' => 40_000,
+            'amount_btc' => 0.005,
+            'payment_address' => 'tb1qq0examplepaidsend',
+            'status' => 'paid',
+            'invoice_date' => now()->toDateString(),
+        ]);
+        $invoice->enablePublicShare();
+
+        $this->actingAs($owner)
+            ->post(route('invoices.deliver', $invoice))
+            ->assertRedirect();
+
+        $this->assertSame('paid', $invoice->fresh()->status);
+    }
+
     public function test_owner_can_save_delivery_message_draft(): void
     {
         $owner = User::factory()->create();

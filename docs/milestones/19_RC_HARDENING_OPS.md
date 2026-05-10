@@ -32,8 +32,8 @@ Supporting ops doc: [`docs/ops/DOCS_DX.md`](../ops/DOCS_DX.md)
 
 ## Phase Rollup
 
-### [ ] Phase 1 — Notification Coverage Audit
-Document every outbound mail type — trigger, recipient, delivery-log behavior — so the full mail surface is explicitly accounted for before RC.
+### [x] Phase 1 — Notification Coverage Audit
+Document every outbound mail type — trigger, recipient, delivery-log behavior — so the full mail surface is explicitly accounted for before RC. Closed 2026-05-09 — see [`x19.1_NOTIFICATION_COVERAGE_AUDIT.md`](../strategies/x19.1_NOTIFICATION_COVERAGE_AUDIT.md).
 
 ### [ ] Phase 2 — Auth/Password Policy Hardening
 Implement 419-to-login redirect and site-wide session-expiry logout.
