@@ -17,7 +17,7 @@
 ## 3. Base Communication Flows
 1. **Send Invoice (manual owner action)**
    1. Available when the invoice has a client email and its public link is enabled.
-   2. Sending the invoice queues outbound delivery, records the attempt in the delivery log, and issues the invoice out of `draft`.
+   2. Sending the invoice queues outbound delivery and records the attempt in the delivery log. If the invoice is currently in `draft`, the send action also transitions its status to `sent`. Sending an invoice that is already `sent`, `partial`, `pending`, `paid`, or `void` does not regress its status.
 
 2. **Payment Acknowledgment + Receipt**
    1. **Detected Payment Acknowledgment**
@@ -56,14 +56,16 @@
    2. The owner reminder should communicate that the invoice is overdue, include the outstanding totals, and suggest next steps.
    3. The client reminder should communicate the overdue status, include the outstanding balance and invoice link, and include a short “contact the sender if you already paid” caveat.
 
-3. **Significant Overpayment Alert (Client)**
+3. **Significant Overpayment Alert (Owner + Client)**
    1. Triggered when the invoice reflects a significant overpayment (15% threshold for RC).
    2. The client alert should explain that overpayments are treated as gratuities by default and tell the client to contact the sender if the overpayment was accidental.
+   3. The owner alert should report the overpayment percentage and prompt a disposition decision — keep as tip, credit the client, or record a manual adjustment/refund — with a link back into the app.
 
-4. **Significant Underpayment Alert (Client)**
+4. **Significant Underpayment Alert (Owner + Client)**
    1. Triggered when the invoice still carries a significant remaining balance after payment activity (15% threshold for RC).
-   2. The client alert should neutrally communicate that a balance remains, include the outstanding USD/BTC amounts, and link to the public invoice so the client can settle; where appropriate, it may encourage completing the remaining balance in one payment for convenience.
-   3. Fragmented or repeated partial payments should not create a separate repeated-warning alert family; they should continue to use the final underpayment behavior instead.
+   2. The client alert should neutrally communicate that a balance remains, include the outstanding USD amount, and link to the public invoice so the client can settle; where appropriate, it may encourage completing the remaining balance in one payment for convenience.
+   3. The owner alert should report the outstanding balance and link back to the invoice for follow-up or manual adjustment.
+   4. Fragmented or repeated partial payments should not create a separate repeated-warning alert family; they should continue to use the final underpayment behavior instead.
 
 ## 5. Outbound Mail and History
 1. Outbound invoice communication should use a shared queued delivery path and shared delivery history so send outcomes remain auditable.
@@ -82,8 +84,8 @@
    1. `sending` is the claimed provider-boundary state used to prevent duplicate job execution from producing a second outbound send while a delivery is already in progress or awaiting operator review after an ambiguous worker failure.
 12. The delivery history should use concise, human-friendly labels for communication classes and outcomes.
    1. Manual invoice sends should display as `Invoice email`, not a raw storage key.
-   2. Paired owner/client notification rows should keep the audience explicit in the label, such as `Past-due reminder (client)` and `Underpayment alert (owner)`.
-   3. While the legacy repeated-partial warning rows still exist in stored history, they should display honestly as `Partial payment warning (client|owner)` rather than being hidden behind renamed copy.
+   2. Paired issuer/client notification rows should keep the audience explicit in the label, such as `Past-due reminder (client)` and `Underpayment alert (issuer)`.
+   3. While the legacy repeated-partial warning rows still exist in stored history, they should display honestly as `Partial payment warning (client|issuer)` rather than being hidden behind renamed copy.
    4. Payment-triggered follow-up should keep the acknowledgment-versus-receipt split visible in history once those rows ship, using labels such as `Payment acknowledgment (client)`, `Payment acknowledgment (owner)`, and `Receipt (client)` for the later higher-certainty follow-up.
    5. Outcome labels should display as `Queued`, `Sending`, `Sent`, `Skipped`, and `Failed`.
 13. Outbound mail copy should stay concise and actionable.
@@ -96,5 +98,23 @@
       2. That preview should be lightly rate-limited or cooldown-protected so repeated clicks do not spam the owner mailbox.
    5. RC does not include arbitrary custom logo uploads for outbound mail; at most it may show or hide the default CryptoZing logo in the shared mail chrome.
 
-## Coverage & Status (MS17 deliverable)
-A coverage matrix must be added to this spec during MS17 to document the live state of all outbound notice classes. Columns: Audience, Trigger, Mailable class, Status (`live` / `stubbed` / `planned`), Feature test(s), Delivery log type. Must cover all active notice classes including paid notices, past-due reminders, overpayment and underpayment alerts, payment acknowledgments, and receipt. Note any gaps and route deferred items to `docs/BACKLOG.md`.
+## Coverage & Status
+
+One row per outbound notice class. `Status`: `live` = in production code, behaving per spec; `stubbed` = class exists but does not behave per spec (legacy or unwired); `planned` = named in spec, not yet implemented.
+
+| Audience | Trigger | Mailable class | Status | Feature test(s) | Delivery log type |
+|---|---|---|---|---|---|
+| Client | Manual owner action (issue invoice) | `InvoiceReadyMail` | live | [`InvoiceDeliveryTest`](../../tests/Feature/InvoiceDeliveryTest.php) | `send` |
+| Client | Detected on-chain payment (low-info ack) | `InvoicePaymentAcknowledgmentClientMail` | live | [`InvoiceDeliveryTest`](../../tests/Feature/InvoiceDeliveryTest.php), [`WatchPaymentsCommandTest`](../../tests/Feature/Wallet/WatchPaymentsCommandTest.php) | `payment_acknowledgment_client` |
+| Owner | Detected on-chain payment (low-info ack) | `InvoicePaymentAcknowledgmentIssuerMail` | live | [`InvoiceDeliveryTest`](../../tests/Feature/InvoiceDeliveryTest.php), [`WatchPaymentsCommandTest`](../../tests/Feature/Wallet/WatchPaymentsCommandTest.php) | `payment_acknowledgment_issuer` |
+| Client | Owner-reviewed manual receipt send (RC1 deliberate-manual) | `InvoicePaidReceiptMail` | live | [`InvoiceDeliveryTest`](../../tests/Feature/InvoiceDeliveryTest.php) | `receipt` |
+| Owner | Invoice transitions to `paid` | `InvoiceIssuerPaidNoticeMail` | live | [`InvoiceNotificationTest`](../../tests/Feature/InvoiceNotificationTest.php), [`InvoiceDeliveryTest`](../../tests/Feature/InvoiceDeliveryTest.php), [`WatchPaymentsCommandTest`](../../tests/Feature/Wallet/WatchPaymentsCommandTest.php) | `issuer_paid_notice` |
+| Owner | Past-due schedule slot fires (slots 1/2/3 at days 1/7/14) | `InvoicePastDueIssuerMail` | live | [`InvoiceNotificationTest`](../../tests/Feature/InvoiceNotificationTest.php) | `past_due_issuer` |
+| Client | Past-due schedule slot fires (slots 1/2/3 at days 1/7/14) | `InvoicePastDueClientMail` | live | [`InvoiceNotificationTest`](../../tests/Feature/InvoiceNotificationTest.php) | `past_due_client` |
+| Client | Overpayment ≥15% threshold | `InvoiceOverpaymentClientMail` | live | [`InvoiceNotificationTest`](../../tests/Feature/InvoiceNotificationTest.php) | `client_overpay_alert` |
+| Owner | Overpayment ≥15% threshold | `InvoiceOverpaymentIssuerMail` | live | [`InvoiceNotificationTest`](../../tests/Feature/InvoiceNotificationTest.php) | `issuer_overpay_alert` |
+| Client | Underpayment ≥15% remaining | `InvoiceUnderpaymentClientMail` | live | [`InvoiceNotificationTest`](../../tests/Feature/InvoiceNotificationTest.php) | `client_underpay_alert` |
+| Owner | Underpayment ≥15% remaining | `InvoiceUnderpaymentIssuerMail` | live | [`InvoiceNotificationTest`](../../tests/Feature/InvoiceNotificationTest.php) | `issuer_underpay_alert` |
+| Client | (deprecated — superseded by underpay alert per §4.4.3; legacy rows render in history per §5.12.3) | `InvoicePartialWarningClientMail` | stubbed | [`WatchPaymentsCommandTest`](../../tests/Feature/Wallet/WatchPaymentsCommandTest.php) (asserts zero new queued) | `client_partial_warning` |
+| Owner | (deprecated — superseded by underpay alert per §4.4.3; legacy rows render in history per §5.12.3) | `InvoicePartialWarningIssuerMail` | stubbed | [`WatchPaymentsCommandTest`](../../tests/Feature/Wallet/WatchPaymentsCommandTest.php) (asserts zero new queued) | `issuer_partial_warning` |
+| Owner (self) | Manual "send me a test email" preview action (§5.14.4) | `NotificationBrandingPreviewMail` | live | [`MailBrandingTest`](../../tests/Feature/MailBrandingTest.php) | — (no delivery-log row, per §5.14.4.1) |

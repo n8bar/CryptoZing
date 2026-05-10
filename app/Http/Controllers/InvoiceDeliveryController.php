@@ -68,9 +68,11 @@ class InvoiceDeliveryController extends Controller
         );
 
         if ($delivery->status === 'queued') {
-            $invoice->forceFill([
-                'delivery_message_draft' => null,
-            ])->save();
+            $updates = ['delivery_message_draft' => null];
+            if ($invoice->status === 'draft') {
+                $updates['status'] = 'sent';
+            }
+            $invoice->forceFill($updates)->save();
         }
 
         $statusMessage = $delivery->status === 'queued'
