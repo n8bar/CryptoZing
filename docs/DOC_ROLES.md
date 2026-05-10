@@ -45,5 +45,6 @@ Keep these in sync with every merge or scope change.
 
 ## Findings conventions
 
-- Each finding under `docs/qa/Finding*.md` records `Date:` (when reported) near the top, and adds a `Date fixed:` line once resolved with a brief reference to the milestone, PR, or commit that resolved it.
+- **Through M19, new findings go to GitHub Issues; existing finding docs are unchanged. M20 kickoff decides whether this doctype reopens, retires, or stays as-is.** New findings/bugs/todos surfaced during M19 are opened as GitHub Issues and closed via `Fixes #N` on the merging PR. Strategy docs reference the Issue number rather than spawning a new `docs/qa/Finding*.md`.
+- Each existing finding under `docs/qa/Finding*.md` records `Date:` (when reported) near the top, and adds a `Date fixed:` line once resolved with a brief reference to the milestone, PR, or commit that resolved it.
 - A finding without a `Date fixed:` line is treated as still open.
