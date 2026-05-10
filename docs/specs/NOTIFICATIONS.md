@@ -98,5 +98,23 @@
       2. That preview should be lightly rate-limited or cooldown-protected so repeated clicks do not spam the owner mailbox.
    5. RC does not include arbitrary custom logo uploads for outbound mail; at most it may show or hide the default CryptoZing logo in the shared mail chrome.
 
-## Coverage & Status (MS17 deliverable)
-A coverage matrix must be added to this spec during MS17 to document the live state of all outbound notice classes. Columns: Audience, Trigger, Mailable class, Status (`live` / `stubbed` / `planned`), Feature test(s), Delivery log type. Must cover all active notice classes including paid notices, past-due reminders, overpayment and underpayment alerts, payment acknowledgments, and receipt. Note any gaps and route deferred items to `docs/BACKLOG.md`.
+## Coverage & Status
+
+One row per outbound notice class. `Status`: `live` = in production code, behaving per spec; `stubbed` = class exists but does not behave per spec (legacy or unwired); `planned` = named in spec, not yet implemented.
+
+| Audience | Trigger | Mailable class | Status | Feature test(s) | Delivery log type |
+|---|---|---|---|---|---|
+| Client | Manual owner action (issue invoice) | `InvoiceReadyMail` | live | [`InvoiceDeliveryTest`](../../tests/Feature/InvoiceDeliveryTest.php) | `send` |
+| Client | Detected on-chain payment (low-info ack) | `InvoicePaymentAcknowledgmentClientMail` | live | [`InvoiceDeliveryTest`](../../tests/Feature/InvoiceDeliveryTest.php), [`WatchPaymentsCommandTest`](../../tests/Feature/Wallet/WatchPaymentsCommandTest.php) | `payment_acknowledgment_client` |
+| Owner | Detected on-chain payment (low-info ack) | `InvoicePaymentAcknowledgmentIssuerMail` | live | [`InvoiceDeliveryTest`](../../tests/Feature/InvoiceDeliveryTest.php), [`WatchPaymentsCommandTest`](../../tests/Feature/Wallet/WatchPaymentsCommandTest.php) | `payment_acknowledgment_issuer` |
+| Client | Owner-reviewed manual receipt send (RC1 deliberate-manual) | `InvoicePaidReceiptMail` | live | [`InvoiceDeliveryTest`](../../tests/Feature/InvoiceDeliveryTest.php) | `receipt` |
+| Owner | Invoice transitions to `paid` | `InvoiceIssuerPaidNoticeMail` | live | [`InvoiceNotificationTest`](../../tests/Feature/InvoiceNotificationTest.php), [`InvoiceDeliveryTest`](../../tests/Feature/InvoiceDeliveryTest.php), [`WatchPaymentsCommandTest`](../../tests/Feature/Wallet/WatchPaymentsCommandTest.php) | `issuer_paid_notice` |
+| Owner | Past-due schedule slot fires (slots 1/2/3 at days 1/7/14) | `InvoicePastDueIssuerMail` | live | [`InvoiceNotificationTest`](../../tests/Feature/InvoiceNotificationTest.php) | `past_due_issuer` |
+| Client | Past-due schedule slot fires (slots 1/2/3 at days 1/7/14) | `InvoicePastDueClientMail` | live | [`InvoiceNotificationTest`](../../tests/Feature/InvoiceNotificationTest.php) | `past_due_client` |
+| Client | Overpayment ≥15% threshold | `InvoiceOverpaymentClientMail` | live | [`InvoiceNotificationTest`](../../tests/Feature/InvoiceNotificationTest.php) | `client_overpay_alert` |
+| Owner | Overpayment ≥15% threshold | `InvoiceOverpaymentIssuerMail` | live | [`InvoiceNotificationTest`](../../tests/Feature/InvoiceNotificationTest.php) | `issuer_overpay_alert` |
+| Client | Underpayment ≥15% remaining | `InvoiceUnderpaymentClientMail` | live | [`InvoiceNotificationTest`](../../tests/Feature/InvoiceNotificationTest.php) | `client_underpay_alert` |
+| Owner | Underpayment ≥15% remaining | `InvoiceUnderpaymentIssuerMail` | live | [`InvoiceNotificationTest`](../../tests/Feature/InvoiceNotificationTest.php) | `issuer_underpay_alert` |
+| Client | (deprecated — superseded by underpay alert per §4.4.3; legacy rows render in history per §5.12.3) | `InvoicePartialWarningClientMail` | stubbed | [`WatchPaymentsCommandTest`](../../tests/Feature/Wallet/WatchPaymentsCommandTest.php) (asserts zero new queued) | `client_partial_warning` |
+| Owner | (deprecated — superseded by underpay alert per §4.4.3; legacy rows render in history per §5.12.3) | `InvoicePartialWarningIssuerMail` | stubbed | [`WatchPaymentsCommandTest`](../../tests/Feature/Wallet/WatchPaymentsCommandTest.php) (asserts zero new queued) | `issuer_partial_warning` |
+| Owner (self) | Manual "send me a test email" preview action (§5.14.4) | `NotificationBrandingPreviewMail` | live | [`MailBrandingTest`](../../tests/Feature/MailBrandingTest.php) | — (no delivery-log row, per §5.14.4.1) |
