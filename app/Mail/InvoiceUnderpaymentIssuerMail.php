@@ -20,7 +20,7 @@ class InvoiceUnderpaymentIssuerMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Client underpayment alert for invoice ' . ($this->invoice->number ?? $this->invoice->id),
+            subject: 'Payment confirmed — client underpaid Invoice ' . ($this->invoice->number ?? $this->invoice->id),
         );
     }
 

@@ -20,7 +20,7 @@ class InvoiceOverpaymentIssuerMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Client overpaid invoice ' . ($this->invoice->number ?? $this->invoice->id),
+            subject: 'Payment confirmed — client overpaid Invoice ' . ($this->invoice->number ?? $this->invoice->id),
         );
     }
 
