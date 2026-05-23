@@ -224,12 +224,26 @@ class InvoiceController extends Controller
             allowFallback: $btcForUri !== null
         );
 
+        $includeSelf = $request->boolean('include_self');
+        $issuerEmail = (string) ($invoice->user?->email ?? '');
+        $visibleDeliveries = $invoice->deliveries
+            ->where('status', '!=', 'skipped')
+            ->when(
+                !$includeSelf && $issuerEmail !== '',
+                fn ($collection) => $collection->filter(
+                    fn ($delivery) => strcasecmp((string) $delivery->recipient, $issuerEmail) !== 0
+                )
+            )
+            ->values();
+
         return view('invoices.show', [
             'invoice'           => $invoice,
             'rate'              => $rate,
             'paymentSummary'    => $summary,
             'paymentHistory'    => $paymentHistory,
             'reattributeDestinations' => $reattributeDestinations,
+            'includeSelf'       => $includeSelf,
+            'visibleDeliveries' => $visibleDeliveries,
             'gettingStartedStrip' => $request->boolean('getting_started')
                 ? (static function () use ($gettingStartedFlow, $request, $invoice): array {
                     $snapshot = $gettingStartedFlow->snapshot($request->user());
