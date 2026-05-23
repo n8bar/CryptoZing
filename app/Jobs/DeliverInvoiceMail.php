@@ -14,8 +14,6 @@ use App\Mail\InvoiceUnderpaymentClientMail;
 use App\Mail\InvoiceUnderpaymentIssuerMail;
 use App\Mail\InvoiceIssuerPaidNoticeMail;
 use App\Models\Invoice;
-use App\Mail\InvoicePartialWarningClientMail;
-use App\Mail\InvoicePartialWarningIssuerMail;
 use App\Models\InvoiceDelivery;
 use App\Models\InvoicePayment;
 use App\Services\InvoiceDeliveryService;
@@ -140,8 +138,6 @@ class DeliverInvoiceMail implements ShouldQueue
             'issuer_overpay_alert' => new InvoiceOverpaymentIssuerMail($invoice, $delivery),
             'client_underpay_alert' => new InvoiceUnderpaymentClientMail($invoice, $delivery),
             'issuer_underpay_alert' => new InvoiceUnderpaymentIssuerMail($invoice, $delivery),
-            'client_partial_warning' => new InvoicePartialWarningClientMail($invoice, $delivery),
-            'issuer_partial_warning' => new InvoicePartialWarningIssuerMail($invoice, $delivery),
             default => new InvoiceReadyMail($invoice, $delivery),
         };
 
@@ -286,11 +282,6 @@ class DeliverInvoiceMail implements ShouldQueue
         $underpayTypes = ['client_underpay_alert', 'issuer_underpay_alert'];
         if (in_array($delivery->type, $underpayTypes, true) && !$invoice->requiresClientUnderpayAlert()) {
             return 'Underpayment resolved before send.';
-        }
-
-        $partialTypes = ['client_partial_warning', 'issuer_partial_warning'];
-        if (in_array($delivery->type, $partialTypes, true) && !$invoice->shouldWarnAboutPartialPayments()) {
-            return 'Partial-payment warning no longer applicable.';
         }
 
         $pastDueTypes = ['past_due_issuer', 'past_due_client'];

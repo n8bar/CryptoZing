@@ -98,14 +98,6 @@ class InvoiceAlertService
                 "{$reasonPrefix} Overpayment alert no longer applies."
             );
         }
-
-        if (! $invoice->shouldWarnAboutPartialPayments()) {
-            $this->skipQueuedDeliveries(
-                $invoice,
-                ['client_partial_warning', 'issuer_partial_warning'],
-                "{$reasonPrefix} Partial-payment warning no longer applies."
-            );
-        }
     }
 
     public function sendPastDueAlerts(Invoice $invoice): void

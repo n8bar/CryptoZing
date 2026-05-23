@@ -133,7 +133,7 @@ class InvoicePaymentCorrectionTest extends TestCase
             ->once();
     }
 
-    public function test_owner_can_restore_ignored_payment_and_skip_stale_underpay_and_partial_deliveries(): void
+    public function test_owner_can_restore_ignored_payment_and_skip_stale_underpay_and_overpay_deliveries(): void
     {
         Carbon::setTestNow(Carbon::parse('2025-01-11 09:00:00', 'UTC'));
         Log::spy();
@@ -201,7 +201,7 @@ class InvoicePaymentCorrectionTest extends TestCase
             $invoice->deliveries()->create([
                 'invoice_id' => $invoice->id,
                 'user_id' => $owner->id,
-                'type' => 'client_partial_warning',
+                'type' => 'client_overpay_alert',
                 'status' => 'queued',
                 'recipient' => $client->email,
                 'dispatched_at' => now(),
@@ -209,7 +209,7 @@ class InvoicePaymentCorrectionTest extends TestCase
             $invoice->deliveries()->create([
                 'invoice_id' => $invoice->id,
                 'user_id' => $owner->id,
-                'type' => 'issuer_partial_warning',
+                'type' => 'issuer_overpay_alert',
                 'status' => 'queued',
                 'recipient' => $owner->email,
                 'dispatched_at' => now(),

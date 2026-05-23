@@ -29,7 +29,6 @@ class Invoice extends Model
         'billing_address_override','invoice_footer_note_override','branding_heading_override',
         'last_overpayment_alert_at','last_underpayment_alert_at',
         'last_past_due_issuer_alert_at','last_past_due_client_alert_at',
-        'last_partial_warning_sent_at',
     ];
 
     protected $casts = [
@@ -58,7 +57,6 @@ class Invoice extends Model
         'last_underpayment_alert_at' => 'datetime',
         'last_past_due_issuer_alert_at' => 'datetime',
         'last_past_due_client_alert_at' => 'datetime',
-        'last_partial_warning_sent_at' => 'datetime',
     ];
     public const SATS_PER_BTC = 100_000_000;
     public const PAYMENT_SAT_TOLERANCE = 100;
@@ -688,22 +686,6 @@ class Invoice extends Model
         $path = route('invoices.public-print', ['token' => $this->public_token], false);
         $base = rtrim(config('app.public_url', config('app.url')), '/');
         return $base . $path;
-    }
-
-    public function shouldWarnAboutPartialPayments(): bool
-    {
-        if (in_array($this->status, ['paid','void'])) {
-            return false;
-        }
-
-        $outstanding = $this->outstanding_sats;
-        if ($outstanding === null || $outstanding <= 0) {
-            return false;
-        }
-
-        $payments = $this->activePayments();
-
-        return $payments->count() >= 2;
     }
 
     public function sumPaymentsUsd(bool $confirmedOnly = false): float

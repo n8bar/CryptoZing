@@ -85,9 +85,8 @@
 12. The delivery history should use concise, human-friendly labels for communication classes and outcomes.
    1. Manual invoice sends should display as `Invoice email`, not a raw storage key.
    2. Paired issuer/client notification rows should keep the audience explicit in the label, such as `Past-due reminder (client)` and `Underpayment alert (issuer)`.
-   3. While the legacy repeated-partial warning rows still exist in stored history, they should display honestly as `Partial payment warning (client|issuer)` rather than being hidden behind renamed copy.
-   4. Payment-triggered follow-up should keep the acknowledgment-versus-receipt split visible in history once those rows ship, using labels such as `Payment acknowledgment (client)`, `Payment acknowledgment (owner)`, and `Receipt (client)` for the later higher-certainty follow-up.
-   5. Outcome labels should display as `Queued`, `Sending`, `Sent`, `Skipped`, and `Failed`.
+   3. Payment-triggered follow-up should keep the acknowledgment-versus-receipt split visible in history once those rows ship, using labels such as `Payment acknowledgment (client)`, `Payment acknowledgment (owner)`, and `Receipt (client)` for the later higher-certainty follow-up.
+   4. Outcome labels should display as `Queued`, `Sending`, `Sent`, `Skipped`, and `Failed`.
 13. Outbound mail copy should stay concise and actionable.
 14. Owner-facing mail-branding settings for RC may expose only constrained brand-shell controls, not arbitrary message editing.
    1. Allowed MS16 fields are limited to simple mail chrome values such as brand name, short tagline, footer blurb, and whether the default CryptoZing logo is shown in the shared mail header.
@@ -115,6 +114,4 @@ One row per outbound notice class. `Status`: `live` = in production code, behavi
 | Owner | Overpayment ≥15% threshold | `InvoiceOverpaymentIssuerMail` | live | [`InvoiceNotificationTest`](../../tests/Feature/InvoiceNotificationTest.php) | `issuer_overpay_alert` |
 | Client | Underpayment ≥15% remaining | `InvoiceUnderpaymentClientMail` | live | [`InvoiceNotificationTest`](../../tests/Feature/InvoiceNotificationTest.php) | `client_underpay_alert` |
 | Owner | Underpayment ≥15% remaining | `InvoiceUnderpaymentIssuerMail` | live | [`InvoiceNotificationTest`](../../tests/Feature/InvoiceNotificationTest.php) | `issuer_underpay_alert` |
-| Client | (deprecated — superseded by underpay alert per §4.4.3; legacy rows render in history per §5.12.3) | `InvoicePartialWarningClientMail` | stubbed | [`WatchPaymentsCommandTest`](../../tests/Feature/Wallet/WatchPaymentsCommandTest.php) (asserts zero new queued) | `client_partial_warning` |
-| Owner | (deprecated — superseded by underpay alert per §4.4.3; legacy rows render in history per §5.12.3) | `InvoicePartialWarningIssuerMail` | stubbed | [`WatchPaymentsCommandTest`](../../tests/Feature/Wallet/WatchPaymentsCommandTest.php) (asserts zero new queued) | `issuer_partial_warning` |
 | Owner (self) | Manual "send me a test email" preview action (§5.14.4) | `NotificationBrandingPreviewMail` | live | [`MailBrandingTest`](../../tests/Feature/MailBrandingTest.php) | — (no delivery-log row, per §5.14.4.1) |

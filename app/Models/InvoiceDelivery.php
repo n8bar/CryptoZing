@@ -58,8 +58,6 @@ class InvoiceDelivery extends Model
             'issuer_overpay_alert' => 'Overpayment alert (issuer)',
             'client_underpay_alert' => 'Underpayment alert (client)',
             'issuer_underpay_alert' => 'Underpayment alert (issuer)',
-            'client_partial_warning' => 'Partial payment warning (client)',
-            'issuer_partial_warning' => 'Partial payment warning (issuer)',
             default => Str::of($this->type)->replace('_', ' ')->headline()->toString(),
         };
     }
