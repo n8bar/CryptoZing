@@ -64,6 +64,10 @@ class InvoiceAlertService
 
     public function checkPaymentThresholds(Invoice $invoice): void
     {
+        if ($invoice->status === 'void') {
+            return;
+        }
+
         if ($invoice->requiresClientOverpayAlert()) {
             $this->maybeSendOverpayAlert($invoice);
         }
