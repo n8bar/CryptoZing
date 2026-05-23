@@ -1,16 +1,24 @@
+@php
+    $settlementPayments = $settlementPayments ?? collect();
+    $multiplePayments = $settlementPayments->count() > 1;
+@endphp
+
 <x-mail::message :invoice="$invoice">
 # Receipt for Invoice {{ $invoice->number ?? $invoice->id }}
 
 Hi {{ $client->name ?? 'there' }},
 
-Thanks for your payment. We detected funds for **${{ number_format($invoice->amount_usd, 2) }}** on {{ optional($invoice->payment_detected_at)->toDayDateTimeString() ?? 'N/A' }}.
+Your payment is confirmed. **${{ number_format((float) $invoice->amount_usd, 2) }} USD** received{{ $multiplePayments ? ' across ' . $settlementPayments->count() . ' on-chain payments' : '' }}.
 
+@if ($settlementPayments->isNotEmpty())
 <x-mail::panel>
-**Amount received:** {{ $invoice->payment_amount_formatted ?? '—' }} BTC  
-**USD total:** ${{ number_format((float) $invoice->amount_usd, 2) }}  
-**TXID:** <span style="word-break: break-all; font-family: monospace;">{{ $invoice->txid ?? '—' }}</span>
-**Confirmations:** {{ $invoice->payment_confirmations ?? '0' }}
+@foreach ($settlementPayments as $payment)
+**TXID:** <span style="word-break: break-all; font-family: monospace;">{{ $payment->txid }}</span>
+{{ number_format($payment->sats_received) }} sats / ${{ number_format((float) $payment->fiat_amount, 2) }} (confirmed {{ optional($payment->confirmed_at)->toDayDateTimeString() }})
+
+@endforeach
 </x-mail::panel>
+@endif
 
 @if ($publicUrl)
 <x-mail::button :url="$publicUrl">

@@ -30,6 +30,12 @@ class InvoiceIssuerPaidNoticeMail extends Mailable
             markdown: 'mail.invoice-issuer-paid',
             with: [
                 'invoice' => $this->invoice,
+                'settlementPayments' => $this->invoice->payments()
+                    ->whereNotNull('confirmed_at')
+                    ->whereNull('ignored_at')
+                    ->where('is_adjustment', false)
+                    ->orderBy('confirmed_at')
+                    ->get(),
             ],
         );
     }
