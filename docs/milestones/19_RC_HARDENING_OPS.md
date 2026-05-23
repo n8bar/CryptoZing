@@ -1,6 +1,6 @@
 # MS19 - RC Hardening & Ops
 
-Status: Active — running in parallel with MS18 (no hard dependencies between the two; MS18 is blocked on Rachel's video through the 2026-05-31 hard cap, MS19 phases are independent of that work). Phase 1 reopened 2026-05-15 for end-to-end verification (audit closed; verification pass appended). Phase 4 (Visual Identity Polish) added 2026-05-15 — favicon overhaul + open-beta copy refactor + og:image bundled as one visual pass; renumbered downstream phases accordingly. Phase 3 / Phase 5 corrected to independent parallel tracks (no LLC → Legal Layer prerequisite). `.ics` updated to reflect the expanded scope.
+Status: Active — running in parallel with MS18 (no hard dependencies; MS18 is blocked on Rachel's video through the 2026-05-31 hard cap). Phase 3 (LLC) and Phase 5 (Legal Layer) run as independent parallel tracks. Phase 8 (2FA) is positionally last by design.
 Parent execution doc: [`docs/PLAN.md`](../PLAN.md)
 Supporting ops doc: [`docs/ops/DOCS_DX.md`](../ops/DOCS_DX.md)
 
@@ -22,7 +22,7 @@ Supporting ops doc: [`docs/ops/DOCS_DX.md`](../ops/DOCS_DX.md)
 - **Findings tracking trial:** Through M19, new findings/bugs/todos go to GitHub Issues (closed via `Fixes #N` on the merging PR) instead of new `docs/qa/Finding*.md` docs. Existing finding docs stay put. M20 kickoff decides whether to keep, revert, or hybridize. See [`docs/DOC_ROLES.md`](../DOC_ROLES.md#findings-conventions).
 
 ## Current Focus
-- Active phase: Phase 1 (reopened — verification pass) and Phase 2 (next-up auth hardening). Other phases pre-flight.
+- Active phase: Phase 1 (verification pass) and Phase 2 (next-up auth hardening). Other phases pre-flight.
 - Phase 1: [`docs/strategies/19.1_NOTIFICATION_COVERAGE_AUDIT.md`](../strategies/19.1_NOTIFICATION_COVERAGE_AUDIT.md)
 - Phase 2: [`docs/strategies/19.2_AUTH_HARDENING.md`](../strategies/19.2_AUTH_HARDENING.md)
 - Phase 3: [`docs/strategies/19.3_LLC_FORMATION.md`](../strategies/19.3_LLC_FORMATION.md)
@@ -35,7 +35,7 @@ Supporting ops doc: [`docs/ops/DOCS_DX.md`](../ops/DOCS_DX.md)
 ## Phase Rollup
 
 ### [ ] Phase 1 — Notification Coverage Audit & Verification
-Document every outbound mail type — trigger, recipient, delivery-log behavior — so the full mail surface is explicitly accounted for before open beta. Audit (§1–§4) closed 2026-05-09. Reopened 2026-05-15 to add §5–§7 end-to-end verification (every notice class triggered in the running stack against realistic scenarios including time-advanced past-due flows; rendered email confirmed at intended recipients; catch-all alias flipped off so the rest of MS19 emits mail under prod-like routing). See [`19.1_NOTIFICATION_COVERAGE_AUDIT.md`](../strategies/19.1_NOTIFICATION_COVERAGE_AUDIT.md).
+Document every outbound mail type — trigger, recipient, delivery-log behavior — so the full mail surface is explicitly accounted for before open beta. Includes end-to-end verification of every notice class in the running stack against realistic scenarios (time-advanced past-due flows included) and a stress-readiness check; catch-all alias stays flipped off so the rest of MS19 emits mail under prod-like routing. See [`19.1_NOTIFICATION_COVERAGE_AUDIT.md`](../strategies/19.1_NOTIFICATION_COVERAGE_AUDIT.md).
 
 ### [ ] Phase 2 — Auth/Password Policy Hardening
 Implement 419-to-login redirect and site-wide session-expiry logout.
