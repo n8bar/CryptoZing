@@ -1,6 +1,6 @@
 # MS19 - RC Hardening & Ops
 
-Status: Active — running in parallel with MS18 (no hard dependencies; MS18 is blocked on Rachel's video through the 2026-05-31 hard cap). Phase 3 (LLC) and Phase 5 (Legal Layer) run as independent parallel tracks. Phase 8 (2FA) is positionally last by design.
+Status: Active — running in parallel with MS18 (no hard dependencies). Phase 3 (LLC) and Phase 5 (Legal Layer) run as independent parallel tracks. Phase 8 (2FA) is positionally last by design.
 Parent execution doc: [`docs/PLAN.md`](../PLAN.md)
 Supporting ops doc: [`docs/ops/DOCS_DX.md`](../ops/DOCS_DX.md)
 
