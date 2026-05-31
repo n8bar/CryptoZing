@@ -1,6 +1,6 @@
 # MS18 - Pre-Release Content for SEO
 
-Status: Active as of 2026-04-09. Target: **2026-05-31 hard cap** — Rachel's nursing program starts 2026-06-01 and removes her availability for the foreseeable timeline; the video either records by 2026-05-31 or is dropped from MS18 scope rather than slipping the milestone.
+Status: Active as of 2026-04-09. Target: **2026-06-07** — Rachel's footage captured; remaining work is editing and publishing.
 Parent execution doc: [`docs/PLAN.md`](../PLAN.md)
 
 **Relationship to MS15:** MS15 established the technical SEO foundation — domain verification, sitemap submission, canonical signals, robots, and controlled inbound links. That milestone asked "can Google find us?" This milestone asks "when someone searches, do we have an answer worth surfacing?" MS15 is a prerequisite; MS18 builds on it with substance.
