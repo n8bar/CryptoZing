@@ -43,4 +43,4 @@ _(Ordered by SEO and traffic potential. Pick from the top when starting a new ar
 
 ## Video
 
-Tracked in MS18 Phase 3 — see [`strategies/18.3_SITE_ARCHITECTURE_AND_PUBLISHING.md`](strategies/18.3_SITE_ARCHITECTURE_AND_PUBLISHING.md) section 3.
+Tracked in MS18 Phase 3 — see [`strategies/x18.3_SITE_ARCHITECTURE_AND_PUBLISHING.md`](strategies/x18.3_SITE_ARCHITECTURE_AND_PUBLISHING.md) section 3.

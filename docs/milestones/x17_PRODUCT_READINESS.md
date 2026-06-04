@@ -14,28 +14,28 @@ This is the milestone execution doc for MS17. It tracks milestone-level objectiv
 
 ## Current Focus
 - Milestone complete. All five phases done.
-- Phase 1: [`docs/strategies/17.1_ISSUER_SWEEP.md`](../strategies/17.1_ISSUER_SWEEP.md)
-- Phase 2: [`docs/strategies/17.2_TEST_RATIONALIZATION.md`](../strategies/17.2_TEST_RATIONALIZATION.md)
-- Phase 3: [`docs/strategies/17.3_SUPPORT_UI_AND_MONITORING.md`](../strategies/17.3_SUPPORT_UI_AND_MONITORING.md)
-- Phase 4: [`docs/strategies/17.4_POST_PAYMENT_ONBOARDING.md`](../strategies/17.4_POST_PAYMENT_ONBOARDING.md)
-- Phase 5: [`docs/strategies/17.5_MAIL_AUDIT.md`](../strategies/17.5_MAIL_AUDIT.md)
+- Phase 1: [`docs/strategies/x17.1_ISSUER_SWEEP.md`](../strategies/x17.1_ISSUER_SWEEP.md)
+- Phase 2: [`docs/strategies/x17.2_TEST_RATIONALIZATION.md`](../strategies/x17.2_TEST_RATIONALIZATION.md)
+- Phase 3: [`docs/strategies/x17.3_SUPPORT_UI_AND_MONITORING.md`](../strategies/x17.3_SUPPORT_UI_AND_MONITORING.md)
+- Phase 4: [`docs/strategies/x17.4_POST_PAYMENT_ONBOARDING.md`](../strategies/x17.4_POST_PAYMENT_ONBOARDING.md)
+- Phase 5: [`docs/strategies/x17.5_MAIL_AUDIT.md`](../strategies/x17.5_MAIL_AUDIT.md)
 
 ## Phase Rollup
 
 ### Phase 1 — "owner" → "issuer" sweep ✓
-Full rename across UI copy, URLs, route names, code variables and method names, mail classes, mail templates, delivery type strings, database columns, and tests. See [`docs/strategies/17.1_ISSUER_SWEEP.md`](../strategies/17.1_ISSUER_SWEEP.md) for the ordered checklist.
+Full rename across UI copy, URLs, route names, code variables and method names, mail classes, mail templates, delivery type strings, database columns, and tests. See [`docs/strategies/x17.1_ISSUER_SWEEP.md`](../strategies/x17.1_ISSUER_SWEEP.md) for the ordered checklist.
 
 ### Phase 2 — Test suite rationalization ✓
-The suite has grown large and was written opportunistically. This phase audits every test file, produces a written recommendation table, gets approval, and executes agreed changes so the suite is intentional going into RC. See [`docs/strategies/17.2_TEST_RATIONALIZATION.md`](../strategies/17.2_TEST_RATIONALIZATION.md).
+The suite has grown large and was written opportunistically. This phase audits every test file, produces a written recommendation table, gets approval, and executes agreed changes so the suite is intentional going into RC. See [`docs/strategies/x17.2_TEST_RATIONALIZATION.md`](../strategies/x17.2_TEST_RATIONALIZATION.md).
 
 ### Phase 3 — Support UI + monitoring ✓
-The support UI is already complete. This phase adds a service health monitoring panel to the support dashboard so a support agent can triage operational issues — queue depth, recent delivery failures, watcher health — without raw log access. See [`docs/strategies/17.3_SUPPORT_UI_AND_MONITORING.md`](../strategies/17.3_SUPPORT_UI_AND_MONITORING.md).
+The support UI is already complete. This phase adds a service health monitoring panel to the support dashboard so a support agent can triage operational issues — queue depth, recent delivery failures, watcher health — without raw log access. See [`docs/strategies/x17.3_SUPPORT_UI_AND_MONITORING.md`](../strategies/x17.3_SUPPORT_UI_AND_MONITORING.md).
 
 ### Phase 4 — Post-payment onboarding ✓
-Extends the getting-started flow (MS13 task 11) with a Part 2 receipt step that activates once a paid invoice is receipt-eligible and completes when the issuer sends the first reviewed client receipt. See [`docs/strategies/17.4_POST_PAYMENT_ONBOARDING.md`](../strategies/17.4_POST_PAYMENT_ONBOARDING.md).
+Extends the getting-started flow (MS13 task 11) with a Part 2 receipt step that activates once a paid invoice is receipt-eligible and completes when the issuer sends the first reviewed client receipt. See [`docs/strategies/x17.4_POST_PAYMENT_ONBOARDING.md`](../strategies/x17.4_POST_PAYMENT_ONBOARDING.md).
 
 ### Phase 5 — Mail audit and hardening ✓
-Six RC-blocking findings surfaced during Phase 4 BQA, plus additional findings discovered during implementation. All resolved. Root cause analysis and full fix details are in [`docs/strategies/17.5_MAIL_AUDIT.md`](../strategies/17.5_MAIL_AUDIT.md) (see the "Root causes" section at the top).
+Six RC-blocking findings surfaced during Phase 4 BQA, plus additional findings discovered during implementation. All resolved. Root cause analysis and full fix details are in [`docs/strategies/x17.5_MAIL_AUDIT.md`](../strategies/x17.5_MAIL_AUDIT.md) (see the "Root causes" section at the top).
 
 **Finding 1 — Receipt TXID wraps poorly on narrow screens.** ✓
 Fixed: TXID wrapped in an inline-styled `word-break: break-all` span in `invoice-paid.blade.php`.

@@ -88,7 +88,7 @@ Issuers create invoices in USD, derive a unique Bitcoin receive address per invo
 
 ### Public links, print output, and outbound communication
 - Public-share and email links must use `APP_PUBLIC_URL`.
-- Public and print surfaces must honor public-safe boundaries and status-specific behavior defined in [`docs/specs/PRINT_PUBLIC_POLISH.md`](specs/PRINT_PUBLIC_POLISH.md) and [`docs/milestones/13_UX_OVERHAUL.md`](milestones/13_UX_OVERHAUL.md).
+- Public and print surfaces must honor public-safe boundaries and status-specific behavior defined in [`docs/specs/PRINT_PUBLIC_POLISH.md`](specs/PRINT_PUBLIC_POLISH.md) and [`docs/milestones/x13_UX_OVERHAUL.md`](milestones/x13_UX_OVERHAUL.md).
 - Outbound mail in pre-production may be recipient-aliased via `MAIL_ALIAS_ENABLED` and `MAIL_ALIAS_DOMAIN`; this aliasing must be disabled before RC or real-customer use.
 - Invoice send, receipt delivery, notification triggers, and delivery logging must remain auditable.
 
@@ -109,7 +109,7 @@ Issuers create invoices in USD, derive a unique Bitcoin receive address per invo
 - Payment correction / ignore-restore behavior: [`docs/specs/PAYMENT_CORRECTIONS.md`](specs/PAYMENT_CORRECTIONS.md)
 - Outbound invoice communication, receipts, and alerts: [`docs/specs/NOTIFICATIONS.md`](specs/NOTIFICATIONS.md)
 - Print/public behavior: [`docs/specs/PRINT_PUBLIC_POLISH.md`](specs/PRINT_PUBLIC_POLISH.md)
-- MS13 UX overhaul milestone doc: [`docs/milestones/13_UX_OVERHAUL.md`](milestones/13_UX_OVERHAUL.md)
+- MS13 UX overhaul milestone doc: [`docs/milestones/x13_UX_OVERHAUL.md`](milestones/x13_UX_OVERHAUL.md)
 - Onboarding flow: [`docs/specs/ONBOARD_SPEC.md`](specs/ONBOARD_SPEC.md)
 - Post-payment onboarding: [`docs/specs/POST_PAYMENT_ONBOARDING.md`](specs/POST_PAYMENT_ONBOARDING.md)
 - Wallet import and wallet UX: [`docs/specs/WALLET_XPUB_UX_SPEC.md`](specs/WALLET_XPUB_UX_SPEC.md)
