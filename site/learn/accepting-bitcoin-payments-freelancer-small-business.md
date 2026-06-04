@@ -74,4 +74,16 @@ It used to be. The lack of good tooling meant it was mostly restricted to hard-c
 
 The actual flow is: set up a wallet, pick a tool that generates invoices, share payment links with clients, and watch for confirmations. The right tool makes most of that feel obvious.
 
+<a class="video-link" href="/learn/how-to-invoice-someone-in-bitcoin/">
+  <span class="video-link-thumb">
+    <img src="https://img.youtube.com/vi/Glp6jUusTLQ/maxresdefault.jpg" alt="" loading="lazy">
+    <span class="video-link-play" aria-hidden="true"></span>
+  </span>
+  <span class="video-link-text">
+    <span class="video-link-kicker">Watch</span>
+    <span class="video-link-title">How to Invoice Someone in Bitcoin</span>
+    <span class="video-link-meta">12-minute walkthrough</span>
+  </span>
+</a>
+
 The real question is not whether you *can* accept Bitcoin. It is whether your clients would use it. If even one or two would, it is worth exploring. And if you are the kind of person who likes the idea of getting paid without a middleman deciding when you get your money — well, that part is exactly as good as it sounds.

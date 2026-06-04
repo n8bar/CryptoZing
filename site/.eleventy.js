@@ -10,6 +10,21 @@ module.exports = function (eleventyConfig) {
       .replace("%Y", d.getUTCFullYear());
   });
 
+  // Ordered guide lists: newest-first, but the video card is pulled out of its
+  // date slot and placed directly after the article it pairs with.
+  const pairAfter = "accepting-bitcoin-payments-freelancer-small-business";
+  const orderGuides = (items) => {
+    const ordered = items.slice().reverse();
+    const video = ordered.find((i) => i.data.card_image);
+    if (!video) return ordered;
+    const rest = ordered.filter((i) => i !== video);
+    const idx = rest.findIndex((i) => i.fileSlug === pairAfter);
+    rest.splice(idx === -1 ? rest.length : idx + 1, 0, video);
+    return rest;
+  };
+  eleventyConfig.addCollection("learnList", (api) => orderGuides(api.getFilteredByTag("learn")));
+  eleventyConfig.addCollection("stagingList", (api) => orderGuides(api.getFilteredByTag("staging")));
+
   // Passthroughs are only needed for the GitHub Pages build.
   // In local dev these files already exist in public/ and don't need copying.
   if (isCI) {
