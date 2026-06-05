@@ -96,6 +96,12 @@
       1. That preview should not send to client recipients or create invoice-linked delivery-history rows.
       2. That preview should be lightly rate-limited or cooldown-protected so repeated clicks do not spam the owner mailbox.
    5. RC does not include arbitrary custom logo uploads for outbound mail; at most it may show or hide the default CryptoZing logo in the shared mail chrome.
+15. Transient outbound send failures must be retried, not treated as terminal on the first failure.
+   1. On a failed send attempt the delivery returns to a retryable state and the worker re-attempts under a bounded retry budget with spaced backoff, rather than being recorded `failed` immediately.
+   2. A delivery is recorded as terminal `failed` only after the retry budget is exhausted, preserving the final error detail.
+   3. Idempotency (items 7–8) must hold across all retry attempts: a transient failure followed by a successful retry produces exactly one outbound send and no duplicate delivery-history rows.
+16. A `failed` delivery must be operator-resendable for every notice class, not receipts alone.
+   1. Resend reuses the shared delivery path and its cooldown/idempotency guards, so it recovers a failed notice without enabling a duplicate send of one already delivered.
 
 ## Coverage & Status
 
