@@ -663,6 +663,7 @@
                                                 <th class="px-2 py-2 text-left">Queued</th>
                                                 <th class="px-2 py-2 text-left">Sent</th>
                                                 <th class="px-2 py-2 text-left">Error</th>
+                                                <th class="px-2 py-2 text-left">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody class="divide-y divide-gray-100">
@@ -709,6 +710,16 @@
                                                              title="{{ $deliveryErrorMessage }}">
                                                             {{ $deliveryErrorMessage }}
                                                         </div>
+                                                    </td>
+                                                    <td class="px-2 py-2 text-sm">
+                                                        @if ($delivery->status === 'failed')
+                                                            <form method="POST" action="{{ route('invoices.deliver.resend', ['invoice' => $invoice, 'delivery' => $delivery]) }}" class="inline">
+                                                                @csrf
+                                                                <button type="submit" class="text-indigo-600 underline hover:text-indigo-800">Resend</button>
+                                                            </form>
+                                                        @else
+                                                            —
+                                                        @endif
                                                     </td>
                                                 </tr>
                                             @endforeach

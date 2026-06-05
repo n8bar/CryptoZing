@@ -31,6 +31,11 @@ class DeliverInvoiceMail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public int $tries = 3;
+
+    /** @var int[] Seconds to wait before each retry attempt. */
+    public array $backoff = [60, 300];
+
     public function __construct(public InvoiceDelivery $delivery)
     {
     }
@@ -162,17 +167,44 @@ class DeliverInvoiceMail implements ShouldQueue
                 'recipient' => $delivery->recipient,
             ]);
         } catch (\Throwable $e) {
+            // Release the claim back to `queued` so a retry re-attempts the send.
+            // Terminal `failed` is recorded only once retries are exhausted, in failed().
             $delivery->update([
-                'status' => 'failed',
+                'status' => 'queued',
                 'error_code' => (string) $e->getCode(),
                 'error_message' => $e->getMessage(),
             ]);
-            Log::error('Invoice delivery failed', [
+            Log::warning('Invoice delivery send failed; will retry', [
                 'delivery_id' => $delivery->id,
+                'attempt' => $this->attempts(),
                 'error' => $e->getMessage(),
             ]);
             throw $e;
         }
+    }
+
+    /**
+     * Invoked by the queue after the retry budget is exhausted. Only here does a
+     * delivery become terminally `failed`.
+     */
+    public function failed(\Throwable $e): void
+    {
+        $delivery = $this->delivery->fresh();
+        if (! $delivery || ! in_array($delivery->status, ['queued', 'sending'], true)) {
+            return;
+        }
+
+        $delivery->update([
+            'status' => 'failed',
+            'error_code' => (string) $e->getCode(),
+            'error_message' => $e->getMessage(),
+        ]);
+        Log::error('Invoice delivery failed after retries', [
+            'delivery_id' => $delivery->id,
+            'invoice_id' => $delivery->invoice_id,
+            'type' => $delivery->type,
+            'error' => $e->getMessage(),
+        ]);
     }
 
     private function duplicateSendReason(InvoiceDelivery $delivery): ?string
