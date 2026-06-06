@@ -102,6 +102,9 @@
    3. Idempotency (items 7–8) must hold across all retry attempts: a transient failure followed by a successful retry produces exactly one outbound send and no duplicate delivery-history rows.
 16. A `failed` delivery must be operator-resendable for every notice class, not receipts alone.
    1. Resend reuses the shared delivery path and its cooldown/idempotency guards, so it recovers a failed notice without enabling a duplicate send of one already delivered.
+17. Every delivery must reach a truthful terminal state on its own.
+   1. A delivery's recorded status must reflect the provider's actual handling: `sent` only if the provider accepted the message, `failed` if it did not.
+   2. No delivery may remain indefinitely in a non-terminal state (`queued`/`sending`); it must resolve to `sent` or `failed` without operator intervention, including after a process crash or interruption mid-send.
 
 ## Coverage & Status
 
