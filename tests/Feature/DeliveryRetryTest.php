@@ -9,6 +9,7 @@ use App\Models\InvoiceDelivery;
 use App\Models\User;
 use App\Services\InvoiceDeliveryService;
 use App\Services\MailAlias;
+use App\Services\MailgunEventLookup;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
@@ -149,10 +150,13 @@ class DeliveryRetryTest extends TestCase
         );
     }
 
-    public function test_a_sending_delivery_is_not_resent_on_retry(): void
+    public function test_stuck_sending_reconciles_to_sent_when_provider_confirms(): void
     {
-        // A post-send bookkeeping failure leaves the row in `sending`. A retry
-        // must no-op (no duplicate email), never revert to queued and re-send.
+        // A leftover `sending` row (crash/post-send-write failure) must reconcile,
+        // never re-send. Provider confirms it went out → `sent`.
+        config(['mail.default' => 'mailgun']);
+        $this->mock(MailgunEventLookup::class, fn ($m) => $m->shouldReceive('wasAccepted')->andReturn(true));
+
         [, , $delivery] = $this->makeQueuedDelivery('send', 'sending');
 
         $sendCalls = 0;
@@ -165,7 +169,35 @@ class DeliveryRetryTest extends TestCase
 
         $this->runJob($delivery);
 
-        $this->assertSame(0, $sendCalls, 'A delivery already in `sending` must not be re-sent.');
+        $this->assertSame(0, $sendCalls, 'Reconcile must not re-send.');
+        $this->assertSame('sent', $delivery->fresh()->status);
+    }
+
+    public function test_stuck_sending_retries_when_provider_does_not_confirm(): void
+    {
+        // Provider can't confirm → throw to keep the queue retrying toward failed();
+        // still never re-sends.
+        config(['mail.default' => 'mailgun']);
+        $this->mock(MailgunEventLookup::class, fn ($m) => $m->shouldReceive('wasAccepted')->andReturn(false));
+
+        [, , $delivery] = $this->makeQueuedDelivery('send', 'sending');
+
+        $sendCalls = 0;
+        Mail::shouldReceive('to')->andReturnSelf();
+        Mail::shouldReceive('send')->andReturnUsing(function () use (&$sendCalls) {
+            $sendCalls++;
+
+            return null;
+        });
+
+        try {
+            $this->runJob($delivery);
+            $this->fail('Expected an unconfirmed sending delivery to throw for retry.');
+        } catch (\RuntimeException $e) {
+            // expected
+        }
+
+        $this->assertSame(0, $sendCalls, 'Reconcile must not re-send.');
         $this->assertSame('sending', $delivery->fresh()->status);
     }
 
