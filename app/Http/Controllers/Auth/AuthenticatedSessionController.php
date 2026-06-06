@@ -28,6 +28,13 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        // A return-to-page target stashed by the 419 / session-expiry handler
+        // wins over first-login persona routing — the user was actively
+        // somewhere, so put them back there.
+        if ($request->session()->has('url.intended')) {
+            return redirect()->intended(route('dashboard', absolute: false));
+        }
+
         $user = $request->user();
         if ($user && $user->isSupportAgent()) {
             return redirect()->route('support.dashboard');

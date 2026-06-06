@@ -71,13 +71,43 @@ return Application::configure(basePath: dirname(__DIR__))
             return redirect('/');
         };
 
+        $renderSessionExpired = function (Request $request) {
+            $returnTo = \App\Support\ReturnToResolver::resolve($request);
+
+            Auth::guard('web')->logout();
+
+            if ($request->hasSession()) {
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                if ($returnTo !== null) {
+                    $request->session()->put('url.intended', $returnTo);
+                }
+            }
+
+            $loginUrl = route('login', ['expired' => 1]);
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'message' => 'Your session has expired. Please sign in again.',
+                    'redirect' => $loginUrl,
+                ], 419);
+            }
+
+            return redirect()->to($loginUrl);
+        };
+
         $exceptions->render(function (AuthorizationException $exception, Request $request) use ($renderForbidden) {
             return $renderForbidden($request, $exception->getMessage());
         });
 
-        $exceptions->render(function (HttpExceptionInterface $exception, Request $request) use ($renderForbidden, $renderLogoutRedirect) {
-            if ($exception->getStatusCode() === 419 && ($request->routeIs('logout') || $request->is('logout'))) {
-                return $renderLogoutRedirect($request);
+        $exceptions->render(function (HttpExceptionInterface $exception, Request $request) use ($renderForbidden, $renderLogoutRedirect, $renderSessionExpired) {
+            if ($exception->getStatusCode() === 419) {
+                if ($request->routeIs('logout') || $request->is('logout')) {
+                    return $renderLogoutRedirect($request);
+                }
+
+                return $renderSessionExpired($request);
             }
 
             if ($exception->getStatusCode() !== 403) {
@@ -87,11 +117,11 @@ return Application::configure(basePath: dirname(__DIR__))
             return $renderForbidden($request, $exception->getMessage());
         });
 
-        $exceptions->render(function (TokenMismatchException $exception, Request $request) use ($renderLogoutRedirect) {
-            if (! $request->routeIs('logout') && ! $request->is('logout')) {
-                return null;
+        $exceptions->render(function (TokenMismatchException $exception, Request $request) use ($renderLogoutRedirect, $renderSessionExpired) {
+            if ($request->routeIs('logout') || $request->is('logout')) {
+                return $renderLogoutRedirect($request);
             }
 
-            return $renderLogoutRedirect($request);
+            return $renderSessionExpired($request);
         });
     })->create();
