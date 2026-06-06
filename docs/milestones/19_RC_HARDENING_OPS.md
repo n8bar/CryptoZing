@@ -22,8 +22,8 @@ Supporting ops doc: [`docs/ops/DOCS_DX.md`](../ops/DOCS_DX.md)
 - **Findings tracking trial:** Through M19, new findings/bugs/todos go to GitHub Issues (closed via `Fixes #N` on the merging PR) instead of new `docs/qa/Finding*.md` docs. Existing finding docs stay put. M20 kickoff decides whether to keep, revert, or hybridize. See [`docs/DOC_ROLES.md`](../DOC_ROLES.md#findings-conventions).
 
 ## Current Focus
-- Active phase: Phase 1 (verification pass) and Phase 2 (next-up auth hardening). Other phases pre-flight.
-- Phase 1: [`docs/strategies/19.1_NOTIFICATION_COVERAGE_AUDIT.md`](../strategies/19.1_NOTIFICATION_COVERAGE_AUDIT.md)
+- Active phase: Phase 2 (auth hardening). Phase 1 complete; other phases pre-flight.
+- Phase 1: [`docs/strategies/x19.1_NOTIFICATION_COVERAGE_AUDIT.md`](../strategies/x19.1_NOTIFICATION_COVERAGE_AUDIT.md) ✓
 - Phase 2: [`docs/strategies/19.2_AUTH_HARDENING.md`](../strategies/19.2_AUTH_HARDENING.md)
 - Phase 3: [`docs/strategies/19.3_LLC_FORMATION.md`](../strategies/19.3_LLC_FORMATION.md)
 - Phase 4: [`docs/strategies/19.4_VISUAL_IDENTITY_POLISH.md`](../strategies/19.4_VISUAL_IDENTITY_POLISH.md)
@@ -34,8 +34,8 @@ Supporting ops doc: [`docs/ops/DOCS_DX.md`](../ops/DOCS_DX.md)
 
 ## Phase Rollup
 
-### [ ] Phase 1 — Notification Coverage Audit & Verification
-Document every outbound mail type — trigger, recipient, delivery-log behavior — so the full mail surface is explicitly accounted for before open beta. Includes end-to-end verification of every notice class in the running stack against realistic scenarios (time-advanced past-due flows included) and a stress-readiness check; catch-all alias stays flipped off so the rest of MS19 emits mail under prod-like routing. See [`19.1_NOTIFICATION_COVERAGE_AUDIT.md`](../strategies/19.1_NOTIFICATION_COVERAGE_AUDIT.md).
+### [x] Phase 1 — Notification Coverage Audit & Verification
+Document every outbound mail type — trigger, recipient, delivery-log behavior — so the full mail surface is explicitly accounted for before open beta. Includes end-to-end verification of every notice class in the running stack against realistic scenarios (time-advanced past-due flows included) and a stress-readiness check; catch-all alias stays flipped off so the rest of MS19 emits mail under prod-like routing. See [`x19.1_NOTIFICATION_COVERAGE_AUDIT.md`](../strategies/x19.1_NOTIFICATION_COVERAGE_AUDIT.md).
 
 ### [ ] Phase 2 — Auth/Password Policy Hardening
 Implement 419-to-login redirect and site-wide session-expiry logout.
