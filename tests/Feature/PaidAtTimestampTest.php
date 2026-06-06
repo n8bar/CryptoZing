@@ -79,4 +79,48 @@ class PaidAtTimestampTest extends TestCase
         $this->assertSame('paid', $invoice->status);
         $this->assertSame($when->toDateTimeString(), $invoice->paid_at->toDateTimeString());
     }
+
+    public function test_paid_at_is_the_crossing_not_a_later_redundant_payment(): void
+    {
+        $invoice = $this->makeInvoice(100);
+        $crossing = Carbon::now()->subDays(2)->startOfSecond();
+        $later = Carbon::now()->subDay()->startOfSecond();
+
+        // One payment already crosses the $100 total at $crossing.
+        InvoicePayment::create([
+            'invoice_id' => $invoice->id, 'txid' => 'tx-paidat-cross', 'sats_received' => 240_000,
+            'detected_at' => $crossing, 'confirmed_at' => $crossing, 'usd_rate' => 50_000, 'fiat_amount' => 120.00,
+        ]);
+        // A later, redundant payment — NOT the crossing.
+        InvoicePayment::create([
+            'invoice_id' => $invoice->id, 'txid' => 'tx-paidat-extra', 'sats_received' => 100_000,
+            'detected_at' => $later, 'confirmed_at' => $later, 'usd_rate' => 50_000, 'fiat_amount' => 50.00,
+        ]);
+
+        $invoice->refresh()->refreshPaymentState();
+
+        $this->assertSame('paid', $invoice->status);
+        $this->assertSame(
+            $crossing->toDateTimeString(),
+            $invoice->paid_at->toDateTimeString(),
+            'paid_at is the crossing confirmation, not a later redundant payment (max would be wrong).'
+        );
+    }
+
+    public function test_reference_timestamp_takes_precedence_for_paid_at(): void
+    {
+        $invoice = $this->makeInvoice(100);
+        $confirmed = Carbon::now()->subDays(2)->startOfSecond();
+
+        InvoicePayment::create([
+            'invoice_id' => $invoice->id, 'txid' => 'tx-paidat-ref', 'sats_received' => 200_000,
+            'detected_at' => $confirmed, 'confirmed_at' => $confirmed, 'usd_rate' => 50_000, 'fiat_amount' => 100.00,
+        ]);
+
+        $reference = Carbon::now()->subHour()->startOfSecond();
+        $invoice->refresh()->refreshPaymentState($reference);
+
+        $this->assertSame('paid', $invoice->status);
+        $this->assertSame($reference->toDateTimeString(), $invoice->paid_at->toDateTimeString());
+    }
 }

@@ -439,12 +439,9 @@ class Invoice extends Model
                 }
 
                 if (!$this->paid_at) {
-                    // The settling (last) confirmation is when the invoice became paid,
-                    // consistent with txid/payment_confirmed_at in refreshPaymentLedger().
-                    $settlingConfirmed = $this->activePayments()
-                        ->filter(fn (InvoicePayment $p) => $this->paymentIsConfirmed($p))
-                        ->max('confirmed_at');
-                    $this->paid_at = $reference ?? $settlingConfirmed ?? now();
+                    // The confirmation that crossed the total into paid — the time
+                    // everyone finally agreed on settlement. See PARTIAL_PAYMENTS.md.
+                    $this->paid_at = $reference ?? $this->settlementCrossingTime($expectedUsd) ?? now();
                 }
             } elseif (!in_array($this->status, ['draft','void'], true)) {
                 $this->status = $confirmedUsd > 0 ? 'partial' : ($hasUnconfirmed ? 'pending' : 'sent');
@@ -723,6 +720,28 @@ class Invoice extends Model
             ->whereNull('confirmed_at')
             ->where('is_adjustment', false)
             ->exists();
+    }
+
+    /**
+     * The confirmed_at of the confirmation at which the time-sorted cumulative
+     * confirmed total first reaches the expected total — the latest re-cross
+     * into paid. Returns null if no confirmation reaches the total.
+     */
+    private function settlementCrossingTime(float $expectedUsd): ?\Illuminate\Support\Carbon
+    {
+        $confirmed = $this->activePayments()
+            ->filter(fn (InvoicePayment $p) => $this->paymentIsConfirmed($p))
+            ->sortBy(fn (InvoicePayment $p) => optional($p->confirmed_at ?? $p->created_at)->getTimestamp() ?? 0);
+
+        $cumulative = 0.0;
+        foreach ($confirmed as $payment) {
+            $cumulative += $this->paymentFiatValue($payment);
+            if ($cumulative >= $expectedUsd) {
+                return $payment->confirmed_at ?? $payment->created_at;
+            }
+        }
+
+        return null;
     }
 
     private function paymentFiatValue(InvoicePayment $payment): float
