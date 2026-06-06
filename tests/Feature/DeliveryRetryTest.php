@@ -149,6 +149,26 @@ class DeliveryRetryTest extends TestCase
         );
     }
 
+    public function test_a_sending_delivery_is_not_resent_on_retry(): void
+    {
+        // A post-send bookkeeping failure leaves the row in `sending`. A retry
+        // must no-op (no duplicate email), never revert to queued and re-send.
+        [, , $delivery] = $this->makeQueuedDelivery('send', 'sending');
+
+        $sendCalls = 0;
+        Mail::shouldReceive('to')->andReturnSelf();
+        Mail::shouldReceive('send')->andReturnUsing(function () use (&$sendCalls) {
+            $sendCalls++;
+
+            return null;
+        });
+
+        $this->runJob($delivery);
+
+        $this->assertSame(0, $sendCalls, 'A delivery already in `sending` must not be re-sent.');
+        $this->assertSame('sending', $delivery->fresh()->status);
+    }
+
     public function test_owner_can_resend_a_failed_non_receipt_delivery(): void
     {
         Queue::fake();

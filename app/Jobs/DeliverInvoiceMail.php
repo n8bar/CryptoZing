@@ -146,29 +146,16 @@ class DeliverInvoiceMail implements ShouldQueue
             default => new InvoiceReadyMail($invoice, $delivery),
         };
 
+        // Only the send itself is retryable. A failure here releases the claim
+        // back to `queued` so a retry re-attempts; terminal `failed` is recorded
+        // only once retries are exhausted, in failed().
         try {
             $mailer = Mail::to($mailAlias->convert($delivery->recipient));
             if ($delivery->cc) {
                 $mailer->cc($mailAlias->convert($delivery->cc));
             }
             $sentMessage = $mailer->send($mailable);
-
-            $delivery->update([
-                'status' => 'sent',
-                'sent_at' => now(),
-                'provider_message_id' => $sentMessage?->getMessageId(),
-                'error_code' => null,
-                'error_message' => null,
-            ]);
-            Log::info('invoice_delivery.sent', [
-                'delivery_id' => $delivery->id,
-                'invoice_id' => $invoice->id,
-                'type' => $delivery->type,
-                'recipient' => $delivery->recipient,
-            ]);
         } catch (\Throwable $e) {
-            // Release the claim back to `queued` so a retry re-attempts the send.
-            // Terminal `failed` is recorded only once retries are exhausted, in failed().
             $delivery->update([
                 'status' => 'queued',
                 'error_code' => (string) $e->getCode(),
@@ -181,6 +168,23 @@ class DeliverInvoiceMail implements ShouldQueue
             ]);
             throw $e;
         }
+
+        // Send succeeded — record it OUTSIDE the retryable catch. If this write
+        // fails the email is already out, so we must not revert to `queued` and
+        // re-send; the job re-runs, sees `sending`, and no-ops.
+        $delivery->update([
+            'status' => 'sent',
+            'sent_at' => now(),
+            'provider_message_id' => $sentMessage?->getMessageId(),
+            'error_code' => null,
+            'error_message' => null,
+        ]);
+        Log::info('invoice_delivery.sent', [
+            'delivery_id' => $delivery->id,
+            'invoice_id' => $invoice->id,
+            'type' => $delivery->type,
+            'recipient' => $delivery->recipient,
+        ]);
     }
 
     /**
