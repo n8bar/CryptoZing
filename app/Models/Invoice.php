@@ -439,10 +439,12 @@ class Invoice extends Model
                 }
 
                 if (!$this->paid_at) {
-                    $firstConfirmed = $this->activePayments()
+                    // The settling (last) confirmation is when the invoice became paid,
+                    // consistent with txid/payment_confirmed_at in refreshPaymentLedger().
+                    $settlingConfirmed = $this->activePayments()
                         ->filter(fn (InvoicePayment $p) => $this->paymentIsConfirmed($p))
-                        ->min('confirmed_at');
-                    $this->paid_at = $reference ?? $firstConfirmed ?? now();
+                        ->max('confirmed_at');
+                    $this->paid_at = $reference ?? $settlingConfirmed ?? now();
                 }
             } elseif (!in_array($this->status, ['draft','void'], true)) {
                 $this->status = $confirmedUsd > 0 ? 'partial' : ($hasUnconfirmed ? 'pending' : 'sent');
