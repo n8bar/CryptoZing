@@ -32,7 +32,7 @@ services:
                 WWWGROUP: '${WWWGROUP}'
         image: 'sail-8.4/app'
         command: >
-            sh -c "php artisan schedule:work"
+            sh -c "until mysqladmin ping -hmysql -usail -ppassword --silent; do echo 'Waiting for MySQL for scheduler...'; sleep 2; done; echo 'MySQL is ready for scheduler.'; exec php artisan schedule:work"
         environment:
             WWWUSER: '${WWWUSER}'
             LARAVEL_SAIL: 1
@@ -41,7 +41,8 @@ services:
         networks:
             - sail
         depends_on:
-            - mysql
+            mysql:
+                condition: service_healthy
         restart: unless-stopped
     queue:
         build:
@@ -51,7 +52,7 @@ services:
                 WWWGROUP: '${WWWGROUP}'
         image: 'sail-8.4/app'
         command: >
-            sh -c "php artisan queue:work --tries=3 --timeout=90 --max-time=3600"
+            sh -c "until mysqladmin ping -hmysql -usail -ppassword --silent; do echo 'Waiting for MySQL for queue worker...'; sleep 2; done; echo 'MySQL is ready for queue worker.'; exec php artisan queue:work --tries=3 --timeout=90 --max-time=3600"
         environment:
             WWWUSER: '${WWWUSER}'
             LARAVEL_SAIL: 1
@@ -60,7 +61,8 @@ services:
         networks:
             - sail
         depends_on:
-            - mysql
+            mysql:
+                condition: service_healthy
         restart: unless-stopped
     mysql:
         image: 'mysql/mysql-server:8.0'
