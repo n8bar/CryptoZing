@@ -42,7 +42,7 @@ Ignore/restore correction handling for wrongly attributed on-chain rows is defin
         - `sent`/`pending` → `partial` when confirmed USD > 0 but below expected.
         - `partial`/`pending` → `paid` when confirmed USD ≥ expected (confirmation threshold enforced).
         - `draft` stays draft if we really want to block payments until “sent” — TBD.
-    4. `paid_at` stays the first confirmed timestamp once confirmed USD crosses expected; confirmation timestamps update when block data arrives.
+    4. `paid_at` is the settlement timestamp — the confirmation that crosses the expected total (the settling/last confirmed payment), consistent with `txid` and `payment_confirmed_at`. Confirmation timestamps update when block data arrives.
 - Handle multiple payments per tx/address pair gracefully (e.g., same tx sends two outputs to us) by summing `sats_received`.
 
 ## Confirmation and RBF Safety
