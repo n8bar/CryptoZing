@@ -671,4 +671,62 @@ class InvoiceShowEditFlowTest extends TestCase
             false
         );
     }
+
+    public function test_delivery_log_defaults_to_client_facing_rows_and_include_self_toggle_reveals_issuer_rows(): void
+    {
+        $owner = User::factory()->create(['email' => 'issuer-log-test@example.com']);
+        $client = Client::create([
+            'user_id' => $owner->id,
+            'name' => 'Log Filter Client',
+            'email' => 'client-log-test@example.com',
+        ]);
+
+        $invoice = Invoice::create([
+            'user_id' => $owner->id,
+            'client_id' => $client->id,
+            'number' => 'INV-LOGFILTER-1',
+            'amount_usd' => 100,
+            'btc_rate' => 50_000,
+            'amount_btc' => 0.002,
+            'payment_address' => 'tb1qq0logfilter',
+            'status' => 'sent',
+            'invoice_date' => now()->toDateString(),
+        ]);
+
+        $invoice->deliveries()->create([
+            'user_id' => $owner->id,
+            'type' => 'send',
+            'status' => 'sent',
+            'recipient' => $client->email,
+            'queued_at' => now()->subMinute(),
+            'sent_at' => now()->subMinute(),
+        ]);
+
+        $invoice->deliveries()->create([
+            'user_id' => $owner->id,
+            'type' => 'issuer_paid_notice',
+            'status' => 'sent',
+            'recipient' => $owner->email,
+            'queued_at' => now()->subMinute(),
+            'sent_at' => now()->subMinute(),
+        ]);
+
+        $defaultResponse = $this
+            ->actingAs($owner)
+            ->get(route('invoices.show', $invoice));
+
+        $defaultResponse->assertOk();
+        $defaultResponse->assertSee($client->email);
+        $defaultResponse->assertDontSee('Paid notice (issuer)');
+        $defaultResponse->assertSee('Include emails sent to me');
+        $defaultResponse->assertSee('id="delivery-log"', false);
+
+        $includeSelfResponse = $this
+            ->actingAs($owner)
+            ->get(route('invoices.show', ['invoice' => $invoice, 'include_self' => 1]));
+
+        $includeSelfResponse->assertOk();
+        $includeSelfResponse->assertSee($client->email);
+        $includeSelfResponse->assertSee('Paid notice (issuer)');
+    }
 }

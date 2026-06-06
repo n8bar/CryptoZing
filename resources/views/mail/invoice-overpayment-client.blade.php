@@ -1,7 +1,7 @@
 @component('mail::message', ['invoice' => $invoice])
-# Invoice {{ $invoice->number ?? $invoice->id }} was overpaid
+# Payment confirmed — Invoice {{ $invoice->number ?? $invoice->id }} overpaid
 
-We detected that the payment we received is about **{{ number_format($invoice->overpaymentPercent() ?? 0, 1) }}%** above the invoice total.
+Your payment is now confirmed on the network and came in about **{{ number_format($invoice->overpaymentPercent() ?? 0, 1) }}%** above the invoice total.
 
 Overpayments are treated as gratuities by default, so please reply if this was accidental and we’ll coordinate a refund or credit.
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invoice;
+use App\Models\InvoiceDelivery;
 use App\Services\InvoiceDeliveryService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -152,5 +153,27 @@ class InvoiceDeliveryController extends Controller
         }
 
         return back()->with('status', 'Receipt resend queued.');
+    }
+
+    public function resendDelivery(Request $request, Invoice $invoice, InvoiceDelivery $delivery): RedirectResponse
+    {
+        $this->authorize('update', $invoice);
+
+        if ($delivery->invoice_id !== $invoice->id) {
+            abort(404);
+        }
+
+        if ($delivery->status !== 'failed') {
+            return back()->with('status', 'Only failed deliveries can be resent.');
+        }
+
+        $resend = $this->deliveries->queueResend($invoice, $delivery->type, $delivery->recipient);
+
+        if ($resend === null) {
+            $cooldown = $this->deliveries->manualSendCooldownMinutes();
+            return back()->with('status', "That notice was sent recently. Please wait {$cooldown} minutes before resending.");
+        }
+
+        return back()->with('status', 'Delivery resend queued.');
     }
 }

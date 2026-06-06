@@ -21,7 +21,7 @@ class InvoiceUnderpaymentClientMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Invoice ' . ($this->invoice->number ?? $this->invoice->id) . ' has a balance due',
+            subject: 'Payment confirmed — balance still due on Invoice ' . ($this->invoice->number ?? $this->invoice->id),
             replyTo: [new Address($this->invoice->user->email, $this->invoice->user->name)],
         );
     }

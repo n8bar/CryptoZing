@@ -625,7 +625,7 @@
             <div class="space-y-6">
                 @if ($invoice->deliveries->isNotEmpty())
                     @php
-                        $displayDeliveries = $invoice->deliveries->where('status', '!=', 'skipped');
+                        $displayDeliveries = $visibleDeliveries;
                         $deliveryCount = $displayDeliveries->count();
                     @endphp
                     <style>
@@ -633,7 +633,7 @@
                         details.delivery-log:not([open]) .hide-label { display: none; }
                         summary.delivery-log-summary { cursor: pointer; }
                     </style>
-                    <div class="rounded-lg bg-white shadow">
+                    <div id="delivery-log" class="rounded-lg bg-white shadow">
                         <details class="delivery-log" open>
                             <summary class="delivery-log-summary flex select-none items-center justify-between px-6 py-4">
                                 <div>
@@ -644,6 +644,15 @@
                                 <span class="text-xs text-gray-500 hide-label">Hide</span>
                             </summary>
                             <div class="border-t border-gray-100 px-6 pb-6">
+                                <form method="GET" action="{{ route('invoices.show', $invoice) }}#delivery-log" class="py-3">
+                                    <label class="inline-flex items-center gap-2 text-xs text-gray-600">
+                                        <input type="checkbox" name="include_self" value="1"
+                                               {{ $includeSelf ? 'checked' : '' }}
+                                               onchange="this.form.submit()"
+                                               class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                                        Include emails sent to me
+                                    </label>
+                                </form>
                                 <div class="overflow-y-auto overflow-x-auto rounded border border-gray-100" style="max-height: 24rem;">
                                     <table class="min-w-full divide-y divide-gray-200 text-sm">
                                         <thead class="bg-gray-50 text-xs uppercase tracking-wide text-gray-500">
@@ -654,6 +663,7 @@
                                                 <th class="px-2 py-2 text-left">Queued</th>
                                                 <th class="px-2 py-2 text-left">Sent</th>
                                                 <th class="px-2 py-2 text-left">Error</th>
+                                                <th class="px-2 py-2 text-left">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody class="divide-y divide-gray-100">
@@ -701,6 +711,16 @@
                                                             {{ $deliveryErrorMessage }}
                                                         </div>
                                                     </td>
+                                                    <td class="px-2 py-2 text-sm">
+                                                        @if ($delivery->status === 'failed')
+                                                            <form method="POST" action="{{ route('invoices.deliver.resend', ['invoice' => $invoice, 'delivery' => $delivery]) }}" class="inline">
+                                                                @csrf
+                                                                <button type="submit" class="text-indigo-600 underline hover:text-indigo-800">Resend</button>
+                                                            </form>
+                                                        @else
+                                                            —
+                                                        @endif
+                                                    </td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -710,7 +730,7 @@
                         </details>
                     </div>
                 @else
-                    <div class="rounded-lg bg-white p-6 shadow">
+                    <div id="delivery-log" class="rounded-lg bg-white p-6 shadow">
                         <h3 class="text-sm font-semibold text-gray-700">Delivery log</h3>
                         <p class="mt-2 text-sm text-gray-500">
                             No delivery attempts yet. Enable the public link and send the invoice to create the first log entry.

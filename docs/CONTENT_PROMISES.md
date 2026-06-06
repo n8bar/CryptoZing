@@ -77,6 +77,7 @@ Entries with real concern — product decisions pending, content that could cont
 
 **2. [Direct claim]** — CZ charges 0% fee (beta only)
 - Source: `site/learn/btcpay-server-alternatives.md:129` (comparison table: "0% (beta)"), `:124` (_"No fees during beta. Long-term pricing hasn't been decided; free is still on the table, and if not, the intent is to keep it very low."_)
+- Also stated in: video — `youtu.be/Glp6jUusTLQ` (§7 wrap-up: _"CryptoZing is free too, at least during beta, maybe longer"_)
 - Required product behavior: CZ must not charge fees during beta. Post-beta pricing is explicitly left open in copy.
 - Product verification: confirmed — no fee logic in codebase
 - Status: open — pending monetization decision. Related to 1. Copy now scoped to beta only.
@@ -86,6 +87,12 @@ Entries with real concern — product decisions pending, content that could cont
 - Lists: no Lightning, no CSV/JSON export, no recurring invoices, no QuickBooks, basic client management, dashboard-only reporting
 - Required product behavior: if and when any of these ship, update the article to match
 - Status: open
+
+**4. [Direct claim]** — invoice's Bitcoin amount refreshes at the current rate each time the client opens it; the rate is never locked, and CryptoZing does not expire invoices
+- Source: video — `youtu.be/Glp6jUusTLQ` (§3 "Creating the invoice", §6 "What if something goes wrong?"); shooting script: `.cybercreek/video/how-to-invoice-bitcoin-script.md` (local-only)
+- Direct claims: _"This tool refreshes it every time the client opens the invoice"_; _"USD is the anchor. The Bitcoin just floats with the market until the moment they pay"_; _"This tool refreshes the rate every time the client opens the invoice. Most other tools expire the invoice instead"_
+- Required product behavior: the public invoice view recomputes the BTC amount from the current USD→BTC rate on each open; no hard expiry that invalidates a still-open invoice
+- Status: open — reconcile in MS19 that the public invoice recomputes on open and has no invalidating expiry
 
 ## 2. Minor
 
@@ -141,6 +148,12 @@ Low-concern entries — core product behavior or patterns CZ would only violate 
 
 **17. [Implicit framing]** — noncustodial settlement means no intermediary holds funds
 - Source: `site/learn/what-is-a-bitcoin-invoice.md:68`
+
+**18. [Direct claim]** — public shareable invoice link the client can open in any browser
+- Source: video — `youtu.be/Glp6jUusTLQ` (§4 "Sending it")
+
+**19. [Direct claim]** — CryptoZing emails the invoice to the client
+- Source: video — `youtu.be/Glp6jUusTLQ` (§4 "Sending it")
 
 ## 3. Resolved
 

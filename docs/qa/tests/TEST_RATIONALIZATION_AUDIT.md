@@ -1,6 +1,6 @@
 # Test Suite Rationalization Audit
 
-_Produced for MS17 Phase 2. See [`docs/strategies/17.2_TEST_RATIONALIZATION.md`](../../strategies/17.2_TEST_RATIONALIZATION.md) for process._
+_Produced for MS17 Phase 2. See [`docs/strategies/x17.2_TEST_RATIONALIZATION.md`](../../strategies/x17.2_TEST_RATIONALIZATION.md) for process._
 
 Status: **Pass 2 complete. Awaiting review before execution.**
 

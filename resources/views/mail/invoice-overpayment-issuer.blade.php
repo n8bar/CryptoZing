@@ -1,7 +1,7 @@
 @component('mail::message', ['invoice' => $invoice])
-# Overpayment flagged on invoice {{ $invoice->number ?? $invoice->id }}
+# Payment confirmed — Invoice {{ $invoice->number ?? $invoice->id }} overpaid
 
-The latest payment puts this invoice roughly **{{ number_format($invoice->overpaymentPercent() ?? 0, 1) }}%** above the total.
+The client's payment is now confirmed on the network, about **{{ number_format($invoice->overpaymentPercent() ?? 0, 1) }}%** above the invoice total.
 
 Decide whether to keep it as a tip, credit the client, or record a manual adjustment/refund.
 

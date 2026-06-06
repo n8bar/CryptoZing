@@ -11,7 +11,7 @@ Supporting ops doc: [`docs/ops/RC_ROLLOUT_CHECKLIST.md`](../ops/RC_ROLLOUT_CHECK
 - Replace the GitHub Pages placeholder at `/` with the live app landing page without breaking the SEO baseline established in MS15 and extended in MS18.
 - Remove temporary mail aliasing.
 - Complete rollout verification per the RC rollout checklist.
-- Activate the legal layer drafted in MS19 Phase 4: swap placeholder entity name for the actual LLC name (formed in MS19 Phase 3), publish ToS and Privacy Policy to live URLs, and wire footer ToS/Privacy links.
+- Activate the legal layer drafted in MS19 Phase 5: swap placeholder entity name for the actual LLC name (formed in MS19 Phase 3), publish ToS and Privacy Policy to live URLs, and wire footer ToS/Privacy links.
 
 ## Decisions recorded (during MS18 Phase 1)
 - **Content site architecture:** Static content files served by nginx directly alongside the Laravel app — same domain, no PHP involved for content routes. CMS is Eleventy (selected in MS18 Phase 1); evaluate at RC deployment whether to keep Eleventy or migrate — static output means migration is never a rework.
@@ -20,7 +20,7 @@ Supporting ops doc: [`docs/ops/RC_ROLLOUT_CHECKLIST.md`](../ops/RC_ROLLOUT_CHECK
 - **Staging:** Dev server (`public/content/` via Sail) is the staging environment during MS18–MS20. At RC deployment, the built `public/content/` output is what nginx serves. Post-RC staging options to be decided post-RC.
 - **GitHub Pages retirement:** GitHub Pages is retired at DNS cutover — not deleted, just no longer the DNS target. No redirects needed; URLs are preserved by the nginx serving the same paths.
 - **GitHub nav link:** Remove the GitHub link from the site nav before RC deployment — it's pre-release framing. Keep the footer link as-is; consider updating copy post-RC if it no longer fits.
-- **Legal-layer activation:** ToS, Privacy Policy, disclaimer copy, and footer ToS/Privacy link scaffolding are drafted in MS19 Phase 4 with placeholder entity names. Final entity-name swap (using the LLC formed in MS19 Phase 3) and publication to live URLs happen at deploy time within Phase 2 of this milestone — not as a separate phase. Treat as a finishing step in the deploy/cutover work.
+- **Legal-layer activation:** ToS, Privacy Policy, disclaimer copy, and footer ToS/Privacy link scaffolding are drafted in MS19 Phase 5 with placeholder entity names. Final entity-name swap (using the LLC formed in MS19 Phase 3) and publication to live URLs happen at deploy time within Phase 2 of this milestone — not as a separate phase. Treat as a finishing step in the deploy/cutover work.
 
 ## Phases
 _(Phase strategy docs to be written when this milestone becomes active.)_
@@ -36,6 +36,6 @@ _(To be detailed when active.)_
 - [ ] Live app landing page replaces GitHub Pages placeholder at `/`; SEO baseline intact (canonical, sitemap, robots, indexed URLs).
 - [ ] Temporary mail aliasing removed; outbound mail routes through production config.
 - [ ] Self-host deployment verified — a clean instance can be stood up independently from the production environment.
-- [ ] Legal layer activated: drafted ToS and Privacy Policy from MS19 Phase 4 published with the actual LLC entity name; footer ToS/Privacy links functional on every page; disclaimer copy live at signup, wallet onboarding, and invoice/payment surfaces.
+- [ ] Legal layer activated: drafted ToS and Privacy Policy from MS19 Phase 5 published with the actual LLC entity name; footer ToS/Privacy links functional on every page; disclaimer copy live at signup, wallet onboarding, and invoice/payment surfaces.
 - [ ] Content promises catalog checked — no work in this milestone introduced or violated an entry.
 - [ ] All RC rollout checklist items completed and signed off.

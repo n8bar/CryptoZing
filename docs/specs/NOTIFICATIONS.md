@@ -85,9 +85,8 @@
 12. The delivery history should use concise, human-friendly labels for communication classes and outcomes.
    1. Manual invoice sends should display as `Invoice email`, not a raw storage key.
    2. Paired issuer/client notification rows should keep the audience explicit in the label, such as `Past-due reminder (client)` and `Underpayment alert (issuer)`.
-   3. While the legacy repeated-partial warning rows still exist in stored history, they should display honestly as `Partial payment warning (client|issuer)` rather than being hidden behind renamed copy.
-   4. Payment-triggered follow-up should keep the acknowledgment-versus-receipt split visible in history once those rows ship, using labels such as `Payment acknowledgment (client)`, `Payment acknowledgment (owner)`, and `Receipt (client)` for the later higher-certainty follow-up.
-   5. Outcome labels should display as `Queued`, `Sending`, `Sent`, `Skipped`, and `Failed`.
+   3. Payment-triggered follow-up should keep the acknowledgment-versus-receipt split visible in history once those rows ship, using labels such as `Payment acknowledgment (client)`, `Payment acknowledgment (owner)`, and `Receipt (client)` for the later higher-certainty follow-up.
+   4. Outcome labels should display as `Queued`, `Sending`, `Sent`, `Skipped`, and `Failed`.
 13. Outbound mail copy should stay concise and actionable.
 14. Owner-facing mail-branding settings for RC may expose only constrained brand-shell controls, not arbitrary message editing.
    1. Allowed MS16 fields are limited to simple mail chrome values such as brand name, short tagline, footer blurb, and whether the default CryptoZing logo is shown in the shared mail header.
@@ -97,6 +96,15 @@
       1. That preview should not send to client recipients or create invoice-linked delivery-history rows.
       2. That preview should be lightly rate-limited or cooldown-protected so repeated clicks do not spam the owner mailbox.
    5. RC does not include arbitrary custom logo uploads for outbound mail; at most it may show or hide the default CryptoZing logo in the shared mail chrome.
+15. Transient outbound send failures must be retried, not treated as terminal on the first failure.
+   1. On a failed send attempt the delivery returns to a retryable state and the worker re-attempts under a bounded retry budget with spaced backoff, rather than being recorded `failed` immediately.
+   2. A delivery is recorded as terminal `failed` only after the retry budget is exhausted, preserving the final error detail.
+   3. Idempotency (items 7–8) must hold across all retry attempts: a transient failure followed by a successful retry produces exactly one outbound send and no duplicate delivery-history rows.
+16. A `failed` delivery must be operator-resendable for every notice class, not receipts alone.
+   1. Resend reuses the shared delivery path and its cooldown/idempotency guards, so it recovers a failed notice without enabling a duplicate send of one already delivered.
+17. Every delivery must reach a truthful terminal state on its own.
+   1. A delivery's recorded status must reflect the provider's actual handling: `sent` only if the provider accepted the message, `failed` if it did not.
+   2. No delivery may remain indefinitely in a non-terminal state (`queued`/`sending`); it must resolve to `sent` or `failed` without operator intervention, including after a process crash or interruption mid-send.
 
 ## Coverage & Status
 
@@ -115,6 +123,4 @@ One row per outbound notice class. `Status`: `live` = in production code, behavi
 | Owner | Overpayment ≥15% threshold | `InvoiceOverpaymentIssuerMail` | live | [`InvoiceNotificationTest`](../../tests/Feature/InvoiceNotificationTest.php) | `issuer_overpay_alert` |
 | Client | Underpayment ≥15% remaining | `InvoiceUnderpaymentClientMail` | live | [`InvoiceNotificationTest`](../../tests/Feature/InvoiceNotificationTest.php) | `client_underpay_alert` |
 | Owner | Underpayment ≥15% remaining | `InvoiceUnderpaymentIssuerMail` | live | [`InvoiceNotificationTest`](../../tests/Feature/InvoiceNotificationTest.php) | `issuer_underpay_alert` |
-| Client | (deprecated — superseded by underpay alert per §4.4.3; legacy rows render in history per §5.12.3) | `InvoicePartialWarningClientMail` | stubbed | [`WatchPaymentsCommandTest`](../../tests/Feature/Wallet/WatchPaymentsCommandTest.php) (asserts zero new queued) | `client_partial_warning` |
-| Owner | (deprecated — superseded by underpay alert per §4.4.3; legacy rows render in history per §5.12.3) | `InvoicePartialWarningIssuerMail` | stubbed | [`WatchPaymentsCommandTest`](../../tests/Feature/Wallet/WatchPaymentsCommandTest.php) (asserts zero new queued) | `issuer_partial_warning` |
 | Owner (self) | Manual "send me a test email" preview action (§5.14.4) | `NotificationBrandingPreviewMail` | live | [`MailBrandingTest`](../../tests/Feature/MailBrandingTest.php) | — (no delivery-log row, per §5.14.4.1) |

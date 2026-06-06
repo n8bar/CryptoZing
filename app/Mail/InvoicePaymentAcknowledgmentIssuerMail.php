@@ -24,7 +24,7 @@ class InvoicePaymentAcknowledgmentIssuerMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Review detected payment for Invoice ' . ($this->invoice->number ?? $this->invoice->id),
+            subject: 'Review payment activity on Invoice ' . ($this->invoice->number ?? $this->invoice->id),
         );
     }
 
