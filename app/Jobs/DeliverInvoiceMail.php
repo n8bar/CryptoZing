@@ -26,6 +26,8 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Symfony\Component\Mailer\Header\MetadataHeader;
+use Symfony\Component\Mime\Email;
 
 class DeliverInvoiceMail implements ShouldQueue
 {
@@ -145,6 +147,13 @@ class DeliverInvoiceMail implements ShouldQueue
             'issuer_underpay_alert' => new InvoiceUnderpaymentIssuerMail($invoice, $delivery),
             default => new InvoiceReadyMail($invoice, $delivery),
         };
+
+        // Tag the outbound message with the delivery id (Mailgun `v:delivery_id`) so
+        // its provider outcome is matchable from webhooks/events even if we never
+        // persist a provider_message_id. See NOTIFICATIONS.md item 17.
+        $mailable->withSymfonyMessage(function (Email $message) use ($delivery) {
+            $message->getHeaders()->add(new MetadataHeader('delivery_id', (string) $delivery->id));
+        });
 
         // Only the send itself is retryable. A failure here releases the claim
         // back to `queued` so a retry re-attempts; terminal `failed` is recorded
