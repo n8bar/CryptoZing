@@ -60,6 +60,24 @@ class SettlementMailEvidenceTest extends TestCase
         $this->assertStringNotContainsString('across 1 on-chain payments', $receiptHtml);
     }
 
+    public function test_settlement_mails_render_timestamps_with_seconds(): void
+    {
+        [$invoice, $delivery] = $this->makeMultiPaymentPaidInvoice();
+        $invoice->forceFill(['paid_at' => Carbon::now()->subMinutes(6)])->save();
+        $invoice = $invoice->fresh(['client', 'user', 'payments']);
+
+        // Issuer "Paid at" carries seconds.
+        $expectedPaidAt = $invoice->paid_at->format('D, M j, Y g:i:s A');
+        $issuerHtml = (new InvoiceIssuerPaidNoticeMail($invoice, $delivery))->render();
+        $this->assertStringContainsString($expectedPaidAt, $issuerHtml);
+
+        // Receipt per-payment confirmation carries seconds.
+        $lastConfirmed = $invoice->payments->sortBy('confirmed_at')->last();
+        $expectedConfirmed = $lastConfirmed->confirmed_at->format('D, M j, Y g:i:s A');
+        $receiptHtml = (new InvoicePaidReceiptMail($invoice, $delivery))->render();
+        $this->assertStringContainsString($expectedConfirmed, $receiptHtml);
+    }
+
     private function makeMultiPaymentPaidInvoice(): array
     {
         $owner = User::factory()->create([

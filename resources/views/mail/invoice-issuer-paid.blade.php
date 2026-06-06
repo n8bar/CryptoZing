@@ -9,7 +9,7 @@ Good news — this invoice is now marked **paid**.
 
 - **Client:** {{ $invoice->client->name ?? 'N/A' }}
 - **Amount:** ${{ number_format($invoice->amount_usd ?? 0, 2) }} ({{ $invoice->amount_btc ?? '—' }} BTC)
-- **Paid at:** {{ optional($invoice->paid_at)->toDayDateTimeString() ?? now()->toDayDateTimeString() }}
+- **Paid at:** {{ optional($invoice->paid_at)->format('D, M j, Y g:i:s A') ?? now()->format('D, M j, Y g:i:s A') }}
 
 @if ($settlementPayments->isNotEmpty())
 **On-chain settlement:**

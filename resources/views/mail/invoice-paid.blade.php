@@ -14,7 +14,7 @@ Your payment is confirmed. **${{ number_format((float) $invoice->amount_usd, 2) 
 <x-mail::panel>
 @foreach ($settlementPayments as $payment)
 **TXID:** <span style="word-break: break-all; font-family: monospace;">{{ $payment->txid }}</span>
-{{ number_format($payment->sats_received) }} sats / ${{ number_format((float) $payment->fiat_amount, 2) }} (confirmed {{ optional($payment->confirmed_at)->toDayDateTimeString() }})
+{{ number_format($payment->sats_received) }} sats / ${{ number_format((float) $payment->fiat_amount, 2) }} (confirmed {{ optional($payment->confirmed_at)->format('D, M j, Y g:i:s A') }})
 
 @endforeach
 </x-mail::panel>
