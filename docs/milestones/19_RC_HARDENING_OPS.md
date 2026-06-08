@@ -22,7 +22,7 @@ Supporting ops doc: [`docs/ops/DOCS_DX.md`](../ops/DOCS_DX.md)
 - **Findings tracking trial:** Through M19, new findings/bugs/todos go to GitHub Issues (closed via `Fixes #N` on the merging PR) instead of new `docs/qa/Finding*.md` docs. Existing finding docs stay put. M20 kickoff decides whether to keep, revert, or hybridize. See [`docs/DOC_ROLES.md`](../DOC_ROLES.md#findings-conventions).
 
 ## Current Focus
-- Phases 1–2 complete; Phase 3+ pre-flight, next phase TBD.
+- Active phase: Phase 3 (LLC formation) — CyberCreek LLC (parent) Articles filed 2026-06-08. Phases 1–2 complete.
 - Phase 1: [`docs/strategies/x19.1_NOTIFICATION_COVERAGE_AUDIT.md`](../strategies/x19.1_NOTIFICATION_COVERAGE_AUDIT.md) ✓
 - Phase 2: [`docs/strategies/x19.2_AUTH_HARDENING.md`](../strategies/x19.2_AUTH_HARDENING.md) ✓
 - Phase 3: [`docs/strategies/19.3_LLC_FORMATION.md`](../strategies/19.3_LLC_FORMATION.md)
@@ -41,7 +41,7 @@ Document every outbound mail type — trigger, recipient, delivery-log behavior 
 Implement 419-to-login redirect and site-wide session-expiry logout, with return-to-page after re-auth. See [`x19.2_AUTH_HARDENING.md`](../strategies/x19.2_AUTH_HARDENING.md).
 
 ### [ ] Phase 3 — LLC Formation
-Form a single-member LLC in Arizona; obtain EIN; open a business bank account; draft and sign an operating agreement; update CryptoZing references to reflect the entity. Provides the entity backing the Phase 5 legal-layer ToS protections need to actually shield the operator personally. Phase 3 (LLC) and Phase 5 (Legal Layer) run as **independent parallel tracks** — drafting/UI work in Phase 5 does not gate on LLC status; only the deploy-time entity-name swap at MS21 needs the formed entity. Both must land before MS21.
+Form parent **CyberCreek LLC** then subsidiary **CryptoZing LLC** (member: CyberCreek) in Arizona — parent-first to avoid a later membership transfer; obtain EINs, open a business bank account, sign operating agreements, update CryptoZing references to reflect the entity. Provides the entity backing the Phase 5 legal-layer ToS protections need to actually shield the operator personally. Phase 3 (LLC) and Phase 5 (Legal Layer) run as **independent parallel tracks** — drafting/UI work in Phase 5 does not gate on LLC status; only the deploy-time entity-name swap at MS21 needs the formed entity. Both must land before MS21.
 
 ### [ ] Phase 4 — Visual Identity Polish
 Land the visual/brand polish pass before open beta: favicon set across all surfaces (theme-cohesive yet purpose-distinguishable), og:image / social previews, and the open-beta copy refactor (formerly Phase 4 §5 / now Phase 5 §5 of the prior layout — moved here so it bundles with the favicon and social-preview work as one coherent visual pass). No dependency on Phase 3; slotted here so subsequent phases review their surfaces in their final visual state.
