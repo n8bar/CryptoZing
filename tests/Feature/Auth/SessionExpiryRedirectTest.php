@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Session\TokenMismatchException;
@@ -69,6 +70,31 @@ class SessionExpiryRedirectTest extends TestCase
         $response = $this->post('/__guest_expire_test');
 
         $response->assertRedirect(route('login', ['expired' => 1]));
+    }
+
+    public function test_get_idle_expiry_flags_login_for_a_returning_user(): void
+    {
+        // A returning user carries the marker cookie, so a guest bounce from a
+        // protected GET surfaces the expired-session banner.
+        $this->withUnencryptedCookie(AuthenticatedSessionController::RETURNING_COOKIE, '1')
+            ->get('/dashboard')
+            ->assertRedirect(route('login', ['expired' => 1]));
+    }
+
+    public function test_get_idle_redirect_is_plain_login_for_a_first_time_visitor(): void
+    {
+        $this->get('/dashboard')->assertRedirect(route('login'));
+    }
+
+    public function test_login_drops_returning_marker_and_logout_clears_it(): void
+    {
+        $user = User::factory()->create();
+
+        $this->post('/login', ['email' => $user->email, 'password' => 'password'])
+            ->assertCookie(AuthenticatedSessionController::RETURNING_COOKIE);
+
+        $this->post('/logout')
+            ->assertCookieExpired(AuthenticatedSessionController::RETURNING_COOKIE);
     }
 
     public function test_login_page_shows_expired_notice_when_flagged(): void

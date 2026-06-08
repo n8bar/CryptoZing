@@ -40,6 +40,21 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->validateCsrfTokens(except: [
             'webhooks/mailgun',
         ]);
+
+        // Non-sensitive boolean marker — left unencrypted so it reads as plain
+        // text in the guest-redirect check below (and in tests).
+        $middleware->encryptCookies(except: [
+            \App\Http\Controllers\Auth\AuthenticatedSessionController::RETURNING_COOKIE,
+        ]);
+
+        // Guests bounced from a protected page get the expired-session banner
+        // only when they carry the returning-user marker (their session expired),
+        // not on a first, never-authenticated visit.
+        $middleware->redirectGuestsTo(function (Request $request) {
+            return $request->hasCookie(\App\Http\Controllers\Auth\AuthenticatedSessionController::RETURNING_COOKIE)
+                ? route('login', ['expired' => 1])
+                : route('login');
+        });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $renderForbidden = function (Request $request, ?string $details = null) {

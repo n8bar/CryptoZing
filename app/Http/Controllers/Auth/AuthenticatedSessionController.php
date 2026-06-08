@@ -7,10 +7,18 @@ use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
+    /**
+     * Long-lived marker dropped at login so a later guest redirect can tell an
+     * expired session ("you were signed in") apart from a never-authenticated
+     * visit, and surface the expired-session banner only in the former case.
+     */
+    public const RETURNING_COOKIE = 'cz_returning';
+
     /**
      * Display the login view.
      */
@@ -27,6 +35,9 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+
+        // Outlives the session so a later expiry can be recognised as one.
+        Cookie::queue(Cookie::forever(self::RETURNING_COOKIE, '1'));
 
         // A return-to-page target stashed by the 419 / session-expiry handler
         // wins over first-login persona routing — the user was actively
@@ -56,6 +67,10 @@ class AuthenticatedSessionController extends Controller
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
+
+        // Deliberate logout, not an expiry — drop the marker so the next guest
+        // redirect lands on a plain /login without the expired-session banner.
+        Cookie::queue(Cookie::forget(self::RETURNING_COOKIE));
 
         return redirect('/');
     }
