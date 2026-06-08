@@ -22,9 +22,9 @@ Supporting ops doc: [`docs/ops/DOCS_DX.md`](../ops/DOCS_DX.md)
 - **Findings tracking trial:** Through M19, new findings/bugs/todos go to GitHub Issues (closed via `Fixes #N` on the merging PR) instead of new `docs/qa/Finding*.md` docs. Existing finding docs stay put. M20 kickoff decides whether to keep, revert, or hybridize. See [`docs/DOC_ROLES.md`](../DOC_ROLES.md#findings-conventions).
 
 ## Current Focus
-- Active phase: Phase 2 (auth hardening). Phase 1 complete; other phases pre-flight.
+- Phases 1–2 complete; Phase 3+ pre-flight, next phase TBD.
 - Phase 1: [`docs/strategies/x19.1_NOTIFICATION_COVERAGE_AUDIT.md`](../strategies/x19.1_NOTIFICATION_COVERAGE_AUDIT.md) ✓
-- Phase 2: [`docs/strategies/19.2_AUTH_HARDENING.md`](../strategies/19.2_AUTH_HARDENING.md)
+- Phase 2: [`docs/strategies/x19.2_AUTH_HARDENING.md`](../strategies/x19.2_AUTH_HARDENING.md) ✓
 - Phase 3: [`docs/strategies/19.3_LLC_FORMATION.md`](../strategies/19.3_LLC_FORMATION.md)
 - Phase 4: [`docs/strategies/19.4_VISUAL_IDENTITY_POLISH.md`](../strategies/19.4_VISUAL_IDENTITY_POLISH.md)
 - Phase 5: [`docs/strategies/19.5_LEGAL_LAYER.md`](../strategies/19.5_LEGAL_LAYER.md)
@@ -37,8 +37,8 @@ Supporting ops doc: [`docs/ops/DOCS_DX.md`](../ops/DOCS_DX.md)
 ### [x] Phase 1 — Notification Coverage Audit & Verification
 Document every outbound mail type — trigger, recipient, delivery-log behavior — so the full mail surface is explicitly accounted for before open beta. Includes end-to-end verification of every notice class in the running stack against realistic scenarios (time-advanced past-due flows included) and a stress-readiness check; catch-all alias stays flipped off so the rest of MS19 emits mail under prod-like routing. See [`x19.1_NOTIFICATION_COVERAGE_AUDIT.md`](../strategies/x19.1_NOTIFICATION_COVERAGE_AUDIT.md).
 
-### [ ] Phase 2 — Auth/Password Policy Hardening
-Implement 419-to-login redirect and site-wide session-expiry logout.
+### [x] Phase 2 — Auth/Password Policy Hardening
+Implement 419-to-login redirect and site-wide session-expiry logout, with return-to-page after re-auth. See [`x19.2_AUTH_HARDENING.md`](../strategies/x19.2_AUTH_HARDENING.md).
 
 ### [ ] Phase 3 — LLC Formation
 Form a single-member LLC in Arizona; obtain EIN; open a business bank account; draft and sign an operating agreement; update CryptoZing references to reflect the entity. Provides the entity backing the Phase 5 legal-layer ToS protections need to actually shield the operator personally. Phase 3 (LLC) and Phase 5 (Legal Layer) run as **independent parallel tracks** — drafting/UI work in Phase 5 does not gate on LLC status; only the deploy-time entity-name swap at MS21 needs the formed entity. Both must land before MS21.
@@ -61,8 +61,8 @@ Add 2FA to the RC. Email-based 2FA as the baseline; TOTP / authenticator-app 2FA
 ## Exit Criteria
 
 - [ ] Notification coverage documented AND verified end-to-end: every outbound mail type accounted for with intended trigger, recipient, and delivery-log behavior, and every notice class observed firing correctly in the running stack against realistic scenarios (including time-advanced past-due flows). Catch-all alias disabled; later MS19 phases run under prod-like mail routing.
-- [ ] 419-to-login redirect implemented and tested.
-- [ ] Site-wide session expiry logout implemented and tested.
+- [x] 419-to-login redirect implemented and tested.
+- [x] Site-wide session expiry logout implemented and tested.
 - [ ] LLC formed in Arizona; EIN obtained; business bank account opened; operating agreement signed; CryptoZing references updated to reflect the entity.
 - [ ] Favicon set generated and wired across all surfaces (Laravel app, marketing site, any other distinct surface) with theme-cohesive yet purpose-distinguishable per-surface variants.
 - [ ] og:image / social-preview meta tags wired and validated against major platform preview tools.
