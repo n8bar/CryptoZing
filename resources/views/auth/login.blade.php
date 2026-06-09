@@ -15,6 +15,12 @@
                 </div>
             @endif
 
+            @if (request()->boolean('expired'))
+                <div class="mb-4 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-800" role="status">
+                    Your session expired for your security. Please sign in again to continue.
+                </div>
+            @endif
+
             @if ($errors->any())
                 <div class="mb-4 rounded-lg alert-error px-4 py-3 text-sm">
                     <div class="font-semibold">We couldn’t sign you in.</div>

@@ -1615,12 +1615,21 @@
 
             if (deliveryForm && deliveryInput && saveState && draftUrl && csrfToken) {
                 let lastSavedValue = deliveryInput.value;
+                const draftStashKey = 'cz:return-restore:delivery-draft:' + draftUrl;
 
                 const setSaveState = (text, isError = false) => {
                     saveState.textContent = text;
                     saveState.classList.toggle('text-red-600', isError);
                     saveState.classList.toggle('text-green-600', !isError && text.length > 0);
                 };
+
+                // Restore unsaved text preserved across a session-expiry bounce.
+                const stashedDraft = localStorage.getItem(draftStashKey);
+                if (stashedDraft !== null && stashedDraft !== deliveryInput.value) {
+                    deliveryInput.value = stashedDraft;
+                    setSaveState('Restored your unsaved note.');
+                }
+                localStorage.removeItem(draftStashKey);
 
                 const saveDraft = async () => {
                     const currentValue = deliveryInput.value;
@@ -1629,6 +1638,10 @@
                     }
 
                     setSaveState('Saving...');
+                    // Stash before sending: if the session has expired, the 419
+                    // handler redirects to login before this returns, so we keep
+                    // the text here to restore when the user comes back.
+                    localStorage.setItem(draftStashKey, currentValue);
 
                     try {
                         const response = await fetch(draftUrl, {
@@ -1641,11 +1654,16 @@
                             body: JSON.stringify({ message: currentValue }),
                         });
 
+                        if (response.status === 419) {
+                            return; // global handler is redirecting; keep the stash
+                        }
+
                         if (!response.ok) {
                             throw new Error('save-failed');
                         }
 
                         lastSavedValue = currentValue;
+                        localStorage.removeItem(draftStashKey);
                         setSaveState('Saved');
                         setTimeout(() => {
                             if (saveState.textContent === 'Saved') {
@@ -1653,6 +1671,7 @@
                             }
                         }, 1200);
                     } catch {
+                        localStorage.removeItem(draftStashKey);
                         setSaveState('Could not save this note yet.', true);
                     }
                 };
@@ -1706,6 +1725,7 @@
                 }
 
                 let lastSavedValue = noteInput.value;
+                const noteStashKey = 'cz:return-restore:payment-note:' + noteForm.action;
 
                 const setNoteSaveState = (text, isError = false) => {
                     noteSaveState.textContent = text;
@@ -1715,6 +1735,14 @@
                     requestAnimationFrame(() => syncPaymentNoteFieldHeight(noteInput));
                 };
 
+                // Restore unsaved text preserved across a session-expiry bounce.
+                const stashedNote = localStorage.getItem(noteStashKey);
+                if (stashedNote !== null && stashedNote !== noteInput.value) {
+                    noteInput.value = stashedNote;
+                    setNoteSaveState('Restored your unsaved note.');
+                }
+                localStorage.removeItem(noteStashKey);
+
                 const saveNote = async () => {
                     const currentValue = noteInput.value;
 
@@ -1723,6 +1751,10 @@
                     }
 
                     setNoteSaveState('Saving...');
+                    // Stash before sending: if the session has expired, the 419
+                    // handler redirects to login before this returns, so we keep
+                    // the text here to restore when the user comes back.
+                    localStorage.setItem(noteStashKey, currentValue);
 
                     try {
                         const response = await fetch(noteForm.action, {
@@ -1738,6 +1770,10 @@
                             }),
                         });
 
+                        if (response.status === 419) {
+                            return; // global handler is redirecting; keep the stash
+                        }
+
                         if (response.status === 422) {
                             const payload = await response.json();
                             throw new Error(payload?.errors?.note?.[0] || 'Could not save this note yet.');
@@ -1750,6 +1786,7 @@
                         const payload = await response.json();
 
                         lastSavedValue = currentValue;
+                        localStorage.removeItem(noteStashKey);
                         if (noteDisplay) {
                             noteDisplay.textContent = payload.note && payload.note.length > 0 ? payload.note : '—';
                         }
@@ -1761,6 +1798,7 @@
                             }
                         }, 1200);
                     } catch (error) {
+                        localStorage.removeItem(noteStashKey);
                         setNoteSaveState(error instanceof Error ? error.message : 'Could not save this note yet.', true);
                     }
                 };
