@@ -13,21 +13,21 @@ UID:cz-ms18@cryptozing.app
 END:VEVENT
 BEGIN:VEVENT
 DTSTART;VALUE=DATE:20260508
-DTEND;VALUE=DATE:20260704
+DTEND;VALUE=DATE:20260718
 SUMMARY:MS19 — RC Hardening & Ops
 DESCRIPTION:RC hardening: notification coverage, auth/password policy, LLC formation, legal layer (ToS, Privacy Policy, disclaimers, monetization-neutral copy), content promises reconciliation, contributor docs, 2FA (email baseline, optional TOTP).
 UID:cz-ms19@cryptozing.app
 END:VEVENT
 BEGIN:VEVENT
-DTSTART;VALUE=DATE:20260703
-DTEND;VALUE=DATE:20260716
+DTSTART;VALUE=DATE:20260717
+DTEND;VALUE=DATE:20260730
 SUMMARY:MS20 — Mainnet Cutover Preparation
 DESCRIPTION:Define and rehearse env flips, wallet validation, mail sanity, and backout steps for mainnet cutover.
 UID:cz-ms20@cryptozing.app
 END:VEVENT
 BEGIN:VEVENT
-DTSTART;VALUE=DATE:20260715
-DTEND;VALUE=DATE:20260728
+DTSTART;VALUE=DATE:20260729
+DTEND;VALUE=DATE:20260811
 SUMMARY:MS21 — CryptoZing.app Deployment (RC)
 DESCRIPTION:Deploy the RC under cryptozing.app, replace GitHub Pages placeholder, remove temporary mail aliasing, complete rollout verification.
 UID:cz-ms21@cryptozing.app
