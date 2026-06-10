@@ -23,14 +23,14 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 - Most recently completed milestone doc: [`docs/milestones/x18_PRERELEASE_CONTENT_SEO.md`](milestones/x18_PRERELEASE_CONTENT_SEO.md)
 
 ## Published Release Target
-- **First public release: mid-to-late 2027.** The RC milestone timeline (MS21, targeting 2026-07-05) covers the release candidate. The published release target accounts for post-RC work needed before an official first release.
+- **First public release: mid-to-late 2027.** The RC milestone timeline (MS21, targeting 2026-08-11) covers the release candidate. The published release target accounts for post-RC work needed before an official first release.
 
 ## Active and Upcoming Milestones
 | Status | ID | Milestone | Short intent | Target | Primary doc |
 |---|---|---|---|---|---|
-| [ ] | 19 | RC Hardening & Ops | RC hardening before mainnet cutover: notification coverage audit; auth/password policy hardening (419-to-login redirect, session expiry logout); LLC formation (entity, EIN, bank account, operating agreement); legal layer (ToS, Privacy Policy, disclaimers, monetization-neutral copy review, UI placement); content promises reconciliation; contributor docs refresh; 2FA (email baseline, opportunistic TOTP). | 2026-06-11 | [`docs/milestones/19_RC_HARDENING_OPS.md`](milestones/19_RC_HARDENING_OPS.md) |
-| [ ] | 20 | Mainnet Cutover Preparation | Define and rehearse env flips, wallet validation, mail sanity checks, and backout steps for mainnet cutover. | 2026-06-23 | [`docs/milestones/20_MAINNET_CUTOVER_PREP.md`](milestones/20_MAINNET_CUTOVER_PREP.md) |
-| [ ] | 21 | CryptoZing.app Deployment (RC) | Deploy the RC under `cryptozing.app`, replace the GitHub Pages placeholder at `/` with the live app landing page without breaking the SEO baseline established in MS15, remove temporary mail aliasing, and complete rollout verification. | 2026-07-05 | [`docs/milestones/21_RC_DEPLOYMENT.md`](milestones/21_RC_DEPLOYMENT.md) |
+| [ ] | 19 | RC Hardening & Ops | RC hardening before mainnet cutover: notification coverage audit; auth/password policy hardening (419-to-login redirect, session expiry logout); LLC formation (entity, EIN, bank account, operating agreement); legal layer (ToS, Privacy Policy, disclaimers, monetization-neutral copy review, UI placement); content promises reconciliation; contributor docs refresh; 2FA (email baseline, opportunistic TOTP). | 2026-07-18 | [`docs/milestones/19_RC_HARDENING_OPS.md`](milestones/19_RC_HARDENING_OPS.md) |
+| [ ] | 20 | Mainnet Cutover Preparation | Define and rehearse env flips, wallet validation, mail sanity checks, and backout steps for mainnet cutover. | 2026-07-30 | [`docs/milestones/20_MAINNET_CUTOVER_PREP.md`](milestones/20_MAINNET_CUTOVER_PREP.md) |
+| [ ] | 21 | CryptoZing.app Deployment (RC) | Deploy the RC under `cryptozing.app`, replace the GitHub Pages placeholder at `/` with the live app landing page without breaking the SEO baseline established in MS15, remove temporary mail aliasing, and complete rollout verification. | 2026-08-11 | [`docs/milestones/21_RC_DEPLOYMENT.md`](milestones/21_RC_DEPLOYMENT.md) |
 
 ## Completed Milestones
 | Status | ID | Milestone | Short intent | Primary doc |

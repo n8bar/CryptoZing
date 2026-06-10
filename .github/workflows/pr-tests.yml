@@ -75,4 +75,8 @@ jobs:
         run: php artisan migrate --force
 
       - name: Run tests
-        run: php artisan test
+        # local-only group is excluded here on purpose: it guards a docs
+        # invariant (PLAN.md milestone Targets == milestones.ics end dates)
+        # that should fail the local suite, not gate every PR. See
+        # tests/Feature/Docs/MilestoneScheduleConsistencyTest.php.
+        run: php artisan test --exclude-group=local-only
