@@ -4,6 +4,7 @@
 - Always run artisan/composer/npm commands through Sail (`./vendor/bin/sail ...`).
 - Doc-tree roles, canonical docs, strategy doc rules, checklist-depth separation, and CHANGELOG conventions all live in [`docs/DOC_ROLES.md`](docs/DOC_ROLES.md). Read it when navigating docs or deciding where new content belongs.
 - Where dates are necessary in docs, use the date from the system you're running on.
+- Milestone dates have one source of truth: `docs/milestones.ics`. PLAN.md's "Target" column must equal each milestone's `.ics` end date (DTEND). This invariant is guarded by `tests/Feature/Docs/MilestoneScheduleConsistencyTest.php`, tagged `#[Group('local-only')]` — it runs in the local suite (`./vendor/bin/sail artisan test`) but is excluded from the GitHub `PR Tests` gate, so run tests locally after any milestone-date change.
 - When adding features, update or create migrations + tests, then run `./vendor/bin/sail artisan test`.
 - Also keep AGENTS.md updated to save on churn from session switching.
 - Keep `.cybercreek/` local-only and untracked; do not commit agent coordination logs, local recovery files, or other local-only helper artifacts. For local-only work under `.cybercreek/`, follow `.cybercreek/AGENTS_LOCAL.md` if present.
