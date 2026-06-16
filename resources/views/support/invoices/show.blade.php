@@ -1,4 +1,3 @@
-<x-emoji-favicon symbol="📄" bg="#FDE68A" />
 <x-app-layout>
     <x-slot name="header">
         <div class="flex flex-wrap items-center justify-between gap-3">

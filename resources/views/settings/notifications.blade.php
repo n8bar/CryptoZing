@@ -1,4 +1,3 @@
-<x-emoji-favicon symbol="🔔" bg="#FEF3C7" />
 <x-app-layout>
     <x-slot name="header">
         <div class="flex flex-col">

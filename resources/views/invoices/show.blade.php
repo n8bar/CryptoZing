@@ -1,5 +1,4 @@
 @if(!request()->routeIs('invoices.public-print'))
-    <x-emoji-favicon symbol="💸" bg="#FEF3C7" />
 @endif
 <x-app-layout>
     <x-slot name="header">
