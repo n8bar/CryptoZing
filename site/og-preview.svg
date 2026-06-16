@@ -17,7 +17,7 @@
 
   <g font-family="DejaVu Sans" fill="#ffffff">
     <text x="470" y="262" font-size="96" font-weight="bold" letter-spacing="-1">CryptoZing</text>
-    <rect x="474" y="291" width="124" height="9" rx="4.5" fill="#ff5908"/>
+    <rect x="470" y="292" width="592" height="9" rx="4.5" fill="#ff5908"/>
     <text x="472" y="356" font-size="34" fill="#cbd5e1">Bitcoin invoicing with</text>
     <text x="472" y="402" font-size="34" fill="#cbd5e1">on-chain payment tracking</text>
     <text x="472" y="470" font-size="28" font-weight="bold" fill="#ff8a4d">cryptozing.app</text>
