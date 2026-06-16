@@ -4,7 +4,7 @@
 
 Status: Not started.
 Parent execution doc: [`docs/PLAN.md`](../PLAN.md)
-Supporting ops doc: [`docs/ops/RC_ROLLOUT_CHECKLIST.md`](../ops/RC_ROLLOUT_CHECKLIST.md)
+Supporting ops doc: [`docs/ops/OB_ROLLOUT_CHECKLIST.md`](../ops/OB_ROLLOUT_CHECKLIST.md)
 
 ## Milestone Objectives
 - Define and rehearse the env flips, wallet validation, mail sanity checks, and backout steps needed for a safe mainnet cutover.

@@ -249,8 +249,8 @@ The core pattern: **people want to accept Bitcoin, not become a sysadmin.** BTCP
 - No fees currently. Monetization strategy TBD — content already leaves room for future fees.
 - Full invoice management: CRUD, status lifecycle (draft → sent → pending → partial → paid → void), USD-denominated with BTC computed at current rates, rate snapshots per payment.
 - Client management: minimal. Contact database (name/email/notes), invoice association, soft-delete. No client-level aggregation, no client portal, no balance tracking across invoices. Support dashboard shows recent invoices per client but issuers have no equivalent view.
-- Lightning: not implemented. On-chain only for RC and MVP. Explicitly deferred.
-- Active development. RC targeting mid-2026, first public release mid-to-late 2027.
+- Lightning: not implemented. On-chain only for the open beta and MVP. Explicitly deferred.
+- Active development. Open beta targeting mid-2026, first public release mid-to-late 2027.
 - Payment detection: automatic on-chain watching via Mempool.space API, confirmation-gated, unconfirmed tracking, idempotent.
 - Reporting: dashboard only (outstanding totals, open counts, past due, recent payments, action items). No CSV/JSON export, no time-series analytics, no per-client reports, no tax reporting. These are backlog items.
 - Email: manual invoice send, payment acknowledgments, receipts (owner-reviewed before sending), past-due alerts, overpayment/underpayment alerts, delivery logging with Mailgun webhooks.

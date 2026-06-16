@@ -1,6 +1,6 @@
 # Content Promises Catalog
 
-A living catalog of promises and expectations that customer-facing content sets about CryptoZing — both directly and implicitly. Maintained as content is written so the product can be trued up to it before RC (see MS19).
+A living catalog of promises and expectations that customer-facing content sets about CryptoZing — both directly and implicitly. Maintained as content is written so the product can be trued up to it ahead of the open beta (see MS19).
 
 ## Why this exists
 
@@ -58,7 +58,7 @@ When an entry is a **critical omission** about a future product decision (for ex
 
 ## Reconciliation
 
-Every major entry needs individual reconciliation before RC. Minor entries get a bulk verification pass. MS19 will include a phase to walk this catalog and either confirm the product honors each entry or trigger a content revision. New entries added after MS19 reconciliation will need to be caught in the next pre-release pass.
+Every major entry needs individual reconciliation before the open beta. Minor entries get a bulk verification pass. MS19 will include a phase to walk this catalog and either confirm the product honors each entry or trigger a content revision. New entries added after MS19 reconciliation will need to be caught in the next pre-release pass.
 
 ---
 

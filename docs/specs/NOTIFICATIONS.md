@@ -26,14 +26,14 @@
       3. The acknowledgment must remain non-promissory and should not imply that a receipt, refund, or other outcome is guaranteed.
       4. If the payment state is ambiguous, the acknowledgment should stay limited to what the system can safely say and should avoid any certainty about how the payment applies.
       5. When an acknowledgment is tied to a specific detected payment identity, repeated detection of that same payment must not create a second acknowledgment for the same notice class.
-      6. RC uses paired owner/client delivery classes for this flow so the client acknowledgment and owner follow-through remain distinct in delivery history.
+      6. The open beta uses paired owner/client delivery classes for this flow so the client acknowledgment and owner follow-through remain distinct in delivery history.
    2. **Later Payment Ambiguity**
       1. After an invoice has already received detected on-chain payment activity, later payments to that invoice’s address may still be semantically ambiguous even when the wallet configuration remains supported.
       2. Examples include stale-address reuse and payers intentionally using an older valid invoice address for a newer invoice.
       3. Later-payment ambiguity should narrow the acknowledgment to what the system can safely say rather than suppressing it outright.
    3. **Receipt Follow-Up**
       1. A receipt is a higher-certainty follow-up than an acknowledgment and should only be sent from an owner-reviewed payment state.
-      2. RC does not auto-send client receipts from detected payment state alone, even when the invoice appears straightforward under current ledger rules.
+      2. The open beta does not auto-send client receipts from detected payment state alone, even when the invoice appears straightforward under current ledger rules.
       3. The product must support a clear owner-facing path to send that receipt after review and any needed ignore or reattribution work.
          1. That path should stay visible from the invoice payment history and from dashboard payment-review surfaces when a paid invoice still lacks a queued or sent client receipt.
       4. Later-payment ambiguity, ignore state, and reattribution state should surface truthful review context to the owner, but they are not the only reason a client receipt requires review.
@@ -57,12 +57,12 @@
    3. The client reminder should communicate the overdue status, include the outstanding balance and invoice link, and include a short “contact the sender if you already paid” caveat.
 
 3. **Significant Overpayment Alert (Owner + Client)**
-   1. Triggered when the invoice reflects a significant overpayment (15% threshold for RC).
+   1. Triggered when the invoice reflects a significant overpayment (15% threshold for the open beta).
    2. The client alert should explain that overpayments are treated as gratuities by default and tell the client to contact the sender if the overpayment was accidental.
    3. The owner alert should report the overpayment percentage and prompt a disposition decision — keep as tip, credit the client, or record a manual adjustment/refund — with a link back into the app.
 
 4. **Significant Underpayment Alert (Owner + Client)**
-   1. Triggered when the invoice still carries a significant remaining balance after payment activity (15% threshold for RC).
+   1. Triggered when the invoice still carries a significant remaining balance after payment activity (15% threshold for the open beta).
    2. The client alert should neutrally communicate that a balance remains, include the outstanding USD amount, and link to the public invoice so the client can settle; where appropriate, it may encourage completing the remaining balance in one payment for convenience.
    3. The owner alert should report the outstanding balance and link back to the invoice for follow-up or manual adjustment.
    4. Fragmented or repeated partial payments should not create a separate repeated-warning alert family; they should continue to use the final underpayment behavior instead.
@@ -72,7 +72,7 @@
 2. The shared delivery history should preserve enough context to identify the invoice, sender/issuer context, recipient(s), communication class, outcome, and timing/error details for each outbound attempt.
 3. Public-share links embedded in outbound emails must use the explicitly configured public host for the intended recipient-facing environment.
    1. That public host may differ from the host currently running the app, such as when a development or staging environment is deliberately targeting another deployment.
-4. Client-facing payment-triggered notification emails should use explicit paired owner/client delivery classes for RC rather than relying on a generic issuer-copy toggle.
+4. Client-facing payment-triggered notification emails should use explicit paired owner/client delivery classes for the open beta rather than relying on a generic issuer-copy toggle.
 5. Outbound mail capability is a required part of a valid recipient-facing deployment.
    1. Development and test environments may intentionally run without outbound mail, but production-ready deployments must have it configured.
 6. The shared delivery path must suppress duplicate or too-recent outbound attempts by notice class and record those suppressed attempts as `skipped` rather than silently dropping them.
@@ -88,14 +88,14 @@
    3. Payment-triggered follow-up should keep the acknowledgment-versus-receipt split visible in history once those rows ship, using labels such as `Payment acknowledgment (client)`, `Payment acknowledgment (owner)`, and `Receipt (client)` for the later higher-certainty follow-up.
    4. Outcome labels should display as `Queued`, `Sending`, `Sent`, `Skipped`, and `Failed`.
 13. Outbound mail copy should stay concise and actionable.
-14. Owner-facing mail-branding settings for RC may expose only constrained brand-shell controls, not arbitrary message editing.
+14. Owner-facing mail-branding settings for the open beta may expose only constrained brand-shell controls, not arbitrary message editing.
    1. Allowed MS16 fields are limited to simple mail chrome values such as brand name, short tagline, footer blurb, and whether the default CryptoZing logo is shown in the shared mail header.
    2. Those settings should be prepopulated from the current shipped defaults so leaving them unchanged preserves the current mail output.
    3. Truthfulness-critical subjects and message bodies remain product-controlled in MS16, including payment acknowledgments, receipts, owner paid notices, and alert copy.
-   4. RC may include a simple owner-facing `send me a test email` action that sends a branded test message to the authenticated owner account email using the current saved branding-shell settings.
+   4. The open beta may include a simple owner-facing `send me a test email` action that sends a branded test message to the authenticated owner account email using the current saved branding-shell settings.
       1. That preview should not send to client recipients or create invoice-linked delivery-history rows.
       2. That preview should be lightly rate-limited or cooldown-protected so repeated clicks do not spam the owner mailbox.
-   5. RC does not include arbitrary custom logo uploads for outbound mail; at most it may show or hide the default CryptoZing logo in the shared mail chrome.
+   5. The open beta does not include arbitrary custom logo uploads for outbound mail; at most it may show or hide the default CryptoZing logo in the shared mail chrome.
 15. Transient outbound send failures must be retried, not treated as terminal on the first failure.
    1. On a failed send attempt the delivery returns to a retryable state and the worker re-attempts under a bounded retry budget with spaced backoff, rather than being recorded `failed` immediately.
    2. A delivery is recorded as terminal `failed` only after the retry budget is exhausted, preserving the final error detail.

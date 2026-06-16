@@ -15,5 +15,5 @@ Issuers occasionally receive payment via wire transfer, cash, check, or other of
 - The existing small-balance resolver and reattribution tools remain unchanged.
 
 ## Out of Scope
-- Editing or deleting recorded manual payments (post-RC, covered by backlog item 14).
-- Multi-currency off-chain payments; USD only for RC.
+- Editing or deleting recorded manual payments (post-open-beta, covered by backlog item 14).
+- Multi-currency off-chain payments; USD only for the open beta.

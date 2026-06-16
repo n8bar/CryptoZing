@@ -54,7 +54,7 @@ Ignore/restore correction handling for wrongly attributed on-chain rows is defin
 
 ### Confirmation Gate
 - Default confirmation threshold: 1, configurable via `BLOCKCHAIN_CONFIRMATIONS_REQUIRED`.
-- Post-RC direction: allow a per-user required-confirmations setting with app-default fallback.
+- Post-open-beta direction: allow a per-user required-confirmations setting with app-default fallback.
 - Invoice transitions to `paid` only when confirmed USD totals satisfy expected USD.
 - `paid_at` is set only on confirmed transition.
 
@@ -141,5 +141,5 @@ Ignore/restore correction handling for wrongly attributed on-chain rows is defin
     - **Noise tolerance** (≤ $10 USD equivalent or ≤ 1% of invoice) — simply show the extra as part of the payment history without alerts.
     - **Significant overpay** (> tolerance) — flag the invoice for the issuer (UI + notification) and make clear that the surplus may be an intentional tip or an accidental overpayment. Issuer guidance may suggest refund/credit follow-up when the surplus looks accidental, but the default copy should avoid sounding overly prescriptive about what to do with intentional tips. If a client has multiple overpaid invoices, batch the refund/credit calculation so the issuer can settle them in one transaction. Future automation can email the client with those options if we don’t act within a configured SLA so mistaken overpayments can be corrected.
 
-## Post-RC Direction
+## Post-open-beta Direction
 - Add a per-user required-confirmations setting (1-6) used by the watcher, with app-default fallback.

@@ -43,7 +43,7 @@ This is not the end-user onboarding wizard spec (see `docs/specs/ONBOARD_SPEC.md
 - (Screenshot: invoice show with payment history/outstanding card.)
 
 ## 7) Wrap-up
-- Keep `MAIL_ALIAS_ENABLED` on for non-prod to route mail to the catch-all; disable it before RC/production deploys.
+- Keep `MAIL_ALIAS_ENABLED` on for non-prod to route mail to the catch-all; disable it before open-beta/production deploys.
 - For test resets, rerun migrations/seeds:
   ```bash
   ./vendor/bin/sail artisan migrate:fresh --seed

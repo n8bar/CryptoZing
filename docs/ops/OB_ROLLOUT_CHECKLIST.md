@@ -1,6 +1,6 @@
-# RC Rollout Checklist (CryptoZing.app)
+# Open Beta Rollout Checklist (CryptoZing.app)
 
-Use this when preparing the Release Candidate deployment; keep APP_PUBLIC_URL and mail settings aligned per environment.
+Use this when preparing the open-beta deployment; keep APP_PUBLIC_URL and mail settings aligned per environment.
 
 ## Pre-flight
 - Confirm environment: APP_PUBLIC_URL set to intended host (e.g., https://cryptozing.app), WALLET_NETWORK matches network in use.
@@ -9,7 +9,7 @@ Use this when preparing the Release Candidate deployment; keep APP_PUBLIC_URL an
 
 ## Mail aliasing flip
 - Set MAIL_ALIAS_ENABLED=false (and clear MAIL_ALIAS_DOMAIN if present).
-- MS16 Phase 2 already proved the app can deliver through Mailgun HTTP API with a temporary alias-off send to controlled dev inboxes on 2026-03-28; treat that as transport proof only, not as the RC sign-off for the target environment.
+- MS16 Phase 2 already proved the app can deliver through Mailgun HTTP API with a temporary alias-off send to controlled dev inboxes on 2026-03-28; treat that as transport proof only, not as the open-beta sign-off for the target environment.
 - Send a test invoice email and a paid receipt to real recipients; verify links, headers, and rendering.
 - Register the Mailgun webhook in the Mailgun dashboard: POST `https://cryptozing.app/webhooks/mailgun` for `delivered`, `failed`, and `permanent_fail` event types. Copy the signing key to `MAILGUN_WEBHOOK_SIGNING_KEY`.
 - Confirm DKIM/SPF/DMARC pass on the production domain.

@@ -8,7 +8,7 @@ Use [`docs/PLAN.md`](PLAN.md) for milestone order, current focus, and the primar
 Use detailed docs under `docs/specs/` and `docs/milestones/` for local scope, acceptance criteria, and implementation-impacting notes.
 
 ## Canonical Doc Roles
-- [`docs/PLAN.md`](PLAN.md): human-facing execution dashboard for RC milestone order, current focus, and the primary next doc.
+- [`docs/PLAN.md`](PLAN.md): human-facing execution dashboard for open-beta milestone order, current focus, and the primary next doc.
 - [`docs/BACKLOG.md`](BACKLOG.md): post-MVP and deferred work only.
 - [`docs/UX_GUARDRAILS.md`](UX_GUARDRAILS.md): global UX, accessibility, and interaction rules.
 - `docs/milestones/**`: milestone execution docs when a milestone is active or large enough to need detailed checklist tracking.
@@ -89,7 +89,7 @@ Issuers create invoices in USD, derive a unique Bitcoin receive address per invo
 ### Public links, print output, and outbound communication
 - Public-share and email links must use `APP_PUBLIC_URL`.
 - Public and print surfaces must honor public-safe boundaries and status-specific behavior defined in [`docs/specs/PRINT_PUBLIC_POLISH.md`](specs/PRINT_PUBLIC_POLISH.md) and [`docs/milestones/x13_UX_OVERHAUL.md`](milestones/x13_UX_OVERHAUL.md).
-- Outbound mail in pre-production may be recipient-aliased via `MAIL_ALIAS_ENABLED` and `MAIL_ALIAS_DOMAIN`; this aliasing must be disabled before RC or real-customer use.
+- Outbound mail in pre-production may be recipient-aliased via `MAIL_ALIAS_ENABLED` and `MAIL_ALIAS_DOMAIN`; this aliasing must be disabled before open-beta launch or real-customer use.
 - Invoice send, receipt delivery, notification triggers, and delivery logging must remain auditable.
 
 ### Background processing and timing
@@ -100,8 +100,8 @@ Issuers create invoices in USD, derive a unique Bitcoin receive address per invo
 ### Active plan-linked requirements
 - Automatic attribution hardening must make derivation state key-aware, preserve invoice key identity for auditability, detect and flag unsupported wallet reuse without hard-blocking the issuer, snapshot unsupported state onto newly created invoices while avoiding blanket retroactive invoice flagging, distinguish unsupported shared-wallet evidence from stale-address wrong-invoice reuse, reinforce the dedicated-account requirement in wallet and onboarding UX, and provide an auditable correction path for wrongly attributed on-chain payments.
 - Mailer and alerts hardening must prevent duplicate outbound mail, support issuer-editable templates with safe variables and preview/reset flows, and keep payment-triggered outbound communication truthful and reviewable, including low-information payment acknowledgments plus issuer-reviewed client receipts; the detailed outbound-mail rules live in [`docs/specs/NOTIFICATIONS.md`](specs/NOTIFICATIONS.md).
-- Post-payment onboarding should remain lightweight in RC: Part 1 still gets issuers to first invoice delivery, while Part 2 should activate only once a first paid invoice is receipt-eligible, suspend when ignore/reattribution review would make a receipt untruthful, and complete when the issuer sends the first reviewed client receipt.
-- Mainnet cutover and RC deployment must preserve invoice integrity while switching environments, include a backout path, and verify alias-off mail behavior plus public-link correctness before real-customer rollout.
+- Post-payment onboarding should remain lightweight for the open beta: Part 1 still gets issuers to first invoice delivery, while Part 2 should activate only once a first paid invoice is receipt-eligible, suspend when ignore/reattribution review would make a receipt untruthful, and complete when the issuer sends the first reviewed client receipt.
+- Mainnet cutover and open-beta deployment must preserve invoice integrity while switching environments, include a backout path, and verify alias-off mail behavior plus public-link correctness before real-customer rollout.
 
 ## Canonical Spec Map
 - Rates and BTC/USD behavior: [`docs/specs/RATES.md`](specs/RATES.md)
@@ -116,7 +116,7 @@ Issuers create invoices in USD, derive a unique Bitcoin receive address per invo
 - Support access: [`docs/specs/SUPPORT_ACCESS.md`](specs/SUPPORT_ACCESS.md)
 - Cross-cutting UX and accessibility rules: [`docs/UX_GUARDRAILS.md`](UX_GUARDRAILS.md)
 - Docs and contributor-experience scope: [`docs/ops/DOCS_DX.md`](ops/DOCS_DX.md)
-- Rollout verification: [`docs/ops/RC_ROLLOUT_CHECKLIST.md`](ops/RC_ROLLOUT_CHECKLIST.md)
+- Rollout verification: [`docs/ops/OB_ROLLOUT_CHECKLIST.md`](ops/OB_ROLLOUT_CHECKLIST.md)
 
 ## Current Cross-Feature Constraints
 - Additional wallet storage exists, but invoice-level multi-wallet selection remains deferred to post-MVP and is tracked in [`docs/BACKLOG.md`](BACKLOG.md).
