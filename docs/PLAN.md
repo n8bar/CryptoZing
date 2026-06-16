@@ -16,21 +16,21 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 
 ## Current
 - Active milestone:
-  - **MS19 - RC Hardening & Ops** — in progress; Phase 1 (notification coverage audit & verification) underway, later phases pre-flight.
+  - **MS19 - Open Beta Hardening & Ops** — in progress; Phase 1 (notification coverage audit & verification) underway, later phases pre-flight.
 - Status: `active`
 - Next action: MS19 Phase 1 — notification coverage verification (Claude).
-- Primary next doc: [`docs/milestones/19_RC_HARDENING_OPS.md`](milestones/19_RC_HARDENING_OPS.md)
+- Primary next doc: [`docs/milestones/19_OB_HARDENING_OPS.md`](milestones/19_OB_HARDENING_OPS.md)
 - Most recently completed milestone doc: [`docs/milestones/x18_PRERELEASE_CONTENT_SEO.md`](milestones/x18_PRERELEASE_CONTENT_SEO.md)
 
 ## Published Release Target
-- **First public release: mid-to-late 2027.** The RC milestone timeline (MS21, targeting 2026-08-11) covers the release candidate. The published release target accounts for post-RC work needed before an official first release.
+- **First public release: mid-to-late 2027.** The open beta milestone timeline (MS21, targeting 2026-08-11) covers the open beta. The published release target accounts for post-open-beta work needed before an official first release.
 
 ## Active and Upcoming Milestones
 | Status | ID | Milestone | Short intent | Target | Primary doc |
 |---|---|---|---|---|---|
-| [ ] | 19 | RC Hardening & Ops | RC hardening before mainnet cutover: notification coverage audit; auth/password policy hardening (419-to-login redirect, session expiry logout); LLC formation (entity, EIN, bank account, operating agreement); legal layer (ToS, Privacy Policy, disclaimers, monetization-neutral copy review, UI placement); content promises reconciliation; contributor docs refresh; 2FA (email baseline, opportunistic TOTP). | 2026-07-18 | [`docs/milestones/19_RC_HARDENING_OPS.md`](milestones/19_RC_HARDENING_OPS.md) |
+| [ ] | 19 | Open Beta Hardening & Ops | Open beta hardening before mainnet cutover: notification coverage audit; auth/password policy hardening (419-to-login redirect, session expiry logout); LLC formation (entity, EIN, bank account, operating agreement); legal layer (ToS, Privacy Policy, disclaimers, monetization-neutral copy review, UI placement); content promises reconciliation; contributor docs refresh; 2FA (email baseline, opportunistic TOTP). | 2026-07-18 | [`docs/milestones/19_OB_HARDENING_OPS.md`](milestones/19_OB_HARDENING_OPS.md) |
 | [ ] | 20 | Mainnet Cutover Preparation | Define and rehearse env flips, wallet validation, mail sanity checks, and backout steps for mainnet cutover. | 2026-07-30 | [`docs/milestones/20_MAINNET_CUTOVER_PREP.md`](milestones/20_MAINNET_CUTOVER_PREP.md) |
-| [ ] | 21 | CryptoZing.app Deployment (RC) | Deploy the RC under `cryptozing.app`, replace the GitHub Pages placeholder at `/` with the live app landing page without breaking the SEO baseline established in MS15, remove temporary mail aliasing, and complete rollout verification. | 2026-08-11 | [`docs/milestones/21_RC_DEPLOYMENT.md`](milestones/21_RC_DEPLOYMENT.md) |
+| [ ] | 21 | CryptoZing.app Deployment (Open Beta) | Deploy the open beta under `cryptozing.app`, replace the GitHub Pages placeholder at `/` with the live app landing page without breaking the SEO baseline established in MS15, remove temporary mail aliasing, and complete rollout verification. | 2026-08-11 | [`docs/milestones/21_OB_DEPLOYMENT.md`](milestones/21_OB_DEPLOYMENT.md) |
 
 ## Completed Milestones
 | Status | ID | Milestone | Short intent | Primary doc |

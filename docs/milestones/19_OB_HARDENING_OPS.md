@@ -1,11 +1,11 @@
-# MS19 - RC Hardening & Ops
+# MS19 - Open Beta Hardening & Ops
 
 Status: Active — running in parallel with MS18 (no hard dependencies). Phase 3 (LLC) and Phase 5 (Legal Layer) run as independent parallel tracks. Phase 8 (2FA) is positionally last by design.
 Parent execution doc: [`docs/PLAN.md`](../PLAN.md)
 Supporting ops doc: [`docs/ops/DOCS_DX.md`](../ops/DOCS_DX.md)
 
 ## Milestone Objectives
-- Document notification coverage so the full outbound mail surface is explicitly accounted for before RC.
+- Document notification coverage so the full outbound mail surface is explicitly accounted for before open beta.
 - Add auth and password policy hardening: 419-to-login redirect, site-wide session expiry logout.
 - Keep contributor docs current.
 - Form a single-member LLC in Arizona with EIN, business bank account, and operating agreement, so the legal layer's ToS protections actually shield the operator personally.
@@ -13,7 +13,7 @@ Supporting ops doc: [`docs/ops/DOCS_DX.md`](../ops/DOCS_DX.md)
 - Reconcile the content promises catalog against the finished product — confirm every open entry is honored or trigger a content/product revision.
 - Refactor public-facing copy from "pre-release" / "Release Candidate" to "open beta" across all published pages.
 - Land a coherent visual identity polish before open beta — favicon set across all surfaces (theme-cohesive yet purpose-distinguishable), og:image / social previews, bundled with the open-beta copy refactor.
-- Add 2FA capability for RC: email-based 2FA as the baseline, TOTP opportunistically if MS19 time allows, with a recommendation surface for users without 2FA enabled.
+- Add 2FA capability for open beta: email-based 2FA as the baseline, TOTP opportunistically if MS19 time allows, with a recommendation surface for users without 2FA enabled.
 
 ## Decisions recorded
 - **Legal approach:** No lawyer for RC1. Self-drafted ToS and Privacy Policy covering the essential bases — not financial advice, no custody of funds, user responsibility for keys, no warranty on BTC/USD values.
@@ -53,10 +53,10 @@ Draft ToS, Privacy Policy, disclaimer copy; review existing UI/mail copy for mon
 Walk every open entry in `CONTENT_PROMISES.md` against the finished product; resolve each as honored, content-revised, or product-revised.
 
 ### [ ] Phase 7 — Contributor Docs Review
-Refresh AGENTS.md, CLAUDE.md, AgentRoles/, and contributor-facing ops docs for currency before RC.
+Refresh AGENTS.md, CLAUDE.md, AgentRoles/, and contributor-facing ops docs for currency before open beta.
 
 ### [ ] Phase 8 — Two-Factor Authentication
-Add 2FA to the RC. Email-based 2FA as the baseline; TOTP / authenticator-app 2FA opportunistically if MS19 time allows (deferred to the 2028 release otherwise). Includes a non-blocking recommendation surface for users without 2FA enabled. **Positionally last by design** — if additional phases are ever added to MS19, this one stays at the end.
+Add 2FA to the open beta. Email-based 2FA as the baseline; TOTP / authenticator-app 2FA opportunistically if MS19 time allows (deferred to the 2028 release otherwise). Includes a non-blocking recommendation surface for users without 2FA enabled. **Positionally last by design** — if additional phases are ever added to MS19, this one stays at the end.
 
 ## Exit Criteria
 
