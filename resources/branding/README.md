@@ -47,3 +47,19 @@ potrace mask-silhouette.bmp --svg --color "#ffffff" -t 30 -O 0.4 -a 1.2 -o trace
 ```
 
 To change the mark, replace `public/images/CZ.png` and re-run the pipeline.
+
+## Social card (og:image)
+
+`generate-og-image.php` builds the 1200×630 social-preview card that matches the
+favicon mark: navy brand background, the keyline CZ glyph (embedded from
+`favicon.svg`, keyline thinned for the larger scale), wordmark, and tagline.
+
+```bash
+./vendor/bin/sail php resources/branding/generate-og-image.php
+# then copy the result to the Pages surface:
+cp storage/app/branding/og-preview.png storage/app/branding/og-preview.svg site/
+```
+
+Output: `site/og-preview.png` (+ `og-preview.svg` source). The marketing site
+references it via `og:image` / `twitter:image` in `site/_layouts/default.njk`.
+The Laravel app has no social-card surface, so nothing in `public/` is needed.
