@@ -29,6 +29,14 @@ module.exports = function (eleventyConfig) {
   // In local dev these files already exist in public/ and don't need copying.
   if (isCI) {
     eleventyConfig.addPassthroughCopy("images");
+    eleventyConfig.addPassthroughCopy("favicon.ico");
+    eleventyConfig.addPassthroughCopy("favicon.svg");
+    eleventyConfig.addPassthroughCopy("favicon-16x16.png");
+    eleventyConfig.addPassthroughCopy("favicon-32x32.png");
+    eleventyConfig.addPassthroughCopy("apple-touch-icon.png");
+    eleventyConfig.addPassthroughCopy("android-chrome-192x192.png");
+    eleventyConfig.addPassthroughCopy("android-chrome-512x512.png");
+    eleventyConfig.addPassthroughCopy("site.webmanifest");
     eleventyConfig.addPassthroughCopy("og-preview.png");
     eleventyConfig.addPassthroughCopy("og-preview.svg");
     eleventyConfig.addPassthroughCopy("CNAME");
