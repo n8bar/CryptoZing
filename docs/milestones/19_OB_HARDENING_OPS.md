@@ -12,7 +12,7 @@ Supporting ops doc: [`docs/ops/DOCS_DX.md`](../ops/DOCS_DX.md)
 - Put a minimum legal layer in place before mainnet cutover: Terms of Service draft, Privacy Policy draft, disclaimer copy at key user touchpoints, monetization-neutral copy review across existing UI and mail, and UI placement (disclaimer surfaces + footer ToS/Privacy Policy links).
 - Reconcile the content promises catalog against the finished product — confirm every open entry is honored or trigger a content/product revision.
 - Refactor public-facing copy from "pre-release" / "Release Candidate" to "open beta" across all published pages.
-- Land a coherent visual identity polish before open beta — favicon set across all surfaces (theme-cohesive yet purpose-distinguishable), og:image / social previews, bundled with the open-beta copy refactor.
+- Land a coherent visual identity polish before open beta — a single CryptoZing favicon set site-wide, the favicon-matching og:image card, the RC→open-beta copy cleanup, and branded error pages (#96).
 - Add 2FA capability for open beta: email-based 2FA as the baseline, TOTP opportunistically if MS19 time allows, with a recommendation surface for users without 2FA enabled.
 
 ## Decisions recorded
@@ -22,11 +22,11 @@ Supporting ops doc: [`docs/ops/DOCS_DX.md`](../ops/DOCS_DX.md)
 - **Findings tracking trial:** Through M19, new findings/bugs/todos go to GitHub Issues (closed via `Fixes #N` on the merging PR) instead of new `docs/qa/Finding*.md` docs. Existing finding docs stay put. M20 kickoff decides whether to keep, revert, or hybridize. See [`docs/DOC_ROLES.md`](../DOC_ROLES.md#findings-conventions).
 
 ## Current Focus
-- Active phases: Phase 3 (LLC formation) — CyberCreek LLC (parent) Articles filed 2026-06-08, awaiting AZCC — and Phase 4 (Visual Identity) running in parallel: favicon set shipped, og:image + copy refactor remain. Phases 1–2 complete.
+- Active phase: Phase 3 (LLC formation) — CyberCreek LLC (parent) Articles filed 2026-06-08, awaiting AZCC. Phases 1, 2, 4 complete.
 - Phase 1: [`docs/strategies/x19.1_NOTIFICATION_COVERAGE_AUDIT.md`](../strategies/x19.1_NOTIFICATION_COVERAGE_AUDIT.md) ✓
 - Phase 2: [`docs/strategies/x19.2_AUTH_HARDENING.md`](../strategies/x19.2_AUTH_HARDENING.md) ✓
 - Phase 3: [`docs/strategies/19.3_LLC_FORMATION.md`](../strategies/19.3_LLC_FORMATION.md)
-- Phase 4: [`docs/strategies/19.4_VISUAL_IDENTITY_POLISH.md`](../strategies/19.4_VISUAL_IDENTITY_POLISH.md)
+- Phase 4: [`docs/strategies/x19.4_VISUAL_IDENTITY_POLISH.md`](../strategies/x19.4_VISUAL_IDENTITY_POLISH.md) ✓
 - Phase 5: [`docs/strategies/19.5_LEGAL_LAYER.md`](../strategies/19.5_LEGAL_LAYER.md)
 - Phase 6: [`docs/strategies/19.6_CONTENT_PROMISES_RECONCILIATION.md`](../strategies/19.6_CONTENT_PROMISES_RECONCILIATION.md)
 - Phase 7: [`docs/strategies/19.7_CONTRIBUTOR_DOCS.md`](../strategies/19.7_CONTRIBUTOR_DOCS.md)
@@ -43,8 +43,8 @@ Implement 419-to-login redirect and site-wide session-expiry logout, with return
 ### [ ] Phase 3 — LLC Formation
 Form parent **CyberCreek LLC** then subsidiary **CryptoZing LLC** (member: CyberCreek) in Arizona — parent-first to avoid a later membership transfer; obtain EINs, open a business bank account, sign operating agreements, update CryptoZing references to reflect the entity. Provides the entity backing the Phase 5 legal-layer ToS protections need to actually shield the operator personally. Phase 3 (LLC) and Phase 5 (Legal Layer) run as **independent parallel tracks** — drafting/UI work in Phase 5 does not gate on LLC status; only the deploy-time entity-name swap at MS21 needs the formed entity. Both must land before MS21.
 
-### [ ] Phase 4 — Visual Identity Polish
-Land the visual/brand polish pass before open beta: favicon set across all surfaces (theme-cohesive yet purpose-distinguishable), og:image / social previews, and the open-beta copy refactor (formerly Phase 4 §5 / now Phase 5 §5 of the prior layout — moved here so it bundles with the favicon and social-preview work as one coherent visual pass). No dependency on Phase 3; slotted here so subsequent phases review their surfaces in their final visual state.
+### [x] Phase 4 — Visual Identity Polish
+Visual/brand polish pass before open beta: a single CryptoZing favicon set site-wide (faithful potrace of the real logo), the favicon-matching og:image card, the RC→"open beta" terminology cleanup, and branded guest-safe error pages (#96). Shipped and verified (app surfaces + live marketing site); see [`x19.4_VISUAL_IDENTITY_POLISH.md`](../strategies/x19.4_VISUAL_IDENTITY_POLISH.md).
 
 ### [ ] Phase 5 — Legal Layer
 Draft ToS, Privacy Policy, disclaimer copy; review existing UI/mail copy for monetization-neutral language; place all in the UI. Drafting + UI work has no dependency on Phase 3 (LLC) — runs in parallel. Final entity-name swap and publication is deferred to MS21 deploy time.
@@ -64,9 +64,10 @@ Add 2FA to the open beta. Email-based 2FA as the baseline; TOTP / authenticator-
 - [x] 419-to-login redirect implemented and tested.
 - [x] Site-wide session expiry logout implemented and tested.
 - [ ] LLC formed in Arizona; EIN obtained; business bank account opened; operating agreement signed; CryptoZing references updated to reflect the entity.
-- [ ] Favicon set generated and wired across all surfaces (Laravel app, marketing site, any other distinct surface) with theme-cohesive yet purpose-distinguishable per-surface variants.
-- [ ] og:image / social-preview meta tags wired and validated against major platform preview tools.
-- [ ] User-facing "pre-release" / "Release Candidate" copy replaced with "open beta" framing; internal docs unchanged.
+- [x] Single CryptoZing favicon set generated and wired site-wide (Laravel app + marketing/Pages site) — one mark, no per-surface variants.
+- [x] og:image card + social-preview meta wired on the marketing site and validated against the platform preview tools.
+- [x] No "RC" / "Release Candidate" in user-facing copy (deployed RC is publicly "open beta"); "pre-release" kept where accurate; internal docs/comments unchanged.
+- [x] Branded, guest-safe error pages — 404/500/503/429 plus 403 migrated off the auth-assuming layout; 500 leaks no debug detail (#96).
 - [ ] ToS and Privacy Policy drafted and published to the live site.
 - [ ] Disclaimer copy present at signup, wallet onboarding, and invoice/payment surfaces; footer links to ToS and Privacy Policy on every page.
 - [ ] Existing UI and mail copy reviewed for overstatements, financial advice language, and pricing commitments — issues resolved.
