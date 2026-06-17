@@ -26,9 +26,9 @@ Wrong-invoice cases include stale-address reuse: an old valid CryptoZing invoice
 ## Non-Goals
 - Editing the amount, txid, or timestamps of an on-chain payment row.
 - Replacing the existing manual-adjustment flow.
-- Bulk ignore/restore operations across multiple invoices in RC.
+- Bulk ignore/restore operations across multiple invoices in the open beta.
 - Granting support agents or public users any correction ability.
-- Cross-owner payment reassignment in RC.
+- Cross-owner payment reassignment in the open beta.
 
 ## Core Decisions
 1. Corrections target individual non-adjustment `invoice_payments` rows only.
@@ -38,7 +38,7 @@ Wrong-invoice cases include stale-address reuse: an old valid CryptoZing invoice
 5. Undoing a reattribution returns active accounting credit to the immutable source invoice through an explicit undo action, not by making the owner guess through the destination picker.
 6. Actively reattributed rows are not eligible for ignore until the owner undoes the reattribution and returns active accounting credit to the source invoice.
 7. Manual adjustment rows (`is_adjustment = true`) are never eligible for ignore/restore/reattribute.
-8. Invoice-to-invoice reattribution is same-owner only in RC.
+8. Invoice-to-invoice reattribution is same-owner only in the open beta.
 9. Owner auditability takes precedence over convenience: correction actions require explicit intent and leave a trace.
 10. Ignore/restore/reattribute are bookkeeping interpretation tools for detected payments; manual adjustments are separate owner-created ledger entries.
 11. Soft delete may remain available even when bookkeeping history exists because the invoice record and provenance still exist.
@@ -68,7 +68,7 @@ Rules:
 - `ignore_reason` is required when a row is ignored.
 - Restoring a payment clears `ignored_at`, `ignored_by_user_id`, and `ignore_reason`.
 - Ignore/restore never rewrites `txid`, `vout_index`, `sats_received`, `detected_at`, `confirmed_at`, `block_height`, `usd_rate`, `fiat_amount`, `meta`, or `note`.
-- No separate RC audit table is required; row metadata plus structured logs is sufficient for this phase.
+- No separate open-beta audit table is required; row metadata plus structured logs is sufficient for this phase.
 - `invoice_payments.invoice_id` remains the immutable source/detected invoice while the row exists.
 - `accounting_invoice_id` is the sole active accounting destination for the row.
 - Normal active rows set `accounting_invoice_id = invoice_id`.

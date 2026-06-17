@@ -4,7 +4,7 @@ _Last updated: 2026-04-08_
 This is the canonical post-MVP backlog.
 
 Use this file only for deferred or future work.
-Anything still in RC scope belongs in [`docs/PLAN.md`](PLAN.md) and its linked canonical docs instead.
+Anything still in open-beta scope belongs in [`docs/PLAN.md`](PLAN.md) and its linked canonical docs instead.
 
 ## Near-Term Product UX
 1. **Invoices + Clients Search and Filtering**
@@ -43,21 +43,21 @@ _Carry-forward guardrail from active roadmap scope: suppress duplicate sends for
    - Reuse `InvoicePaid` events and delivery log updates to emit notifications without polling.
 
 6. **Notification Preference Expansion**
-   - Consider allowing issuers to configure alert thresholds per profile instead of keeping the RC-wide default threshold.
+   - Consider allowing issuers to configure alert thresholds per profile instead of keeping the open-beta-wide default threshold.
 
 7. **Configurable Past-Due Reminder Cadence**
    - Expose the hardcoded day-offset schedule (day 1, 7, 14 past due) as issuer-configurable notification settings.
-   - RC ships a sane fixed default; this item adds issuer control post-RC.
+   - The open beta ships a sane fixed default; this item adds issuer control post-open-beta.
 
 8. **Custom Outbound Mail Logo Uploads**
    - Allow issuers to upload a custom logo for outbound mail instead of only showing or hiding the default CryptoZing logo.
    - Include storage, validation, replacement/removal, and email-client-safe fallback behavior.
-   - Keep this separate from the RC KISS mail-branding controls, which are limited to brand-shell text fields plus a default-logo on/off toggle.
+   - Keep this separate from the open-beta KISS mail-branding controls, which are limited to brand-shell text fields plus a default-logo on/off toggle.
 
 ## Support & Admin Roles
 
 20. **Support agent / maintainer role separation**
-   - For RC, the support agent role doubles as the operational maintainer: one email allowlist, one dashboard, full visibility into both issuer grants and service health monitoring.
+   - For the open beta, the support agent role doubles as the operational maintainer: one email allowlist, one dashboard, full visibility into both issuer grants and service health monitoring.
    - Post-MVP, split these into distinct roles if the team grows:
      - A **maintainer** role that has access to the monitoring panel (queue depth, delivery failures, watcher health) but not to issuer grant browsing.
      - A **support agent** role that has access to issuer grant browsing but not to the monitoring panel, if a dedicated support function separate from engineering is needed.
@@ -96,7 +96,7 @@ _Carry-forward guardrail from active roadmap scope: suppress duplicate sends for
 
 ## Product UX
 16. **Multi-wallet selection + additional wallets UI**
-   - Core wallet-key lineage and cursor safety is now tracked in active RC roadmap scope; this post-MVP item builds on that foundation.
+   - Core wallet-key lineage and cursor safety is now tracked in active open-beta roadmap scope; this post-MVP item builds on that foundation.
    - Re-enable the Additional wallets UI in `/wallet/settings` once multi-wallet selection is in scope.
    - Add an invoice-level wallet selector and migration guidance for existing invoices.
 
@@ -113,7 +113,7 @@ _Carry-forward guardrail from active roadmap scope: suppress duplicate sends for
    - Surface an issuer-facing ledger so credit issuance, application, reversal, and remaining credit are auditable over time.
 
 19. **Spending-only companion wallet ecosystem idea**
-   - Separate product idea, not RC scope for CryptoZing itself.
+   - Separate product idea, not open-beta scope for CryptoZing itself.
    - Explore a companion wallet app that can spend/send but does not receive, and only shares public derivation material with CryptoZing.
    - Goal: reduce accidental outside receive activity on the same account namespace while keeping CryptoZing watch-only.
    - Future direction to evaluate later: whether a tighter CryptoZing + companion-wallet pairing should be encouraged or even required in a future product generation.

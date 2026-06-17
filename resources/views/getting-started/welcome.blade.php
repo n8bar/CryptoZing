@@ -1,4 +1,3 @@
-<x-emoji-favicon symbol="🧭" bg="#DBEAFE" />
 <x-app-layout>
     <x-slot name="header">
         <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">

@@ -1,4 +1,3 @@
-<x-emoji-favicon symbol="🛠️" bg="#EDE9FE" />
 <x-app-layout>
     <x-slot name="header"><h2 class="text-xl font-semibold leading-tight">Edit Invoice</h2></x-slot>
 

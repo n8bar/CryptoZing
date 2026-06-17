@@ -208,7 +208,7 @@ docker/      Container setup
 - Backlog: [`docs/BACKLOG.md`](docs/BACKLOG.md)
 - Changelog: [`docs/CHANGELOG.log`](docs/CHANGELOG.log)
 - Quick start: [`docs/ops/get-live/QUICK_START.md`](docs/ops/get-live/QUICK_START.md)
-- RC rollout checklist: [`docs/ops/RC_ROLLOUT_CHECKLIST.md`](docs/ops/RC_ROLLOUT_CHECKLIST.md)
+- Rollout checklist: [`docs/ops/OB_ROLLOUT_CHECKLIST.md`](docs/ops/OB_ROLLOUT_CHECKLIST.md)
 - Active milestone: [`docs/milestones/16_MAILER_AND_ALERTS_POLISH_AUDIT.md`](docs/milestones/16_MAILER_AND_ALERTS_POLISH_AUDIT.md)
 - Onboarding Part 1 spec: [`docs/specs/ONBOARD_SPEC.md`](docs/specs/ONBOARD_SPEC.md)
 - Post-payment onboarding spec: [`docs/specs/POST_PAYMENT_ONBOARDING.md`](docs/specs/POST_PAYMENT_ONBOARDING.md)

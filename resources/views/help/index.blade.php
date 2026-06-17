@@ -1,4 +1,3 @@
-<x-emoji-favicon symbol="💡" bg="#E0F2FE" />
 <x-public-layout title="Helpful Notes">
     @push('head')
         <meta name="description" content="Helpful notes on wallet safety (xpub/zpub), invoices, payments, and privacy for CryptoZing Bitcoin invoicing.">

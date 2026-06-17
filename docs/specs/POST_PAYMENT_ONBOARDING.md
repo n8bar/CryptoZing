@@ -1,19 +1,19 @@
 # Post-Payment Onboarding Spec (MS17 Early Scope)
 
-Purpose: define a small second activation flow that helps a signed-in owner handle the first receipt-eligible paid invoice without turning RC into a full tutorial system.
+Purpose: define a small second activation flow that helps a signed-in owner handle the first receipt-eligible paid invoice without turning the open beta into a full tutorial system.
 
 ## Scope
 - This is onboarding Part 2. Part 1 still covers `connect wallet -> create invoice -> enable share + deliver`.
 - Part 2 stays mostly invisible until the owner has a first paid invoice that is eligible for truthful client-receipt follow-up.
 - The flow should teach one operator responsibility first: review the paid invoice, then send the client receipt.
 - If the first paid invoice is not currently safe for receipt follow-up because the owner needs to correct interpretation first, the flow should suspend instead of pushing the owner toward an untruthful receipt.
-- RC scope should rely on contextual guidance copy for edge cases such as ignore, reattribution, and small-balance resolution. RC does not need a fake-invoice tutorial, scenario simulator, or sandbox ledger for those cases.
+- Open-beta scope should rely on contextual guidance copy for edge cases such as ignore, reattribution, and small-balance resolution. The open beta does not need a fake-invoice tutorial, scenario simulator, or sandbox ledger for those cases.
 
 ## Goals
 1. Make the first owner-reviewed client receipt feel intentional rather than surprising.
 2. Teach the owner why a payment acknowledgment is not the same thing as a client receipt.
 3. Keep the first paid-invoice follow-up truthful when correction or reconciliation work is still needed.
-4. Reuse the smallest possible UX surface so the product can ship RC without a second large onboarding project.
+4. Reuse the smallest possible UX surface so the product can ship the open beta without a second large onboarding project.
 
 ## Activation Model
 1. **Trigger candidate**
@@ -47,7 +47,7 @@ Part 2 should make these points clear in concise language:
 - Guidance should stay contextual and short. Link to the relevant payment-history and correction controls instead of trying to reteach the whole product.
 - If the owner is blocked by ignore/reattribution review, the UI should say why the receipt step is paused and point at the relevant correction surface.
 
-## Out of Scope for RC
+## Out of Scope for the open beta
 - Fake invoices or simulated payment scenarios inside the real owner ledger.
 - A broad interactive tutorial for every payment edge case.
 - Forcing owners through overpayment, underpayment, ignore, reattribution, or small-balance scenarios before they can complete Part 2.
@@ -62,4 +62,4 @@ Part 2 should make these points clear in concise language:
 ## MS17 Intent
 - Fold this work into the early part of MS17 rather than creating a standalone milestone.
 - Treat this as a small activation/help UX slice that should ship once MS16 leaves the manual-review receipt path stable enough to teach.
-- If we later decide to add a simulated tutorial, fake invoices, or broader operator training, that expanded scope should be reconsidered separately instead of being smuggled into RC under this spec.
+- If we later decide to add a simulated tutorial, fake invoices, or broader operator training, that expanded scope should be reconsidered separately instead of being smuggled into the open beta under this spec.

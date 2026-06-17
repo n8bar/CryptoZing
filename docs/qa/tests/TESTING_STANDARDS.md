@@ -2,7 +2,7 @@
 
 _Established MS17 Phase 2. Apply to all new and modified tests from this point forward._
 
-These rules exist to keep the suite fast, non-redundant, and meaningful going into RC. They are derived from the Pass 2 efficiency audit findings.
+These rules exist to keep the suite fast, non-redundant, and meaningful going into the open beta. They are derived from the Pass 2 efficiency audit findings.
 
 ---
 

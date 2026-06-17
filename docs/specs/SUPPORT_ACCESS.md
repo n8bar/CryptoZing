@@ -35,7 +35,7 @@ CryptoZing needs a narrowly scoped way for tech support to inspect an owner's in
 
 3. Support access is temporary.
 - Grant duration is fixed by product configuration and may not be chosen per owner.
-- The MVP/RC default is `72 hours`.
+- The MVP/open-beta default is `72 hours`.
 - Expiration must be enforced server-side on every support request.
 
 4. Owners may revoke access at any time.
@@ -95,7 +95,7 @@ Minimum required fields:
 - `support_access_expires_at`
 - `support_access_terms_version`
 
-Optional audit fields may be added later if support usage grows, but they are not required for RC.
+Optional audit fields may be added later if support usage grows, but they are not required for the open beta.
 
 ## Verification Targets
 - Owner can grant support access and see the expiration timestamp.

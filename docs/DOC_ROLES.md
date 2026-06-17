@@ -4,7 +4,7 @@ Canonical reference for what each tracked doc is for, and the rules about how th
 
 ## Canonical docs (top-level scope authority)
 
-- [`docs/PLAN.md`](PLAN.md) — RC milestone order, status, current focus, and the primary next doc.
+- [`docs/PLAN.md`](PLAN.md) — open-beta milestone order, status, current focus, and the primary next doc.
 - [`docs/PRODUCT_SPEC.md`](PRODUCT_SPEC.md) — global product behavior and invariants.
 - [`docs/BACKLOG.md`](BACKLOG.md) — post-MVP and deferred work only.
 - [`docs/UX_GUARDRAILS.md`](UX_GUARDRAILS.md) — global UX, accessibility, and interaction rules.
