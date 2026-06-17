@@ -78,7 +78,7 @@
                 @auth
                     <a class="cz-btn cz-btn--primary" href="{{ route('dashboard') }}">Back to dashboard</a>
                 @else
-                    <a class="cz-btn cz-btn--primary" href="/">Go home</a>
+                    <a class="cz-btn cz-btn--primary" href="/">Home</a>
                     <a class="cz-btn cz-btn--ghost" href="{{ route('login') }}">Sign in</a>
                 @endauth
             @endisset

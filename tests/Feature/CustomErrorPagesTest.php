@@ -21,7 +21,7 @@ class CustomErrorPagesTest extends TestCase
         $response->assertNotFound();
         $response->assertSee('Page not found');
         $response->assertSee('CryptoZing');
-        $response->assertSee('Go home'); // guest recovery, no auth context required
+        $response->assertSee('Home'); // guest recovery, no auth context required
     }
 
     public function test_500_shows_a_friendly_message_without_leaking_debug_detail(): void
