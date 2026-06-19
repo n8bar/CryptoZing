@@ -13,21 +13,21 @@ UID:cz-ms18@cryptozing.app
 END:VEVENT
 BEGIN:VEVENT
 DTSTART;VALUE=DATE:20260508
-DTEND;VALUE=DATE:20260718
+DTEND;VALUE=DATE:20260801
 SUMMARY:MS19 — Open Beta Hardening & Ops
 DESCRIPTION:Open beta hardening: notification coverage, auth/password policy, LLC formation, legal layer (ToS, Privacy Policy, disclaimers, monetization-neutral copy), content promises reconciliation, contributor docs, 2FA (email baseline, optional TOTP).
 UID:cz-ms19@cryptozing.app
 END:VEVENT
 BEGIN:VEVENT
-DTSTART;VALUE=DATE:20260717
-DTEND;VALUE=DATE:20260730
+DTSTART;VALUE=DATE:20260803
+DTEND;VALUE=DATE:20260813
 SUMMARY:MS20 — Mainnet Cutover Preparation
 DESCRIPTION:Define and rehearse env flips, wallet validation, mail sanity, and backout steps for mainnet cutover.
 UID:cz-ms20@cryptozing.app
 END:VEVENT
 BEGIN:VEVENT
-DTSTART;VALUE=DATE:20260729
-DTEND;VALUE=DATE:20260811
+DTSTART;VALUE=DATE:20260815
+DTEND;VALUE=DATE:20260825
 SUMMARY:MS21 — CryptoZing.app Deployment (Open Beta)
 DESCRIPTION:Deploy the open beta under cryptozing.app, replace GitHub Pages placeholder, remove temporary mail aliasing, complete rollout verification.
 UID:cz-ms21@cryptozing.app
