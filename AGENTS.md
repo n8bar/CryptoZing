@@ -21,7 +21,7 @@
 - If the user has uncommitted doc edits in the same active workstream, preserve them and include them in the next related commit by default unless the user says otherwise.
 - Apply the UX guardrails in [`docs/UX_GUARDRAILS.md`](docs/UX_GUARDRAILS.md) on every UX touch: Nielsen/WCAG as baseline; inline guidance, preserved input, no layout shift, focus/error handling, mobile/accessibility.
 - GitHub `main` is canonical and protected. New work branches follow `codex/<task>`, and existing PRs must be updated via their original source branch rather than alternate branches.
-- PRs are gated by GitHub Actions `PR Tests`; keep branches current with `origin/main` before requesting review.
+- PRs are gated by GitHub Actions `PR Tests`; keep branches current with `origin/main` before requesting review. Docs-only PRs (Markdown anywhere + `docs/**`, including `milestones.ics`) skip the suite via `paths-ignore`, so run milestone-date checks locally (the consistency test is local-only anyway).
 
 ## Multi-Agent Coordination
 - Primary and secondary agents are role-based, not capability-limited: secondaries can work docs, code, tests, or modules within their stated task.
