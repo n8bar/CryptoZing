@@ -180,4 +180,74 @@ class InvoicePaymentSummaryTest extends TestCase
         $this->assertSame(0, $destinationSummary['outstanding_sats']);
         $this->assertSame(0.0, $destinationSummary['outstanding_usd']);
     }
+
+    public function test_fresh_invoice_without_payment_activity_is_not_flagged_as_underpaid(): void
+    {
+        $user = User::factory()->create();
+        $client = Client::create([
+            'user_id' => $user->id,
+            'name' => 'Acme',
+            'email' => 'billing@acme.test',
+        ]);
+
+        $invoice = Invoice::create([
+            'user_id' => $user->id,
+            'client_id' => $client->id,
+            'number' => 'INV-3001',
+            'amount_usd' => 100,
+            'btc_rate' => 50_000,
+            'amount_btc' => 0.002,
+            'payment_address' => 'tb1qfreshinvoice',
+            'status' => 'sent',
+            'invoice_date' => now()->toDateString(),
+        ]);
+
+        $summary = $invoice->paymentSummary(['rate_usd' => 50_000]);
+
+        $this->assertFalse($invoice->hasSignificantUnderpayment());
+        $this->assertNull($invoice->underpaymentPercent());
+        $this->assertFalse($invoice->requiresClientUnderpayAlert());
+        $this->assertSame(0.0, $summary['confirmed_usd']);
+        $this->assertSame(100.0, $summary['outstanding_usd']);
+    }
+
+    public function test_partial_payment_activity_is_still_flagged_as_underpaid(): void
+    {
+        $user = User::factory()->create();
+        $client = Client::create([
+            'user_id' => $user->id,
+            'name' => 'Acme',
+            'email' => 'billing@acme.test',
+        ]);
+
+        $invoice = Invoice::create([
+            'user_id' => $user->id,
+            'client_id' => $client->id,
+            'number' => 'INV-3002',
+            'amount_usd' => 100,
+            'btc_rate' => 50_000,
+            'amount_btc' => 0.002,
+            'payment_address' => 'tb1qpartialinvoice',
+            'status' => 'sent',
+            'invoice_date' => now()->toDateString(),
+        ]);
+
+        InvoicePayment::create([
+            'invoice_id' => $invoice->id,
+            'txid' => 'tx-partial-underpay',
+            'sats_received' => 40_000,
+            'detected_at' => now(),
+            'confirmed_at' => now(),
+            'usd_rate' => 50_000,
+            'fiat_amount' => 20.00,
+        ]);
+
+        $summary = $invoice->fresh()->paymentSummary(['rate_usd' => 50_000]);
+
+        $this->assertTrue($invoice->fresh()->hasSignificantUnderpayment());
+        $this->assertSame(80.0, round($invoice->fresh()->underpaymentPercent(), 1));
+        $this->assertTrue($invoice->fresh()->requiresClientUnderpayAlert());
+        $this->assertSame(20.0, $summary['confirmed_usd']);
+        $this->assertSame(80.0, $summary['outstanding_usd']);
+    }
 }
