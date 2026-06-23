@@ -13,5 +13,6 @@ New work branches follow `claude/<task>` (not `codex/<task>`).
 ## Terminal Ownership
 Claude drives Sail, git, and artisan commands—assume the user does not have a shell open unless they say otherwise. This is the same ownership model as described in `AGENTS.md` for Codex.
 
-## Subagents
-Follow the multi-agent coordination rules in `AGENTS.md` (path-scoped writes, no overlapping write scopes, handoff notes).
+## Workflows & Subagents
+- Use the available workflows/skills and subagents wherever feasible — lean on structured workflows for multi-step work, and dispatch subagents for independent, path-scoped tasks that reduce cycle time (don't delegate the next blocking step just to use one).
+- Follow the multi-agent coordination rules in `AGENTS.md` (path-scoped writes, no overlapping write scopes, handoff notes).
