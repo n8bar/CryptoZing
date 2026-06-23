@@ -20,8 +20,9 @@
 - Whenever `docs/**` or AGENTS.md changes, commit/push those updates right away. Exception: single-item checklist checkoffs in the same active workstream do not need to be pushed right away and may be committed together later.
 - If the user has uncommitted doc edits in the same active workstream, preserve them and include them in the next related commit by default unless the user says otherwise.
 - Apply the UX guardrails in [`docs/UX_GUARDRAILS.md`](docs/UX_GUARDRAILS.md) on every UX touch: Nielsen/WCAG as baseline; inline guidance, preserved input, no layout shift, focus/error handling, mobile/accessibility.
-- GitHub `main` is canonical and protected. New work branches follow `codex/<task>`, and existing PRs must be updated via their original source branch rather than alternate branches.
+- GitHub `main` is canonical. New work branches follow `codex/<task>`, and existing PRs must be updated via their original source branch rather than alternate branches.
 - PRs are gated by GitHub Actions `PR Tests`; keep branches current with `origin/main` before requesting review. Docs-only PRs (Markdown anywhere + `docs/**`, including `milestones.ics`) skip the suite via `paths-ignore`, so run milestone-date checks locally (the consistency test is local-only anyway).
+- Doc-only changes may be committed directly to `main` — no branch or PR required. "Doc-only" is the same carve-out as the PR gate: Markdown anywhere + `docs/**`, including `milestones.ics`. Anything touching code still goes through a `codex/<task>` (Claude: `claude/<task>`) branch + PR. Direct `.ics` commits bypass the PR entirely, so run milestone-date checks locally after any such change.
 
 ## Multi-Agent Coordination
 - Primary and secondary agents are role-based, not capability-limited: secondaries can work docs, code, tests, or modules within their stated task.
