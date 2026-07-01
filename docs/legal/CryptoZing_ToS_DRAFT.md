@@ -1,0 +1,54 @@
+# CryptoZing — Terms of Service (DRAFT / WORK IN PROGRESS)
+
+Status: In active section-by-section review. Intro + §1–§8 **locked**; §9 **under review**; §10–§16 **pending review**.
+Self-drafted, not legal advice (per the "no lawyer for RC1" decision in [`../strategies/19.5_LEGAL_LAYER.md`](../strategies/19.5_LEGAL_LAYER.md)).
+Placeholders in `[brackets]` resolve at MS21 deploy. Risk boilerplate adapted from the 37signals policies base (CC BY 4.0); bespoke crypto/non-custody/beta clauses drafted from scratch.
+
+---
+
+**Terms of Service**
+*Effective: `[date]` · Operated by `[CryptoZing LLC]`*
+
+*(intro — LOCKED)* Welcome to CryptoZing, a Bitcoin invoicing service run by `[CryptoZing LLC]`. CryptoZing ("the Service") is **beta software** — use it for low-stakes invoices first; it isn't built to be relied on for production-critical or high-value payment workflows. By creating an account or using the Service, you agree to these Terms. If you don't agree with them, please don't use the Service.
+
+**1. Your account.** *(LOCKED)* You must be at least 18 and able to enter a binding contract. You're responsible for activity under your account, for keeping your credentials secure, and for maintaining a valid email address you control. You're responsible for your own conduct and for following any laws that apply to you.
+
+**2. CryptoZing is non-custodial.** *(LOCKED)* You acknowledge that:
+- CryptoZing never takes custody of your bitcoin and cannot hold, control, move, or access your funds, keys, or seed phrase;
+- CryptoZing detects payments by watching the blockchain through a public account key (xpub) you connect; and
+- payments go directly from your customer's wallet to an address you control, so CryptoZing cannot send, freeze, refund, or reverse any payment.
+
+**3. Your keys and funds are your responsibility.** *(LOCKED)* Because the Service is non-custodial, you alone are responsible for your wallet, keys, and seed phrase, including backups. If you lose them, your funds are unrecoverable and there is nothing we can do. CryptoZing does not ask for your private keys or seed phrase — anyone who does is trying to scam you. You're responsible for verifying addresses and amounts before relying on them.
+
+**4. Not financial, tax, legal, or investment advice.** *(LOCKED)* CryptoZing is an invoicing tool, not an advisor. Nothing in the Service is advice, and any amounts or rate estimates it shows are for convenience, not a recommendation. Your decisions are your own.
+
+**5. No warranty on rates, payments, or the network.** *(LOCKED)* CryptoZing depends on the Bitcoin network and third-party data outside our control. We don't guarantee the accuracy of any rate or amount we display, the timing or finality of any payment, network fees, or that any payment will confirm. You accept these risks when you use the Service.
+
+**6. Acceptable use.** *(LOCKED)* You agree to use CryptoZing only for lawful purposes, and not to use it to facilitate illegal activity, defraud anyone, violate others' rights, or abuse or interfere with the Service or its infrastructure. We may limit or suspend access we consider abusive, unlawful, or a threat to the Service or other users.
+
+**7. Your content; our software.** *(LOCKED)* You keep all rights to the data you put into CryptoZing — your invoices, customer details, and business information remain yours. You grant CryptoZing the permission needed to host, store, back up, process, transmit, and display that data to operate and provide the Service — including through third-party providers we use to run it — and for no other purpose. You're responsible for the data you provide and confirm you have the right to provide it, including any customer details. CryptoZing's software, name, logo, and design are ours or our licensors'; these Terms grant you no right to reuse, copy, or resell them.
+
+**8. Beta service: availability, changes, and bugs.** *(LOCKED)* The Service is provided on an **as-available** basis. We don't promise any uptime, and we may change, interrupt, or discontinue the Service, in whole or in part, at any time, with or without notice. Being beta, it may contain bugs or behave unexpectedly, and we don't promise to fix any issue or to add, keep, or maintain any feature. Your bitcoin is always in your own wallet, but your records in CryptoZing are not — and we don't guarantee against loss of data, so you're responsible for keeping your own copies of anything you need.
+
+**9. Stopping and termination.** *(UNDER REVIEW)* You can stop using CryptoZing and delete your account at any time, which removes the data in your account. We can't remove data other users hold about their dealings with you, or records we keep as a party to a transaction — such as payments made to CryptoZing — or are required to retain. We may limit, suspend, or terminate your access at any time, in our sole discretion — including for a violation of these Terms or if we stop offering the Service. Because the Service is non-custodial, ending your access doesn't touch your bitcoin — your funds are always in your own wallet.
+*(survival clause — proposed, pending: "If your account or these Terms end, the provisions that by their nature should survive will keep applying.")*
+
+> **Open on §9:** (a) scope wording (Nate to pick further); (b) survival clause final wording; (c) add one general Privacy-Policy pointer elsewhere in the doc.
+
+**10. No warranties — as is / as available.** *(PENDING REVIEW)* The Service is provided "as is" and "as available," without warranties of any kind, express or implied, including merchantability, fitness for a particular purpose, title, and non-infringement. We don't warrant that it will be uninterrupted, secure, error-free, or fit your needs. You use it at your own risk. Where some warranties can't be disclaimed by law, this applies to the fullest extent permitted.
+
+**11. Limitation of liability.** *(PENDING REVIEW)* To the fullest extent permitted by law, `[CryptoZing LLC]` and its owner won't be liable for any indirect, incidental, special, consequential, or punitive damages, or for lost profits, data, goodwill, or bitcoin — including funds lost, stolen, sent in error, or unrecoverable due to lost keys, third-party wallets, the Bitcoin network, or your own actions. Our total liability for any claim relating to the Service won't exceed `[the greater of what you paid us in the prior 12 months, or US$100]`.
+*(open: liability cap amount)*
+
+**12. Indemnification.** *(PENDING REVIEW)* You'll indemnify and hold harmless `[CryptoZing LLC]` and its owner from claims, losses, or expenses (including reasonable legal fees) arising from your use of the Service, your content, your violation of these Terms, or your violation of any law or third-party right.
+
+**13. Governing law and disputes.** *(PENDING REVIEW)* These Terms are governed by Arizona law, without regard to conflict-of-laws rules. Any dispute relating to the Service or these Terms will be brought in the state or federal courts in Arizona, and you agree to that venue.
+*(open: arbitration / class-action waiver deliberately omitted — confirm)*
+
+**14. Changes to these Terms.** *(PENDING REVIEW)* We may update these Terms from time to time. If we do, we'll post the updated version with a new effective date; continued use after changes take effect means you accept them.
+
+**15. General.** *(PENDING REVIEW)* If any part is unenforceable, the rest stands. Not enforcing a provision isn't a waiver. These Terms are the entire agreement between you and `[CryptoZing LLC]` about the Service. You can't transfer your rights under them; we may transfer ours in connection with the business.
+
+**16. Contact.** *(PENDING REVIEW)* Questions? Contact `[CryptoZing LLC]` at `[contact email]`.
+
+*Portions adapted from the 37signals Terms of Service, used under CC BY 4.0.*
