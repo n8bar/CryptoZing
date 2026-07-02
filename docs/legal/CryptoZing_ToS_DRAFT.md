@@ -1,6 +1,6 @@
 # CryptoZing — Terms of Service (DRAFT / WORK IN PROGRESS)
 
-Status: In active section-by-section review. Intro + §1–§11 **approved**; §12–§16 **pending review**.
+Status: In active section-by-section review. Intro + §1–§12 **approved**; §13–§16 **pending review**.
 Self-drafted, not legal advice (per the "no lawyer for RC1" decision in [`../strategies/19.5_LEGAL_LAYER.md`](../strategies/19.5_LEGAL_LAYER.md)).
 Placeholders in `[brackets]` resolve at MS21 deploy. Risk boilerplate adapted from the 37signals policies base (CC BY 4.0); bespoke crypto/non-custody/beta clauses drafted from scratch.
 
@@ -35,7 +35,7 @@ Placeholders in `[brackets]` resolve at MS21 deploy. Risk boilerplate adapted fr
 
 **11. Limitation of liability.** *(APPROVED)* ***To the fullest extent permitted by law, `[CryptoZing LLC]` and its owner won't be liable for any indirect, incidental, special, consequential, or punitive damages, or for lost profits, data, goodwill, or bitcoin — including funds lost, stolen, sent in error, or unrecoverable due to lost keys, third-party wallets, the Bitcoin network, or your own actions. Our total liability for any claim relating to the Service won't exceed the greater of US$50 or what you paid us in the prior 12 months.***
 
-**12. Indemnification.** *(PENDING REVIEW)* You'll indemnify and hold harmless `[CryptoZing LLC]` and its owner from claims, losses, or expenses (including reasonable legal fees) arising from your use of the Service, your content, your violation of these Terms, or your violation of any law or third-party right. We may assume the exclusive defense and control of any matter subject to indemnification by you, with counsel of our choosing, and you agree to cooperate with our defense. You won't settle any claim affecting us without our written consent.
+**12. Indemnification.** *(APPROVED)* You'll indemnify and hold harmless `[CryptoZing LLC]` and its owner from claims, losses, or expenses (including reasonable legal fees) arising from your use of the Service, your content, your violation of these Terms, or your violation of any law or third-party right. We may assume the exclusive defense and control of any matter subject to indemnification by you, with counsel of our choosing, and you agree to cooperate with our defense. You won't settle any claim affecting us without our written consent.
 
 **13. Governing law and disputes.** *(PENDING REVIEW)* These Terms are governed by Arizona law, without regard to conflict-of-laws rules. Any dispute relating to the Service or these Terms will be brought in the state or federal courts in Arizona, and you agree to that venue.
 *(open: arbitration / class-action waiver deliberately omitted — confirm)*
