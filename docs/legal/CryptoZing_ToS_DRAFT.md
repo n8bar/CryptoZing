@@ -1,6 +1,6 @@
 # CryptoZing — Terms of Service (DRAFT / WORK IN PROGRESS)
 
-Status: In active section-by-section review. Intro + §1–§13 **approved**; §14–§16 **pending review**.
+Status: In active section-by-section review. Intro + §1–§14 **approved**; §15–§16 **pending review**.
 Self-drafted, not legal advice (per the "no lawyer for RC1" decision in [`../strategies/19.5_LEGAL_LAYER.md`](../strategies/19.5_LEGAL_LAYER.md)).
 Placeholders in `[brackets]` resolve at MS21 deploy. Risk boilerplate adapted from the 37signals policies base (CC BY 4.0); bespoke crypto/non-custody/beta clauses drafted from scratch.
 
@@ -39,7 +39,7 @@ Placeholders in `[brackets]` resolve at MS21 deploy. Risk boilerplate adapted fr
 
 **13. Governing law and disputes.** *(APPROVED)* These Terms are governed by Arizona law, without regard to conflict-of-laws rules. Any dispute relating to the Service or these Terms will be brought in the state or federal courts in Arizona, and you agree to that venue.
 
-**14. Changes to these Terms.** *(PENDING REVIEW)* We may update these Terms from time to time. If we do, we'll post the updated version with a new effective date; continued use after changes take effect means you accept them.
+**14. Changes to these Terms.** *(APPROVED)* We may update these Terms from time to time — for example, to reflect changes to the Service or for legal, regulatory, or security reasons. When we do, we'll give notice: we'll post the updated Terms with a new effective date, and if a change is material we may also notify you through the Service or by email. Changes apply going forward. By continuing to use the Service after we've given notice, you accept the updated Terms; if you don't agree with a change, you can stop using the Service and delete your account at any time.
 
 **15. General.** *(PENDING REVIEW)* If any part is unenforceable, the rest stands. Not enforcing a provision isn't a waiver. These Terms and our `[Privacy Policy]` are the entire agreement between you and `[CryptoZing LLC]` about the Service. The Privacy Policy explains what data we collect and how we handle it. You can't transfer your rights under them; we may transfer ours in connection with the business.
 
