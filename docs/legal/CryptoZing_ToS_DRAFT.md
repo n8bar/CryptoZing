@@ -1,6 +1,6 @@
 # CryptoZing — Terms of Service (DRAFT / WORK IN PROGRESS)
 
-Status: In active section-by-section review. Intro + §1–§14 **approved**; §15–§16 **pending review**.
+Status: Section-by-section review complete — intro + §1–§16 **approved**. Remaining before publication: self-review pass (19.5 §1 item 6), the #121 deletion fix (item 7), and the MS21 placeholder swap.
 Self-drafted, not legal advice (per the "no lawyer for RC1" decision in [`../strategies/19.5_LEGAL_LAYER.md`](../strategies/19.5_LEGAL_LAYER.md)).
 Placeholders in `[brackets]` resolve at MS21 deploy. Risk boilerplate adapted from the 37signals policies base (CC BY 4.0); bespoke crypto/non-custody/beta clauses drafted from scratch.
 
@@ -41,8 +41,8 @@ Placeholders in `[brackets]` resolve at MS21 deploy. Risk boilerplate adapted fr
 
 **14. Changes to these Terms.** *(APPROVED)* We may update these Terms from time to time — for example, to reflect changes to the Service or for legal, regulatory, or security reasons. When we do, we'll give notice: we'll post the updated Terms with a new effective date, and if a change is material we may also notify you through the Service or by email. Changes apply going forward. By continuing to use the Service after we've given notice, you accept the updated Terms; if you don't agree with a change, you can stop using the Service and delete your account at any time.
 
-**15. General.** *(PENDING REVIEW)* If any part is unenforceable, the rest stands. Not enforcing a provision isn't a waiver. These Terms and our `[Privacy Policy]` are the entire agreement between you and `[CryptoZing LLC]` about the Service. The Privacy Policy explains what data we collect and how we handle it. You can't transfer your rights under them; we may transfer ours in connection with the business.
+**15. General.** *(APPROVED)* If any part is unenforceable, the rest stands. Not enforcing a provision isn't a waiver. These Terms and our `[Privacy Policy]` are the entire agreement between you and `[CryptoZing LLC]` about the Service. The Privacy Policy explains what data we collect and how we handle it. You can't transfer your rights under them; we may transfer ours in connection with the business.
 
-**16. Contact.** *(PENDING REVIEW)* Questions? Contact `[CryptoZing LLC]` at `[contact email]`.
+**16. Contact.** *(APPROVED)* Questions? Contact `[CryptoZing LLC]` at CryptoZingTerms@CyberCreek.us.
 
 *Portions adapted from the 37signals Terms of Service, used under CC BY 4.0.*
