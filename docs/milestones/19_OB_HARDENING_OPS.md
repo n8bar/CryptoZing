@@ -42,13 +42,13 @@ Document every outbound mail type — trigger, recipient, delivery-log behavior 
 Implement 419-to-login redirect and site-wide session-expiry logout, with return-to-page after re-auth. See [`x19.2_AUTH_HARDENING.md`](../strategies/x19.2_AUTH_HARDENING.md).
 
 ### [ ] Phase 3 — LLC Formation
-Form parent **CyberCreek LLC** then subsidiary **CryptoZing LLC** (member: CyberCreek) in Arizona — parent-first to avoid a later membership transfer; obtain EINs, sign operating agreements, update CryptoZing references to reflect the entity (the business bank account moved to Phase 8 — deferred until a first fiat inflow). Provides the entity backing the Phase 5 legal-layer ToS protections need to actually shield the operator personally. Phase 3 (LLC) and Phase 5 (Legal Layer) run as **independent parallel tracks** — drafting/UI work in Phase 5 does not gate on LLC status; only the deploy-time entity-name swap at MS21 needs the formed entity. Both must land before MS21.
+Form parent **CyberCreek LLC** then subsidiary **CryptoZing LLC** (member: CyberCreek) in Arizona — parent-first to avoid a later membership transfer; obtain EINs, sign operating agreements, update CryptoZing references to reflect the entity (the business bank account moved to Phase 8 — deferred until a first fiat inflow). Provides the entity backing the Phase 5 legal-layer ToS protections need to actually shield the operator personally. Phase 3 (LLC) and Phase 5 (Legal Layer) run as **independent parallel tracks** — drafting/UI work in Phase 5 does not gate on LLC status; the entity name is final (CryptoZing LLC) in the Phase 5 drafts. Both must land before MS21.
 
 ### [x] Phase 4 — Visual Identity Polish
 Visual/brand polish pass before open beta: a single CryptoZing favicon set site-wide (faithful potrace of the real logo), the favicon-matching og:image card, the RC→"open beta" terminology cleanup, and branded guest-safe error pages (#96). Shipped and verified (app surfaces + live marketing site); see [`x19.4_VISUAL_IDENTITY_POLISH.md`](../strategies/x19.4_VISUAL_IDENTITY_POLISH.md).
 
 ### [ ] Phase 5 — Legal Layer
-Draft ToS, Privacy Policy, disclaimer copy; review existing UI/mail copy for monetization-neutral language; place all in the UI. Drafting + UI work has no dependency on Phase 3 (LLC) — runs in parallel. Final entity-name swap and publication is deferred to MS21 deploy time.
+Draft ToS, Privacy Policy, disclaimer copy; review existing UI/mail copy for monetization-neutral language; place all in the UI. Drafting + UI work has no dependency on Phase 3 (LLC) — runs in parallel. Publication (resolving the remaining effective-date and Privacy Policy link placeholders) is deferred to MS21 deploy time.
 
 ### [ ] Phase 6 — Content Promises Reconciliation
 Walk every open entry in `CONTENT_PROMISES.md` against the finished product; resolve each as honored, content-revised, or product-revised.
