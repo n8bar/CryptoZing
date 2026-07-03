@@ -6,6 +6,7 @@ use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
@@ -53,7 +54,9 @@ class ProfileController extends Controller
 
         Auth::logout();
 
-        $user->delete();
+        // The User deleting hook removes payment/accounting rows before the
+        // users -> invoices cascade; keep both steps atomic.
+        DB::transaction(fn () => $user->delete());
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
