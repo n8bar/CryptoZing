@@ -38,6 +38,10 @@ Keep these in sync with every merge or scope change.
 - For any active workstream, keep one obvious checklist owner. If a milestone doc and a strategy doc both exist, the milestone doc summarizes status/objectives while the strategy doc owns the detailed ordered checklist (unless docs explicitly say otherwise).
 - Any doc with numbered tasks/milestones/todos is assumed to be done in order unless that doc explicitly says otherwise — flag intentional deviations.
 
+## Reference notation
+
+- Milestone phase/section references — in commit-message prefixes and doc cross-references — use `M<milestone>.<phase> §<section>` (e.g., `M19.5 §1`, `M19.4 §4.2`), not bare `19.5 §1`.
+
 ## CHANGELOG conventions
 
 - Keep [`docs/CHANGELOG.log`](CHANGELOG.log) updated alongside canonical docs when scope or doc structure shifts.
