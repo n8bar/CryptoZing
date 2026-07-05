@@ -1,6 +1,6 @@
 # CryptoZing — Privacy Policy (DRAFT / WORK IN PROGRESS)
 
-Status: Draft complete — self-review (item 4) and section walk (item 5) remain.
+Status: Draft complete and self-reviewed — section walk (item 5) remains.
 Self-drafted, not legal advice (per the "no lawyer for RC1" decision in [`../strategies/19.5_LEGAL_LAYER.md`](../strategies/19.5_LEGAL_LAYER.md)).
 Placeholders in `[brackets]` resolve at MS21 deploy. Structure adapted from the Automattic privacy policy base (CC BY-SA 4.0); the wallet/blockchain sections are drafted from scratch.
 
@@ -46,7 +46,7 @@ We share information only with the services that run CryptoZing, and only what t
 We may also disclose information if the law requires it or to protect the Service and its users.
 
 **8. Retention and deletion.**
-We keep your information while your account is active. Deleting your account removes your data from the Service — profile, wallet configuration (xpubs), customers, invoices, and payment and delivery records — and your shared invoice links stop working, as described in Section 9 of the `[Terms of Service]`. A few things outlive deletion: emails that were already sent, short-lived operational logs and backups that age out on their own, and records we keep as a party to a transaction or are required to retain.
+We keep your information while your account is active. Deleting your account removes your data from the Service — profile, wallet configuration (xpubs), customers, invoices, and payment and delivery records — and your shared invoice links stop working, as described in Section 9 of the `[Terms of Service]`. A few things outlive deletion: emails that were already sent, operational logs and backups that age out on their own rather than being edited per-account, and records we keep as a party to a transaction or are required to retain.
 
 **9. Security.**
 Traffic is encrypted in transit (HTTPS), passwords are stored hashed, and xpubs are stored encrypted. Support staff can view your account only while a time-boxed, read-only access grant from you is active — and even then they can't see your wallet configuration. No online service is fully secure, so keep your own copies of records you can't afford to lose (`[Terms of Service]`, Section 8).
