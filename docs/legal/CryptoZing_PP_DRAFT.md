@@ -9,7 +9,7 @@ Placeholders in `[brackets]` resolve at MS21 deploy. Structure adapted from the 
 **Privacy Policy**
 *Effective: `[date]` · Operated by CryptoZing LLC*
 
-CryptoZing is a Bitcoin invoicing service run by CryptoZing LLC. This policy explains what information the Service collects, why, and what happens to it. The short version: we collect what we need to run the Service, we don't sell your information, and we don't run ads or third-party analytics.
+*(intro — APPROVED)* CryptoZing is a Bitcoin invoicing service run by CryptoZing LLC. This policy explains what information the Service collects, why, and what happens to it. The short version: we collect what we need to run the Service, we don't sell your information, and we don't run ads or third-party analytics.
 
 **1. Information you give us.**
 - *Account*: your name, email address, and password (stored hashed — we can't read it).
