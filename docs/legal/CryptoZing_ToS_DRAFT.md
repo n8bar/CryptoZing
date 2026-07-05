@@ -1,6 +1,6 @@
 # CryptoZing — Terms of Service (DRAFT / WORK IN PROGRESS)
 
-Status: Intro + §1–§16 **approved**; disposition-walk edits (19.5 §1 item 9) drafted — pending review. Remaining before publication: that review and the MS21 placeholder swap.
+Status: Draft complete — intro + §1–§16 and the disposition-walk edits all **approved**. Remaining before publication: the MS21 placeholder swap.
 Self-drafted, not legal advice (per the "no lawyer for RC1" decision in [`../strategies/19.5_LEGAL_LAYER.md`](../strategies/19.5_LEGAL_LAYER.md)).
 Placeholders in `[brackets]` resolve at MS21 deploy. Risk boilerplate adapted from the 37signals policies base (CC BY 4.0); bespoke crypto/non-custody/beta clauses drafted from scratch.
 
