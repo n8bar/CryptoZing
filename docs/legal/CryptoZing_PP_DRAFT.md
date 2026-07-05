@@ -18,7 +18,7 @@ Placeholders in `[brackets]` resolve at MS21 deploy. Structure adapted from the 
 - *Invoice content*: descriptions, amounts, dates, notes — whatever you type into an invoice.
 - *Customer details*: your customers' names, email addresses, and any notes you keep about them. Section 4 covers how we handle them.
 
-**2. Information we collect automatically.**
+**2. Information we collect automatically.** *(APPROVED)*
 - *Log and session data*: signing in records your IP address and browser details with your session. Our operational logs record events like email deliveries (recipient address and outcome) and views of public invoice pages (viewer IP address).
 - *Cookies*: we set first-party cookies for sign-in sessions and security. There are no advertising, analytics, or cross-site tracking cookies.
 - *Blockchain activity*: payment activity at the Bitcoin addresses derived from your xpub, observed from the public blockchain.
