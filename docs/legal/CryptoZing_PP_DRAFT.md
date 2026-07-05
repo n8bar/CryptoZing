@@ -11,7 +11,7 @@ Placeholders in `[brackets]` resolve at MS21 deploy. Structure adapted from the 
 
 *(intro — APPROVED)* CryptoZing is a Bitcoin invoicing service run by CryptoZing LLC. This policy explains what information the Service collects, why, and what happens to it. The short version: we collect what we need to run the Service, we don't sell your information, and we don't run ads or third-party analytics.
 
-**1. Information you give us.**
+**1. Information you give us.** *(APPROVED)*
 - *Account*: your name, email address, and password (stored hashed — we can't read it).
 - *Business identity*: the billing name, email, phone, address, footer note, and branding you configure — these appear on the invoices and emails you send through the Service.
 - *Wallet*: the extended public key (xpub) of each Bitcoin account you connect. Section 3 covers what an xpub reveals.
