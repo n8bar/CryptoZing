@@ -40,7 +40,7 @@ Keep these in sync with every merge or scope change.
 
 ## Reference notation
 
-- Milestone phase/section references — in commit-message prefixes and doc cross-references — use `M<milestone>.<phase> §<section>` (e.g., `M19.5 §1`, `M19.4 §4.2`), not bare `19.5 §1`.
+- Milestone phase/section references — in commit-message prefixes and doc cross-references — use dotted `M<milestone>.<phase>.<section>` (e.g., `M19.5.1`), not `§` forms or bare `19.5 §1`.
 
 ## CHANGELOG conventions
 
