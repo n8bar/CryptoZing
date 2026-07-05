@@ -40,7 +40,8 @@ Keep these in sync with every merge or scope change.
 
 ## Reference notation
 
-- Milestone phase/section references — in commit-message prefixes and doc cross-references — use dotted `M<milestone>.<phase>.<section>` (e.g., `M19.5.1`).
+- Milestone/phase references — in commit-message prefixes and doc cross-references — use dotted `M<milestone>.<phase>` and extend one dotted segment per level as deep as needed (e.g., `M19.5.1`, `M19.5.1.9`, `M19.5.1.9.5`).
+- Vocabulary: sections divide into items and subitems. "Item" may refer to an entry at any level below phase; "subitem" may refer to any item below section level.
 
 ## CHANGELOG conventions
 
