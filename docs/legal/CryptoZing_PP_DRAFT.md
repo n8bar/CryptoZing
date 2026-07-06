@@ -45,7 +45,7 @@ We share information with service providers that help us run CryptoZing — each
 
 We may also disclose information if the law requires it or to protect the Service and its users.
 
-**8. Retention and deletion.**
+**8. Retention and deletion.** *(APPROVED)*
 We keep your information while your account is active. Deleting your account removes your data from the Service — profile, wallet configuration (xpubs), customers, invoices, and payment and delivery records — and your shared invoice links stop working, as described in Section 9 of the `[Terms of Service]`. A few things outlive deletion: emails that were already sent, operational logs and backups that age out on their own rather than being edited per-account, and records we keep as a party to a transaction or are required to retain.
 
 **9. Security.**
