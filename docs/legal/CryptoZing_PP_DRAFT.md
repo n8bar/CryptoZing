@@ -29,7 +29,7 @@ An xpub can't move funds, but it derives all of an account's receive addresses. 
 **4. Your customers' information.** *(APPROVED)*
 You're responsible for having the right to give us your customers' details (`[Terms of Service]`, Section 7). We use them only to provide the Service to you: showing them on your invoices and sending invoice email — delivery, receipts, and payment alerts — on your behalf, with replies directed to you. We don't market to your customers or use their addresses for anything else.
 
-**5. Public invoice pages.**
+**5. Public invoice pages.** *(APPROVED)*
 When you share an invoice link, anyone with the link can see that invoice: its contents and amounts, payment address and status, your business identity, and the customer-facing details you entered. Links use unguessable tokens and tell search engines not to index the page; you can disable or rotate a link at any time, and shared links stop working if you delete your account.
 
 **6. How we use information.**
