@@ -35,13 +35,13 @@ When you share an invoice link, anyone with the link can see that invoice: its c
 **6. How we use information.** *(APPROVED)*
 We use the information above to run the Service: creating, sending, and displaying your invoices; watching for and recording payments; showing your dashboard; providing support when you ask for it; keeping the Service secure and troubleshooting problems; and communicating with you about your account. We don't sell your information, build advertising profiles, or use your data for purposes unrelated to providing the Service.
 
-**7. Third-party services.**
-We share information only with the services that run CryptoZing, and only what they need:
-- *Mailgun* delivers our email, so it processes recipient addresses and message content.
-- *mempool.space* provides blockchain data. Payment watching asks it about individual invoice addresses; those queries come from our servers and carry no account identity and no xpub.
-- *Coinbase* provides the BTC–USD exchange rate. Those requests carry no user data at all.
+**7. Third-party services.** *(APPROVED)*
+We share information with service providers that help us run CryptoZing — each gets only what it needs to provide its service. For example:
+- An email delivery provider (like Mailgun) processes recipient addresses and message content.
+- A blockchain data service (like mempool.space) answers payment-watching queries about individual invoice addresses; those queries come from our servers and carry no account identity and no xpub.
+- An exchange-rate source (like Coinbase) provides the BTC–USD rate we display; those requests carry no user data at all.
 - Hosting and infrastructure providers store and transmit Service data as part of running it.
-- App pages load a web font from Bunny Fonts (a no-logging CDN) and a QR-code library from jsDelivr, so your browser contacts those hosts. Public invoice pages load no third-party resources.
+- Other providers as the Service grows — the same rule applies: each gets only what it needs to provide its service.
 
 We may also disclose information if the law requires it or to protect the Service and its users.
 
