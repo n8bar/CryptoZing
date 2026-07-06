@@ -32,7 +32,7 @@ You're responsible for having the right to give us your customers' details (`[Te
 **5. Public invoice pages.** *(APPROVED)*
 When you share an invoice link, anyone with the link can see that invoice: its contents and amounts, payment address and status, your business identity, and the customer-facing details you entered. Links use unguessable tokens and tell search engines not to index the page; you can disable or rotate a link at any time, and shared links stop working if you delete your account.
 
-**6. How we use information.**
+**6. How we use information.** *(APPROVED)*
 We use the information above to run the Service: creating, sending, and displaying your invoices; watching for and recording payments; showing your dashboard; providing support when you ask for it; keeping the Service secure and troubleshooting problems; and communicating with you about your account. We don't sell your information, build advertising profiles, or use your data for purposes unrelated to providing the Service.
 
 **7. Third-party services.**
