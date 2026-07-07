@@ -48,7 +48,7 @@ We may also disclose information if the law requires it or to protect the Servic
 **8. Retention and deletion.** *(APPROVED)*
 We keep your information while your account is active. Deleting your account removes your data from the Service — profile, wallet configuration (xpubs), customers, invoices, and payment and delivery records — and your shared invoice links stop working, as described in Section 9 of the `[Terms of Service]`. A few things outlive deletion: emails that were already sent, operational logs and backups that age out on their own rather than being edited per-account, and records we keep as a party to a transaction or are required to retain.
 
-**9. Security.**
+**9. Security.** *(APPROVED)*
 Traffic is encrypted in transit (HTTPS), passwords are stored hashed, and xpubs are stored encrypted. If support is provided, it can view your account only while a time-boxed, read-only grant from you is active — and even then your wallet configuration stays out of view. No online service is fully secure, so keep your own copies of records you can't afford to lose (`[Terms of Service]`, Section 8).
 
 **10. Your choices.**
