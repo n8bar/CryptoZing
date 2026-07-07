@@ -52,7 +52,7 @@ We keep your information while your account is active. Deleting your account rem
 Traffic is encrypted in transit (HTTPS), passwords are stored hashed, and xpubs are stored encrypted. If support is provided, it can view your account only while a time-boxed, read-only grant from you is active — and even then your wallet configuration stays out of view. No online service is fully secure, so keep your own copies of records you can't afford to lose (`[Terms of Service]`, Section 8).
 
 **10. Your choices.**
-You can edit your account and business details in settings, manage your connected wallet accounts, disable or rotate any shared invoice link, and delete your account yourself at any time. For anything you can't do from settings — or questions about the information we hold about you — email us (Section 12) and we'll help.
+You can edit your account and business details in settings, manage your connected wallet accounts, disable or rotate any shared invoice link, and delete your account yourself at any time. We designed the Service to be fully self-serve; for anything you can't do from settings — or questions about the information we hold about you — email us (Section 12) and we'll help.
 
 **11. Changes to this policy.**
 We may update this policy from time to time. When we do, we'll post the update with a new effective date, and if a change is material we may also notify you through the Service or by email. Continuing to use the Service after we've given notice means the updated policy applies to you.
