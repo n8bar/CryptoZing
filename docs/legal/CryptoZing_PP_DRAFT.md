@@ -1,6 +1,6 @@
 # CryptoZing — Privacy Policy (DRAFT / WORK IN PROGRESS)
 
-Status: Draft complete and self-reviewed — section walk (item 5) remains.
+Status: Draft complete — intro, §1–§12, and the attribution footer all **approved**. Remaining before publication: the MS21 placeholder swap.
 Self-drafted, not legal advice (per the "no lawyer for RC1" decision in [`../strategies/19.5_LEGAL_LAYER.md`](../strategies/19.5_LEGAL_LAYER.md)).
 Placeholders in `[brackets]` resolve at MS21 deploy. Structure adapted from the Automattic privacy policy base (CC BY-SA 4.0); the wallet/blockchain sections are drafted from scratch.
 
@@ -60,4 +60,4 @@ We may update this policy from time to time. When we do, we'll post the update w
 **12. Contact.** *(APPROVED)*
 Privacy questions? Contact CryptoZing LLC at CryptoZingPrivacy@CyberCreek.us.
 
-*Adapted from the Automattic Privacy Policy ([github.com/Automattic/legalmattic](https://github.com/Automattic/legalmattic)), used under Creative Commons Attribution-ShareAlike 4.0. This Privacy Policy is likewise licensed under CC BY-SA 4.0.*
+*(footer — APPROVED)* *Adapted from the Automattic Privacy Policy ([github.com/Automattic/legalmattic](https://github.com/Automattic/legalmattic)), used under Creative Commons Attribution-ShareAlike 4.0. This Privacy Policy is likewise licensed under CC BY-SA 4.0.*
