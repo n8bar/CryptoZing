@@ -57,7 +57,7 @@ You can edit your account and business details in settings, manage your connecte
 **11. Changes to this policy.** *(APPROVED)*
 We may update this policy from time to time. When we do, we'll post the update with a new effective date, and if a change is material we may also notify you through the Service or by email. Continuing to use the Service after we've given notice means the updated policy applies to you.
 
-**12. Contact.**
+**12. Contact.** *(APPROVED)*
 Privacy questions? Contact CryptoZing LLC at CryptoZingPrivacy@CyberCreek.us.
 
 *Adapted from the Automattic Privacy Policy ([github.com/Automattic/legalmattic](https://github.com/Automattic/legalmattic)), used under Creative Commons Attribution-ShareAlike 4.0. This Privacy Policy is likewise licensed under CC BY-SA 4.0.*
