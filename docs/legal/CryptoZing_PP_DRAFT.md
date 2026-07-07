@@ -54,7 +54,7 @@ Traffic is encrypted in transit (HTTPS), passwords are stored hashed, and xpubs 
 **10. Your choices.** *(APPROVED)*
 You can edit your account and business details in settings, manage your connected wallet accounts, disable or rotate any shared invoice link, and delete your account yourself at any time. We designed the Service to be fully self-serve; for anything you can't do from settings — or questions about the information we hold about you — email us (Section 12) and we'll help.
 
-**11. Changes to this policy.**
+**11. Changes to this policy.** *(APPROVED)*
 We may update this policy from time to time. When we do, we'll post the update with a new effective date, and if a change is material we may also notify you through the Service or by email. Continuing to use the Service after we've given notice means the updated policy applies to you.
 
 **12. Contact.**
