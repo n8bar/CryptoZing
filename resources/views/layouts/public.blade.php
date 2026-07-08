@@ -40,6 +40,8 @@
             <main class="px-1">
                 {{ $slot }}
             </main>
+
+            <x-legal-footer />
         </div>
         <script>
             (() => {

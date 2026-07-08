@@ -348,3 +348,8 @@
         {{ $billingDetails['footer_note'] }}
     </div>
 @endif
+
+<p class="section-gap" style="margin-bottom:0; font-size:13.33px; color:#6b7280;">
+    Amounts, rates, and payment statuses are informational, not guaranteed &mdash; verify before relying on them.
+    CryptoZing is not a party to this transaction.
+</p>

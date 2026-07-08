@@ -51,6 +51,8 @@
             ])>
                 {{ $slot }}
             </main>
+
+            <x-legal-footer />
         </div>
         <script>
             (() => {

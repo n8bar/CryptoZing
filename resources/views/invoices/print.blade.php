@@ -236,6 +236,10 @@
             'billingDetails' => $billingDetails,
         ])
     @endif
+
+    <footer class="no-print" style="margin-top:16px; text-align:center; font-size:13.33px; color:#6b7280;">
+        <a href="{{ route('legal.privacy') }}" style="color:inherit; text-decoration:underline; text-underline-offset:2px;">Privacy Policy</a>
+    </footer>
 </div>
 
 <script>

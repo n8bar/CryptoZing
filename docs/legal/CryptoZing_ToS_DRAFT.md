@@ -48,4 +48,4 @@ CryptoZing isn't a party to the transactions you invoice: payment obligations, a
 
 **16. Contact.** *(APPROVED)* Questions? Contact CryptoZing LLC at CryptoZingTerms@CyberCreek.us.
 
-*Portions adapted from the 37signals Terms of Service, used under CC BY 4.0.*
+*Portions adapted from the [37signals Terms of Service](https://github.com/basecamp/policies/blob/master/terms/index.md), used under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).*
