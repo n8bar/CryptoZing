@@ -28,6 +28,7 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+/.agents/
 /.cybercreek/
 /.claude/
 *.pp
