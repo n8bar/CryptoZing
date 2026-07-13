@@ -48,6 +48,8 @@
                         </div>
                         <div class="rounded border border-amber-200 bg-amber-50 px-3 py-2 text-amber-800" style="border-color: currentColor;">
                             {{ __('Privacy note: this key lets anyone derive and monitor addresses for that account. Keep it private and avoid sharing screenshots or logs.') }}
+                            {{ __('Connecting a key lets CryptoZing see that account’s full receive history and balance') }}
+                            (<a href="{{ route('legal.privacy') }}" class="underline font-medium">{{ __('Privacy Policy') }}</a>).
                         </div>
                     </div>
 
