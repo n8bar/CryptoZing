@@ -4,6 +4,11 @@
 - Always run artisan/composer/npm commands through Sail (`./vendor/bin/sail ...`).
 - Doc-tree roles, canonical docs, strategy doc rules, checklist-depth separation, and CHANGELOG conventions all live in [`docs/DOC_ROLES.md`](docs/DOC_ROLES.md). Read it when navigating docs or deciding where new content belongs.
 - Where dates are necessary in docs, use the date from the system you're running on.
+- No commits or pushes on Sundays; finished work waits in the tree until Monday.
+- Completed milestone/strategy docs get the `x` filename prefix in the same commit that closes them, with inbound links retargeted.
+- Check items off the moment they're done, in a commit; pending review/testing gets its own item instead of holding the checkoff. Notes stay tight: IDs, final wordings, verdicts.
+- After every commit, summarize what changed.
+- Prefer webhooks + queue redelivery over cron for convergence; schedule only what is genuinely time-triggered or has no push signal.
 - Milestone dates have one source of truth: `docs/milestones.ics`. PLAN.md's "Target" column must equal each milestone's `.ics` end date (DTEND). This invariant is guarded by `tests/Feature/Docs/MilestoneScheduleConsistencyTest.php`, tagged `#[Group('local-only')]` — it runs in the local suite (`./vendor/bin/sail artisan test`) but is excluded from the GitHub `PR Tests` gate, so run tests locally after any milestone-date change.
 - When adding features, update or create migrations + tests, then run `./vendor/bin/sail artisan test`.
 - Also keep AGENTS.md updated to save on churn from session switching.
@@ -11,6 +16,7 @@
 - Keep the temporary GitHub Pages placeholder fenced under `site/`; treat it as a separate static surface from the Laravel app even though it lives in the same repo.
 - Sail Compose includes a dedicated `scheduler` service that runs `php artisan schedule:work`; `./vendor/bin/sail up -d` keeps the watcher alive automatically.
 - Specs come first: align on the requirement in the spec docs, implement, then update the docs to reflect what shipped; only reverse-engineer specs from existing code when we’ve explicitly agreed to do so.
+- Specs state desired behavior; implementation mechanics (webhooks, APIs, tooling) live in strategy docs and action items.
 - Docs are primarily internal architecture/engineering notes for us and future maintainers, not end-user documentation.
 - If the user is asking for your input/feedback (e.g. “what do you think?”, “should we…?”, “does this make sense?”), answer first and confirm before making changes—even if the request sounds actionable.
 - If asked to implement code before a spec exists, pause to confirm and recommend documenting the scope first (write the spec, then ship the code) unless the user explicitly insists otherwise.
@@ -48,7 +54,7 @@
 - Wallet xpub onboarding lives at `/wallet/settings`; invoices expect a configured wallet or redirect there.
 - **Data hygiene:** As of 2025-11-16 the app only holds seed/test data—no real customers yet. Remove this note (and treat production emails accordingly) once live customer data exists.
 - CryptoZing must remain watch-only: never put private keys or seed phrases into tracked repo files, app config, database seeders, fixtures, tests, or normal application flows. If local testnet funding keys are needed for developer-only scenario setup, keep them only in untracked local storage (for example under `.cybercreek/`) and outside the product boundary.
-- Email delivery currently rewrites recipients to the CryptoZing catch-all via `MAIL_ALIAS_ENABLED/MAIL_ALIAS_DOMAIN` (set to `mailer.cryptozing.app` so Mailgun routes everything to Proton). Disable the aliasing before open beta or any real-customer deployment.
+- `MAIL_ALIAS_ENABLED/MAIL_ALIAS_DOMAIN` can rewrite outbound recipients to the CryptoZing catch-all (`mailer.cryptozing.app` → Proton) for test scenarios; keep it disabled for open beta and any real-customer deployment.
 - `SUPPORT_AGENT_EMAILS` controls which accounts are treated as support accounts, and `SUPPORT_ACCESS_HOURS` should remain the fixed server-side expiration window for temporary owner-granted support access.
 - The CryptoZing.app domain is reserved solely for this project; feel free to provision DNS/subdomains/mail for app needs without saving it for other products.
 - Set `APP_PUBLIC_URL` to whatever domain should appear in public invoice links (localhost for dev, `https://cryptozing.app` for production) so emails never point at the wrong host.
