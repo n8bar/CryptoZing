@@ -325,6 +325,33 @@ class InvoicePaymentDisplayTest extends TestCase
         $response->assertDontSee('invoice sender', false);
     }
 
+    public function test_fresh_invoice_without_payments_shows_no_underpayment_warnings(): void
+    {
+        $owner = User::factory()->create([
+            'billing_name' => 'CryptoZing',
+        ]);
+        $invoice = $this->makeInvoice($owner, [
+            'amount_usd' => 200,
+            'btc_rate' => 40_000,
+            'amount_btc' => 0.005,
+        ]);
+
+        $show = $this
+            ->actingAs($owner)
+            ->get(route('invoices.show', $invoice));
+
+        $show->assertOk();
+        $show->assertDontSee('Underpayment detected', false);
+        $show->assertDontSee('Client alert will show on the public invoice (underpayment', false);
+
+        $print = $this
+            ->actingAs($owner)
+            ->get(route('invoices.print', $invoice->fresh('payments')));
+
+        $print->assertOk();
+        $print->assertDontSee('An outstanding balance of roughly', false);
+    }
+
     public function test_payment_metadata_fields_render_when_present(): void
     {
         $owner = User::factory()->create();
