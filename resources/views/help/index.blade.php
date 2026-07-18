@@ -244,6 +244,33 @@
 	                        CryptoZing does not send funds and never has custody of your bitcoin. Any repayment/refund is your responsibility to send from your own wallet.
 	                    </p>
 	                </article>
+
+	                <article id="gap-limit" class="scroll-mt-24 rounded-lg border border-gray-200 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-slate-900/60">
+	                    <h3 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-slate-100">Invoice paid, but the money is missing from your wallet?</h3>
+	                    <p class="mt-1 text-base text-gray-700 dark:text-slate-200">
+	                        CryptoZing creates a new receiving address for every invoice. Your wallet may only check the next 20 unused addresses — a boundary called the gap limit.
+	                    </p>
+	                    <dl class="mt-4 space-y-4 text-base text-gray-700 dark:text-slate-200">
+	                        <div>
+	                            <dt class="font-semibold text-gray-900 dark:text-slate-100">Why does this happen?</dt>
+	                            <dd class="mt-1">
+	                                If 25 invoices go unpaid and the next customer pays, that payment may arrive at an address your wallet has not checked yet. CryptoZing sees the payment on the blockchain, but your wallet does not show it.
+	                            </dd>
+	                        </div>
+	                        <div>
+	                            <dt class="font-semibold text-gray-900 dark:text-slate-100">Is the money safe?</dt>
+	                            <dd class="mt-1">
+	                                Yes. The address belongs to your wallet — your seed phrase already controls it. The payment is on the blockchain; your wallet just has not looked far enough ahead to show it.
+	                            </dd>
+	                        </div>
+	                        <div>
+	                            <dt class="font-semibold text-gray-900 dark:text-slate-100">How do I make the payment appear?</dt>
+	                            <dd class="mt-1">
+	                                Increase your wallet's gap limit or run a rescan. Check your wallet's instructions for the exact steps — if they do not cover it, the wallet's help forum or support channel is the place to ask.
+	                            </dd>
+	                        </div>
+	                    </dl>
+	                </article>
 	            </section>
 
             <section id="privacy" class="scroll-mt-24 space-y-4">
