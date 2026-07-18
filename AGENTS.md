@@ -1,7 +1,6 @@
 # AGENTS
 
 ## Working Style
-- Checkout boundary: `C:\Projects\CryptoZing` is documentation-only. Do not edit application code, tests, migrations, configuration, or dependencies from this checkout; `vendor/bin/sail` is intentionally absent here. Use a runtime-enabled checkout for code implementation and test execution.
 - Always run artisan/composer/npm commands through Sail (`./vendor/bin/sail ...`).
 - Doc-tree roles, canonical docs, strategy doc rules, checklist-depth separation, and CHANGELOG conventions all live in [`docs/DOC_ROLES.md`](docs/DOC_ROLES.md). Read it when navigating docs or deciding where new content belongs.
 - Where dates are necessary in docs, use the date from the system you're running on.
