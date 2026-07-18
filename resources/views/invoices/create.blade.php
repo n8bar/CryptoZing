@@ -37,6 +37,12 @@
                     </form>
                 </div>
             @else
+                <div x-data="newClientPicker({
+                        storeUrl: @js(route('clients.store')),
+                        csrfToken: @js(csrf_token()),
+                        selected: @js((string) old('client_id', '')),
+                     })"
+                     x-on:modal-closed.window="onModalClosed($event.detail)">
                 <form method="POST" action="{{ route('invoices.store') }}" class="space-y-6">
                 @csrf
                 @if ($isGettingStartedContext)
@@ -66,8 +72,12 @@
                         Client <span class="text-red-600" aria-hidden="true">*</span>
                     </label>
                     <select name="client_id" required
+                            x-ref="clientSelect"
+                            x-on:change="onSelectChange($event)"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                         <option value="">Select…</option>
+                        <option value="__new__">+ New client</option>
+                        <option value="" disabled aria-hidden="true">──────────</option>
                         @foreach ($clients as $c)
                             <option value="{{ $c->id }}" @selected(old('client_id')==$c->id)>{{ $c->name }}</option>
                         @endforeach
@@ -246,6 +256,52 @@
                     </x-primary-button>
                 </div>
             </form>
+
+                <x-modal name="create-client" focusable maxWidth="md">
+                    <div role="dialog" aria-modal="true" aria-labelledby="create-client-title"
+                         class="bg-white p-6 dark:bg-gray-800">
+                        <h3 id="create-client-title" class="text-base font-semibold text-gray-900 dark:text-gray-100">
+                            New client
+                        </h3>
+
+                        <form x-on:submit.prevent="submit" class="mt-4 space-y-4">
+                            <div>
+                                <label for="new-client-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    Name <span class="text-red-600" aria-hidden="true">*</span>
+                                </label>
+                                <input id="new-client-name"
+                                       x-model="form.name"
+                                       required
+                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"/>
+                                <p x-show="errors.name" x-text="errors.name" class="mt-1 text-sm text-red-600"></p>
+                            </div>
+
+                            <div>
+                                <label for="new-client-email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    Email <span class="text-red-600" aria-hidden="true">*</span>
+                                </label>
+                                <input id="new-client-email"
+                                       type="email"
+                                       x-model="form.email"
+                                       required
+                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"/>
+                                <p x-show="errors.email" x-text="errors.email" class="mt-1 text-sm text-red-600"></p>
+                            </div>
+
+                            <p x-show="errors.form" x-text="errors.form" class="text-sm text-red-600"></p>
+
+                            <div class="flex items-center justify-end gap-3">
+                                <x-secondary-button type="button" x-on:click="$dispatch('close')">
+                                    Cancel
+                                </x-secondary-button>
+                                <x-primary-button x-bind:disabled="submitting">
+                                    Create client
+                                </x-primary-button>
+                            </div>
+                        </form>
+                    </div>
+                </x-modal>
+                </div>
             @endif
         </div>
     </div>
