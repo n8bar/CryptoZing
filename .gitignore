@@ -33,3 +33,6 @@ Thumbs.db
 /.claude/
 *.pp
 *.te
+
+# Local Windows shortcuts (intentional local-only helpers)
+*.lnk
