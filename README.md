@@ -210,7 +210,7 @@ docker/      Container setup
 - Quick start: [`docs/ops/get-live/QUICK_START.md`](docs/ops/get-live/QUICK_START.md)
 - Rollout checklist: [`docs/ops/OB_ROLLOUT_CHECKLIST.md`](docs/ops/OB_ROLLOUT_CHECKLIST.md)
 - Active milestone: [`docs/milestones/19_OB_HARDENING_OPS.md`](docs/milestones/19_OB_HARDENING_OPS.md)
-- Foundational milestone history: [MS1](docs/milestones/x1_OWNERSHIP_ACCESS.md), [MS2](docs/milestones/x2_INVOICE_UX_FOUNDATIONS.md), [MS3](docs/milestones/x3_TEST_HARDENING.md), [MS4](docs/milestones/x4_RATE_CURRENCY_CORRECTNESS.md), [MS5](docs/milestones/x5_WALLET_ONBOARDING_DERIVED_ADDRESSES.md), [MS6](docs/milestones/x6_BLOCKCHAIN_PAYMENT_DETECTION.md)
+- Retrospective milestone history: [MS1](docs/milestones/x1_OWNERSHIP_ACCESS.md), [MS2](docs/milestones/x2_INVOICE_UX_FOUNDATIONS.md), [MS3](docs/milestones/x3_TEST_HARDENING.md), [MS4](docs/milestones/x4_RATE_CURRENCY_CORRECTNESS.md), [MS5](docs/milestones/x5_WALLET_ONBOARDING_DERIVED_ADDRESSES.md), [MS6](docs/milestones/x6_BLOCKCHAIN_PAYMENT_DETECTION.md), [MS7](docs/milestones/x7_PARTIAL_PAYMENTS_OUTSTANDING_SUMMARIES.md), [MS8](docs/milestones/x8_INVOICE_DELIVERY_AUTO_RECEIPTS.md), [MS9](docs/milestones/x9_PRINT_PUBLIC_POLISH.md), [MS10](docs/milestones/x10_USER_SETTINGS.md), [MS11](docs/milestones/x11_OBSERVABILITY_SAFETY.md), [MS12](docs/milestones/x12_PAYMENT_ADDRESS_ACCURACY.md)
 - Onboarding Part 1 spec: [`docs/specs/ONBOARD_SPEC.md`](docs/specs/ONBOARD_SPEC.md)
 - Post-payment onboarding spec: [`docs/specs/POST_PAYMENT_ONBOARDING.md`](docs/specs/POST_PAYMENT_ONBOARDING.md)
 - Notifications spec: [`docs/specs/NOTIFICATIONS.md`](docs/specs/NOTIFICATIONS.md)

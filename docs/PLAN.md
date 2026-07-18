@@ -41,12 +41,12 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 | [x] | 4 | Rate & Currency Correctness | Lock USD-canonical rate behavior and shared formatting rules. | [`docs/milestones/x4_RATE_CURRENCY_CORRECTNESS.md`](milestones/x4_RATE_CURRENCY_CORRECTNESS.md) |
 | [x] | 5 | Wallet Onboarding & Derived Addresses | Add wallet-key onboarding and per-invoice derived receive addresses. | [`docs/milestones/x5_WALLET_ONBOARDING_DERIVED_ADDRESSES.md`](milestones/x5_WALLET_ONBOARDING_DERIVED_ADDRESSES.md) |
 | [x] | 6 | Blockchain Payment Detection | Poll chain activity for invoice addresses and update invoice payment state automatically. | [`docs/milestones/x6_BLOCKCHAIN_PAYMENT_DETECTION.md`](milestones/x6_BLOCKCHAIN_PAYMENT_DETECTION.md) |
-| [x] | 7 | Partial Payments & Outstanding Summaries | Record multiple payments, preserve USD snapshots, and surface outstanding balance behavior. | [`docs/specs/PARTIAL_PAYMENTS.md`](specs/PARTIAL_PAYMENTS.md) |
-| [x] | 8 | Invoice Delivery & Auto Receipts | Add invoice send flow, delivery logging, and automatic paid receipts. | [`docs/specs/NOTIFICATIONS.md`](specs/NOTIFICATIONS.md) |
-| [x] | 9 | Print & Public Polish | Align print/public output with branding, status, and public-state expectations. | [`docs/specs/PRINT_PUBLIC_POLISH.md`](specs/PRINT_PUBLIC_POLISH.md) |
-| [x] | 10 | User Settings | Add invoice defaults and stabilize wallet/settings behavior. | - |
-| [x] | 11 | Observability & Safety | Add safety checks, structured logging, and failure-path hardening. | - |
-| [x] | 12 | Payment & Address Accuracy | Correct derivation mismatches and lock confirmation-aware payment accuracy. | [`docs/specs/PARTIAL_PAYMENTS.md`](specs/PARTIAL_PAYMENTS.md) |
+| [x] | 7 | Partial Payments & Outstanding Summaries | Record multiple payments, preserve USD snapshots, and surface outstanding balance behavior. | [`docs/milestones/x7_PARTIAL_PAYMENTS_OUTSTANDING_SUMMARIES.md`](milestones/x7_PARTIAL_PAYMENTS_OUTSTANDING_SUMMARIES.md) |
+| [x] | 8 | Invoice Delivery & Auto Receipts | Add invoice send flow, delivery logging, and automatic paid receipts. | [`docs/milestones/x8_INVOICE_DELIVERY_AUTO_RECEIPTS.md`](milestones/x8_INVOICE_DELIVERY_AUTO_RECEIPTS.md) |
+| [x] | 9 | Print & Public Polish | Align print/public output with branding, status, and public-state expectations. | [`docs/milestones/x9_PRINT_PUBLIC_POLISH.md`](milestones/x9_PRINT_PUBLIC_POLISH.md) |
+| [x] | 10 | User Settings | Add invoice defaults and stabilize wallet/settings behavior. | [`docs/milestones/x10_USER_SETTINGS.md`](milestones/x10_USER_SETTINGS.md) |
+| [x] | 11 | Observability & Safety | Add safety checks, structured logging, and failure-path hardening. | [`docs/milestones/x11_OBSERVABILITY_SAFETY.md`](milestones/x11_OBSERVABILITY_SAFETY.md) |
+| [x] | 12 | Payment & Address Accuracy | Correct derivation mismatches and lock confirmation-aware payment accuracy. | [`docs/milestones/x12_PAYMENT_ADDRESS_ACCURACY.md`](milestones/x12_PAYMENT_ADDRESS_ACCURACY.md) |
 | [x] | 13 | UX Overhaul | Deliver dashboard/theme/help/onboarding/settings IA and close Task 13 Browser QA. | [`docs/milestones/x13_UX_OVERHAUL.md`](milestones/x13_UX_OVERHAUL.md) |
 | [x] | 14 | On-Chain Payment Attribution Hardening | Make attribution key-aware, detect unsupported wallet reuse, reinforce dedicated-account usage, and provide auditable correction tooling. | [`docs/milestones/x14_PAYMENT_ATTRIBUTION_HARDENING.md`](milestones/x14_PAYMENT_ATTRIBUTION_HARDENING.md) |
 | [x] | 15 | CryptoZing.app SEO Bootstrap | Get the placeholder/landing page discovered, indexed, and monitored early before go-live. | [`docs/milestones/x15_CRYPTOZING_APP_SEO_BOOTSTRAP.md`](milestones/x15_CRYPTOZING_APP_SEO_BOOTSTRAP.md) |

@@ -1007,3 +1007,6 @@ Reconstructed six completed foundational strategy docs from the changelog, histo
 
 2026-07-18 | MS1-MS6 retrospective hierarchy expanded to reflect milestone size
 Added completed milestone docs for MS1-MS6 and made phases explicit in every milestone. Small MS1/MS3/MS4 keep phase checklists directly in their milestone docs; large MS2 breaks into four phase strategies, medium MS5 into two, and medium MS6 into three. PLAN/README now point to milestone rollups, and DOC_ROLES now codifies explicit phases, the strategy-breakout threshold, and evidence labeling for retrospective reconstructions.
+
+2026-07-18 | MS7-MS12 retrospective hierarchy added
+Added completed, explicitly phased milestone docs for MS7-MS12 using contemporaneous specs, historical PLAN snapshots, implementation commits, tests, and the changelog. M7, M8, and M9 each break into three action-oriented phase strategies; corrective MS12 breaks into four. Compact M10 and M11 keep their ordered phase checklists directly in the milestone docs. Historical boundaries separate the originally shipped behavior from later descendants, including MS12's correction of unconfirmed settlement, later owner-reviewed receipt policy, and MS14 wallet-lineage hardening. PLAN and README now route through the milestone rollups.
