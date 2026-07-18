@@ -81,6 +81,9 @@
         .auth-muted { color: var(--text-muted); }
         .auth-link { color: var(--link); }
         .auth-link:hover { color: var(--link-hover); }
+        .auth-shell footer { color: var(--text-muted); }
+        .auth-shell footer a { color: var(--link); }
+        .auth-shell footer a:hover { color: var(--link-hover); }
         .auth-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
