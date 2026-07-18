@@ -16,9 +16,9 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 
 ## Current
 - Active milestone:
-  - **MS19 - Open Beta Hardening & Ops** — in progress; Phases 1–6 complete. Active phase: **Phase 7 (Contributor Docs Review)**. Phases 8–9 (Micro-Monetize, 2FA) pending.
+  - **MS19 - Open Beta Hardening & Ops** — in progress; Phases 1–7 complete. Active phase: **Phase 8 (Micro-Monetize)**. Phase 9 (2FA) pending.
 - Status: `active`
-- Next action: MS19 Phase 7 — refresh AGENTS.md, CLAUDE.md, AgentRoles/, and contributor-facing ops docs for currency before open beta.
+- Next action: MS19 Phase 8 kickoff — decide scope (BTC-only vs. BTC+fiat donations) and whether it stays an MS19 phase; re-enable the `frontend-design` plugin before starting.
 - Primary next doc: [`docs/milestones/19_OB_HARDENING_OPS.md`](milestones/19_OB_HARDENING_OPS.md)
 - Most recently completed milestone doc: [`docs/milestones/x18_PRERELEASE_CONTENT_SEO.md`](milestones/x18_PRERELEASE_CONTENT_SEO.md)
 

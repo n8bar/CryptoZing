@@ -1,6 +1,6 @@
 # MS19 - Open Beta Hardening & Ops
 
-Status: Active — Phases 1–6 complete; Phase 7 (Contributor Docs Review) next. Phase 9 (2FA) is positionally last by design.
+Status: Active — Phases 1–7 complete; Phase 8 (Micro-Monetize) next. Phase 9 (2FA) is positionally last by design.
 Parent execution doc: [`docs/PLAN.md`](../PLAN.md)
 Supporting ops doc: [`docs/ops/DOCS_DX.md`](../ops/DOCS_DX.md)
 
@@ -22,14 +22,14 @@ Supporting ops doc: [`docs/ops/DOCS_DX.md`](../ops/DOCS_DX.md)
 - **Findings tracking trial:** Through M19, new findings/bugs/todos go to GitHub Issues (closed via `Fixes #N` on the merging PR) instead of new `docs/qa/Finding*.md` docs. Existing finding docs stay put. M20 kickoff decides whether to keep, revert, or hybridize. See [`docs/DOC_ROLES.md`](../DOC_ROLES.md#findings-conventions).
 
 ## Current Focus
-- Active phase: Phase 7 (Contributor Docs Review). Phases 1–6 complete.
+- Active phase: Phase 8 (Micro-Monetize). Phases 1–7 complete.
 - Phase 1: [`docs/strategies/x19.1_NOTIFICATION_COVERAGE_AUDIT.md`](../strategies/x19.1_NOTIFICATION_COVERAGE_AUDIT.md) ✓
 - Phase 2: [`docs/strategies/x19.2_AUTH_HARDENING.md`](../strategies/x19.2_AUTH_HARDENING.md) ✓
 - Phase 3: [`docs/strategies/x19.3_LLC_FORMATION.md`](../strategies/x19.3_LLC_FORMATION.md) ✓
 - Phase 4: [`docs/strategies/x19.4_VISUAL_IDENTITY_POLISH.md`](../strategies/x19.4_VISUAL_IDENTITY_POLISH.md) ✓
 - Phase 5: [`docs/strategies/x19.5_LEGAL_LAYER.md`](../strategies/x19.5_LEGAL_LAYER.md) ✓
 - Phase 6: [`docs/strategies/x19.6_CONTENT_PROMISES_RECONCILIATION.md`](../strategies/x19.6_CONTENT_PROMISES_RECONCILIATION.md) ✓
-- Phase 7: [`docs/strategies/19.7_CONTRIBUTOR_DOCS.md`](../strategies/19.7_CONTRIBUTOR_DOCS.md)
+- Phase 7: [`docs/strategies/x19.7_CONTRIBUTOR_DOCS.md`](../strategies/x19.7_CONTRIBUTOR_DOCS.md) ✓
 - Phase 8: [`docs/strategies/19.8_MICRO_MONETIZE.md`](../strategies/19.8_MICRO_MONETIZE.md)
 - Phase 9: [`docs/strategies/19.9_TWO_FACTOR_AUTHENTICATION.md`](../strategies/19.9_TWO_FACTOR_AUTHENTICATION.md)
 
@@ -53,8 +53,8 @@ Drafted the ToS, Privacy Policy, and disclaimer copy under CryptoZing LLC; place
 ### [x] Phase 6 — Content Promises Reconciliation
 Walked every catalog entry against the finished product: majors — 3 honored (0% beta fee, limitations list under a takedown policy, rate-refresh/no-expiry code-verified), 1 deferred (fee-criticism hypocrisy risk, monetization-gated as BACKLOG item 23); all 19 minors bulk-verified holding with code evidence, no drift. Gap-limit content had landed via Phase 5. See [`x19.6_CONTENT_PROMISES_RECONCILIATION.md`](../strategies/x19.6_CONTENT_PROMISES_RECONCILIATION.md).
 
-### [ ] Phase 7 — Contributor Docs Review
-Refresh AGENTS.md, CLAUDE.md, AgentRoles/, and contributor-facing ops docs for currency before open beta.
+### [x] Phase 7 — Contributor Docs Review
+Reviewed AGENTS.md (mail-alias note trimmed to mechanism + rule; six standing rules added: no-Sunday-commits, x-prefix completed docs, immediate checkoffs, push-over-cron, specs-state-behavior, commit summaries), CLAUDE.md (clean), AgentRoles/ (Harvey kept as-is), and the contributor-facing ops docs (QUICK_START: queue service noted, host-Node prerequisite dropped, fresh-clone Composer bootstrap added). No retire/merge candidates. See [`x19.7_CONTRIBUTOR_DOCS.md`](../strategies/x19.7_CONTRIBUTOR_DOCS.md).
 
 ### [ ] Phase 8 — Micro-Monetize
 CryptoZing's first revenue surface — a donation page (BTC native; fiat a consideration). **Stub — scope undecided** (BTC-only vs. BTC+fiat); may spin out to its own milestone rather than stay an MS19 phase. The business bank account moves here from Phase 3, deferred until a first fiat inflow warrants opening. Before starting: re-enable the `frontend-design` plugin. See [`19.8_MICRO_MONETIZE.md`](../strategies/19.8_MICRO_MONETIZE.md).
@@ -77,7 +77,7 @@ Add 2FA to the open beta. Email-based 2FA as the baseline; TOTP / authenticator-
 - [x] Existing UI and mail copy reviewed for overstatements, financial advice language, and pricing commitments — issues resolved.
 - [x] Monetization-safe language guide produced for future copy decisions.
 - [x] Content promises catalog reconciled — every open entry confirmed honored or resolved (content revised or product adjusted).
-- [ ] Contributor docs reviewed and current.
+- [x] Contributor docs reviewed and current.
 - [ ] Phase 8 (Micro-Monetize) scoped (BTC-only vs. BTC+fiat decided); donation surface live if kept in MS19; AFCU business account opened when a first fiat inflow warrants it — see [`19.8`](../strategies/19.8_MICRO_MONETIZE.md). (Stub; may spin out to its own milestone.)
 - [ ] Email 2FA available as opt-in; recovery flow per the Phase 9 decision in place.
 - [ ] Recommendation surface for users without 2FA enabled is shipped.
