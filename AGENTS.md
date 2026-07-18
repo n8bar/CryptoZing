@@ -6,6 +6,7 @@
 - Where dates are necessary in docs, use the date from the system you're running on.
 - No commits or pushes on Sundays; finished work waits in the tree until Monday.
 - Completed milestone/strategy docs get the `x` filename prefix in the same commit that closes them, with inbound links retargeted.
+- Check items off the moment they're done, in a commit; pending review/testing gets its own item instead of holding the checkoff. Notes stay tight: IDs, final wordings, verdicts.
 - Milestone dates have one source of truth: `docs/milestones.ics`. PLAN.md's "Target" column must equal each milestone's `.ics` end date (DTEND). This invariant is guarded by `tests/Feature/Docs/MilestoneScheduleConsistencyTest.php`, tagged `#[Group('local-only')]` — it runs in the local suite (`./vendor/bin/sail artisan test`) but is excluded from the GitHub `PR Tests` gate, so run tests locally after any milestone-date change.
 - When adding features, update or create migrations + tests, then run `./vendor/bin/sail artisan test`.
 - Also keep AGENTS.md updated to save on churn from session switching.
