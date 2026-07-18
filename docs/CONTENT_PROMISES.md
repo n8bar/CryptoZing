@@ -98,7 +98,7 @@ Entries with real concern — product decisions pending, content that could cont
 
 ## 2. Minor
 
-Low-concern entries — core product behavior or patterns CZ would only violate through deliberate action. Verify in bulk during MS19.
+Low-concern entries — core product behavior or patterns CZ would only violate through deliberate action. Verify in bulk during MS19. Bulk-verified holding as of the MS19 Phase 6 sweep — all 19, code-walked evidence per entry.
 
 **1. [Potential hypocrisy]** — criticism of "applying chargeback rules"
 - Source: `site/learn/accepting-bitcoin-payments-freelancer-small-business.md:17`
@@ -122,16 +122,16 @@ Low-concern entries — core product behavior or patterns CZ would only violate 
 - Source: `site/index.html:4` (meta description), `:22` (JSON-LD)
 
 **8. [Direct claim]** — USD-first invoices with unique Bitcoin addresses
-- Source: `site/index.html:225`, `site/learn/what-is-a-bitcoin-invoice.md:60`
+- Source: `site/index.html:242`, `site/learn/what-is-a-bitcoin-invoice.md:60`
 
 **9. [Direct claim]** — QR payments
-- Source: `site/index.html:235`
+- Source: `site/index.html:252`
 
 **10. [Direct claim]** — live BTC conversion
-- Source: `site/index.html:235`
+- Source: `site/index.html:252`
 
 **11. [Direct claim]** — on-chain payment tracking via dedicated receiving addresses
-- Source: `site/index.html:225`, `:235`
+- Source: `site/index.html:242`, `:252`
 
 **12. [Direct claim]** — watch-only xpub architecture; never holds or accesses private keys
 - Source: `site/learn/btcpay-server-alternatives.md:122`
