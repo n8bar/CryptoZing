@@ -7,7 +7,7 @@ Context-specific disclaimers per [`../strategies/19.5_LEGAL_LAYER.md`](../strate
 
 ## 1. Signup (account creation) *(APPROVED)*
 
-> CryptoZing is beta software — best for low-stakes invoices first, not production-critical payment workflows. By creating an account, you agree to the [Terms of Service] and [Privacy Policy].
+> CryptoZing is beta software. Suggested use is for low-stakes invoices for now, not critical payment workflows. By creating an account, you agree to the [Terms of Service] and [Privacy Policy].
 
 Placement: small print below the Register button on the registration page.
 
