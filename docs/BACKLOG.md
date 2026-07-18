@@ -126,6 +126,7 @@ _Carry-forward guardrail from active roadmap scope: suppress duplicate sends for
 24. **Invoice line items**
    - Multiple description/quantity/rate rows per invoice summing to the invoice total, replacing today's single description + USD amount pair.
    - Complete implementation includes optional configurable special lines: subtotals, taxes, discounts, etc.
+   - Must make the product usable for in-person cash payments — an itemized sale recorded and settled on the spot, building on the existing off-chain/manual payment recording.
    - USD stays the entry denomination; BTC conversion keeps applying at the invoice level.
    - Ripple surfaces: create/edit form, issuer and public/print views, mail templates, and receipt PDFs once those exist.
 
