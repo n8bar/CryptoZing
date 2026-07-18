@@ -1,7 +1,7 @@
 # PLAN
-_Last updated: 2026-06-19_
+_Last updated: 2026-07-17_
 
-This is the human-facing execution dashboard for Release Candidate work.
+This is the human-facing execution dashboard for open-beta work.
 
 Open this doc first when resuming work.
 Use [`docs/PRODUCT_SPEC.md`](PRODUCT_SPEC.md) for global product behavior and invariants.
@@ -28,7 +28,7 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 ## Active and Upcoming Milestones
 | Status | ID | Milestone | Short intent | Target | Primary doc |
 |---|---|---|---|---|---|
-| [ ] | 19 | Open Beta Hardening & Ops | Open beta hardening before mainnet cutover: notification coverage audit; auth/password policy hardening (419-to-login redirect, session expiry logout); LLC formation (entity, EIN, bank account, operating agreement); legal layer (ToS, Privacy Policy, disclaimers, monetization-neutral copy review, UI placement); content promises reconciliation; contributor docs refresh; 2FA (email baseline, opportunistic TOTP). | 2026-08-01 | [`docs/milestones/19_OB_HARDENING_OPS.md`](milestones/19_OB_HARDENING_OPS.md) |
+| [ ] | 19 | Open Beta Hardening & Ops | Open beta hardening before mainnet cutover: notification coverage audit; auth/password policy hardening (419-to-login redirect, session expiry logout); parent/subsidiary LLC formation (entities, EINs, operating agreements); legal layer (ToS, Privacy Policy, disclaimers, monetization-neutral copy review, UI placement); content promises reconciliation; contributor docs refresh; micro-monetize/business-banking decision; 2FA (email baseline, opportunistic TOTP). | 2026-08-01 | [`docs/milestones/19_OB_HARDENING_OPS.md`](milestones/19_OB_HARDENING_OPS.md) |
 | [ ] | 20 | Mainnet Cutover Preparation | Define and rehearse env flips, wallet validation, mail sanity checks, and backout steps for mainnet cutover. | 2026-08-13 | [`docs/milestones/20_MAINNET_CUTOVER_PREP.md`](milestones/20_MAINNET_CUTOVER_PREP.md) |
 | [ ] | 21 | CryptoZing.app Deployment (Open Beta) | Deploy the open beta under `cryptozing.app`, replace the GitHub Pages placeholder at `/` with the live app landing page without breaking the SEO baseline established in MS15, remove temporary mail aliasing, and complete rollout verification. | 2026-08-25 | [`docs/milestones/21_OB_DEPLOYMENT.md`](milestones/21_OB_DEPLOYMENT.md) |
 | [ ] | 22 | Thorough SEO & Marketing Strategies | Post-deploy discovery investment: thorough SEO pass across live app + site surfaces; marketing strategy. Scope at kickoff. | 2026-09-15 | [`docs/milestones/22_SEO_MARKETING.md`](milestones/22_SEO_MARKETING.md) |
