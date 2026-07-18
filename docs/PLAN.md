@@ -16,9 +16,9 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 
 ## Current
 - Active milestone:
-  - **MS19 - Open Beta Hardening & Ops** — in progress; Phases 1–5 complete. Active phase: **Phase 6 (Content Promises Reconciliation)**. Phases 7–9 (Contributor Docs, Micro-Monetize, 2FA) pending.
+  - **MS19 - Open Beta Hardening & Ops** — in progress; Phases 1–6 complete. Active phase: **Phase 7 (Contributor Docs Review)**. Phases 8–9 (Micro-Monetize, 2FA) pending.
 - Status: `active`
-- Next action: MS19 Phase 6 — walk every open `CONTENT_PROMISES.md` entry against the finished product; resolve each as honored, content-revised, or product-revised.
+- Next action: MS19 Phase 7 — refresh AGENTS.md, CLAUDE.md, AgentRoles/, and contributor-facing ops docs for currency before open beta.
 - Primary next doc: [`docs/milestones/19_OB_HARDENING_OPS.md`](milestones/19_OB_HARDENING_OPS.md)
 - Most recently completed milestone doc: [`docs/milestones/x18_PRERELEASE_CONTENT_SEO.md`](milestones/x18_PRERELEASE_CONTENT_SEO.md)
 
