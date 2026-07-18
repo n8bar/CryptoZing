@@ -362,6 +362,10 @@ class Invoice extends Model
             return false;
         }
 
+        if (!$this->hasPaymentActivity()) {
+            return false;
+        }
+
         $confirmedUsd = $this->sumPaymentsUsd(true);
         if ($confirmedUsd + self::UNDERPAY_USD_TOLERANCE >= $expectedUsd) {
             return false;
@@ -393,6 +397,10 @@ class Invoice extends Model
     {
         $expectedUsd = $this->amount_usd !== null ? (float) $this->amount_usd : null;
         if ($expectedUsd === null || $expectedUsd <= 0) {
+            return null;
+        }
+
+        if (!$this->hasPaymentActivity()) {
             return null;
         }
 
@@ -764,6 +772,17 @@ class Invoice extends Model
     private function paymentIsConfirmed(InvoicePayment $payment): bool
     {
         return $payment->is_adjustment || $payment->confirmed_at !== null;
+    }
+
+    private function hasPaymentActivity(): bool
+    {
+        if ($this->relationLoaded('payments')) {
+            return $this->activePayments()->isNotEmpty();
+        }
+
+        return $this->payments()
+            ->whereNull('ignored_at')
+            ->exists();
     }
 
     private function activePayments(): Collection
