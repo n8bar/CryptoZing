@@ -1,5 +1,5 @@
 # PLAN
-_Last updated: 2026-07-17_
+_Last updated: 2026-07-18_
 
 This is the human-facing execution dashboard for Release Candidate work.
 
@@ -35,12 +35,12 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 ## Completed Milestones
 | Status | ID | Milestone | Short intent | Primary doc |
 |---|---|---|---|---|
-| [x] | 1 | Ownership & Access | Enforce strict owner boundaries and safe denied-state UX. | [`docs/strategies/x1.1_OWNERSHIP_ACCESS.md`](strategies/x1.1_OWNERSHIP_ACCESS.md) |
-| [x] | 2 | Invoice UX Foundations | Establish invoice CRUD, status flow, BTC/USD display, and public sharing basics. | [`docs/strategies/x2.1_INVOICE_UX_FOUNDATIONS.md`](strategies/x2.1_INVOICE_UX_FOUNDATIONS.md) |
-| [x] | 3 | Test Hardening | Add baseline feature coverage for public/share, rates, and trash/restore flows. | [`docs/strategies/x3.1_TEST_HARDENING.md`](strategies/x3.1_TEST_HARDENING.md) |
-| [x] | 4 | Rate & Currency Correctness | Lock USD-canonical rate behavior and shared formatting rules. | [`docs/strategies/x4.1_RATE_CURRENCY_CORRECTNESS.md`](strategies/x4.1_RATE_CURRENCY_CORRECTNESS.md) |
-| [x] | 5 | Wallet Onboarding & Derived Addresses | Add wallet-key onboarding and per-invoice derived receive addresses. | [`docs/strategies/x5.1_WALLET_ONBOARDING_DERIVED_ADDRESSES.md`](strategies/x5.1_WALLET_ONBOARDING_DERIVED_ADDRESSES.md) |
-| [x] | 6 | Blockchain Payment Detection | Poll chain activity for invoice addresses and update invoice payment state automatically. | [`docs/strategies/x6.1_BLOCKCHAIN_PAYMENT_DETECTION.md`](strategies/x6.1_BLOCKCHAIN_PAYMENT_DETECTION.md) |
+| [x] | 1 | Ownership & Access | Enforce strict owner boundaries and safe denied-state UX. | [`docs/milestones/x1_OWNERSHIP_ACCESS.md`](milestones/x1_OWNERSHIP_ACCESS.md) |
+| [x] | 2 | Invoice UX Foundations | Establish invoice CRUD, status flow, BTC/USD display, and public sharing basics. | [`docs/milestones/x2_INVOICE_UX_FOUNDATIONS.md`](milestones/x2_INVOICE_UX_FOUNDATIONS.md) |
+| [x] | 3 | Test Hardening | Add baseline feature coverage for public/share, rates, and trash/restore flows. | [`docs/milestones/x3_TEST_HARDENING.md`](milestones/x3_TEST_HARDENING.md) |
+| [x] | 4 | Rate & Currency Correctness | Lock USD-canonical rate behavior and shared formatting rules. | [`docs/milestones/x4_RATE_CURRENCY_CORRECTNESS.md`](milestones/x4_RATE_CURRENCY_CORRECTNESS.md) |
+| [x] | 5 | Wallet Onboarding & Derived Addresses | Add wallet-key onboarding and per-invoice derived receive addresses. | [`docs/milestones/x5_WALLET_ONBOARDING_DERIVED_ADDRESSES.md`](milestones/x5_WALLET_ONBOARDING_DERIVED_ADDRESSES.md) |
+| [x] | 6 | Blockchain Payment Detection | Poll chain activity for invoice addresses and update invoice payment state automatically. | [`docs/milestones/x6_BLOCKCHAIN_PAYMENT_DETECTION.md`](milestones/x6_BLOCKCHAIN_PAYMENT_DETECTION.md) |
 | [x] | 7 | Partial Payments & Outstanding Summaries | Record multiple payments, preserve USD snapshots, and surface outstanding balance behavior. | [`docs/specs/PARTIAL_PAYMENTS.md`](specs/PARTIAL_PAYMENTS.md) |
 | [x] | 8 | Invoice Delivery & Auto Receipts | Add invoice send flow, delivery logging, and automatic paid receipts. | [`docs/specs/NOTIFICATIONS.md`](specs/NOTIFICATIONS.md) |
 | [x] | 9 | Print & Public Polish | Align print/public output with branding, status, and public-state expectations. | [`docs/specs/PRINT_PUBLIC_POLISH.md`](specs/PRINT_PUBLIC_POLISH.md) |

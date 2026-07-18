@@ -1004,3 +1004,6 @@ Split the former single MS17 (Docs, DX & Support UX) into two focused milestones
 
 2026-07-17 | MS1-MS6 retrospective strategies added
 Reconstructed six completed foundational strategy docs from the changelog, historical PLAN snapshots, implementation commits, and contemporaneous tests; linked them from PLAN and README. The MS6 record explicitly preserves the original unconfirmed-as-paid behavior and identifies MS12 as the later confirmation-gating correction.
+
+2026-07-18 | MS1-MS6 retrospective hierarchy expanded to reflect milestone size
+Added completed milestone docs for MS1-MS6 and made phases explicit in every milestone. Small MS1/MS3/MS4 keep phase checklists directly in their milestone docs; large MS2 breaks into four phase strategies, medium MS5 into two, and medium MS6 into three. PLAN/README now point to milestone rollups, and DOC_ROLES now codifies explicit phases, the strategy-breakout threshold, and evidence labeling for retrospective reconstructions.

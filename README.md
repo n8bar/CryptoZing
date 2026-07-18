@@ -210,7 +210,7 @@ docker/      Container setup
 - Quick start: [`docs/ops/get-live/QUICK_START.md`](docs/ops/get-live/QUICK_START.md)
 - Rollout checklist: [`docs/ops/OB_ROLLOUT_CHECKLIST.md`](docs/ops/OB_ROLLOUT_CHECKLIST.md)
 - Active milestone: [`docs/milestones/19_OB_HARDENING_OPS.md`](docs/milestones/19_OB_HARDENING_OPS.md)
-- Foundational strategy history: [MS1](docs/strategies/x1.1_OWNERSHIP_ACCESS.md), [MS2](docs/strategies/x2.1_INVOICE_UX_FOUNDATIONS.md), [MS3](docs/strategies/x3.1_TEST_HARDENING.md), [MS4](docs/strategies/x4.1_RATE_CURRENCY_CORRECTNESS.md), [MS5](docs/strategies/x5.1_WALLET_ONBOARDING_DERIVED_ADDRESSES.md), [MS6](docs/strategies/x6.1_BLOCKCHAIN_PAYMENT_DETECTION.md)
+- Foundational milestone history: [MS1](docs/milestones/x1_OWNERSHIP_ACCESS.md), [MS2](docs/milestones/x2_INVOICE_UX_FOUNDATIONS.md), [MS3](docs/milestones/x3_TEST_HARDENING.md), [MS4](docs/milestones/x4_RATE_CURRENCY_CORRECTNESS.md), [MS5](docs/milestones/x5_WALLET_ONBOARDING_DERIVED_ADDRESSES.md), [MS6](docs/milestones/x6_BLOCKCHAIN_PAYMENT_DETECTION.md)
 - Onboarding Part 1 spec: [`docs/specs/ONBOARD_SPEC.md`](docs/specs/ONBOARD_SPEC.md)
 - Post-payment onboarding spec: [`docs/specs/POST_PAYMENT_ONBOARDING.md`](docs/specs/POST_PAYMENT_ONBOARDING.md)
 - Notifications spec: [`docs/specs/NOTIFICATIONS.md`](docs/specs/NOTIFICATIONS.md)
