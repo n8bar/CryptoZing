@@ -1,6 +1,6 @@
 # MS19 - Open Beta Hardening & Ops
 
-Status: Active — Phases 1–4 complete; Phase 5 (Legal Layer) active. Phase 9 (2FA) is positionally last by design.
+Status: Active — Phases 1–5 complete; Phase 6 (Content Promises Reconciliation) next. Phase 9 (2FA) is positionally last by design.
 Parent execution doc: [`docs/PLAN.md`](../PLAN.md)
 Supporting ops doc: [`docs/ops/DOCS_DX.md`](../ops/DOCS_DX.md)
 
@@ -22,12 +22,12 @@ Supporting ops doc: [`docs/ops/DOCS_DX.md`](../ops/DOCS_DX.md)
 - **Findings tracking trial:** Through M19, new findings/bugs/todos go to GitHub Issues (closed via `Fixes #N` on the merging PR) instead of new `docs/qa/Finding*.md` docs. Existing finding docs stay put. M20 kickoff decides whether to keep, revert, or hybridize. See [`docs/DOC_ROLES.md`](../DOC_ROLES.md#findings-conventions).
 
 ## Current Focus
-- Active phase: Phase 5 (Legal Layer) — §1–§6 complete; §7 open-issue sweep in execution. Phases 1–4 complete.
+- Active phase: Phase 6 (Content Promises Reconciliation). Phases 1–5 complete.
 - Phase 1: [`docs/strategies/x19.1_NOTIFICATION_COVERAGE_AUDIT.md`](../strategies/x19.1_NOTIFICATION_COVERAGE_AUDIT.md) ✓
 - Phase 2: [`docs/strategies/x19.2_AUTH_HARDENING.md`](../strategies/x19.2_AUTH_HARDENING.md) ✓
 - Phase 3: [`docs/strategies/x19.3_LLC_FORMATION.md`](../strategies/x19.3_LLC_FORMATION.md) ✓
 - Phase 4: [`docs/strategies/x19.4_VISUAL_IDENTITY_POLISH.md`](../strategies/x19.4_VISUAL_IDENTITY_POLISH.md) ✓
-- Phase 5: [`docs/strategies/19.5_LEGAL_LAYER.md`](../strategies/19.5_LEGAL_LAYER.md)
+- Phase 5: [`docs/strategies/x19.5_LEGAL_LAYER.md`](../strategies/x19.5_LEGAL_LAYER.md) ✓
 - Phase 6: [`docs/strategies/19.6_CONTENT_PROMISES_RECONCILIATION.md`](../strategies/19.6_CONTENT_PROMISES_RECONCILIATION.md)
 - Phase 7: [`docs/strategies/19.7_CONTRIBUTOR_DOCS.md`](../strategies/19.7_CONTRIBUTOR_DOCS.md)
 - Phase 8: [`docs/strategies/19.8_MICRO_MONETIZE.md`](../strategies/19.8_MICRO_MONETIZE.md)
@@ -47,8 +47,8 @@ Formed parent **CyberCreek LLC** then subsidiary **CryptoZing LLC** (member: Cyb
 ### [x] Phase 4 — Visual Identity Polish
 Visual/brand polish pass before open beta: a single CryptoZing favicon set site-wide (faithful potrace of the real logo), the favicon-matching og:image card, the RC→"open beta" terminology cleanup, and branded guest-safe error pages (#96). Shipped and verified (app surfaces + live marketing site); see [`x19.4_VISUAL_IDENTITY_POLISH.md`](../strategies/x19.4_VISUAL_IDENTITY_POLISH.md).
 
-### [ ] Phase 5 — Legal Layer
-Draft ToS, Privacy Policy, disclaimer copy; review existing UI/mail copy for monetization-neutral language; place all in the UI. Drafting + UI work has no dependency on Phase 3 (LLC) — runs in parallel. Publication (resolving the remaining effective-date and Privacy Policy link placeholders) is deferred to MS21 deploy time.
+### [x] Phase 5 — Legal Layer
+Drafted the ToS, Privacy Policy, and disclaimer copy under CryptoZing LLC; placed disclaimer surfaces and footer ToS/PP link scaffolding; completed the monetization-neutral copy review with a language guide added to `UX_GUARDRAILS.md`; swept every open issue to a fix or durable todo home (#71, #72, #73, #123, #126, #128 fixed; #81, #120 rehomed as trackers). Publication (effective dates + live links) lands at MS21 deploy. See [`x19.5_LEGAL_LAYER.md`](../strategies/x19.5_LEGAL_LAYER.md).
 
 ### [ ] Phase 6 — Content Promises Reconciliation
 Walk every open entry in `CONTENT_PROMISES.md` against the finished product; resolve each as honored, content-revised, or product-revised.
@@ -73,9 +73,9 @@ Add 2FA to the open beta. Email-based 2FA as the baseline; TOTP / authenticator-
 - [x] No "RC" / "Release Candidate" in user-facing copy (deployed RC is publicly "open beta"); "pre-release" kept where accurate; internal docs/comments unchanged.
 - [x] Branded, guest-safe error pages — 404/500/503/429 plus 403 migrated off the auth-assuming layout; 500 leaks no debug detail (#96).
 - [ ] ToS and Privacy Policy drafted and published to the live site.
-- [ ] Disclaimer copy present at signup, wallet onboarding, and invoice/payment surfaces; footer links to ToS and Privacy Policy on every page.
-- [ ] Existing UI and mail copy reviewed for overstatements, financial advice language, and pricing commitments — issues resolved.
-- [ ] Monetization-safe language guide produced for future copy decisions.
+- [x] Disclaimer copy present at signup, wallet onboarding, and invoice/payment surfaces; footer links to ToS and Privacy Policy on every page.
+- [x] Existing UI and mail copy reviewed for overstatements, financial advice language, and pricing commitments — issues resolved.
+- [x] Monetization-safe language guide produced for future copy decisions.
 - [ ] Content promises catalog reconciled — every open entry confirmed honored or resolved (content revised or product adjusted).
 - [ ] Contributor docs reviewed and current.
 - [ ] Phase 8 (Micro-Monetize) scoped (BTC-only vs. BTC+fiat decided); donation surface live if kept in MS19; AFCU business account opened when a first fiat inflow warrants it — see [`19.8`](../strategies/19.8_MICRO_MONETIZE.md). (Stub; may spin out to its own milestone.)

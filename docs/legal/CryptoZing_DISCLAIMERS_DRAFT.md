@@ -1,7 +1,7 @@
 # CryptoZing — Disclaimer Copy (DRAFT / WORK IN PROGRESS)
 
 Status: Drafting complete — all three disclaimers approved. Placement lands in strategy §6.
-Context-specific disclaimers per [`../strategies/19.5_LEGAL_LAYER.md`](../strategies/19.5_LEGAL_LAYER.md) §3: small print, ultra-concise, entity-agnostic where possible. Placement lands in §6 of that strategy; `[bracketed]` links resolve at MS21 deploy.
+Context-specific disclaimers per [`../strategies/x19.5_LEGAL_LAYER.md`](../strategies/x19.5_LEGAL_LAYER.md) §3: small print, ultra-concise, entity-agnostic where possible. Placement lands in §6 of that strategy; `[bracketed]` links resolve at MS21 deploy.
 
 ---
 

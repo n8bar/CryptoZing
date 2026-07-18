@@ -16,9 +16,9 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 
 ## Current
 - Active milestone:
-  - **MS19 - Open Beta Hardening & Ops** — in progress; Phases 1–4 complete. Active phase: **Phase 5 (Legal Layer)** — §1–§6 complete; §7 open-issue sweep in execution. Phases 6–9 (Content Promises Reconciliation, Contributor Docs, Micro-Monetize, 2FA) pending.
+  - **MS19 - Open Beta Hardening & Ops** — in progress; Phases 1–5 complete. Active phase: **Phase 6 (Content Promises Reconciliation)**. Phases 7–9 (Contributor Docs, Micro-Monetize, 2FA) pending.
 - Status: `active`
-- Next action: MS19 Phase 5 §7 — execute the open-issue sweep dispositions (#71, #72, #73, #123, #126). Phase 6 (Content Promises Reconciliation) follows.
+- Next action: MS19 Phase 6 — walk every open `CONTENT_PROMISES.md` entry against the finished product; resolve each as honored, content-revised, or product-revised.
 - Primary next doc: [`docs/milestones/19_OB_HARDENING_OPS.md`](milestones/19_OB_HARDENING_OPS.md)
 - Most recently completed milestone doc: [`docs/milestones/x18_PRERELEASE_CONTENT_SEO.md`](milestones/x18_PRERELEASE_CONTENT_SEO.md)
 

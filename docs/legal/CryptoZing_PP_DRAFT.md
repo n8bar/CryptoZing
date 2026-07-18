@@ -1,7 +1,7 @@
 # CryptoZing — Privacy Policy (DRAFT / WORK IN PROGRESS)
 
 Status: Draft complete — intro, §1–§12, and the attribution footer all **approved**. Remaining before publication: the MS21 placeholder swap.
-Self-drafted, not legal advice (per the "no lawyer for RC1" decision in [`../strategies/19.5_LEGAL_LAYER.md`](../strategies/19.5_LEGAL_LAYER.md)).
+Self-drafted, not legal advice (per the "no lawyer for RC1" decision in [`../strategies/x19.5_LEGAL_LAYER.md`](../strategies/x19.5_LEGAL_LAYER.md)).
 Placeholders in `[brackets]` resolve at MS21 deploy. Structure adapted from the Automattic privacy policy base (CC BY-SA 4.0); the wallet/blockchain sections are drafted from scratch.
 
 ---
