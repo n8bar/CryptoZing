@@ -94,7 +94,7 @@
         </div>
 
         <p class="mt-4 text-xs auth-muted">
-            CryptoZing is beta software &mdash; best for low-stakes invoices first, not production-critical payment workflows.
+            CryptoZing is beta software. Suggested use is for low-stakes invoices for now, not critical payment workflows.
             By creating an account, you agree to the
             <a href="{{ route('legal.terms') }}" class="underline auth-link">Terms of Service</a> and
             <a href="{{ route('legal.privacy') }}" class="underline auth-link">Privacy Policy</a>.

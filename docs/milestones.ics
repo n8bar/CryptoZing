@@ -32,4 +32,11 @@ SUMMARY:MS21 — CryptoZing.app Deployment (Open Beta)
 DESCRIPTION:Deploy the open beta under cryptozing.app, replace GitHub Pages placeholder, remove temporary mail aliasing, complete rollout verification.
 UID:cz-ms21@cryptozing.app
 END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20260826
+DTEND;VALUE=DATE:20260915
+SUMMARY:MS22 — Thorough SEO & Marketing Strategies
+DESCRIPTION:Post-deploy discovery investment: thorough SEO pass across live app and site surfaces; marketing strategy. Scope at kickoff.
+UID:cz-ms22@cryptozing.app
+END:VEVENT
 END:VCALENDAR

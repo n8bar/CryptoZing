@@ -29,6 +29,9 @@ _(Phase strategy docs to be written when this milestone becomes active.)_
 - Phase 2 — Deploy and cutover
 - Phase 3 — Post-deploy verification and rollout sign-off
 
+Carried items (fold into phase docs when active):
+- [ ] [#81](https://github.com/n8bar/CryptoZing/issues/81) Re-run mail stress testing when the mailer service is upgraded or switched — likely lands at or after the production mail cutover. Deferred-test list in [`x19.1_NOTIFICATION_COVERAGE_AUDIT.md`](../strategies/x19.1_NOTIFICATION_COVERAGE_AUDIT.md) §6.
+
 ## Exit Criteria
 _(To be detailed when active.)_
 
