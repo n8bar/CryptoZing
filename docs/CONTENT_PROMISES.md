@@ -94,7 +94,7 @@ Entries with real concern — product decisions pending, content that could cont
 - Source: video — `youtu.be/Glp6jUusTLQ` (§3 "Creating the invoice", §6 "What if something goes wrong?"); shooting script: `.cybercreek/video/how-to-invoice-bitcoin-script.md` (local-only)
 - Direct claims: _"This tool refreshes it every time the client opens the invoice"_; _"USD is the anchor. The Bitcoin just floats with the market until the moment they pay"_; _"This tool refreshes the rate every time the client opens the invoice. Most other tools expire the invoice instead"_
 - Required product behavior: the public invoice view recomputes the BTC amount from the current USD→BTC rate on each open; no hard expiry that invalidates a still-open invoice
-- Status: open — reconcile in MS19 that the public invoice recomputes on open and has no invalidating expiry
+- Status: honored — code-verified: the public route fetches a fresh rate per request and recomputes BTC from USD at render; no rate lock, no automatic expiry. Issuer-set share-link expiry gates the URL only; the invoice stays valid and rate-floating.
 
 ## 2. Minor
 
