@@ -82,13 +82,13 @@ Entries with real concern — product decisions pending, content that could cont
 - Also stated in: video — `youtu.be/Glp6jUusTLQ` (§7 wrap-up: _"CryptoZing is free too, at least during beta, maybe longer"_)
 - Required product behavior: CZ must not charge fees during beta. Post-beta pricing is explicitly left open in copy.
 - Product verification: confirmed — no fee logic in codebase
-- Status: open — pending monetization decision. Related to 1. Copy now scoped to beta only.
+- Status: honored — fee-free product-verified; copy scoped to beta. Any future fee routes through [`BACKLOG.md`](BACKLOG.md) Monetization item 23 (see Major 1).
 
 **3. [Direct claim]** — stated current limitations
 - Source: `site/learn/btcpay-server-alternatives.md:124`, `:129` (comparison table)
 - Lists: no Lightning, no CSV/JSON export, no recurring invoices, no QuickBooks, basic client management, dashboard-only reporting
-- Required product behavior: if and when any of these ship, update the article to match
-- Status: open
+- Required product behavior: none ongoing — the article is not a living document. If the product outgrows the list and the article becomes incorrect, the article comes down; a replacement is planned (or not) at that time.
+- Status: honored — the list is accurate as of open beta; takedown policy governs from here.
 
 **4. [Direct claim]** — invoice's Bitcoin amount refreshes at the current rate each time the client opens it; the rate is never locked, and CryptoZing does not expire invoices
 - Source: video — `youtu.be/Glp6jUusTLQ` (§3 "Creating the invoice", §6 "What if something goes wrong?"); shooting script: `.cybercreek/video/how-to-invoice-bitcoin-script.md` (local-only)
