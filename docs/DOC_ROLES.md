@@ -16,6 +16,8 @@ Keep these in sync with every merge or scope change.
 - `docs/PLAN.md` — milestone-level progress only; each milestone should check off once there.
   - If `PLAN.md` has a `Next action`, keep it milestone-level; do not pull phase-level or strategy-detail steps into it.
 - `docs/milestones/**` — phase-level execution docs: objective/status summary, phase rollup, current focus, phase-level next actions, phase checkoffs, and milestone exit criteria.
+  - Every milestone represents its phases explicitly; small size is not a reason to omit phase structure.
+  - For a small milestone whose phases do not warrant separate strategy docs, the milestone doc owns the phase headings and their detailed ordered checklists directly.
   - If a milestone doc has a current focus or next action, keep it phase-level. It may point to the current phase strategy, but do not pull strategy-level checklist detail into the milestone doc.
 - `docs/specs/**` — detailed feature and domain requirements.
 - `docs/strategies/**` — ordered implementation checklists, sequencing, and verification steps for one milestone phase. The "do this in this order" docs for active execution.
@@ -25,6 +27,8 @@ Keep these in sync with every merge or scope change.
 ## Strategy doc rules
 
 - **Authority**: strategy docs own ordered execution sequencing for an active workstream. They are authoritative for "what do we do next?" and resumption context, but **not canonical for product scope or behavior** — canonical requirements still live in `PLAN.md`, `PRODUCT_SPEC.md`, and the relevant `docs/specs/**` files.
+- **Breakout threshold**: create a separate strategy doc when a phase's size, sequencing, or verification depth warrants the breakout. Do not create a one-phase strategy merely for filename symmetry; keep a small phase's detailed checklist in its milestone doc.
+- **Retrospective reconstruction**: when backfilling historical docs, label reconstructed phase boundaries explicitly and cite the implementation/history evidence. Do not present inferred phase names or checkpoints as contemporaneous planning facts.
 - **Subagent-aware authoring**: even when a workstream has one primary critical path, write strategy docs with subagent use in mind — keep the main ordered sequence explicit, but call out any known safe parallel sidecars or path-scoped tasks so multi-agent execution does not have to improvise.
 - **Owner labels**: when assigning work by owner, use `Guided User` for tasks that require user-side account access or clicks but where the user should be coached through unfamiliar tooling; reserve plain `User` for work the user can drive directly without coaching.
 - **Lifecycle**: strategy docs may or may not be retired, archived, or folded into milestone/history docs after completion.
@@ -32,8 +36,9 @@ Keep these in sync with every merge or scope change.
 ## Checklist-depth separation
 
 - `docs/PLAN.md` owns milestone checkoffs.
-- `docs/milestones/**` own phase checkoffs.
-- `docs/strategies/**` own the ordered checklist for one phase.
+- `docs/milestones/**` always own explicit phase representation and phase checkoffs.
+- `docs/strategies/**` own the ordered checklist for one phase when that phase is broken out into a strategy doc.
+- In a strategyless small milestone, the milestone doc owns both the explicit phase checkoff and that phase's detailed ordered checklist.
 - Higher-level docs roll up lower-level completion with a single checkoff instead of duplicating items.
 - For any active workstream, keep one obvious checklist owner. If a milestone doc and a strategy doc both exist, the milestone doc summarizes status/objectives while the strategy doc owns the detailed ordered checklist (unless docs explicitly say otherwise).
 - Any doc with numbered tasks/milestones/todos is assumed to be done in order unless that doc explicitly says otherwise — flag intentional deviations.
