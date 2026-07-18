@@ -74,8 +74,8 @@ Entries with real concern — product decisions pending, content that could cont
 - Source: `site/learn/accepting-bitcoin-payments-freelancer-small-business.md:17`
 - We criticized: traditional payment processors for taking hidden, absorbed fees
 - Corollary that binds CZ: if CZ takes a per-transaction cut the same way, we are hypocritical
-- Resolution path: (a) make any CZ fee structurally different — customer-visible, or non-per-transaction (subscription, freemium, etc.); or (b) narrow the criticism in content
-- Status: open — pending monetization decision
+- Resolution path: (a) make any CZ fee structurally different — customer-visible, or non-per-transaction (subscription, freemium, etc.); or (b) narrow the criticism in content; or (c) retire the article and publish an updated replacement as part of the monetization effort
+- Status: deferred — monetization-gated; parked as [`BACKLOG.md`](BACKLOG.md) Monetization item 23 so any fee work resolves it before shipping
 
 **2. [Direct claim]** — CZ charges 0% fee (beta only)
 - Source: `site/learn/btcpay-server-alternatives.md:129` (comparison table: "0% (beta)"), `:124` (_"No fees during beta. Long-term pricing hasn't been decided; free is still on the table, and if not, the intent is to keep it very low."_)

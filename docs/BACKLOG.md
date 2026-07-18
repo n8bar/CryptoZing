@@ -1,5 +1,5 @@
 # Backlog (Post-MVP)
-_Last updated: 2026-07-17_
+_Last updated: 2026-07-18_
 
 This is the canonical post-MVP backlog.
 
@@ -127,3 +127,8 @@ _Carry-forward guardrail from active roadmap scope: suppress duplicate sends for
 21. **Post-beta ToS/Privacy framing removal ([#120](https://github.com/n8bar/CryptoZing/issues/120))**
    - Once out of beta: drop the beta framing (beta-software labels, low-stakes recommended-use language) from the ToS and Privacy Policy; retain the operator disclaimers.
    - Same pass: align the ToS preamble's recommended-use phrasing with the signup disclaimer wording (per note on #120), keeping the ToS the fuller of the two.
+
+## Monetization
+23. **Per-transaction fee vs. published fee criticism (content promise 1.1)**
+   - Before shipping any per-transaction fee: revisit the criticism of processors "taking a cut they expect you to absorb" in `site/learn/accepting-bitcoin-payments-freelancer-small-business.md:17` — see `CONTENT_PROMISES.md` Major 1.
+   - Options, decided at that time: make the fee structurally different (customer-visible or non-per-transaction, e.g. subscription/freemium); narrow the criticism in the article; or retire the article and publish an updated replacement as part of the monetization effort.
