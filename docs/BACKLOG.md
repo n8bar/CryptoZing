@@ -123,6 +123,11 @@ _Carry-forward guardrail from active roadmap scope: suppress duplicate sends for
    - Evaluate other surfaces where the balance is worth showing (dashboard, elsewhere) — keep the watch-only framing clear wherever it appears.
    - At implementation, decide where/whether to place a pointer to the `/help#gap-limit` note near balance displays — a balance readout is where gap-limit confusion becomes visible.
 
+24. **Invoice line items**
+   - Multiple description/quantity/rate rows per invoice summing to the invoice total, replacing today's single description + USD amount pair.
+   - USD stays the entry denomination; BTC conversion keeps applying at the invoice level.
+   - Ripple surfaces: create/edit form, issuer and public/print views, mail templates, and receipt PDFs once those exist.
+
 ## Legal & Policy
 21. **Post-beta ToS/Privacy framing removal ([#120](https://github.com/n8bar/CryptoZing/issues/120))**
    - Once out of beta: drop the beta framing (beta-software labels, low-stakes recommended-use language) from the ToS and Privacy Policy; retain the operator disclaimers.
