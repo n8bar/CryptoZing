@@ -118,6 +118,11 @@ _Carry-forward guardrail from active roadmap scope: suppress duplicate sends for
    - Goal: reduce accidental outside receive activity on the same account namespace while keeping CryptoZing watch-only.
    - Future direction to evaluate later: whether a tighter CryptoZing + companion-wallet pairing should be encouraged or even required in a future product generation.
 
+22. **Wallet balance display (settings + beyond)**
+   - Show the connected account's on-chain balance on the wallet settings page, derived from the watched xpub.
+   - Evaluate other surfaces where the balance is worth showing (dashboard, elsewhere) — keep the watch-only framing clear wherever it appears.
+   - At implementation, decide where/whether to place a pointer to the `/help#gap-limit` note near balance displays — a balance readout is where gap-limit confusion becomes visible.
+
 ## Legal & Policy
 21. **Post-beta ToS/Privacy framing removal ([#120](https://github.com/n8bar/CryptoZing/issues/120))**
    - Once out of beta: drop the beta framing (beta-software labels, low-stakes recommended-use language) from the ToS and Privacy Policy; retain the operator disclaimers.
