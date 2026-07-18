@@ -4,7 +4,6 @@ Fast path to run the app locally with Laravel Sail.
 
 ## Prerequisites
 - Docker + Docker Compose
-- Node 20+ (for Vite build)
 - Mailgun API credentials (pre-prod can use aliasing)
 
 ## Setup
@@ -17,7 +16,10 @@ Fast path to run the app locally with Laravel Sail.
    - Mail safety: `MAIL_OUTBOUND_ENABLED`, `MAIL_MANUAL_SEND_COOLDOWN_MINUTES`, `MAIL_ALERT_COOLDOWN_MINUTES`.
    - Aliasing for pre-prod safety: `MAIL_ALIAS_ENABLED=true`, `MAIL_ALIAS_DOMAIN=mailer.cryptozing.app`.
    - Wallet network: `WALLET_NETWORK=mainnet` (real payments) or `testnet4`/`testnet3` (testing; matches the watcher’s mempool endpoint).
-2. Start Sail and install dependencies:
+2. Start Sail and install dependencies (fresh clone with no `vendor/` yet? bootstrap Composer once first):
+   ```bash
+   docker run --rm -u "$(id -u):$(id -g)" -v "$(pwd):/var/www/html" -w /var/www/html laravelsail/php84-composer:latest composer install --ignore-platform-reqs
+   ```
    ```bash
    ./vendor/bin/sail up -d
    ./vendor/bin/sail composer install
@@ -56,5 +58,5 @@ Run the suite via Sail:
 ```
 
 ## Notes
-- Sail stack includes `laravel.test` (app/web), `scheduler` (runs `php artisan schedule:work`), and `mysql`.
+- Sail stack includes `laravel.test` (app/web), `scheduler` (runs `php artisan schedule:work`), `queue` (runs `queue:work`; mail delivery rides it), and `mysql`.
 - Keep `MAIL_ALIAS_ENABLED` on until production traffic; disable it before open-beta launch so real recipients are used.
