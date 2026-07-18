@@ -57,4 +57,4 @@ Run the suite via Sail:
 
 ## Notes
 - Sail stack includes `laravel.test` (app/web), `scheduler` (runs `php artisan schedule:work`), and `mysql`.
-- Keep `MAIL_ALIAS_ENABLED` on until production traffic; disable it before RC deploys so real recipients are used.
+- Keep `MAIL_ALIAS_ENABLED` on until production traffic; disable it before open-beta launch so real recipients are used.

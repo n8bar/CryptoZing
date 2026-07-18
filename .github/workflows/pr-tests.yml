@@ -1,12 +1,22 @@
 name: PR Tests
 
 on:
+  # Docs-only changes (Markdown anywhere + everything under docs/, incl.
+  # milestones.ics) don't touch the app, so skip the PHPUnit suite for them.
+  # The milestone-date invariant is covered by the local-only
+  # MilestoneScheduleConsistencyTest, not this gate.
   push:
     branches:
       - codex/**
       - feat/**
       - feature/**
+    paths-ignore:
+      - '**/*.md'
+      - 'docs/**'
   pull_request:
+    paths-ignore:
+      - '**/*.md'
+      - 'docs/**'
 
 jobs:
   tests:
@@ -75,4 +85,8 @@ jobs:
         run: php artisan migrate --force
 
       - name: Run tests
-        run: php artisan test
+        # local-only group is excluded here on purpose: it guards a docs
+        # invariant (PLAN.md milestone Targets == milestones.ics end dates)
+        # that should fail the local suite, not gate every PR. See
+        # tests/Feature/Docs/MilestoneScheduleConsistencyTest.php.
+        run: php artisan test --exclude-group=local-only

@@ -21,7 +21,7 @@ class InvoiceOverpaymentClientMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Invoice ' . ($this->invoice->number ?? $this->invoice->id) . ' was overpaid',
+            subject: 'Payment confirmed — Invoice ' . ($this->invoice->number ?? $this->invoice->id) . ' overpaid',
             replyTo: [new Address($this->invoice->user->email, $this->invoice->user->name)],
         );
     }

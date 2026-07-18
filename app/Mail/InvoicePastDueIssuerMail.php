@@ -19,8 +19,15 @@ class InvoicePastDueIssuerMail extends Mailable
 
     public function envelope(): Envelope
     {
+        $number = $this->invoice->number ?? $this->invoice->id;
+        $subject = match ($this->slot()) {
+            2 => "2nd past-due notice sent — invoice {$number} 1 week overdue",
+            3 => "3rd past-due notice sent — invoice {$number} 2 weeks overdue",
+            default => "Reminder sent: invoice {$number} past due",
+        };
+
         return new Envelope(
-            subject: 'Invoice ' . ($this->invoice->number ?? $this->invoice->id) . ' is past due',
+            subject: $subject,
         );
     }
 
@@ -30,6 +37,7 @@ class InvoicePastDueIssuerMail extends Mailable
             markdown: 'mail.invoice-past-due-issuer',
             with: [
                 'invoice' => $this->invoice,
+                'slot' => $this->slot(),
             ],
         );
     }
@@ -37,5 +45,14 @@ class InvoicePastDueIssuerMail extends Mailable
     public function attachments(): array
     {
         return [];
+    }
+
+    private function slot(): int
+    {
+        if (preg_match('/^past_due_(\d+)$/', (string) ($this->delivery->context_key ?? ''), $m)) {
+            return (int) $m[1];
+        }
+
+        return 1;
     }
 }

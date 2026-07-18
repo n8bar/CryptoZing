@@ -157,6 +157,57 @@ class MailgunWebhookTest extends TestCase
         $response->assertStatus(200);
     }
 
+    public function test_accepted_event_resolves_a_sending_row_by_delivery_id_without_message_id(): void
+    {
+        // A stuck `sending` row never recorded a provider_message_id; it must still
+        // resolve via the tagged delivery_id (Path B).
+        $delivery = $this->makeDelivery('', 'sending');
+        $delivery->update(['provider_message_id' => null]);
+        $timestamp = (string) now()->timestamp;
+        $token = 'tok-accepted-id';
+
+        $response = $this->postJson('/webhooks/mailgun', [
+            'signature' => $this->makeSignature($timestamp, $token),
+            'event-data' => [
+                'event' => 'accepted',
+                'user-variables' => ['delivery_id' => (string) $delivery->id],
+                'message' => ['headers' => ['message-id' => '<backfilled@mailgun.org>']],
+            ],
+        ]);
+
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('invoice_deliveries', [
+            'id' => $delivery->id,
+            'status' => 'sent',
+            'provider_message_id' => '<backfilled@mailgun.org>',
+        ]);
+    }
+
+    public function test_failed_event_resolves_a_sending_row_by_delivery_id(): void
+    {
+        $delivery = $this->makeDelivery('', 'sending');
+        $delivery->update(['provider_message_id' => null]);
+        $timestamp = (string) now()->timestamp;
+        $token = 'tok-failed-id';
+
+        $response = $this->postJson('/webhooks/mailgun', [
+            'signature' => $this->makeSignature($timestamp, $token),
+            'event-data' => [
+                'event' => 'failed',
+                'user-variables' => ['delivery_id' => (string) $delivery->id],
+                'message' => ['headers' => ['message-id' => '<f-id@mailgun.org>']],
+                'delivery-status' => ['code' => 550, 'description' => 'No such mailbox.'],
+            ],
+        ]);
+
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('invoice_deliveries', [
+            'id' => $delivery->id,
+            'status' => 'failed',
+            'error_code' => '550',
+        ]);
+    }
+
     public function test_bounced_event_marks_delivery_failed(): void
     {
         $messageId = '<test-bounced-message@mailgun.org>';

@@ -29,7 +29,6 @@ class Invoice extends Model
         'billing_address_override','invoice_footer_note_override','branding_heading_override',
         'last_overpayment_alert_at','last_underpayment_alert_at',
         'last_past_due_issuer_alert_at','last_past_due_client_alert_at',
-        'last_partial_warning_sent_at',
     ];
 
     protected $casts = [
@@ -58,7 +57,6 @@ class Invoice extends Model
         'last_underpayment_alert_at' => 'datetime',
         'last_past_due_issuer_alert_at' => 'datetime',
         'last_past_due_client_alert_at' => 'datetime',
-        'last_partial_warning_sent_at' => 'datetime',
     ];
     public const SATS_PER_BTC = 100_000_000;
     public const PAYMENT_SAT_TOLERANCE = 100;
@@ -449,10 +447,9 @@ class Invoice extends Model
                 }
 
                 if (!$this->paid_at) {
-                    $firstConfirmed = $this->activePayments()
-                        ->filter(fn (InvoicePayment $p) => $this->paymentIsConfirmed($p))
-                        ->min('confirmed_at');
-                    $this->paid_at = $reference ?? $firstConfirmed ?? now();
+                    // The confirmation that crossed the total into paid — the time
+                    // everyone finally agreed on settlement. See PARTIAL_PAYMENTS.md.
+                    $this->paid_at = $reference ?? $this->settlementCrossingTime($expectedUsd) ?? now();
                 }
             } elseif (!in_array($this->status, ['draft','void'], true)) {
                 $this->status = $confirmedUsd > 0 ? 'partial' : ($hasUnconfirmed ? 'pending' : 'sent');
@@ -698,22 +695,6 @@ class Invoice extends Model
         return $base . $path;
     }
 
-    public function shouldWarnAboutPartialPayments(): bool
-    {
-        if (in_array($this->status, ['paid','void'])) {
-            return false;
-        }
-
-        $outstanding = $this->outstanding_sats;
-        if ($outstanding === null || $outstanding <= 0) {
-            return false;
-        }
-
-        $payments = $this->activePayments();
-
-        return $payments->count() >= 2;
-    }
-
     public function sumPaymentsUsd(bool $confirmedOnly = false): float
     {
         $payments = $this->activePayments();
@@ -747,6 +728,28 @@ class Invoice extends Model
             ->whereNull('confirmed_at')
             ->where('is_adjustment', false)
             ->exists();
+    }
+
+    /**
+     * The confirmed_at of the confirmation at which the time-sorted cumulative
+     * confirmed total first reaches the expected total — the latest re-cross
+     * into paid. Returns null if no confirmation reaches the total.
+     */
+    private function settlementCrossingTime(float $expectedUsd): ?\Illuminate\Support\Carbon
+    {
+        $confirmed = $this->activePayments()
+            ->filter(fn (InvoicePayment $p) => $this->paymentIsConfirmed($p))
+            ->sortBy(fn (InvoicePayment $p) => optional($p->confirmed_at ?? $p->created_at)->getTimestamp() ?? 0);
+
+        $cumulative = 0.0;
+        foreach ($confirmed as $payment) {
+            $cumulative += $this->paymentFiatValue($payment);
+            if ($cumulative >= $expectedUsd) {
+                return $payment->confirmed_at ?? $payment->created_at;
+            }
+        }
+
+        return null;
     }
 
     private function paymentFiatValue(InvoicePayment $payment): float

@@ -41,6 +41,12 @@ class InvoicePaidReceiptMail extends Mailable
                 'delivery' => $this->delivery,
                 'client' => $this->invoice->client,
                 'publicUrl' => $this->invoice->public_url,
+                'settlementPayments' => $this->invoice->payments()
+                    ->whereNotNull('confirmed_at')
+                    ->whereNull('ignored_at')
+                    ->where('is_adjustment', false)
+                    ->orderBy('confirmed_at')
+                    ->get(),
             ],
         );
     }

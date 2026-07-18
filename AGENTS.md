@@ -4,6 +4,7 @@
 - Always run artisan/composer/npm commands through Sail (`./vendor/bin/sail ...`).
 - Doc-tree roles, canonical docs, strategy doc rules, checklist-depth separation, and CHANGELOG conventions all live in [`docs/DOC_ROLES.md`](docs/DOC_ROLES.md). Read it when navigating docs or deciding where new content belongs.
 - Where dates are necessary in docs, use the date from the system you're running on.
+- Milestone dates have one source of truth: `docs/milestones.ics`. PLAN.md's "Target" column must equal each milestone's `.ics` end date (DTEND). This invariant is guarded by `tests/Feature/Docs/MilestoneScheduleConsistencyTest.php`, tagged `#[Group('local-only')]` — it runs in the local suite (`./vendor/bin/sail artisan test`) but is excluded from the GitHub `PR Tests` gate, so run tests locally after any milestone-date change.
 - When adding features, update or create migrations + tests, then run `./vendor/bin/sail artisan test`.
 - Also keep AGENTS.md updated to save on churn from session switching.
 - Keep `.cybercreek/` local-only and untracked; do not commit agent coordination logs, local recovery files, or other local-only helper artifacts. For local-only work under `.cybercreek/`, follow `.cybercreek/AGENTS_LOCAL.md` if present.
@@ -19,8 +20,9 @@
 - Whenever `docs/**` or AGENTS.md changes, commit/push those updates right away. Exception: single-item checklist checkoffs in the same active workstream do not need to be pushed right away and may be committed together later.
 - If the user has uncommitted doc edits in the same active workstream, preserve them and include them in the next related commit by default unless the user says otherwise.
 - Apply the UX guardrails in [`docs/UX_GUARDRAILS.md`](docs/UX_GUARDRAILS.md) on every UX touch: Nielsen/WCAG as baseline; inline guidance, preserved input, no layout shift, focus/error handling, mobile/accessibility.
-- GitHub `main` is canonical and protected. New work branches follow `codex/<task>`, and existing PRs must be updated via their original source branch rather than alternate branches.
-- PRs are gated by GitHub Actions `PR Tests`; keep branches current with `origin/main` before requesting review.
+- GitHub `main` is canonical. New work branches follow `codex/<task>`, and existing PRs must be updated via their original source branch rather than alternate branches.
+- PRs are gated by GitHub Actions `PR Tests`; keep branches current with `origin/main` before requesting review. Docs-only PRs (Markdown anywhere + `docs/**`, including `milestones.ics`) skip the suite via `paths-ignore`, so run milestone-date checks locally (the consistency test is local-only anyway).
+- Doc-only changes may be committed directly to `main` — no branch or PR required. "Doc-only" is the same carve-out as the PR gate: Markdown anywhere + `docs/**`, including `milestones.ics`. Anything touching code still goes through a `codex/<task>` (Claude: `claude/<task>`) branch + PR. Direct `.ics` commits bypass the PR entirely, so run milestone-date checks locally after any such change.
 
 ## Multi-Agent Coordination
 - Primary and secondary agents are role-based, not capability-limited: secondaries can work docs, code, tests, or modules within their stated task.
@@ -46,7 +48,7 @@
 - Wallet xpub onboarding lives at `/wallet/settings`; invoices expect a configured wallet or redirect there.
 - **Data hygiene:** As of 2025-11-16 the app only holds seed/test data—no real customers yet. Remove this note (and treat production emails accordingly) once live customer data exists.
 - CryptoZing must remain watch-only: never put private keys or seed phrases into tracked repo files, app config, database seeders, fixtures, tests, or normal application flows. If local testnet funding keys are needed for developer-only scenario setup, keep them only in untracked local storage (for example under `.cybercreek/`) and outside the product boundary.
-- Email delivery currently rewrites recipients to the CryptoZing catch-all via `MAIL_ALIAS_ENABLED/MAIL_ALIAS_DOMAIN` (set to `mailer.cryptozing.app` so Mailgun routes everything to Proton). Disable the aliasing before RC or any real-customer deployment.
+- Email delivery currently rewrites recipients to the CryptoZing catch-all via `MAIL_ALIAS_ENABLED/MAIL_ALIAS_DOMAIN` (set to `mailer.cryptozing.app` so Mailgun routes everything to Proton). Disable the aliasing before open beta or any real-customer deployment.
 - `SUPPORT_AGENT_EMAILS` controls which accounts are treated as support accounts, and `SUPPORT_ACCESS_HOURS` should remain the fixed server-side expiration window for temporary owner-granted support access.
 - The CryptoZing.app domain is reserved solely for this project; feel free to provision DNS/subdomains/mail for app needs without saving it for other products.
 - Set `APP_PUBLIC_URL` to whatever domain should appear in public invoice links (localhost for dev, `https://cryptozing.app` for production) so emails never point at the wrong host.

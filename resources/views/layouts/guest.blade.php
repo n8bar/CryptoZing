@@ -17,8 +17,7 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700&display=swap" rel="stylesheet" />
 
-    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
-    @stack('page-favicon')
+    <x-favicon />
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -131,6 +130,8 @@
                 {{ $slot }}
             </div>
         </main>
+
+        <x-legal-footer />
     </div>
     <script>
         (() => {

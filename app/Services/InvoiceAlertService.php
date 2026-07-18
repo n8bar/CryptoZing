@@ -64,6 +64,10 @@ class InvoiceAlertService
 
     public function checkPaymentThresholds(Invoice $invoice): void
     {
+        if ($invoice->status === 'void') {
+            return;
+        }
+
         if ($invoice->requiresClientOverpayAlert()) {
             $this->maybeSendOverpayAlert($invoice);
         }
@@ -96,14 +100,6 @@ class InvoiceAlertService
                 $invoice,
                 ['client_overpay_alert', 'issuer_overpay_alert'],
                 "{$reasonPrefix} Overpayment alert no longer applies."
-            );
-        }
-
-        if (! $invoice->shouldWarnAboutPartialPayments()) {
-            $this->skipQueuedDeliveries(
-                $invoice,
-                ['client_partial_warning', 'issuer_partial_warning'],
-                "{$reasonPrefix} Partial-payment warning no longer applies."
             );
         }
     }

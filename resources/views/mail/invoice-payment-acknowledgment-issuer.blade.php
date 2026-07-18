@@ -1,5 +1,5 @@
 @component('mail::message', ['invoice' => $invoice])
-# Review detected payment for Invoice {{ $invoice->number ?? $invoice->id }}
+# Review payment activity on Invoice {{ $invoice->number ?? $invoice->id }}
 
 A Bitcoin payment of **{{ $invoice->formatBitcoinAmount(($payment?->sats_received ?? 0) / \App\Models\Invoice::SATS_PER_BTC) ?? '0' }} BTC** was detected for this invoice.
 

@@ -1,5 +1,4 @@
 {{-- resources/views/clients/index.blade.php --}}
-<x-emoji-favicon symbol="👥" bg="#E0F2FE" />
 <x-app-layout>
     <x-slot name="header">
         <div class="flex flex-wrap items-center justify-between gap-3">

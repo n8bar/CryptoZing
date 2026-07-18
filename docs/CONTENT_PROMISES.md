@@ -1,6 +1,6 @@
 # Content Promises Catalog
 
-A living catalog of promises and expectations that customer-facing content sets about CryptoZing — both directly and implicitly. Maintained as content is written so the product can be trued up to it before RC (see MS19).
+A living catalog of promises and expectations that customer-facing content sets about CryptoZing — both directly and implicitly. Maintained as content is written so the product can be trued up to it ahead of the open beta (see MS19).
 
 ## Why this exists
 
@@ -15,6 +15,8 @@ Add to this catalog whenever you write or revise content that:
 - Criticizes a competitor or pattern in a way that binds CZ by contrast
 
 Do not add facts about Bitcoin or other external systems that the product cannot affect — those are not promises, they are statements of fact.
+
+Entries that touch pricing language must follow the monetization-neutral rules in [`UX_GUARDRAILS.md`](UX_GUARDRAILS.md).
 
 This catalog is curated, not exhaustive. Entries that describe core architectural commitments CZ would only violate through a deliberate, conscious redesign (e.g., going custodial, adding chargebacks) are intentionally excluded — cataloging them adds noise without reducing risk. If a future scan surfaces a promise that isn't listed here, check [`DELETED_PROMISES.md`](DELETED_PROMISES.md) before adding it.
 
@@ -58,7 +60,7 @@ When an entry is a **critical omission** about a future product decision (for ex
 
 ## Reconciliation
 
-Every major entry needs individual reconciliation before RC. Minor entries get a bulk verification pass. MS19 will include a phase to walk this catalog and either confirm the product honors each entry or trigger a content revision. New entries added after MS19 reconciliation will need to be caught in the next pre-release pass.
+Every major entry needs individual reconciliation before the open beta. Minor entries get a bulk verification pass. MS19 will include a phase to walk this catalog and either confirm the product honors each entry or trigger a content revision. New entries added after MS19 reconciliation will need to be caught in the next pre-release pass.
 
 ---
 
@@ -77,6 +79,7 @@ Entries with real concern — product decisions pending, content that could cont
 
 **2. [Direct claim]** — CZ charges 0% fee (beta only)
 - Source: `site/learn/btcpay-server-alternatives.md:129` (comparison table: "0% (beta)"), `:124` (_"No fees during beta. Long-term pricing hasn't been decided; free is still on the table, and if not, the intent is to keep it very low."_)
+- Also stated in: video — `youtu.be/Glp6jUusTLQ` (§7 wrap-up: _"CryptoZing is free too, at least during beta, maybe longer"_)
 - Required product behavior: CZ must not charge fees during beta. Post-beta pricing is explicitly left open in copy.
 - Product verification: confirmed — no fee logic in codebase
 - Status: open — pending monetization decision. Related to 1. Copy now scoped to beta only.
@@ -86,6 +89,12 @@ Entries with real concern — product decisions pending, content that could cont
 - Lists: no Lightning, no CSV/JSON export, no recurring invoices, no QuickBooks, basic client management, dashboard-only reporting
 - Required product behavior: if and when any of these ship, update the article to match
 - Status: open
+
+**4. [Direct claim]** — invoice's Bitcoin amount refreshes at the current rate each time the client opens it; the rate is never locked, and CryptoZing does not expire invoices
+- Source: video — `youtu.be/Glp6jUusTLQ` (§3 "Creating the invoice", §6 "What if something goes wrong?"); shooting script: `.cybercreek/video/how-to-invoice-bitcoin-script.md` (local-only)
+- Direct claims: _"This tool refreshes it every time the client opens the invoice"_; _"USD is the anchor. The Bitcoin just floats with the market until the moment they pay"_; _"This tool refreshes the rate every time the client opens the invoice. Most other tools expire the invoice instead"_
+- Required product behavior: the public invoice view recomputes the BTC amount from the current USD→BTC rate on each open; no hard expiry that invalidates a still-open invoice
+- Status: open — reconcile in MS19 that the public invoice recomputes on open and has no invalidating expiry
 
 ## 2. Minor
 
@@ -141,6 +150,12 @@ Low-concern entries — core product behavior or patterns CZ would only violate 
 
 **17. [Implicit framing]** — noncustodial settlement means no intermediary holds funds
 - Source: `site/learn/what-is-a-bitcoin-invoice.md:68`
+
+**18. [Direct claim]** — public shareable invoice link the client can open in any browser
+- Source: video — `youtu.be/Glp6jUusTLQ` (§4 "Sending it")
+
+**19. [Direct claim]** — CryptoZing emails the invoice to the client
+- Source: video — `youtu.be/Glp6jUusTLQ` (§4 "Sending it")
 
 ## 3. Resolved
 

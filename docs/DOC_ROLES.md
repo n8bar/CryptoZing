@@ -4,7 +4,7 @@ Canonical reference for what each tracked doc is for, and the rules about how th
 
 ## Canonical docs (top-level scope authority)
 
-- [`docs/PLAN.md`](PLAN.md) — RC milestone order, status, current focus, and the primary next doc.
+- [`docs/PLAN.md`](PLAN.md) — open-beta milestone order, status, current focus, and the primary next doc.
 - [`docs/PRODUCT_SPEC.md`](PRODUCT_SPEC.md) — global product behavior and invariants.
 - [`docs/BACKLOG.md`](BACKLOG.md) — post-MVP and deferred work only.
 - [`docs/UX_GUARDRAILS.md`](UX_GUARDRAILS.md) — global UX, accessibility, and interaction rules.
@@ -38,6 +38,11 @@ Keep these in sync with every merge or scope change.
 - For any active workstream, keep one obvious checklist owner. If a milestone doc and a strategy doc both exist, the milestone doc summarizes status/objectives while the strategy doc owns the detailed ordered checklist (unless docs explicitly say otherwise).
 - Any doc with numbered tasks/milestones/todos is assumed to be done in order unless that doc explicitly says otherwise — flag intentional deviations.
 
+## Reference notation
+
+- Milestone/phase references — in commit-message prefixes and doc cross-references — use dotted `M<milestone>.<phase>` and extend one dotted segment per level as deep as needed (e.g., `M19.5.1`, `M19.5.1.9`, `M19.5.1.9.5`).
+- Vocabulary: sections divide into items and subitems. "Item" may refer to an entry at any level below phase; "subitem" may refer to any item below section level.
+
 ## CHANGELOG conventions
 
 - Keep [`docs/CHANGELOG.log`](CHANGELOG.log) updated alongside canonical docs when scope or doc structure shifts.
@@ -48,3 +53,13 @@ Keep these in sync with every merge or scope change.
 - **Through M19, new findings go to GitHub Issues; existing finding docs are unchanged. M20 kickoff decides whether this doctype reopens, retires, or stays as-is.** New findings/bugs/todos surfaced during M19 are opened as GitHub Issues and closed via `Fixes #N` on the merging PR. Strategy docs reference the Issue number rather than spawning a new `docs/qa/Finding*.md`.
 - Each existing finding under `docs/qa/Finding*.md` records `Date:` (when reported) near the top, and adds a `Date fixed:` line once resolved with a brief reference to the milestone, PR, or commit that resolved it.
 - A finding without a `Date fixed:` line is treated as still open.
+
+## Issue content conventions
+
+Applies to any GitHub Issue we file.
+
+- **Required**: the problem — what's wrong, what's happening vs. expected, or what's missing.
+- **Optional**: reproduction steps, file/line refs, fix direction, scope, test plan. Include when it helps the doer.
+- **Never**: decision-journaling (`## How surfaced`, `## Reversibility`, `## Why X over Y`), internal shorthand (`Path A`), who-said-what narrative.
+- **Always link** the strategy doc / spec section the work traces to (`Tracked in: …`).
+- Write for a reader without the originating conversation; body + links should be enough to act.

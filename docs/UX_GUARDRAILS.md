@@ -15,3 +15,14 @@ Project-specific non-negotiables:
 - No layout jump: reserve space for helper/error text; avoid page reflow when showing validation.
 - Mobile/accessibility: visible focus rings, keyboard navigability for accordions, adequate tap targets, readable on small screens.
 - Copy: plain language, avoid jargon, safety reminders (e.g., “receive-only key; never share your seed”), friendly errors.
+
+Monetization-neutral language (copy must leave room for future pricing; CryptoZing is free during beta, but nothing may promise it stays that way):
+- Time-bound any free/fee claim: "no fees during beta" is the approved shape; unqualified "free," "always free," "no fees ever" are not.
+- State architecture, not pricing: non-custody is a permanent fact and safe to say; absence-of-fees is a pricing decision and isn't.
+- Present-tense facts beat forever-promises: "is not a party to this transaction" works; "will never take a cut" doesn't.
+- When criticizing competitors, aim at what CZ architecturally can't replicate (custody, chargebacks, settlement delay) — not at fees themselves, which CZ may someday charge.
+- Do/don't examples:
+  - Don't: "Free — no fees ever." Do: "No fees during beta; long-term pricing hasn't been decided."
+  - Don't: "No middleman taking a cut." Do: "Non-custodial — payments go straight to your wallet."
+  - Don't: "Keep 100% of what you invoice." Do: "You control the wallet that gets paid."
+  - Don't: "We'll never charge for this." Do: "Currently free."

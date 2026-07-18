@@ -1,5 +1,5 @@
 # PLAN
-_Last updated: 2026-05-08_
+_Last updated: 2026-06-19_
 
 This is the human-facing execution dashboard for Release Candidate work.
 
@@ -15,24 +15,22 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 - A new milestone cannot begin unless at least one article from [`docs/CONTENT_PLAN.md`](CONTENT_PLAN.md) has been published since the previous milestone started. Content production is a parallel track; milestone transitions are the checkpoint.
 
 ## Current
-- Active milestones (running in parallel — no hard dependencies between them):
-  - **MS18 - Pre-Release Content & SEO** — Phase 3, blocked end-to-end on Rachel's video through the 2026-05-31 hard cap.
-  - **MS19 - RC Hardening & Ops** — pre-flight; strategy doc skeletons drafted, decisions awaiting user input before flesh-out.
+- Active milestone:
+  - **MS19 - Open Beta Hardening & Ops** — in progress; Phases 1, 2, and 4 complete. Active phase: **Phase 3 (LLC formation)** — CyberCreek LLC (parent) approved 2026-06-17; CryptoZing subsidiary filing next. Phases 5–8 (Legal Layer, Content Promises Reconciliation, Contributor Docs, 2FA) pending.
 - Status: `active`
-- Next action: MS19 strategy doc decision answers (user) → flesh-out (Claude). MS18 video gated on Rachel.
-- Primary next doc: [`docs/milestones/19_RC_HARDENING_OPS.md`](milestones/19_RC_HARDENING_OPS.md)
-- Most recently completed milestone doc: [`docs/milestones/17_PRODUCT_READINESS.md`](milestones/17_PRODUCT_READINESS.md)
+- Next action: MS19 Phase 3 — complete LLC formation (parent publication, EINs, business bank account, CryptoZing subsidiary). Phase 5 (Legal Layer) runs as a parallel track.
+- Primary next doc: [`docs/milestones/19_OB_HARDENING_OPS.md`](milestones/19_OB_HARDENING_OPS.md)
+- Most recently completed milestone doc: [`docs/milestones/x18_PRERELEASE_CONTENT_SEO.md`](milestones/x18_PRERELEASE_CONTENT_SEO.md)
 
 ## Published Release Target
-- **First public release: mid-to-late 2027.** The RC milestone timeline (MS21, targeting 2026-07-05) covers the release candidate. The published release target accounts for post-RC work needed before an official first release.
+- **First public release: mid-to-late 2027.** The open beta milestone timeline (MS21, targeting 2026-08-25) covers the open beta. The published release target accounts for post-open-beta work needed before an official first release.
 
 ## Active and Upcoming Milestones
 | Status | ID | Milestone | Short intent | Target | Primary doc |
 |---|---|---|---|---|---|
-| [ ] | 18 | Pre-Release Content & SEO | Extend the site from a single placeholder to a lightweight content site with educational articles, adapted Helpful Notes, and a staging path — giving search engines substance to rank before RC1 ships. | 2026-05-31 | [`docs/milestones/18_PRERELEASE_CONTENT_SEO.md`](milestones/18_PRERELEASE_CONTENT_SEO.md) |
-| [ ] | 19 | RC Hardening & Ops | RC hardening before mainnet cutover: notification coverage audit; auth/password policy hardening (419-to-login redirect, session expiry logout); LLC formation (entity, EIN, bank account, operating agreement); legal layer (ToS, Privacy Policy, disclaimers, monetization-neutral copy review, UI placement); content promises reconciliation; contributor docs refresh; 2FA (email baseline, opportunistic TOTP). | 2026-06-11 | [`docs/milestones/19_RC_HARDENING_OPS.md`](milestones/19_RC_HARDENING_OPS.md) |
-| [ ] | 20 | Mainnet Cutover Preparation | Define and rehearse env flips, wallet validation, mail sanity checks, and backout steps for mainnet cutover. | 2026-06-23 | [`docs/milestones/20_MAINNET_CUTOVER_PREP.md`](milestones/20_MAINNET_CUTOVER_PREP.md) |
-| [ ] | 21 | CryptoZing.app Deployment (RC) | Deploy the RC under `cryptozing.app`, replace the GitHub Pages placeholder at `/` with the live app landing page without breaking the SEO baseline established in MS15, remove temporary mail aliasing, and complete rollout verification. | 2026-07-05 | [`docs/milestones/21_RC_DEPLOYMENT.md`](milestones/21_RC_DEPLOYMENT.md) |
+| [ ] | 19 | Open Beta Hardening & Ops | Open beta hardening before mainnet cutover: notification coverage audit; auth/password policy hardening (419-to-login redirect, session expiry logout); LLC formation (entity, EIN, bank account, operating agreement); legal layer (ToS, Privacy Policy, disclaimers, monetization-neutral copy review, UI placement); content promises reconciliation; contributor docs refresh; 2FA (email baseline, opportunistic TOTP). | 2026-08-01 | [`docs/milestones/19_OB_HARDENING_OPS.md`](milestones/19_OB_HARDENING_OPS.md) |
+| [ ] | 20 | Mainnet Cutover Preparation | Define and rehearse env flips, wallet validation, mail sanity checks, and backout steps for mainnet cutover. | 2026-08-13 | [`docs/milestones/20_MAINNET_CUTOVER_PREP.md`](milestones/20_MAINNET_CUTOVER_PREP.md) |
+| [ ] | 21 | CryptoZing.app Deployment (Open Beta) | Deploy the open beta under `cryptozing.app`, replace the GitHub Pages placeholder at `/` with the live app landing page without breaking the SEO baseline established in MS15, remove temporary mail aliasing, and complete rollout verification. | 2026-08-25 | [`docs/milestones/21_OB_DEPLOYMENT.md`](milestones/21_OB_DEPLOYMENT.md) |
 
 ## Completed Milestones
 | Status | ID | Milestone | Short intent | Primary doc |
@@ -49,8 +47,9 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 | [x] | 10 | User Settings | Add invoice defaults and stabilize wallet/settings behavior. | - |
 | [x] | 11 | Observability & Safety | Add safety checks, structured logging, and failure-path hardening. | - |
 | [x] | 12 | Payment & Address Accuracy | Correct derivation mismatches and lock confirmation-aware payment accuracy. | [`docs/specs/PARTIAL_PAYMENTS.md`](specs/PARTIAL_PAYMENTS.md) |
-| [x] | 13 | UX Overhaul | Deliver dashboard/theme/help/onboarding/settings IA and close Task 13 Browser QA. | [`docs/milestones/13_UX_OVERHAUL.md`](milestones/13_UX_OVERHAUL.md) |
-| [x] | 14 | On-Chain Payment Attribution Hardening | Make attribution key-aware, detect unsupported wallet reuse, reinforce dedicated-account usage, and provide auditable correction tooling. | [`docs/milestones/14_PAYMENT_ATTRIBUTION_HARDENING.md`](milestones/14_PAYMENT_ATTRIBUTION_HARDENING.md) |
-| [x] | 15 | CryptoZing.app SEO Bootstrap | Get the placeholder/landing page discovered, indexed, and monitored early before go-live. | [`docs/milestones/15_CRYPTOZING_APP_SEO_BOOTSTRAP.md`](milestones/15_CRYPTOZING_APP_SEO_BOOTSTRAP.md) |
-| [x] | 16 | Mailer & Alerts Polish + Audit | Restore trustworthy outbound mail, delivery safeguards, truthful notification model, sequence-keyed past-due scheduling, persistent queue worker, and Mailgun webhook delivery status feedback. | [`docs/milestones/16_MAILER_AND_ALERTS_POLISH_AUDIT.md`](milestones/16_MAILER_AND_ALERTS_POLISH_AUDIT.md) |
-| [x] | 17 | Product Readiness | Rationalize the test suite, replace "owner" with "issuer" in all UI and mail copy, add service health monitoring to the support dashboard, and extend the getting-started flow with a post-payment receipt step. | [`docs/milestones/17_PRODUCT_READINESS.md`](milestones/17_PRODUCT_READINESS.md) |
+| [x] | 13 | UX Overhaul | Deliver dashboard/theme/help/onboarding/settings IA and close Task 13 Browser QA. | [`docs/milestones/x13_UX_OVERHAUL.md`](milestones/x13_UX_OVERHAUL.md) |
+| [x] | 14 | On-Chain Payment Attribution Hardening | Make attribution key-aware, detect unsupported wallet reuse, reinforce dedicated-account usage, and provide auditable correction tooling. | [`docs/milestones/x14_PAYMENT_ATTRIBUTION_HARDENING.md`](milestones/x14_PAYMENT_ATTRIBUTION_HARDENING.md) |
+| [x] | 15 | CryptoZing.app SEO Bootstrap | Get the placeholder/landing page discovered, indexed, and monitored early before go-live. | [`docs/milestones/x15_CRYPTOZING_APP_SEO_BOOTSTRAP.md`](milestones/x15_CRYPTOZING_APP_SEO_BOOTSTRAP.md) |
+| [x] | 16 | Mailer & Alerts Polish + Audit | Restore trustworthy outbound mail, delivery safeguards, truthful notification model, sequence-keyed past-due scheduling, persistent queue worker, and Mailgun webhook delivery status feedback. | [`docs/milestones/x16_MAILER_AND_ALERTS_POLISH_AUDIT.md`](milestones/x16_MAILER_AND_ALERTS_POLISH_AUDIT.md) |
+| [x] | 17 | Product Readiness | Rationalize the test suite, replace "owner" with "issuer" in all UI and mail copy, add service health monitoring to the support dashboard, and extend the getting-started flow with a post-payment receipt step. | [`docs/milestones/x17_PRODUCT_READINESS.md`](milestones/x17_PRODUCT_READINESS.md) |
+| [x] | 18 | Pre-Release Content & SEO | Extend the site from a single placeholder to a lightweight content site with educational articles, adapted Helpful Notes, and a staging path — giving search engines substance to rank before RC1 ships. | [`docs/milestones/x18_PRERELEASE_CONTENT_SEO.md`](milestones/x18_PRERELEASE_CONTENT_SEO.md) |

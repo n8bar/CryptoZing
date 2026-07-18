@@ -14,12 +14,11 @@ use App\Mail\InvoiceUnderpaymentClientMail;
 use App\Mail\InvoiceUnderpaymentIssuerMail;
 use App\Mail\InvoiceIssuerPaidNoticeMail;
 use App\Models\Invoice;
-use App\Mail\InvoicePartialWarningClientMail;
-use App\Mail\InvoicePartialWarningIssuerMail;
 use App\Models\InvoiceDelivery;
 use App\Models\InvoicePayment;
 use App\Services\InvoiceDeliveryService;
 use App\Services\MailAlias;
+use App\Services\MailgunEventLookup;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -28,10 +27,17 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Symfony\Component\Mailer\Header\MetadataHeader;
+use Symfony\Component\Mime\Email;
 
 class DeliverInvoiceMail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    public int $tries = 3;
+
+    /** @var int[] Seconds to wait before each retry attempt. */
+    public array $backoff = [60, 300];
 
     public function __construct(public InvoiceDelivery $delivery)
     {
@@ -63,13 +69,26 @@ class DeliverInvoiceMail implements ShouldQueue
             }
 
             if ($delivery->status === 'sending') {
-                Log::info('invoice_delivery.send_already_claimed', [
-                    'delivery_id' => $delivery->id,
-                    'invoice_id' => $delivery->invoice_id,
-                    'type' => $delivery->type,
-                    'recipient' => $delivery->recipient,
-                ]);
-                return;
+                // Leftover from an interrupted prior attempt. With a provider we can
+                // query (Mailgun), reconcile; otherwise no-op — we can't verify whether
+                // it sent, and a throw→fail→resend could duplicate a delivered message.
+                if (config('mail.default') !== 'mailgun') {
+                    Log::info('invoice_delivery.send_already_claimed', [
+                        'delivery_id' => $delivery->id,
+                        'invoice_id' => $delivery->invoice_id,
+                        'type' => $delivery->type,
+                        'recipient' => $delivery->recipient,
+                    ]);
+                    return;
+                }
+                if ($this->reconcileStuckSending($delivery)) {
+                    return; // provider confirms it went out → now `sent`
+                }
+                // Not confirmed — keep the job alive so the queue retries; failed()
+                // records terminal `failed` once tries are exhausted.
+                throw new \RuntimeException(
+                    "Invoice delivery {$delivery->id} stuck in sending; awaiting provider confirmation."
+                );
             }
 
             if ($delivery->status !== 'queued') {
@@ -140,43 +159,120 @@ class DeliverInvoiceMail implements ShouldQueue
             'issuer_overpay_alert' => new InvoiceOverpaymentIssuerMail($invoice, $delivery),
             'client_underpay_alert' => new InvoiceUnderpaymentClientMail($invoice, $delivery),
             'issuer_underpay_alert' => new InvoiceUnderpaymentIssuerMail($invoice, $delivery),
-            'client_partial_warning' => new InvoicePartialWarningClientMail($invoice, $delivery),
-            'issuer_partial_warning' => new InvoicePartialWarningIssuerMail($invoice, $delivery),
             default => new InvoiceReadyMail($invoice, $delivery),
         };
 
+        // Tag the outbound message with the delivery id (Mailgun `v:delivery_id`) so
+        // its provider outcome is matchable from webhooks/events even if we never
+        // persist a provider_message_id. See NOTIFICATIONS.md item 17.
+        $mailable->withSymfonyMessage(function (Email $message) use ($delivery) {
+            $message->getHeaders()->add(new MetadataHeader('delivery_id', (string) $delivery->id));
+        });
+
+        // Only the send itself is retryable. A failure here releases the claim
+        // back to `queued` so a retry re-attempts; terminal `failed` is recorded
+        // only once retries are exhausted, in failed().
         try {
             $mailer = Mail::to($mailAlias->convert($delivery->recipient));
             if ($delivery->cc) {
                 $mailer->cc($mailAlias->convert($delivery->cc));
             }
             $sentMessage = $mailer->send($mailable);
-
-            $delivery->update([
-                'status' => 'sent',
-                'sent_at' => now(),
-                'provider_message_id' => $sentMessage?->getMessageId(),
-                'error_code' => null,
-                'error_message' => null,
-            ]);
-            Log::info('invoice_delivery.sent', [
-                'delivery_id' => $delivery->id,
-                'invoice_id' => $invoice->id,
-                'type' => $delivery->type,
-                'recipient' => $delivery->recipient,
-            ]);
         } catch (\Throwable $e) {
             $delivery->update([
-                'status' => 'failed',
+                'status' => 'queued',
                 'error_code' => (string) $e->getCode(),
                 'error_message' => $e->getMessage(),
             ]);
-            Log::error('Invoice delivery failed', [
+            Log::warning('Invoice delivery send failed; will retry', [
                 'delivery_id' => $delivery->id,
+                'attempt' => $this->attempts(),
                 'error' => $e->getMessage(),
             ]);
             throw $e;
         }
+
+        // Send succeeded — record it OUTSIDE the retryable catch. A transient
+        // failure here must not re-send, so retry the write a few times; if it
+        // still fails, throw and let the job re-run reconcile the `sending` row
+        // against the provider (no re-send).
+        for ($attempt = 1; ; $attempt++) {
+            try {
+                $delivery->update([
+                    'status' => 'sent',
+                    'sent_at' => now(),
+                    'provider_message_id' => $sentMessage?->getMessageId(),
+                    'error_code' => null,
+                    'error_message' => null,
+                ]);
+                break;
+            } catch (\Throwable $e) {
+                if ($attempt >= 3) {
+                    Log::warning('invoice_delivery.sent_write_failed', [
+                        'delivery_id' => $delivery->id,
+                        'error' => $e->getMessage(),
+                    ]);
+                    throw $e;
+                }
+                usleep(100_000);
+            }
+        }
+        Log::info('invoice_delivery.sent', [
+            'delivery_id' => $delivery->id,
+            'invoice_id' => $invoice->id,
+            'type' => $delivery->type,
+            'recipient' => $delivery->recipient,
+        ]);
+    }
+
+    /**
+     * Resolve a delivery stranded in `sending` by an interrupted prior attempt:
+     * ask the provider whether the message actually went out. Returns true and
+     * marks `sent` if confirmed; false otherwise (caller retries). Never re-sends.
+     */
+    private function reconcileStuckSending(InvoiceDelivery $delivery): bool
+    {
+        if (app(MailgunEventLookup::class)->wasAccepted($delivery) === true) {
+            $delivery->update([
+                'status' => 'sent',
+                'sent_at' => $delivery->sent_at ?? now(),
+                'error_code' => null,
+                'error_message' => null,
+            ]);
+            Log::info('invoice_delivery.reconciled_sent', [
+                'delivery_id' => $delivery->id,
+                'invoice_id' => $delivery->invoice_id,
+                'type' => $delivery->type,
+            ]);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Invoked by the queue after the retry budget is exhausted. Only here does a
+     * delivery become terminally `failed`.
+     */
+    public function failed(\Throwable $e): void
+    {
+        $delivery = $this->delivery->fresh();
+        if (! $delivery || ! in_array($delivery->status, ['queued', 'sending'], true)) {
+            return;
+        }
+
+        $delivery->update([
+            'status' => 'failed',
+            'error_code' => (string) $e->getCode(),
+            'error_message' => $e->getMessage(),
+        ]);
+        Log::error('Invoice delivery failed after retries', [
+            'delivery_id' => $delivery->id,
+            'invoice_id' => $delivery->invoice_id,
+            'type' => $delivery->type,
+            'error' => $e->getMessage(),
+        ]);
     }
 
     private function duplicateSendReason(InvoiceDelivery $delivery): ?string
@@ -286,11 +382,6 @@ class DeliverInvoiceMail implements ShouldQueue
         $underpayTypes = ['client_underpay_alert', 'issuer_underpay_alert'];
         if (in_array($delivery->type, $underpayTypes, true) && !$invoice->requiresClientUnderpayAlert()) {
             return 'Underpayment resolved before send.';
-        }
-
-        $partialTypes = ['client_partial_warning', 'issuer_partial_warning'];
-        if (in_array($delivery->type, $partialTypes, true) && !$invoice->shouldWarnAboutPartialPayments()) {
-            return 'Partial-payment warning no longer applicable.';
         }
 
         $pastDueTypes = ['past_due_issuer', 'past_due_client'];

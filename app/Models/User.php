@@ -4,15 +4,39 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
+
+    protected static function booted(): void
+    {
+        // Account deletion is full deletion (ToS §9): payment/accounting rows for
+        // the user's invoices go too. Their invoice_id/accounting_invoice_id
+        // foreign keys are deliberately RESTRICT (to block invoice force-deletes
+        // with retained payment history), so they must be removed before the
+        // users -> invoices cascade runs. Reattribution is scoped to a single
+        // user's invoices, so this never touches another user's records.
+        static::deleting(function (User $user): void {
+            $invoiceIds = $user->invoices()->withTrashed()->pluck('id');
+
+            InvoicePayment::query()
+                ->where(function (Builder $query) use ($invoiceIds): void {
+                    $query->whereIn('invoice_id', $invoiceIds)
+                        ->orWhereIn('accounting_invoice_id', $invoiceIds);
+                })
+                ->delete();
+
+            Cache::forget("dashboard:snapshot:user:{$user->id}");
+        });
+    }
 
     public const DEFAULT_MAIL_BRAND_NAME = 'CryptoZing';
 

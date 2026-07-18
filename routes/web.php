@@ -8,6 +8,7 @@ use App\Http\Controllers\WalletSettingsController;
 use App\Http\Controllers\InvoiceSettingsController;
 use App\Http\Controllers\NotificationSettingsController;
 use App\Http\Controllers\HealthController;
+use App\Http\Controllers\LegalController;
 use App\Http\Controllers\InvoicePaymentNoteController;
 use App\Http\Controllers\InvoiceDeliveryController;
 use App\Http\Controllers\InvoicePaymentAdjustmentController;
@@ -44,6 +45,10 @@ Route::get('p/{token}', [InvoiceController::class, 'publicPrint'])
 
 // Public Helpful Notes (no auth)
 Route::get('/help', HelpController::class)->name('help');
+
+// Public legal pages (scaffolded in M19.5; [date] placeholders resolve at MS21 deploy)
+Route::get('/terms', [LegalController::class, 'terms'])->name('legal.terms');
+Route::get('/privacy', [LegalController::class, 'privacy'])->name('legal.privacy');
 
 /*
 |--------------------------------------------------------------------------
@@ -127,6 +132,8 @@ Route::middleware(['auth'])->group(function () {
         ->name('invoices.deliver.receipt');
     Route::post('invoices/{invoice}/deliver/receipt/resend', [InvoiceDeliveryController::class, 'resendReceipt'])
         ->name('invoices.deliver.receipt.resend');
+    Route::post('invoices/{invoice}/deliveries/{delivery}/resend', [InvoiceDeliveryController::class, 'resendDelivery'])
+        ->name('invoices.deliver.resend');
     Route::patch('invoices/{invoice}/deliver/draft', [InvoiceDeliveryController::class, 'updateDraft'])
         ->name('invoices.deliver.draft');
     Route::patch('invoices/{invoice}/payments/{payment}/note', [InvoicePaymentNoteController::class, 'update'])

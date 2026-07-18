@@ -1,11 +1,11 @@
-# Docs & DX Ops (RC)
+# Docs & DX Ops (Open Beta)
 
 Release Candidate contributor-docs and documentation-operations scope.
 
 ## Outputs
 - `docs/ops/get-live/QUICK_START.md`: Sail-first quick start + env var reference for new contributors.
 - `docs/ops/get-live/CONTRIBUTOR_WALKTHROUGH.md`: end-to-end contributor walkthrough from clone → wallet setup → invoice creation → delivery → payment visibility (screenshots OK).
-- `README.md`, `docs/PLAN.md`, `docs/PRODUCT_SPEC.md`, and `docs/BACKLOG.md` updated to link the above and keep RC scope separate from post-MVP backlog.
+- `README.md`, `docs/PLAN.md`, `docs/PRODUCT_SPEC.md`, and `docs/BACKLOG.md` updated to link the above and keep open-beta scope separate from post-MVP backlog.
 
 ## Quick Start + Env Var Reference
 Audience: new contributors running the stack locally with Sail.
@@ -25,4 +25,4 @@ Goal: show the first successful invoice lifecycle with minimal branching.
 
 ## Definition of Done
 - Quick start and contributor walkthrough docs exist, are linked from README and `docs/PLAN.md`, and match current UX/commands.
-- `docs/PLAN.md` keeps RC scope for Docs & DX; anything deferred is explicitly routed to `docs/BACKLOG.md`.
+- `docs/PLAN.md` keeps open-beta scope for Docs & DX; anything deferred is explicitly routed to `docs/BACKLOG.md`.

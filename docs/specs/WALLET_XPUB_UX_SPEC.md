@@ -1,6 +1,6 @@
 # Wallet / XPUB UX Spec (MS13 — UX ToDo #7)
 
-Purpose: make wallet setup mainnet-first and approachable for non-technical users while keeping derivation safety intact. Applies to the primary wallet on `/wallet/settings`; additional wallets UI is deferred to post-RC until multi-wallet selection is in scope.
+Purpose: make wallet setup mainnet-first and approachable for non-technical users while keeping derivation safety intact. Applies to the primary wallet on `/wallet/settings`; additional wallets UI is deferred to post-open-beta until multi-wallet selection is in scope.
 
 ## Goals
 - One-step setup: network derives from `WALLET_NETWORK` (`mainnet`, `testnet4`, or `testnet3`); user only pastes a wallet account key (BIP84 xpub/zpub/vpub/tpub).
@@ -32,7 +32,7 @@ Purpose: make wallet setup mainnet-first and approachable for non-technical user
 - The Helpful Notes guidance for dedicated receiving accounts and unsupported configuration is shipped on the public `Helpful Notes` page, using stronger watch-only wording while keeping mainnet-style prefix examples in the explanatory import guidance.
 - MS14 wallet settings now link directly from the dedicated-account guidance block to the matching Helpful Notes anchor and emit a support-safe save log after that guidance is shown.
 
-## Deferred (post-RC)
+## Deferred (post-open-beta)
 - Additional wallets UI and multi-wallet selection (backend storage remains; UI will return once the selector is in scope). Tracked in `docs/BACKLOG.md`.
 
 ## UI & Interaction
@@ -56,7 +56,7 @@ Purpose: make wallet setup mainnet-first and approachable for non-technical user
     4) Paste here. You can verify below before saving.
   - Provide wallet badges with concise notes, e.g., “Ledger Live: Account → … → Account extended public key,” “Trezor Suite: Accounts → Receive → Show public key,” and mobile-friendly cues like “Blockstream Green (iOS/Android): Account → three dots → Export xpub” and “BlueWallet/Nunchuk (iOS/Android): Account → More/Manage → Export xpub.”
 - Testnet cue: if `WALLET_NETWORK` is not mainnet, show a small helper above the field: “Testnet (for testing only). Real payments require mainnet.” No badge/no copy on mainnet.
-- Additional wallets UI is deferred post-RC; when re-enabled, mirror the primary form (same helper/validation) and disallow mixed networks.
+- Additional wallets UI is deferred post-open-beta; when re-enabled, mirror the primary form (same helper/validation) and disallow mixed networks.
 - CTA area: primary “Save wallet” button stays enabled after errors; secondary “Re-run validation” link/button near the helper for retry.
 
 ## Validation & States

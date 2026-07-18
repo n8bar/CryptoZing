@@ -19,25 +19,34 @@ class MailgunWebhookController extends Controller
         $eventData = $request->input('event-data', []);
         $event = $eventData['event'] ?? null;
         $messageId = $eventData['message']['headers']['message-id'] ?? null;
+        $deliveryId = $eventData['user-variables']['delivery_id'] ?? null;
 
-        if (! $messageId) {
-            return response()->json(['ok' => true]);
+        // Resolve by the delivery id we tag onto every message — matches even when
+        // provider_message_id was never persisted (e.g. a stuck `sending` row). Fall
+        // back to the provider message id for older, untagged messages.
+        $delivery = null;
+        if ($deliveryId !== null && $deliveryId !== '') {
+            $delivery = InvoiceDelivery::find($deliveryId);
         }
-
-        $delivery = InvoiceDelivery::where('provider_message_id', $messageId)->first();
+        if (! $delivery && $messageId) {
+            $delivery = InvoiceDelivery::where('provider_message_id', $messageId)->first();
+        }
 
         if (! $delivery) {
             return response()->json(['ok' => true]);
         }
 
         match ($event) {
-            'delivered' => $delivery->update([
+            // `accepted` confirms the provider took the message — enough to resolve a
+            // delivery that was sent but never recorded `sent`; `delivered` confirms it too.
+            'accepted', 'delivered' => $delivery->update([
                 'status' => 'sent',
-                'sent_at' => now(),
+                'sent_at' => $delivery->sent_at ?? now(),
+                'provider_message_id' => $delivery->provider_message_id ?: $messageId,
                 'error_code' => null,
                 'error_message' => null,
             ]),
-            'failed', 'bounced' => $this->handleFailure($delivery, $eventData),
+            'failed', 'bounced' => $this->handleFailure($delivery, $eventData, $messageId),
             default => null,
         };
 
@@ -61,7 +70,7 @@ class MailgunWebhookController extends Controller
         return hash_equals($expected, $provided);
     }
 
-    private function handleFailure(InvoiceDelivery $delivery, array $eventData): void
+    private function handleFailure(InvoiceDelivery $delivery, array $eventData, ?string $messageId = null): void
     {
         $status = $eventData['delivery-status'] ?? [];
         $reason = $status['description'] ?? $status['message'] ?? 'Delivery failed.';
@@ -69,6 +78,7 @@ class MailgunWebhookController extends Controller
 
         $delivery->update([
             'status' => 'failed',
+            'provider_message_id' => $delivery->provider_message_id ?: $messageId,
             'error_code' => $code ?: null,
             'error_message' => $reason,
         ]);

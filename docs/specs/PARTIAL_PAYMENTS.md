@@ -42,7 +42,7 @@ Ignore/restore correction handling for wrongly attributed on-chain rows is defin
         - `sent`/`pending` → `partial` when confirmed USD > 0 but below expected.
         - `partial`/`pending` → `paid` when confirmed USD ≥ expected (confirmation threshold enforced).
         - `draft` stays draft if we really want to block payments until “sent” — TBD.
-    4. `paid_at` stays the first confirmed timestamp once confirmed USD crosses expected; confirmation timestamps update when block data arrives.
+    4. `paid_at` is the settlement timestamp — the `confirmed_at` of the confirmation that most recently crosses the cumulative confirmed total from below the expected total to at-or-above it (the latest total re-cross): the time everyone finally agreed the invoice was paid. Among surviving confirmed payments the cumulative is monotonic, so this is the payment that first reaches the expected total; a later, redundant payment is not the crossing. Confirmation timestamps update when block data arrives.
 - Handle multiple payments per tx/address pair gracefully (e.g., same tx sends two outputs to us) by summing `sats_received`.
 
 ## Confirmation and RBF Safety
@@ -54,7 +54,7 @@ Ignore/restore correction handling for wrongly attributed on-chain rows is defin
 
 ### Confirmation Gate
 - Default confirmation threshold: 1, configurable via `BLOCKCHAIN_CONFIRMATIONS_REQUIRED`.
-- Post-RC direction: allow a per-user required-confirmations setting with app-default fallback.
+- Post-open-beta direction: allow a per-user required-confirmations setting with app-default fallback.
 - Invoice transitions to `paid` only when confirmed USD totals satisfy expected USD.
 - `paid_at` is set only on confirmed transition.
 
@@ -141,5 +141,5 @@ Ignore/restore correction handling for wrongly attributed on-chain rows is defin
     - **Noise tolerance** (≤ $10 USD equivalent or ≤ 1% of invoice) — simply show the extra as part of the payment history without alerts.
     - **Significant overpay** (> tolerance) — flag the invoice for the issuer (UI + notification) and make clear that the surplus may be an intentional tip or an accidental overpayment. Issuer guidance may suggest refund/credit follow-up when the surplus looks accidental, but the default copy should avoid sounding overly prescriptive about what to do with intentional tips. If a client has multiple overpaid invoices, batch the refund/credit calculation so the issuer can settle them in one transaction. Future automation can email the client with those options if we don’t act within a configured SLA so mistaken overpayments can be corrected.
 
-## Post-RC Direction
+## Post-open-beta Direction
 - Add a per-user required-confirmations setting (1-6) used by the watcher, with app-default fallback.

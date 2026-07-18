@@ -1,6 +1,6 @@
 # Test Suite Rationalization Audit
 
-_Produced for MS17 Phase 2. See [`docs/strategies/17.2_TEST_RATIONALIZATION.md`](../../strategies/17.2_TEST_RATIONALIZATION.md) for process._
+_Produced for MS17 Phase 2. See [`docs/strategies/x17.2_TEST_RATIONALIZATION.md`](../../strategies/x17.2_TEST_RATIONALIZATION.md) for process._
 
 Status: **Pass 2 complete. Awaiting review before execution.**
 
@@ -65,9 +65,9 @@ These files were partially read during the audit (file sizes exceeded the read w
 
 ---
 
-## Coverage gaps (RC-critical)
+## Coverage gaps (critical for open-beta launch)
 
-Surfaces with zero or near-zero test coverage that matter for RC:
+Surfaces with zero or near-zero test coverage that matter for the open beta:
 
 1. **Blockchain confirmation logic** — No explicit tests for block height tracking, confirmation counting, mempool API error handling/retries, or double-spend detection. `WatchPaymentsCommandTest` is partially read; this may be partially covered.
 2. **Receipt content** — Tests verify delivery queueing but not receipt email content, layout, or truthfulness invariants.
@@ -75,7 +75,7 @@ Surfaces with zero or near-zero test coverage that matter for RC:
 4. **Multi-wallet / wallet reconnect** — All tests assume a single wallet per user. No coverage for wallet reconnection, legacy key retirement, or address reuse detection across wallets.
 5. **Dashboard cache invalidation on payment events** — TTL behavior tested; event-driven invalidation is not.
 
-Gaps 3–5 are deferred to the backlog unless the review in Section 2 surfaces a specific RC risk. Gap 1 should be confirmed once `WatchPaymentsCommandTest` is fully read. Gap 2 is partially mitigated by `MailBrandingTest` but receipt truthfulness invariants (no receipt on unresolved correction state) are untested.
+Gaps 3–5 are deferred to the backlog unless the review in Section 2 surfaces a specific open-beta risk. Gap 1 should be confirmed once `WatchPaymentsCommandTest` is fully read. Gap 2 is partially mitigated by `MailBrandingTest` but receipt truthfulness invariants (no receipt on unresolved correction state) are untested.
 
 ---
 
