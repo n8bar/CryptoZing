@@ -16,9 +16,9 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 
 ## Current
 - Active milestone:
-  - **MS19 - Open Beta Hardening & Ops** — in progress; Phases 1, 2, and 4 complete. Active phase: **Phase 3 (LLC formation)** — CyberCreek LLC (parent) approved 2026-06-17; CryptoZing subsidiary filing next. Phases 5–8 (Legal Layer, Content Promises Reconciliation, Contributor Docs, 2FA) pending.
+  - **MS19 - Open Beta Hardening & Ops** — in progress; Phases 1–4 complete. Active phase: **Phase 5 (Legal Layer)** — §1–§6 complete; §7 open-issue sweep in execution. Phases 6–9 (Content Promises Reconciliation, Contributor Docs, Micro-Monetize, 2FA) pending.
 - Status: `active`
-- Next action: MS19 Phase 3 — complete LLC formation (parent publication, EINs, business bank account, CryptoZing subsidiary). Phase 5 (Legal Layer) runs as a parallel track.
+- Next action: MS19 Phase 5 §7 — execute the open-issue sweep dispositions (#71, #72, #73, #123, #126). Phase 6 (Content Promises Reconciliation) follows.
 - Primary next doc: [`docs/milestones/19_OB_HARDENING_OPS.md`](milestones/19_OB_HARDENING_OPS.md)
 - Most recently completed milestone doc: [`docs/milestones/x18_PRERELEASE_CONTENT_SEO.md`](milestones/x18_PRERELEASE_CONTENT_SEO.md)
 
