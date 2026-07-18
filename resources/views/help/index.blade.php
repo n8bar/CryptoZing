@@ -260,13 +260,13 @@
 	                        <div>
 	                            <dt class="font-semibold text-gray-900 dark:text-slate-100">Is the money safe?</dt>
 	                            <dd class="mt-1">
-	                                Yes. The address belongs to your wallet — your seed phrase already controls it. The payment is on the blockchain; your wallet just has not looked far enough ahead to show it.
+	                                Yes. The address belongs to your wallet and your seed phrase controls it. The payment is on the blockchain; your wallet just has not looked far enough ahead to show it.
 	                            </dd>
 	                        </div>
 	                        <div>
 	                            <dt class="font-semibold text-gray-900 dark:text-slate-100">How do I make the payment appear?</dt>
 	                            <dd class="mt-1">
-	                                Increase your wallet's gap limit or run a rescan. Check your wallet's instructions for the exact steps — if they do not cover it, the wallet's help forum or support channel is the place to ask.
+	                                Increase your wallet's gap limit or run a rescan. Check your wallet's instructions for the exact steps. If they do not cover it, the wallet's help forum or support channel is the place to ask.
 	                            </dd>
 	                        </div>
 	                    </dl>
