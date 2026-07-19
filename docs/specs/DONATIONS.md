@@ -11,6 +11,7 @@ CryptoZing has no revenue surface; the monetization posture ("leave room, promis
 - Each donor session gets its own receive address, not shared with other donors; the address stays with that session until it sees payment.
 - The address is shown as a copyable string and a QR code that encodes the chosen amount.
 - When payment is seen on the address, the page shows a thank-you state.
+- The thank-you state doubles as a printable receipt: date, USD and BTC amounts, receiving address, and txid in a print-friendly layout carrying the same not-tax-deductible disclaimer — a payment record, not deduction paperwork. The screen nudges the donor to save or print it now; the record exists only in that session.
 - The flow is anonymous end to end: no personal data is requested or stored.
 - Donation funds go to a CryptoZing-controlled wallet wholly separate from every user's wallet; the app's watch-only rule holds (no private keys anywhere).
 - On-page disclaimer: donations support CryptoZing LLC, are non-refundable, and are not tax-deductible.
