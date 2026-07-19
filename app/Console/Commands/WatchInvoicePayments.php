@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Invoice;
+use App\Services\DonationPaymentSyncService;
 use App\Services\InvoicePaymentSyncService;
 use Illuminate\Console\Command;
 
@@ -10,10 +11,11 @@ class WatchInvoicePayments extends Command
 {
     protected $signature = 'wallet:watch-payments {--invoice= : Limit to a specific invoice ID}';
 
-    protected $description = 'Poll known invoice addresses for payments and auto-mark invoices paid.';
+    protected $description = 'Poll known invoice and donation addresses for payments and auto-mark them paid.';
 
     public function __construct(
-        private readonly InvoicePaymentSyncService $syncService
+        private readonly InvoicePaymentSyncService $syncService,
+        private readonly DonationPaymentSyncService $donationSyncService
     )
     {
         parent::__construct();
@@ -64,6 +66,11 @@ class WatchInvoicePayments extends Command
         });
 
         $this->info("Processed {$processed} invoices, updated {$updated}.");
+
+        if (! $this->option('invoice')) {
+            $donations = $this->donationSyncService->syncPending();
+            $this->info("Checked {$donations['checked']} donation addresses, {$donations['paid']} newly paid.");
+        }
 
         return Command::SUCCESS;
     }
