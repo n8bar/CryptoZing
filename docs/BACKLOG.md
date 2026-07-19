@@ -138,13 +138,8 @@ _Carry-forward guardrail from active roadmap scope: suppress duplicate sends for
 ## Monetization
 25. **Fiat donations**
    - Add a fiat path to the donation page (MS19 Phase 8 ships BTC-only; see `docs/strategies/19.8_MICRO_MONETIZE.md`).
-   - Requires a payment processor, the business bank account (item 26) to land/convert funds, and tax-treatment confirmation for fiat inflows.
+   - Requires a payment processor and business banking to land/convert funds.
    - Revisit once donation-page traffic or user requests suggest demand; fiat in scope likely means its own milestone.
-
-26. **Business bank account (AFCU)**
-   - Gated on USD revenue: open once CZ actually sells donated bitcoin or receives dollars directly — an empty account just risks monthly fees.
-   - Sub-steps: confirm AFCU requirements (formation receipt, EIN, deposit minimums, fee schedule); open business checking in **CryptoZing LLC's** name + EIN; route all CZ income/expenses through it exclusively (no co-mingling).
-   - Rationale + AFCU details originated in MS19 Phase 3 (`docs/strategies/x19.3_LLC_FORMATION.md`, "Decisions made").
 
 23. **Per-transaction fee vs. published fee criticism (content promise 1.1)**
    - Before shipping any per-transaction fee: revisit the criticism of processors "taking a cut they expect you to absorb" in `site/learn/accepting-bitcoin-payments-freelancer-small-business.md:17` — see `CONTENT_PROMISES.md` Major 1.
