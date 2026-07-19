@@ -57,7 +57,7 @@ Walked every catalog entry against the finished product: majors — 3 honored (0
 Reviewed AGENTS.md (mail-alias note trimmed to mechanism + rule; six standing rules added: no-Sunday-commits, x-prefix completed docs, immediate checkoffs, push-over-cron, specs-state-behavior, commit summaries), CLAUDE.md (clean), AgentRoles/ (Harvey kept as-is), and the contributor-facing ops docs (QUICK_START: queue service noted, host-Node prerequisite dropped, fresh-clone Composer bootstrap added). No retire/merge candidates. See [`x19.7_CONTRIBUTOR_DOCS.md`](../strategies/x19.7_CONTRIBUTOR_DOCS.md).
 
 ### [ ] Phase 8 — Micro-Monetize
-CryptoZing's first revenue surface — a donation page. **Stub — scope decided (BTC-only, stays in MS19; fiat donations backlogged as BACKLOG item 25), flesh-out pending.** Before starting: re-enable the `frontend-design` plugin. See [`19.8_MICRO_MONETIZE.md`](../strategies/19.8_MICRO_MONETIZE.md).
+CryptoZing's first revenue surface — a public `/donate` page in the app (BTC-only; fiat donations backlogged as BACKLOG item 25): USD presets at the live rate, per-donor derived addresses from a CZ-owned watch-only xpub, on-page thank-you. Ships dark; public at the MS21 deploy. **Fleshed out, pending review.** See [`19.8_MICRO_MONETIZE.md`](../strategies/19.8_MICRO_MONETIZE.md) and [`docs/specs/DONATIONS.md`](../specs/DONATIONS.md).
 
 ### [ ] Phase 9 — Two-Factor Authentication
 Add 2FA to the open beta. Email-based 2FA as the baseline; TOTP / authenticator-app 2FA opportunistically if MS19 time allows (deferred to the 2028 release otherwise). Includes a non-blocking recommendation surface for users without 2FA enabled. **Positionally last by design** — if additional phases are ever added to MS19, this one stays at the end.
@@ -78,7 +78,7 @@ Add 2FA to the open beta. Email-based 2FA as the baseline; TOTP / authenticator-
 - [x] Monetization-safe language guide produced for future copy decisions.
 - [x] Content promises catalog reconciled — every open entry confirmed honored or resolved (content revised or product adjusted).
 - [x] Contributor docs reviewed and current.
-- [ ] Phase 8 (Micro-Monetize): scope decided (BTC-only, stays in MS19; fiat donations backlogged); donation surface live — see [`19.8`](../strategies/19.8_MICRO_MONETIZE.md).
+- [ ] Phase 8 (Micro-Monetize): scope decided (BTC-only, stays in MS19; fiat donations backlogged); donation surface built and verified on testnet — ships dark, public at the MS21 deploy. See [`19.8`](../strategies/19.8_MICRO_MONETIZE.md).
 - [ ] Email 2FA available as opt-in; recovery flow per the Phase 9 decision in place.
 - [ ] Recommendation surface for users without 2FA enabled is shipped.
 - [ ] TOTP shipped if MS19 time-cutoff met; otherwise explicitly deferred to the 2028 release.

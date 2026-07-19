@@ -18,7 +18,7 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 - Active milestone:
   - **MS19 - Open Beta Hardening & Ops** — in progress; Phases 1–7 complete. Active phase: **Phase 8 (Micro-Monetize)**. Phase 9 (2FA) pending.
 - Status: `active`
-- Next action: MS19 Phase 8 flesh-out — scope decided (BTC-only donation page, stays an MS19 phase; fiat donations backlogged); re-enable the `frontend-design` plugin before starting.
+- Next action: MS19 Phase 8 — review/approve the fleshed [`19.8_MICRO_MONETIZE.md`](strategies/19.8_MICRO_MONETIZE.md) + [`DONATIONS.md`](specs/DONATIONS.md) spec, then implement on a `claude/` branch.
 - Primary next doc: [`docs/milestones/19_OB_HARDENING_OPS.md`](milestones/19_OB_HARDENING_OPS.md)
 - Most recently completed milestone doc: [`docs/milestones/x18_PRERELEASE_CONTENT_SEO.md`](milestones/x18_PRERELEASE_CONTENT_SEO.md)
 
