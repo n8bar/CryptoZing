@@ -14,6 +14,7 @@ CryptoZing has no revenue surface; the monetization posture ("leave room, promis
 - The flow is anonymous end to end: no personal data is requested or stored.
 - Donation funds go to a CryptoZing-controlled wallet wholly separate from every user's wallet; the app's watch-only rule holds (no private keys anywhere).
 - On-page disclaimer: donations support CryptoZing LLC, are non-refundable, and are not tax-deductible.
+- When a donation is seen, a notification email goes to a configured operator address. Donors receive no mail.
 - Donations never appear in user-facing invoice surfaces, stats, or mail.
 
 ## Out of Scope
