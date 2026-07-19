@@ -28,4 +28,21 @@ class Donation extends Model
             'allocated_at' => 'datetime',
         ];
     }
+
+    public function bitcoinUriForAmount(?float $amountBtc): ?string
+    {
+        if (! $this->address) {
+            return null;
+        }
+
+        $params = [];
+        if ($amountBtc !== null && $amountBtc > 0) {
+            $params['amount'] = number_format($amountBtc, 8, '.', '');
+        }
+        $params['label'] = 'CryptoZing donation';
+
+        $query = http_build_query($params, '', '&', PHP_QUERY_RFC3986);
+
+        return 'bitcoin:' . $this->address . ($query ? ('?' . $query) : '');
+    }
 }
