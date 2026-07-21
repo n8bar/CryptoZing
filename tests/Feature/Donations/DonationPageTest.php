@@ -47,7 +47,79 @@ class DonationPageTest extends TestCase
         $this->get('/donate')
             ->assertOk()
             ->assertSee('CryptoZing LLC')
-            ->assertSee('not tax-deductible');
+            ->assertSee('not tax-deductible')
+            ->assertSee('Donate $5');
+
+        $this->assertSame(0, Donation::count());
+    }
+
+    public function test_preset_buttons_allocate_their_labeled_amount_despite_an_empty_custom_field(): void
+    {
+        $this->mock(HdWallet::class, function ($mock) {
+            $mock->shouldReceive('deriveAddress')
+                ->once()
+                ->andReturn('tb1qpreset0');
+        });
+
+        $this->post('/donate', ['preset_amount' => 5, 'amount' => ''])
+            ->assertRedirect(route('donate.show'))
+            ->assertSessionHasNoErrors();
+
+        $this->assertDatabaseHas('donations', [
+            'address' => 'tb1qpreset0',
+            'usd_amount_requested' => '5.00',
+        ]);
+    }
+
+    public function test_full_pool_shows_a_busy_notice_instead_of_an_address(): void
+    {
+        config(['donations.max_unpaid_addresses' => 1]);
+
+        $this->makeDonation();
+
+        $this->post('/donate', ['amount' => 25])->assertRedirect(route('donate.show'));
+
+        $this->get('/donate')
+            ->assertOk()
+            ->assertSee('try again')
+            ->assertDontSee('tb1qdonatepaid0');
+
+        $this->assertSame(1, Donation::count());
+    }
+
+    public function test_rate_outage_shows_a_notice_instead_of_silently_dropping_the_amount(): void
+    {
+        Cache::forget(BtcRate::CACHE_KEY);
+        \Illuminate\Support\Facades\Http::fake([
+            'api.coinbase.com/*' => \Illuminate\Support\Facades\Http::response(null, 500),
+        ]);
+
+        $donation = $this->makeDonation(['address' => 'tb1qrateless0', 'derivation_index' => 3]);
+
+        $this->withSession(['donation_id' => $donation->id])
+            ->get('/donate')
+            ->assertOk()
+            ->assertSee('tb1qrateless0')
+            ->assertSee('rate unavailable');
+    }
+
+    public function test_donate_again_clears_the_paid_session_and_returns_to_the_picker(): void
+    {
+        $donation = $this->makeDonation([
+            'status' => 'paid',
+            'txid' => 'donation-tx-9',
+            'sats_received' => 90000,
+            'paid_at' => now(),
+        ]);
+
+        $this->withSession(['donation_id' => $donation->id])
+            ->post('/donate/reset')
+            ->assertRedirect(route('donate.show'));
+
+        $this->get('/donate')
+            ->assertOk()
+            ->assertSee('Donate $5')
+            ->assertDontSee('donation-tx-9');
     }
 
     public function test_choosing_an_amount_allocates_an_address_and_shows_bip21_qr_payload(): void
@@ -131,7 +203,7 @@ class DonationPageTest extends TestCase
         $this->flushSession();
         $this->post('/donate', ['amount' => 5]);
         $this->flushSession();
-        $this->post('/donate', ['amount' => 5]);
+        $this->post('/donate', ['amount' => 5])->assertRedirect(route('donate.show'));
 
         $this->assertSame(2, Donation::count());
     }

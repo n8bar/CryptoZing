@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('donations', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('derivation_index')->unique();
+            $table->unsignedInteger('derivation_index');
             $table->string('address')->unique();
             $table->string('network');
             $table->decimal('usd_amount_requested', 10, 2)->nullable();
@@ -18,8 +18,11 @@ return new class extends Migration
             $table->string('txid')->nullable();
             $table->unsignedBigInteger('sats_received')->nullable();
             $table->timestamp('paid_at')->nullable();
+            $table->timestamp('notified_at')->nullable();
             $table->timestamp('allocated_at')->nullable()->index();
             $table->timestamps();
+
+            $table->unique(['network', 'derivation_index']);
         });
     }
 

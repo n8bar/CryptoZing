@@ -45,7 +45,7 @@
                             <dd class="text-right">{{ number_format((int) $donation->sats_received) }} sats</dd>
                         </div>
                         <div class="flex justify-between gap-4">
-                            <dt class="text-gray-600 dark:text-slate-400">&nbsp;</dt>
+                            <dt class="text-gray-600 dark:text-slate-400"><span class="sr-only">Received (BTC)</span></dt>
                             <dd class="text-right">{{ rtrim(rtrim(number_format($donation->sats_received / 100000000, 8, '.', ''), '0'), '.') }} BTC</dd>
                         </div>
                     </dl>
@@ -73,8 +73,12 @@
                         Donations support CryptoZing LLC. They are non-refundable and not tax-deductible. This is a payment record, not a tax document.
                     </p>
 
-                    <div class="donate-no-print mt-6 flex items-center gap-3">
+                    <div class="donate-no-print mt-6 flex flex-wrap items-center gap-3">
                         <x-primary-button type="button" onclick="window.print()">Print receipt</x-primary-button>
+                        <form method="POST" action="{{ route('donate.reset') }}">
+                            @csrf
+                            <x-secondary-button type="submit">Donate again</x-secondary-button>
+                        </form>
                         <span class="inline-flex h-2.5 w-2.5 rounded-full bg-amber-500" aria-hidden="true"></span>
                         <span class="font-sans text-sm text-gray-600 dark:text-slate-400">Payment seen</span>
                     </div>
@@ -83,16 +87,25 @@
                 <div class="bg-white dark:bg-slate-800 shadow rounded-lg p-6">
                     <h1 class="text-2xl font-semibold mb-1">Send your donation</h1>
                     <p class="mb-5 text-sm text-gray-600 dark:text-slate-400">Scan the code or copy the address. This page updates on its own once your payment is seen.</p>
+                    <noscript>
+                        <p class="mb-5 text-sm text-gray-600 dark:text-slate-400">JavaScript is off in your browser — refresh this page after sending; your receipt appears once the payment is seen.</p>
+                    </noscript>
+
+                    @if ($rateUnavailable)
+                        <p class="mb-5 rounded-md border border-amber-300 bg-amber-50 dark:bg-amber-950/40 dark:border-amber-700 px-3 py-2 text-sm">
+                            Live rate unavailable — your chosen amount can't be converted to BTC right now. You can still send any amount to this address.
+                        </p>
+                    @endif
 
                     @if ($bitcoinUri)
-                        <div class="donate-no-print mb-5 flex justify-center">
-                            <div class="rounded-lg bg-white p-3 shadow-sm border border-gray-200 dark:border-transparent">
+                        <div class="donate-no-print mb-5 flex justify-center" aria-hidden="true">
+                            <div class="rounded-lg p-3 shadow-sm border border-gray-200 dark:border-slate-500" style="background:#ffffff">
                                 {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(220)->margin(1)->generate($bitcoinUri) !!}
                             </div>
                         </div>
                     @endif
 
-                    <div class="donate-no-print mb-5 flex items-center gap-2" aria-live="polite">
+                    <div class="donate-no-print mb-5 flex items-center gap-2">
                         <span class="relative inline-flex h-2.5 w-2.5" aria-hidden="true">
                             <span class="absolute inline-flex h-full w-full animate-ping motion-reduce:animate-none rounded-full bg-amber-400 opacity-60"></span>
                             <span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-amber-500"></span>
@@ -120,10 +133,7 @@
                     </dl>
 
                     <div class="donate-no-print mt-4">
-                        <x-secondary-button type="button"
-                            onclick="navigator.clipboard.writeText(document.getElementById('donation-address').textContent.trim()); this.textContent = 'Copied!';">
-                            Copy address
-                        </x-secondary-button>
+                        <x-secondary-button type="button" id="donation-copy">Copy address</x-secondary-button>
                     </div>
 
                     <details class="donate-no-print mt-6" @if ($errors->has('amount')) open @endif>
@@ -133,7 +143,8 @@
                             <div>
                                 <x-input-label for="amount" value="New amount (USD)" />
                                 <x-text-input type="number" name="amount" id="amount" min="1" max="25000" step="0.01"
-                                    :value="old('amount', $donation->usd_amount_requested)" class="mt-1 block w-40" />
+                                    :value="old('amount', $donation->usd_amount_requested)" class="mt-1 block w-40"
+                                    @if ($errors->has('amount')) autofocus @endif />
                             </div>
                             <x-primary-button>Update</x-primary-button>
                         </form>
@@ -158,6 +169,29 @@
                                 })
                                 .catch(function () {});
                         }, 10000);
+
+                        const copyButton = document.getElementById('donation-copy');
+                        if (copyButton) {
+                            copyButton.addEventListener('click', function () {
+                                const text = document.getElementById('donation-address').textContent.trim();
+                                const finish = function (ok) {
+                                    copyButton.textContent = ok ? 'Copied!' : 'Copy failed';
+                                    setTimeout(function () { copyButton.textContent = 'Copy address'; }, 1200);
+                                };
+                                if (window.isSecureContext && navigator.clipboard) {
+                                    navigator.clipboard.writeText(text).then(function () { finish(true); }, function () { finish(false); });
+                                } else {
+                                    const helper = document.createElement('textarea');
+                                    helper.value = text;
+                                    document.body.appendChild(helper);
+                                    helper.select();
+                                    let ok = false;
+                                    try { ok = document.execCommand('copy'); } catch (e) {}
+                                    helper.remove();
+                                    finish(ok);
+                                }
+                            });
+                        }
                     })();
                 </script>
             @else
@@ -165,14 +199,20 @@
                     <h1 class="text-2xl font-semibold mb-1">Support CryptoZing</h1>
                     <p class="mb-5 text-sm text-gray-600 dark:text-slate-400">CryptoZing is free while in open beta. If it saves you time, a Bitcoin donation helps keep it running.</p>
 
+                    @if ($poolBusy)
+                        <p class="mb-5 rounded-md border border-amber-300 bg-amber-50 dark:bg-amber-950/40 dark:border-amber-700 px-3 py-2 text-sm">
+                            The donation queue is full right now — please try again in a little while.
+                        </p>
+                    @endif
+
                     <form method="POST" action="{{ route('donate.allocate') }}">
                         @csrf
                         <fieldset class="mb-5">
                             <legend class="text-sm font-medium mb-2">Choose an amount</legend>
                             <div class="flex flex-wrap gap-2">
-                                <x-secondary-button type="submit" name="amount" value="5">Donate $5</x-secondary-button>
-                                <x-secondary-button type="submit" name="amount" value="25">Donate $25</x-secondary-button>
-                                <x-secondary-button type="submit" name="amount" value="100">Donate $100</x-secondary-button>
+                                <x-secondary-button type="submit" name="preset_amount" value="5">Donate $5</x-secondary-button>
+                                <x-secondary-button type="submit" name="preset_amount" value="25">Donate $25</x-secondary-button>
+                                <x-secondary-button type="submit" name="preset_amount" value="100">Donate $100</x-secondary-button>
                             </div>
                         </fieldset>
 
@@ -180,7 +220,8 @@
                             <div>
                                 <x-input-label for="amount" value="Custom amount (USD)" />
                                 <x-text-input type="number" name="amount" id="amount" min="1" max="25000" step="0.01"
-                                    :value="old('amount')" class="mt-1 block w-40" />
+                                    :value="old('amount')" class="mt-1 block w-40"
+                                    @if ($errors->has('amount')) autofocus @endif />
                             </div>
                             <x-primary-button>Donate</x-primary-button>
                         </div>

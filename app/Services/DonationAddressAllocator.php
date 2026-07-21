@@ -7,24 +7,29 @@ use Illuminate\Support\Facades\DB;
 
 class DonationAddressAllocator
 {
+    private const LOCK_NAME = 'cz:donations:allocate';
+
     public function __construct(
         private readonly HdWallet $hdWallet
     ) {
     }
 
     /**
-     * Return the pending donation for $donationId if it is still open,
-     * otherwise allocate an address: derive fresh while the unpaid pool
-     * is under the cap, then fall back to reusing the oldest pending
-     * address (bot/gap-limit guard).
+     * Return the pending donation for $donationId if it is still open on the
+     * current network, otherwise derive a fresh address while the unpaid pool
+     * is under the cap. Returns null when the pool is full (bot/gap-limit
+     * guard) — addresses are never shared between donor sessions.
      */
-    public function allocate(?int $donationId, float $usdAmount): Donation
+    public function allocate(?int $donationId, float $usdAmount): ?Donation
     {
-        return DB::transaction(function () use ($donationId, $usdAmount) {
+        $network = (string) config('wallet.default_network', 'testnet');
+
+        return $this->withAllocationLock(function () use ($donationId, $usdAmount, $network) {
             if ($donationId) {
                 $existing = Donation::query()
                     ->whereKey($donationId)
                     ->where('status', 'pending')
+                    ->where('network', $network)
                     ->first();
 
                 if ($existing) {
@@ -33,20 +38,16 @@ class DonationAddressAllocator
             }
 
             $cap = max((int) config('donations.max_unpaid_addresses', 20), 1);
-            $pendingCount = Donation::query()->where('status', 'pending')->count();
+            $pendingCount = Donation::query()
+                ->where('status', 'pending')
+                ->where('network', $network)
+                ->count();
 
             if ($pendingCount >= $cap) {
-                $oldest = Donation::query()
-                    ->where('status', 'pending')
-                    ->orderBy('allocated_at')
-                    ->orderBy('id')
-                    ->first();
-
-                return $this->touchAllocation($oldest, $usdAmount);
+                return null;
             }
 
-            $index = (int) (Donation::query()->max('derivation_index') ?? -1) + 1;
-            $network = (string) config('wallet.default_network', 'testnet');
+            $index = (int) (Donation::query()->where('network', $network)->max('derivation_index') ?? -1) + 1;
             $address = $this->hdWallet->deriveAddress((string) config('donations.xpub'), $index, $network);
 
             return Donation::query()->create([
@@ -58,6 +59,26 @@ class DonationAddressAllocator
                 'allocated_at' => now(),
             ]);
         });
+    }
+
+    /**
+     * Serialize allocation via a MySQL advisory lock so concurrent requests
+     * cannot read the same max index or both squeeze past the cap. A donor
+     * who cannot get the lock within the wait window is treated as pool-busy.
+     */
+    private function withAllocationLock(\Closure $callback): ?Donation
+    {
+        $acquired = (int) (DB::selectOne('SELECT GET_LOCK(?, 5) AS acquired', [self::LOCK_NAME])->acquired ?? 0);
+
+        if ($acquired !== 1) {
+            return null;
+        }
+
+        try {
+            return $callback();
+        } finally {
+            DB::selectOne('SELECT RELEASE_LOCK(?) AS released', [self::LOCK_NAME]);
+        }
     }
 
     private function touchAllocation(Donation $donation, float $usdAmount): Donation

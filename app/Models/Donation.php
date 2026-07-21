@@ -15,6 +15,7 @@ class Donation extends Model
         'txid',
         'sats_received',
         'paid_at',
+        'notified_at',
         'allocated_at',
     ];
 
@@ -25,6 +26,7 @@ class Donation extends Model
             'usd_amount_requested' => 'decimal:2',
             'sats_received' => 'integer',
             'paid_at' => 'datetime',
+            'notified_at' => 'datetime',
             'allocated_at' => 'datetime',
         ];
     }

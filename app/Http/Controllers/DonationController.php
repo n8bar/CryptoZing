@@ -18,6 +18,7 @@ class DonationController extends Controller
 
         $btcAmount = null;
         $bitcoinUri = null;
+        $rateUnavailable = false;
 
         if ($donation && $donation->status === 'pending') {
             $rate = BtcRate::current();
@@ -25,6 +26,8 @@ class DonationController extends Controller
 
             if ($rateUsd) {
                 $btcAmount = number_format((float) $donation->usd_amount_requested / (float) $rateUsd, 8, '.', '');
+            } else {
+                $rateUnavailable = true;
             }
 
             $bitcoinUri = $donation->bitcoinUriForAmount($btcAmount !== null ? (float) $btcAmount : null);
@@ -34,11 +37,17 @@ class DonationController extends Controller
             'donation' => $donation,
             'btcAmount' => $btcAmount,
             'bitcoinUri' => $bitcoinUri,
+            'rateUnavailable' => $rateUnavailable,
+            'poolBusy' => (bool) $request->session()->get('donation_pool_busy'),
         ]);
     }
 
     public function allocate(Request $request, DonationAddressAllocator $allocator): RedirectResponse
     {
+        if ($request->filled('preset_amount')) {
+            $request->merge(['amount' => $request->input('preset_amount')]);
+        }
+
         $validated = $request->validate([
             'amount' => ['required', 'numeric', 'min:1', 'max:25000'],
         ]);
@@ -50,7 +59,18 @@ class DonationController extends Controller
             (float) $validated['amount']
         );
 
+        if (! $donation) {
+            return redirect()->route('donate.show')->with('donation_pool_busy', true);
+        }
+
         $request->session()->put('donation_id', $donation->id);
+
+        return redirect()->route('donate.show');
+    }
+
+    public function reset(Request $request): RedirectResponse
+    {
+        $request->session()->forget('donation_id');
 
         return redirect()->route('donate.show');
     }

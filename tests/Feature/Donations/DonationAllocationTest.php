@@ -65,7 +65,7 @@ class DonationAllocationTest extends TestCase
         ]);
     }
 
-    public function test_pool_cap_reuses_oldest_pending_address_instead_of_deriving_more(): void
+    public function test_pool_cap_refuses_new_allocations_instead_of_sharing_addresses(): void
     {
         $this->mock(HdWallet::class, function ($mock) {
             $mock->shouldReceive('deriveAddress')
@@ -80,14 +80,39 @@ class DonationAllocationTest extends TestCase
 
         $allocator = app(DonationAddressAllocator::class);
         $first = $allocator->allocate(null, 10.00);
-        $this->travel(1)->minutes();
         $allocator->allocate(null, 15.00);
-        $this->travel(1)->minutes();
 
         $capped = $allocator->allocate(null, 20.00);
 
-        $this->assertSame($first->id, $capped->id);
-        $this->assertSame('tb1qdonation0', $capped->address);
+        $this->assertNull($capped);
         $this->assertSame(2, \App\Models\Donation::count());
+        $this->assertSame('10.00', (string) $first->fresh()->usd_amount_requested);
+    }
+
+    public function test_allocation_queries_are_scoped_to_the_current_network(): void
+    {
+        \App\Models\Donation::query()->create([
+            'derivation_index' => 9,
+            'address' => 'tb1qoldtestnet',
+            'network' => 'testnet',
+            'status' => 'pending',
+            'allocated_at' => now(),
+        ]);
+
+        $this->mock(HdWallet::class, function ($mock) {
+            $mock->shouldReceive('deriveAddress')
+                ->with('tpubDonationTest', 0, 'testnet4')
+                ->once()
+                ->andReturn('tb1qnet0');
+        });
+
+        config(['donations.max_unpaid_addresses' => 1]);
+
+        $donation = app(DonationAddressAllocator::class)->allocate(null, 25.00);
+
+        $this->assertNotNull($donation);
+        $this->assertSame('tb1qnet0', $donation->address);
+        $this->assertSame(0, $donation->derivation_index);
+        $this->assertSame('testnet4', $donation->network);
     }
 }
