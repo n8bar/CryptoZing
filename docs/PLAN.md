@@ -16,9 +16,9 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 
 ## Current
 - Active milestone:
-  - **MS19 - Open Beta Hardening & Ops** — in progress; Phases 1–7 complete. Active phase: **Phase 8 (Micro-Monetize)**. Phase 9 (2FA) pending.
+  - **MS19 - Open Beta Hardening & Ops** — in progress; Phases 1–8 complete. Active phase: **Phase 9 (2FA)**, the last MS19 phase.
 - Status: `active`
-- Next action: MS19 Phase 8 — review/approve the fleshed [`19.8_MICRO_MONETIZE.md`](strategies/19.8_MICRO_MONETIZE.md) + [`DONATIONS.md`](specs/DONATIONS.md) spec, then implement on a `claude/` branch.
+- Next action: merge PR #132 (M19.8 donations) once PR Tests are green; then MS19 Phase 9 kickoff per [`19.9_TWO_FACTOR_AUTHENTICATION.md`](strategies/19.9_TWO_FACTOR_AUTHENTICATION.md).
 - Primary next doc: [`docs/milestones/19_OB_HARDENING_OPS.md`](milestones/19_OB_HARDENING_OPS.md)
 - Most recently completed milestone doc: [`docs/milestones/x18_PRERELEASE_CONTENT_SEO.md`](milestones/x18_PRERELEASE_CONTENT_SEO.md)
 

@@ -15,7 +15,7 @@ _(Phase strategy docs to be written when this milestone becomes active.)_
 - Phase 1 — Cutover rehearsal: env flips, wallet validation, mail sanity, backout steps
 
 Carried items (fold into phase docs when active):
-- [ ] Donation wallet xpub (MS19 Phase 8): swap `DONATION_WALLET_XPUB` to the mainnet donation xpub in the env flip and validate it in the wallet-validation step; network follows `WALLET_NETWORK`. See [`19.8_MICRO_MONETIZE.md`](../strategies/19.8_MICRO_MONETIZE.md) §1.
+- [ ] Donation wallet xpub (MS19 Phase 8): swap `DONATION_WALLET_XPUB` to the mainnet donation xpub in the env flip and validate it in the wallet-validation step; network follows `WALLET_NETWORK`. See [`x19.8_MICRO_MONETIZE.md`](../strategies/x19.8_MICRO_MONETIZE.md) §1.
 
 ## Exit Criteria
 _(To be detailed when active.)_

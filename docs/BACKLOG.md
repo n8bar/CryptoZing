@@ -137,7 +137,7 @@ _Carry-forward guardrail from active roadmap scope: suppress duplicate sends for
 
 ## Monetization
 25. **Fiat donations**
-   - Add a fiat path to the donation page (MS19 Phase 8 ships BTC-only; see `docs/strategies/19.8_MICRO_MONETIZE.md`).
+   - Add a fiat path to the donation page (MS19 Phase 8 ships BTC-only; see `docs/strategies/x19.8_MICRO_MONETIZE.md`).
    - Requires a payment processor and business banking to land/convert funds.
    - Revisit once donation-page traffic or user requests suggest demand; fiat in scope likely means its own milestone.
 
