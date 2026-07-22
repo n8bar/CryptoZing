@@ -18,7 +18,7 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 - Active milestone:
   - **MS19 - Open Beta Hardening & Ops** — in progress; Phases 1–8 complete. Active phase: **Phase 9 (2FA)**, the last MS19 phase.
 - Status: `active`
-- Next action: merge PR #132 (M19.8 donations) once PR Tests are green; then MS19 Phase 9 kickoff per [`19.9_TWO_FACTOR_AUTHENTICATION.md`](strategies/19.9_TWO_FACTOR_AUTHENTICATION.md).
+- Next action: MS19 Phase 9 (2FA) — in progress on `claude/m19.9-2fa` per [`19.9_TWO_FACTOR_AUTHENTICATION.md`](strategies/19.9_TWO_FACTOR_AUTHENTICATION.md).
 - Primary next doc: [`docs/milestones/19_OB_HARDENING_OPS.md`](milestones/19_OB_HARDENING_OPS.md)
 - Most recently completed milestone doc: [`docs/milestones/x18_PRERELEASE_CONTENT_SEO.md`](milestones/x18_PRERELEASE_CONTENT_SEO.md)
 
