@@ -86,7 +86,7 @@
             @elseif ($donation && $donation->status === 'pending' && ! $changeMode)
                 <div class="bg-white dark:bg-slate-800 shadow rounded-lg p-6">
                     <h1 class="text-2xl font-semibold mb-1">Send your donation</h1>
-                    <p class="mb-5 text-sm text-gray-600 dark:text-slate-400">Scan the code or copy the address. This page updates on its own once your payment is seen.</p>
+                    <p class="mb-6 text-sm text-gray-600 dark:text-slate-400">Scan the code or copy the address. This page updates on its own once your payment is seen.</p>
                     <noscript>
                         <p class="mb-5 text-sm text-gray-600 dark:text-slate-400">JavaScript is off in your browser — refresh this page after sending; your receipt appears once the payment is seen.</p>
                     </noscript>
@@ -105,7 +105,7 @@
                         </div>
                     @endif
 
-                    <div class="donate-no-print mb-5 flex items-center gap-2">
+                    <div class="donate-no-print mt-6 mb-5 flex items-center gap-2">
                         <span class="relative inline-flex h-2.5 w-2.5" aria-hidden="true">
                             <span class="absolute inline-flex h-full w-full animate-ping motion-reduce:animate-none rounded-full bg-amber-400 opacity-60"></span>
                             <span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-amber-500"></span>
@@ -199,7 +199,7 @@
 
                     <form method="POST" action="{{ route('donate.allocate') }}">
                         @csrf
-                        <fieldset class="mb-8">
+                        <fieldset class="mt-6 mb-6">
                             <legend class="text-sm font-medium mb-2">Choose an amount</legend>
                             <div class="flex flex-wrap gap-2">
                                 <x-secondary-button type="submit" name="preset_amount" value="5">Donate $5</x-secondary-button>
