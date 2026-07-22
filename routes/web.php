@@ -43,6 +43,18 @@ Route::get('/', fn () => view('welcome'));
 Route::get('p/{token}', [InvoiceController::class, 'publicPrint'])
     ->name('invoices.public-print');
 
+Route::get('donate', [\App\Http\Controllers\DonationController::class, 'show'])
+    ->name('donate.show');
+Route::post('donate', [\App\Http\Controllers\DonationController::class, 'allocate'])
+    ->middleware('throttle:10,1')
+    ->name('donate.allocate');
+Route::get('donate/status', [\App\Http\Controllers\DonationController::class, 'status'])
+    ->middleware('throttle:30,1')
+    ->name('donate.status');
+Route::post('donate/reset', [\App\Http\Controllers\DonationController::class, 'reset'])
+    ->middleware('throttle:10,1')
+    ->name('donate.reset');
+
 // Public Helpful Notes (no auth)
 Route::get('/help', HelpController::class)->name('help');
 

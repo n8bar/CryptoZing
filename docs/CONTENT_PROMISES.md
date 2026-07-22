@@ -79,7 +79,7 @@ Entries with real concern — product decisions pending, content that could cont
 
 **2. [Direct claim]** — CZ charges 0% fee (beta only)
 - Source: `site/learn/btcpay-server-alternatives.md:129` (comparison table: "0% (beta)"), `:124` (_"No fees during beta. Long-term pricing hasn't been decided; free is still on the table, and if not, the intent is to keep it very low."_)
-- Also stated in: video — `youtu.be/Glp6jUusTLQ` (§7 wrap-up: _"CryptoZing is free too, at least during beta, maybe longer"_)
+- Also stated in: video — `youtu.be/Glp6jUusTLQ` (§7 wrap-up: _"CryptoZing is free too, at least during beta, maybe longer"_); in-app — `resources/views/donate/show.blade.php` (_"CryptoZing is free while in open beta"_; first in-app source of the claim, time-bound to beta)
 - Required product behavior: CZ must not charge fees during beta. Post-beta pricing is explicitly left open in copy.
 - Product verification: confirmed — no fee logic in codebase
 - Status: honored — fee-free product-verified; copy scoped to beta. Any future fee routes through [`BACKLOG.md`](BACKLOG.md) Monetization item 23 (see Major 1).
