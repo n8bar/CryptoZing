@@ -10,5 +10,5 @@ A donation just landed on the donation wallet.
 - **Network:** {{ $donation->network }}
 - **Seen at:** {{ optional($donation->paid_at)->format('D, M j, Y g:i:s A') ?? now()->format('D, M j, Y g:i:s A') }}
 
-Thanks for using CryptoZing
+Thanks for supporting CryptoZing
 @endcomponent
