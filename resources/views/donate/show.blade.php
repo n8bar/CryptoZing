@@ -14,6 +14,14 @@
     <div class="py-10">
         <div class="mx-auto max-w-xl px-4 sm:px-6">
             @if ($donation && $donation->status === 'paid')
+                <div class="donate-no-print mb-6">
+                    <h1 class="text-2xl font-semibold mb-1">Thank you for supporting CryptoZing!</h1>
+                    <p class="text-sm text-gray-600 dark:text-slate-400">
+                        Your donation was seen on the network.
+                        <strong class="text-gray-900 dark:text-slate-100">Save or print your payment record now</strong> — it's only available in this browser session.
+                    </p>
+                </div>
+
                 {{-- Signature artifact: the donation record, set like a till receipt --}}
                 <div class="donate-receipt bg-white dark:bg-slate-800 shadow rounded-lg p-6 font-mono text-sm text-gray-900 dark:text-slate-100">
                     <div class="text-center">
@@ -23,11 +31,7 @@
 
                     <hr class="donate-receipt-rule my-4">
 
-                    <p class="font-sans text-base">Thank you for supporting CryptoZing!</p>
-                    <p class="mt-2 font-sans text-sm text-gray-600 dark:text-slate-400" aria-live="polite">
-                        Your donation was seen on the network.
-                        <strong class="text-gray-900 dark:text-slate-100">Save or print this receipt now</strong> — it's only available in this browser session.
-                    </p>
+                    <p class="font-sans text-sm">Thank you for supporting CryptoZing.</p>
 
                     <hr class="donate-receipt-rule my-4">
 
