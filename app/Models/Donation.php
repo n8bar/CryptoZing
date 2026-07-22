@@ -11,6 +11,7 @@ class Donation extends Model
         'address',
         'network',
         'usd_amount_requested',
+        'btc_amount_requested',
         'status',
         'txid',
         'sats_received',
@@ -24,11 +25,21 @@ class Donation extends Model
         return [
             'derivation_index' => 'integer',
             'usd_amount_requested' => 'decimal:2',
+            'btc_amount_requested' => 'decimal:8',
             'sats_received' => 'integer',
             'paid_at' => 'datetime',
             'notified_at' => 'datetime',
             'allocated_at' => 'datetime',
         ];
+    }
+
+    public function requestedAmountLabel(): string
+    {
+        if ($this->btc_amount_requested !== null) {
+            return rtrim(rtrim(number_format((float) $this->btc_amount_requested, 8, '.', ''), '0'), '.') . ' BTC';
+        }
+
+        return '$' . number_format((float) $this->usd_amount_requested, 2) . ' USD';
     }
 
     public function bitcoinUriForAmount(?float $amountBtc): ?string

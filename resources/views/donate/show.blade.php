@@ -38,7 +38,7 @@
                         </div>
                         <div class="flex justify-between gap-4">
                             <dt class="text-gray-600 dark:text-slate-400">Requested</dt>
-                            <dd class="text-right">${{ number_format((float) $donation->usd_amount_requested, 2) }} USD</dd>
+                            <dd class="text-right">{{ $donation->requestedAmountLabel() }}</dd>
                         </div>
                         <div class="flex justify-between gap-4">
                             <dt class="text-gray-600 dark:text-slate-400">Received</dt>
@@ -121,7 +121,16 @@
                         @if ($btcAmount)
                             <div>
                                 <dt class="font-medium">Amount</dt>
-                                <dd class="mt-0.5">{{ $btcAmount }} BTC <span class="text-gray-600 dark:text-slate-400">(${{ number_format((float) $donation->usd_amount_requested, 2) }} USD at the current rate)</span></dd>
+                                <dd class="mt-0.5">
+                                    {{ $btcAmount }} BTC
+                                    @if ($donation->btc_amount_requested !== null)
+                                        @if ($usdEquivalent !== null)
+                                            <span class="text-gray-600 dark:text-slate-400">(&asymp; ${{ number_format($usdEquivalent, 2) }} USD at the current rate)</span>
+                                        @endif
+                                    @else
+                                        <span class="text-gray-600 dark:text-slate-400">(${{ number_format((float) $donation->usd_amount_requested, 2) }} USD at the current rate)</span>
+                                    @endif
+                                </dd>
                             </div>
                         @endif
                         @if ($bitcoinUri)
@@ -210,15 +219,44 @@
 
                         <div class="flex items-end gap-2">
                             <div>
-                                <x-input-label for="amount" value="Custom amount (USD)" />
-                                <x-text-input type="number" name="amount" id="amount" min="1" max="25000" step="0.01"
-                                    :value="old('amount', $prefillAmount)" class="mt-1 block w-40"
-                                    :autofocus="$errors->has('amount')" />
+                                <x-input-label for="amount" value="Custom amount" />
+                                <div class="mt-1 flex rounded-md border border-gray-300 dark:border-slate-500 bg-gray-50 dark:bg-slate-900 shadow-sm overflow-hidden focus-within:ring-2 focus-within:ring-indigo-500 focus-within:border-indigo-500">
+                                    <button type="button" id="donation-unit-toggle" aria-label="Switch between USD and BTC"
+                                        class="px-3 text-sm font-semibold bg-gray-800 text-white hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 transition ease-in-out duration-150">$</button>
+                                    <input type="number" name="amount" id="amount" min="1" max="25000" step="0.01"
+                                        value="{{ old('amount', $prefillAmount) }}"
+                                        class="w-40 border-0 bg-transparent dark:bg-transparent text-sm focus:ring-0"
+                                        @if ($errors->has('amount')) autofocus @endif>
+                                </div>
+                                <input type="hidden" name="unit" id="donation-unit" value="{{ old('unit', $prefillUnit) }}">
                             </div>
                             <x-primary-button>Donate</x-primary-button>
                         </div>
                         <x-input-error :messages="$errors->get('amount')" class="mt-2" />
                     </form>
+
+                    <script>
+                        (function () {
+                            const toggle = document.getElementById('donation-unit-toggle');
+                            const unitField = document.getElementById('donation-unit');
+                            const amountField = document.getElementById('amount');
+                            if (! toggle || ! unitField || ! amountField) return;
+                            const apply = function (unit) {
+                                unitField.value = unit;
+                                if (unit === 'btc') {
+                                    toggle.textContent = '₿';
+                                    amountField.min = '0.00001'; amountField.max = '1'; amountField.step = '0.00000001';
+                                } else {
+                                    toggle.textContent = '$';
+                                    amountField.min = '1'; amountField.max = '25000'; amountField.step = '0.01';
+                                }
+                            };
+                            toggle.addEventListener('click', function () {
+                                apply(unitField.value === 'btc' ? 'usd' : 'btc');
+                            });
+                            apply(unitField.value === 'btc' ? 'btc' : 'usd');
+                        })();
+                    </script>
 
                     <p class="mt-6 text-xs text-gray-600 dark:text-slate-400">
                         Donations support CryptoZing LLC. They are non-refundable and not tax-deductible.

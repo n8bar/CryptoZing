@@ -14,6 +14,7 @@ return new class extends Migration
             $table->string('address')->unique();
             $table->string('network');
             $table->decimal('usd_amount_requested', 10, 2)->nullable();
+            $table->decimal('btc_amount_requested', 16, 8)->nullable();
             $table->string('status')->default('pending')->index();
             $table->string('txid')->nullable();
             $table->unsignedBigInteger('sats_received')->nullable();

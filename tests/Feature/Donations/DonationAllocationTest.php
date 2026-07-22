@@ -31,7 +31,7 @@ class DonationAllocationTest extends TestCase
                 ->andReturn('tb1qdonation0');
         });
 
-        $donation = app(DonationAddressAllocator::class)->allocate(null, 25.00);
+        $donation = app(DonationAddressAllocator::class)->allocate(null, 'usd', 25.00);
 
         $this->assertSame('tb1qdonation0', $donation->address);
         $this->assertDatabaseHas('donations', [
@@ -53,8 +53,8 @@ class DonationAllocationTest extends TestCase
         });
 
         $allocator = app(DonationAddressAllocator::class);
-        $first = $allocator->allocate(null, 25.00);
-        $again = $allocator->allocate($first->id, 40.00);
+        $first = $allocator->allocate(null, 'usd', 25.00);
+        $again = $allocator->allocate($first->id, 'usd', 40.00);
 
         $this->assertSame($first->id, $again->id);
         $this->assertSame('tb1qdonation0', $again->address);
@@ -79,10 +79,10 @@ class DonationAllocationTest extends TestCase
         });
 
         $allocator = app(DonationAddressAllocator::class);
-        $first = $allocator->allocate(null, 10.00);
-        $allocator->allocate(null, 15.00);
+        $first = $allocator->allocate(null, 'usd', 10.00);
+        $allocator->allocate(null, 'usd', 15.00);
 
-        $capped = $allocator->allocate(null, 20.00);
+        $capped = $allocator->allocate(null, 'usd', 20.00);
 
         $this->assertNull($capped);
         $this->assertSame(2, \App\Models\Donation::count());
@@ -108,7 +108,7 @@ class DonationAllocationTest extends TestCase
 
         config(['donations.max_unpaid_addresses' => 1]);
 
-        $donation = app(DonationAddressAllocator::class)->allocate(null, 25.00);
+        $donation = app(DonationAddressAllocator::class)->allocate(null, 'usd', 25.00);
 
         $this->assertNotNull($donation);
         $this->assertSame('tb1qnet0', $donation->address);

@@ -21,11 +21,18 @@ class DonationController extends Controller
         $rateUnavailable = false;
         $changeMode = $request->boolean('change') && $donation && $donation->status === 'pending';
 
+        $usdEquivalent = null;
+
         if (! $changeMode && $donation && $donation->status === 'pending') {
             $rate = BtcRate::current();
             $rateUsd = $rate['rate_usd'] ?? null;
 
-            if ($rateUsd) {
+            if ($donation->btc_amount_requested !== null) {
+                $btcAmount = number_format((float) $donation->btc_amount_requested, 8, '.', '');
+                $usdEquivalent = $rateUsd
+                    ? round((float) $donation->btc_amount_requested * (float) $rateUsd, 2)
+                    : null;
+            } elseif ($rateUsd) {
                 $btcAmount = number_format((float) $donation->usd_amount_requested / (float) $rateUsd, 8, '.', '');
             } else {
                 $rateUnavailable = true;
@@ -34,31 +41,45 @@ class DonationController extends Controller
             $bitcoinUri = $donation->bitcoinUriForAmount($btcAmount !== null ? (float) $btcAmount : null);
         }
 
+        $prefillUnit = $changeMode && $donation->btc_amount_requested !== null ? 'btc' : 'usd';
+
         return view('donate.show', [
             'donation' => $donation,
             'btcAmount' => $btcAmount,
             'bitcoinUri' => $bitcoinUri,
             'rateUnavailable' => $rateUnavailable,
+            'usdEquivalent' => $usdEquivalent,
             'poolBusy' => (bool) $request->session()->get('donation_pool_busy'),
             'changeMode' => $changeMode,
-            'prefillAmount' => $changeMode ? $donation->usd_amount_requested : null,
+            'prefillUnit' => $prefillUnit,
+            'prefillAmount' => $changeMode
+                ? ($prefillUnit === 'btc'
+                    ? rtrim(rtrim(number_format((float) $donation->btc_amount_requested, 8, '.', ''), '0'), '.')
+                    : $donation->usd_amount_requested)
+                : null,
         ]);
     }
 
     public function allocate(Request $request, DonationAddressAllocator $allocator): RedirectResponse
     {
         if ($request->filled('preset_amount')) {
-            $request->merge(['amount' => $request->input('preset_amount')]);
+            $request->merge(['amount' => $request->input('preset_amount'), 'unit' => 'usd']);
         }
 
+        $request->validate(['unit' => ['nullable', 'in:usd,btc']]);
+        $unit = $request->input('unit') === 'btc' ? 'btc' : 'usd';
+
         $validated = $request->validate([
-            'amount' => ['required', 'numeric', 'min:1', 'max:25000'],
+            'amount' => $unit === 'btc'
+                ? ['required', 'numeric', 'min:0.00001', 'max:1']
+                : ['required', 'numeric', 'min:1', 'max:25000'],
         ]);
 
         $sessionDonationId = $request->session()->get('donation_id');
 
         $donation = $allocator->allocate(
             is_numeric($sessionDonationId) ? (int) $sessionDonationId : null,
+            $unit,
             (float) $validated['amount']
         );
 

@@ -7,7 +7,7 @@ CryptoZing has no revenue surface; the monetization posture ("leave room, promis
 
 ## Scope
 - A public, guest-safe donation page in the app.
-- Donor picks a USD preset or enters a custom USD amount; the page converts to BTC at the live rate under the same rate standard as invoices.
+- Donor picks a USD preset or enters a custom amount in USD or BTC (unit toggle on the custom field). USD amounts convert to BTC at the live rate under the same rate standard as invoices; BTC amounts are used exactly and do not depend on the rate. Preset buttons are always USD regardless of the toggle.
 - Each donor session gets its own receive address, not shared with other donors; the address stays with that session until it sees payment.
 - If the unpaid address pool is at its cap, new donors see a try-again-shortly notice instead of an address — addresses are never shared between donor sessions.
 - If the live rate is unavailable, the page says so; the donor may still send any amount to their address.

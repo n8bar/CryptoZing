@@ -4,7 +4,7 @@
 A donation just landed on the donation wallet.
 
 - **Amount:** {{ number_format((int) $donation->sats_received) }} sats
-- **Requested (USD):** ${{ number_format((float) $donation->usd_amount_requested, 2) }}
+- **Requested:** {{ $donation->requestedAmountLabel() }}
 - **Address:** <span style="word-break: break-all; font-family: monospace;">{{ $donation->address }}</span>
 - **Txid:** <span style="word-break: break-all; font-family: monospace;">{{ $donation->txid }}</span>
 - **Network:** {{ $donation->network }}

@@ -17,14 +17,16 @@ class DonationAddressAllocator
     /**
      * Return the pending donation for $donationId if it is still open on the
      * current network, otherwise derive a fresh address while the unpaid pool
-     * is under the cap. Returns null when the pool is full (bot/gap-limit
-     * guard) — addresses are never shared between donor sessions.
+     * is under the cap. $unit is 'usd' or 'btc'; the amount is stored in its
+     * own unit column and the other is cleared. Returns null when the pool is
+     * full (bot/gap-limit guard) — addresses are never shared between donor
+     * sessions.
      */
-    public function allocate(?int $donationId, float $usdAmount): ?Donation
+    public function allocate(?int $donationId, string $unit, float $amount): ?Donation
     {
         $network = (string) config('wallet.default_network', 'testnet');
 
-        return $this->withAllocationLock(function () use ($donationId, $usdAmount, $network) {
+        return $this->withAllocationLock(function () use ($donationId, $unit, $amount, $network) {
             if ($donationId) {
                 $existing = Donation::query()
                     ->whereKey($donationId)
@@ -33,7 +35,7 @@ class DonationAddressAllocator
                     ->first();
 
                 if ($existing) {
-                    return $this->touchAllocation($existing, $usdAmount);
+                    return $this->touchAllocation($existing, $unit, $amount);
                 }
             }
 
@@ -50,14 +52,13 @@ class DonationAddressAllocator
             $index = (int) (Donation::query()->where('network', $network)->max('derivation_index') ?? -1) + 1;
             $address = $this->hdWallet->deriveAddress((string) config('donations.xpub'), $index, $network);
 
-            return Donation::query()->create([
+            return Donation::query()->create(array_merge([
                 'derivation_index' => $index,
                 'address' => $address,
                 'network' => $network,
-                'usd_amount_requested' => $usdAmount,
                 'status' => 'pending',
                 'allocated_at' => now(),
-            ]);
+            ], $this->amountColumns($unit, $amount)));
         });
     }
 
@@ -81,13 +82,23 @@ class DonationAddressAllocator
         }
     }
 
-    private function touchAllocation(Donation $donation, float $usdAmount): Donation
+    private function touchAllocation(Donation $donation, string $unit, float $amount): Donation
     {
-        $donation->forceFill([
-            'usd_amount_requested' => $usdAmount,
-            'allocated_at' => now(),
-        ])->save();
+        $donation->forceFill(array_merge(
+            ['allocated_at' => now()],
+            $this->amountColumns($unit, $amount)
+        ))->save();
 
         return $donation;
+    }
+
+    /**
+     * @return array{usd_amount_requested: float|null, btc_amount_requested: float|null}
+     */
+    private function amountColumns(string $unit, float $amount): array
+    {
+        return $unit === 'btc'
+            ? ['usd_amount_requested' => null, 'btc_amount_requested' => $amount]
+            : ['usd_amount_requested' => $amount, 'btc_amount_requested' => null];
     }
 }

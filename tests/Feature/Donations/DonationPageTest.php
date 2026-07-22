@@ -54,6 +54,81 @@ class DonationPageTest extends TestCase
         $this->assertSame(0, Donation::count());
     }
 
+    public function test_custom_amount_can_be_specified_in_btc(): void
+    {
+        $this->mock(HdWallet::class, function ($mock) {
+            $mock->shouldReceive('deriveAddress')
+                ->once()
+                ->andReturn('tb1qbtcunit0');
+        });
+
+        $this->post('/donate', ['unit' => 'btc', 'amount' => '0.0005'])
+            ->assertRedirect(route('donate.show'))
+            ->assertSessionHasNoErrors();
+
+        $this->assertDatabaseHas('donations', [
+            'address' => 'tb1qbtcunit0',
+            'btc_amount_requested' => '0.00050000',
+            'usd_amount_requested' => null,
+        ]);
+
+        $this->get('/donate')
+            ->assertOk()
+            ->assertSee('0.00050000')
+            ->assertSee('bitcoin:tb1qbtcunit0?amount=0.00050000', false);
+    }
+
+    public function test_btc_amount_qr_does_not_depend_on_the_live_rate(): void
+    {
+        Cache::forget(BtcRate::CACHE_KEY);
+        \Illuminate\Support\Facades\Http::fake([
+            'api.coinbase.com/*' => \Illuminate\Support\Facades\Http::response(null, 500),
+        ]);
+
+        $donation = $this->makeDonation([
+            'address' => 'tb1qbtcnorate0',
+            'derivation_index' => 4,
+            'usd_amount_requested' => null,
+            'btc_amount_requested' => 0.0005,
+        ]);
+
+        $this->withSession(['donation_id' => $donation->id])
+            ->get('/donate')
+            ->assertOk()
+            ->assertSee('bitcoin:tb1qbtcnorate0?amount=0.00050000', false)
+            ->assertDontSee('rate unavailable');
+    }
+
+    public function test_preset_buttons_use_usd_even_when_the_unit_toggle_is_on_btc(): void
+    {
+        $this->mock(HdWallet::class, function ($mock) {
+            $mock->shouldReceive('deriveAddress')
+                ->once()
+                ->andReturn('tb1qpresetusd0');
+        });
+
+        $this->post('/donate', ['preset_amount' => 25, 'unit' => 'btc', 'amount' => ''])
+            ->assertRedirect(route('donate.show'))
+            ->assertSessionHasNoErrors();
+
+        $this->assertDatabaseHas('donations', [
+            'address' => 'tb1qpresetusd0',
+            'usd_amount_requested' => '25.00',
+            'btc_amount_requested' => null,
+        ]);
+    }
+
+    public function test_btc_amounts_outside_bounds_are_rejected(): void
+    {
+        $this->from('/donate')->post('/donate', ['unit' => 'btc', 'amount' => '0.000001'])
+            ->assertRedirect('/donate')
+            ->assertSessionHasErrors('amount');
+
+        $this->from('/donate')->post('/donate', ['unit' => 'btc', 'amount' => '2'])
+            ->assertRedirect('/donate')
+            ->assertSessionHasErrors('amount');
+    }
+
     public function test_change_amount_returns_to_the_picker_and_reuses_the_same_address(): void
     {
         $this->mock(HdWallet::class, function ($mock) {
@@ -192,6 +267,23 @@ class DonationPageTest extends TestCase
         $this->from('/donate')->post('/donate', ['amount' => 0.25])
             ->assertRedirect('/donate')
             ->assertSessionHasErrors('amount');
+    }
+
+    public function test_btc_denominated_receipt_shows_the_requested_btc_amount(): void
+    {
+        $donation = $this->makeDonation([
+            'status' => 'paid',
+            'txid' => 'donation-tx-btc',
+            'sats_received' => 50000,
+            'paid_at' => now(),
+            'usd_amount_requested' => null,
+            'btc_amount_requested' => 0.0005,
+        ]);
+
+        $this->withSession(['donation_id' => $donation->id])
+            ->get('/donate')
+            ->assertOk()
+            ->assertSee('0.0005 BTC');
     }
 
     public function test_paid_donation_shows_thank_you_receipt_with_payment_details(): void
