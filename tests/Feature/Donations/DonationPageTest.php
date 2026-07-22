@@ -48,9 +48,34 @@ class DonationPageTest extends TestCase
             ->assertOk()
             ->assertSee('CryptoZing LLC')
             ->assertSee('not tax-deductible')
-            ->assertSee('Donate $5');
+            ->assertSee('Donate $5')
+            ->assertSee('name="amount"', false);
 
         $this->assertSame(0, Donation::count());
+    }
+
+    public function test_change_amount_returns_to_the_picker_and_reuses_the_same_address(): void
+    {
+        $this->mock(HdWallet::class, function ($mock) {
+            $mock->shouldReceive('deriveAddress')
+                ->once()
+                ->andReturn('tb1qchange0');
+        });
+
+        $this->post('/donate', ['amount' => 25]);
+
+        $this->get('/donate?change=1')
+            ->assertOk()
+            ->assertSee('Donate $5')
+            ->assertDontSee('tb1qchange0');
+
+        $this->post('/donate', ['amount' => 40]);
+
+        $this->assertSame(1, Donation::count());
+        $this->get('/donate')
+            ->assertOk()
+            ->assertSee('tb1qchange0')
+            ->assertSee('0.00133333');
     }
 
     public function test_preset_buttons_allocate_their_labeled_amount_despite_an_empty_custom_field(): void
@@ -222,7 +247,8 @@ class DonationPageTest extends TestCase
         $this->actingAs($user)->get(route('dashboard'))
             ->assertOk()
             ->assertDontSee($donation->address)
-            ->assertDontSee('donation-tx-leakcheck');
+            ->assertDontSee('donation-tx-leakcheck')
+            ->assertSee(route('donate.show'), false);
 
         $this->actingAs($user)->get(route('invoices.index'))
             ->assertOk()

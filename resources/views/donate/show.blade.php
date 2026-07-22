@@ -83,7 +83,7 @@
                         <span class="font-sans text-sm text-gray-600 dark:text-slate-400">Payment seen</span>
                     </div>
                 </div>
-            @elseif ($donation && $donation->status === 'pending')
+            @elseif ($donation && $donation->status === 'pending' && ! $changeMode)
                 <div class="bg-white dark:bg-slate-800 shadow rounded-lg p-6">
                     <h1 class="text-2xl font-semibold mb-1">Send your donation</h1>
                     <p class="mb-5 text-sm text-gray-600 dark:text-slate-400">Scan the code or copy the address. This page updates on its own once your payment is seen.</p>
@@ -98,7 +98,7 @@
                     @endif
 
                     @if ($bitcoinUri)
-                        <div class="donate-no-print mb-5 flex justify-center" aria-hidden="true">
+                        <div class="donate-no-print my-6 flex justify-center" aria-hidden="true">
                             <div class="rounded-lg p-3 shadow-sm border border-gray-200 dark:border-slate-500" style="background:#ffffff">
                                 {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(220)->margin(1)->generate($bitcoinUri) !!}
                             </div>
@@ -136,20 +136,12 @@
                         <x-secondary-button type="button" id="donation-copy">Copy address</x-secondary-button>
                     </div>
 
-                    <details class="donate-no-print mt-6" @if ($errors->has('amount')) open @endif>
-                        <summary class="cursor-pointer text-sm text-gray-600 dark:text-slate-400">Change amount</summary>
-                        <form method="POST" action="{{ route('donate.allocate') }}" class="mt-3 flex items-end gap-2">
-                            @csrf
-                            <div>
-                                <x-input-label for="amount" value="New amount (USD)" />
-                                <x-text-input type="number" name="amount" id="amount" min="1" max="25000" step="0.01"
-                                    :value="old('amount', $donation->usd_amount_requested)" class="mt-1 block w-40"
-                                    @if ($errors->has('amount')) autofocus @endif />
-                            </div>
-                            <x-primary-button>Update</x-primary-button>
-                        </form>
-                        <x-input-error :messages="$errors->get('amount')" class="mt-2" />
-                    </details>
+                    <div class="donate-no-print mt-6">
+                        <a href="{{ route('donate.show', ['change' => 1]) }}"
+                            class="text-sm underline underline-offset-2 text-gray-600 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200">
+                            &larr; Back to change the amount
+                        </a>
+                    </div>
 
                     <p class="mt-6 text-xs text-gray-600 dark:text-slate-400">
                         Donations support CryptoZing LLC. They are non-refundable and not tax-deductible.
@@ -207,7 +199,7 @@
 
                     <form method="POST" action="{{ route('donate.allocate') }}">
                         @csrf
-                        <fieldset class="mb-5">
+                        <fieldset class="mb-8">
                             <legend class="text-sm font-medium mb-2">Choose an amount</legend>
                             <div class="flex flex-wrap gap-2">
                                 <x-secondary-button type="submit" name="preset_amount" value="5">Donate $5</x-secondary-button>
@@ -220,8 +212,8 @@
                             <div>
                                 <x-input-label for="amount" value="Custom amount (USD)" />
                                 <x-text-input type="number" name="amount" id="amount" min="1" max="25000" step="0.01"
-                                    :value="old('amount')" class="mt-1 block w-40"
-                                    @if ($errors->has('amount')) autofocus @endif />
+                                    :value="old('amount', $prefillAmount)" class="mt-1 block w-40"
+                                    :autofocus="$errors->has('amount')" />
                             </div>
                             <x-primary-button>Donate</x-primary-button>
                         </div>

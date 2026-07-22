@@ -19,8 +19,9 @@ class DonationController extends Controller
         $btcAmount = null;
         $bitcoinUri = null;
         $rateUnavailable = false;
+        $changeMode = $request->boolean('change') && $donation && $donation->status === 'pending';
 
-        if ($donation && $donation->status === 'pending') {
+        if (! $changeMode && $donation && $donation->status === 'pending') {
             $rate = BtcRate::current();
             $rateUsd = $rate['rate_usd'] ?? null;
 
@@ -39,6 +40,8 @@ class DonationController extends Controller
             'bitcoinUri' => $bitcoinUri,
             'rateUnavailable' => $rateUnavailable,
             'poolBusy' => (bool) $request->session()->get('donation_pool_busy'),
+            'changeMode' => $changeMode,
+            'prefillAmount' => $changeMode ? $donation->usd_amount_requested : null,
         ]);
     }
 
