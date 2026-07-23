@@ -96,6 +96,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/settings/notifications/test-email', [NotificationSettingsController::class, 'sendPreview'])->name('settings.notifications.preview');
     Route::get('/wallet/settings', [WalletSettingsController::class, 'edit'])->name('wallet.settings.edit');
     Route::post('/wallet/settings', [WalletSettingsController::class, 'update'])->name('wallet.settings.update');
+    Route::post('/wallet/settings/step-up-code', [WalletSettingsController::class, 'sendStepUpCode'])
+        ->name('wallet.settings.step-up-code');
     Route::post('/wallet/settings/validate', [WalletSettingsController::class, 'validateKey'])
         ->name('wallet.settings.validate');
     Route::post('/wallet/settings/accounts', [WalletSettingsController::class, 'storeAccount'])

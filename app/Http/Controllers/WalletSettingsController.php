@@ -5,15 +5,21 @@ namespace App\Http\Controllers;
 use App\Http\Requests\WalletAccountRequest;
 use App\Http\Requests\WalletKeyPreviewRequest;
 use App\Http\Requests\WalletSettingRequest;
+use App\Models\User;
 use App\Models\UserWalletAccount;
 use App\Models\WalletSetting;
 use App\Services\GettingStartedFlow;
 use App\Services\HdWallet;
+use App\Services\TwoFactor\TotpService;
+use App\Services\TwoFactor\TwoFactorCodeService;
 use App\Services\WalletKeyLineage;
 use App\Services\WalletUnsupportedConfigurationDetector;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 
 class WalletSettingsController extends Controller
 {
@@ -85,6 +91,14 @@ class WalletSettingsController extends Controller
         $existingWallet = $user->walletSetting;
         $replacedPrimaryWallet = $this->primaryWalletIdentityChanged($existingWallet, $payload, $lineage);
         $unsupportedConfigurationPreviouslyActive = (bool) optional($existingWallet)->unsupported_configuration_active;
+
+        // Repointing an existing key is where payments get diverted, so it
+        // demands step-up re-verification: current password always, plus a
+        // valid 2FA code when 2FA is enabled. First onboarding (no existing
+        // key) is not a repoint and is exempt.
+        if ($replacedPrimaryWallet) {
+            $this->assertStepUpVerified($request, $user);
+        }
 
         $wallet = $user->walletSetting()->updateOrCreate(['user_id' => $user->id], [
             'network' => $payload['network'],
@@ -179,6 +193,61 @@ class WalletSettingsController extends Controller
 
         return redirect()->route('wallet.settings.edit')
             ->with('status', 'Wallet removed.');
+    }
+
+    /**
+     * Email a step-up verification code (email 2FA / TOTP email fallback) so a
+     * user can re-verify before repointing their wallet key.
+     */
+    public function sendStepUpCode(Request $request, TwoFactorCodeService $codes): RedirectResponse
+    {
+        $user = $request->user();
+
+        if (! $user->requiresTwoFactorChallenge()) {
+            return back();
+        }
+
+        if ($codes->tooManyRecentSends($user)) {
+            return back()->withErrors([
+                'two_factor_code' => __('Too many code requests. Please wait a few minutes before trying again.'),
+            ]);
+        }
+
+        $codes->sendCode($user);
+
+        return back()->with('status', 'A verification code is on its way to your email.');
+    }
+
+    /**
+     * Enforce step-up for a wallet-key repoint: the current password, plus a
+     * valid 2FA code (app or emailed) when the user has 2FA enabled.
+     */
+    private function assertStepUpVerified(Request $request, User $user): void
+    {
+        if (! Hash::check((string) $request->input('current_password'), (string) $user->password)) {
+            throw ValidationException::withMessages([
+                'current_password' => __('Your current password is required to change the wallet key.'),
+            ]);
+        }
+
+        if (! $user->requiresTwoFactorChallenge()) {
+            return;
+        }
+
+        $code = (string) $request->input('two_factor_code');
+
+        $verified = $user->hasTotpEnabled()
+            && app(TotpService::class)->verify((string) $user->two_factor_totp_secret, $code);
+
+        if (! $verified) {
+            $verified = app(TwoFactorCodeService::class)->verifyCode($user, $code);
+        }
+
+        if (! $verified) {
+            throw ValidationException::withMessages([
+                'two_factor_code' => __('Enter a valid two-factor code to change the wallet key.'),
+            ]);
+        }
     }
 
     private function primaryWalletIdentityChanged(?WalletSetting $existingWallet, array $payload, WalletKeyLineage $lineage): bool
