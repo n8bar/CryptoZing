@@ -51,11 +51,11 @@
                 </div>
             </form>
 
-            @if ($method === 'email' && Route::has('two-factor.challenge.resend'))
+            @if (Route::has('two-factor.challenge.resend'))
                 <form method="POST" action="{{ route('two-factor.challenge.resend') }}" class="mt-4 text-center">
                     @csrf
                     <button type="submit" class="text-sm font-semibold auth-link">
-                        Resend code
+                        {{ $method === 'totp' ? 'Email me a code instead' : 'Resend code' }}
                     </button>
                 </form>
             @endif

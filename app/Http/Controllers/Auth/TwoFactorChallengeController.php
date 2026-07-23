@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\TwoFactor\TotpService;
 use App\Services\TwoFactor\TwoFactorCodeService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -22,8 +23,10 @@ class TwoFactorChallengeController extends Controller
     /** Session key holding the half-authenticated login. */
     public const SESSION_KEY = 'two_factor.login';
 
-    public function __construct(private readonly TwoFactorCodeService $codes)
-    {
+    public function __construct(
+        private readonly TwoFactorCodeService $codes,
+        private readonly TotpService $totp,
+    ) {
     }
 
     public function create(Request $request): View|RedirectResponse
@@ -65,12 +68,25 @@ class TwoFactorChallengeController extends Controller
             ]);
         }
 
-        if (! $this->codes->verifyCode($user, $validated['code'])) {
+        // A TOTP user may present their app code or, if they asked for the
+        // fallback, an emailed code — accept whichever matches.
+        $verifiedByTotp = $user->hasTotpEnabled()
+            && $this->totp->verify((string) $user->two_factor_totp_secret, $validated['code']);
+
+        $verified = $verifiedByTotp || $this->codes->verifyCode($user, $validated['code']);
+
+        if (! $verified) {
             $this->codes->recordFailedAttempt($user);
 
             throw ValidationException::withMessages([
                 'code' => __('That code is invalid or has expired. Request a new one and try again.'),
             ]);
+        }
+
+        // The email path clears state inside verifyCode(); a TOTP match must
+        // release any lingering code/attempt state here.
+        if ($verifiedByTotp) {
+            $this->codes->clearChallengeState($user);
         }
 
         // Second factor satisfied — complete the login with the same fixation

@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\TwoFactorChallengeController;
 use App\Http\Controllers\Auth\TwoFactorSettingsController;
+use App\Http\Controllers\Auth\TwoFactorTotpController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
@@ -84,6 +85,19 @@ Route::middleware('auth')->group(function () {
 
     Route::delete('two-factor/email', [TwoFactorSettingsController::class, 'disable'])
         ->name('two-factor.email.disable');
+
+    // Authenticator-app (TOTP) enrollment + management (§4).
+    Route::post('two-factor/totp/setup', [TwoFactorTotpController::class, 'setup'])
+        ->name('two-factor.totp.setup');
+
+    Route::get('two-factor/totp/setup', [TwoFactorTotpController::class, 'show'])
+        ->name('two-factor.totp.setup.show');
+
+    Route::post('two-factor/totp/confirm', [TwoFactorTotpController::class, 'confirm'])
+        ->name('two-factor.totp.confirm');
+
+    Route::delete('two-factor/totp', [TwoFactorTotpController::class, 'disable'])
+        ->name('two-factor.totp.disable');
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');

@@ -112,14 +112,24 @@ class TwoFactorCodeService
             return false;
         }
 
+        $this->clearChallengeState($user);
+
+        return true;
+    }
+
+    /**
+     * Clear all challenge state after a factor is satisfied: consume any active
+     * code, reset the attempt counter, and release any lock. Used on a
+     * successful email verify and on a successful TOTP login.
+     */
+    public function clearChallengeState(User $user): void
+    {
         $user->forceFill([
             'two_factor_code_hash' => null,
             'two_factor_code_expires_at' => null,
             'two_factor_attempts' => 0,
             'two_factor_locked_until' => null,
         ])->save();
-
-        return true;
     }
 
     private function generateCode(): string

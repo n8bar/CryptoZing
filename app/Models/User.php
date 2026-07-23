@@ -88,6 +88,7 @@ class User extends Authenticatable
         'password',
         'remember_token',
         'two_factor_code_hash',
+        'two_factor_totp_secret',
     ];
 
     /**
@@ -125,6 +126,8 @@ class User extends Authenticatable
             'two_factor_code_expires_at' => 'datetime',
             'two_factor_attempts' => 'integer',
             'two_factor_locked_until' => 'datetime',
+            'two_factor_totp_secret' => 'encrypted',
+            'two_factor_totp_confirmed_at' => 'datetime',
         ];
     }
 
@@ -147,12 +150,33 @@ class User extends Authenticatable
     }
 
     /**
+     * Whether the user has a confirmed authenticator-app (TOTP) secret. A
+     * stored-but-unconfirmed secret does not count and never gates login.
+     */
+    public function hasTotpEnabled(): bool
+    {
+        return $this->two_factor_totp_confirmed_at !== null;
+    }
+
+    /**
+     * Whether a TOTP secret has been generated but not yet confirmed — drives
+     * the "finish setup" state on the settings card.
+     */
+    public function hasPendingTotpEnrollment(): bool
+    {
+        return ! $this->hasTotpEnabled() && $this->two_factor_totp_secret !== null;
+    }
+
+    /**
      * The second factor that leads this user's login challenge, or null when
-     * 2FA is off. Email is the only method today; TOTP will take precedence
-     * once it ships.
+     * 2FA is off. TOTP leads when confirmed; email is the fallback/default.
      */
     public function twoFactorLoginMethod(): ?string
     {
+        if ($this->hasTotpEnabled()) {
+            return 'totp';
+        }
+
         return $this->hasEmailTwoFactorEnabled() ? 'email' : null;
     }
 
