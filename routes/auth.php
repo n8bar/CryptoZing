@@ -8,6 +8,8 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\TwoFactorChallengeController;
+use App\Http\Controllers\Auth\TwoFactorSettingsController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
@@ -33,6 +35,14 @@ Route::middleware('guest')->group(function () {
 
     Route::post('reset-password', [NewPasswordController::class, 'store'])
         ->name('password.store');
+
+    // Second-factor challenge: the user has passed the password check but is not
+    // yet logged in (pending id stashed in the session), so this stays guest-safe.
+    Route::get('two-factor/challenge', [TwoFactorChallengeController::class, 'create'])
+        ->name('two-factor.challenge');
+
+    Route::post('two-factor/challenge', [TwoFactorChallengeController::class, 'store'])
+        ->name('two-factor.challenge.store');
 });
 
 Route::middleware('auth')->group(function () {
@@ -53,6 +63,14 @@ Route::middleware('auth')->group(function () {
     Route::post('confirm-password', [ConfirmablePasswordController::class, 'store']);
 
     Route::put('password', [PasswordController::class, 'update'])->name('password.update');
+
+    // Email-2FA enrollment (settings side). Login-time verification is guest-safe
+    // and lives in the challenge routes above.
+    Route::post('two-factor/email/enroll', [TwoFactorSettingsController::class, 'enroll'])
+        ->name('two-factor.email.enroll');
+
+    Route::post('two-factor/email/confirm', [TwoFactorSettingsController::class, 'confirm'])
+        ->name('two-factor.email.confirm');
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');

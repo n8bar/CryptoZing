@@ -87,6 +87,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'two_factor_code_hash',
     ];
 
     /**
@@ -120,7 +121,47 @@ class User extends Authenticatable
             'getting_started_dismissed' => 'boolean',
             'getting_started_replay_started_at' => 'datetime',
             'getting_started_replay_wallet_verified_at' => 'datetime',
+            'two_factor_email_enabled_at' => 'datetime',
+            'two_factor_code_expires_at' => 'datetime',
+            'two_factor_attempts' => 'integer',
+            'two_factor_locked_until' => 'datetime',
         ];
+    }
+
+    /**
+     * Whether the user has completed email-2FA enrollment. The enabled-at
+     * timestamp is set only after the round-trip code is confirmed.
+     */
+    public function hasEmailTwoFactorEnabled(): bool
+    {
+        return $this->two_factor_email_enabled_at !== null;
+    }
+
+    /**
+     * Whether enrollment has begun (a code was emailed) but has not yet been
+     * confirmed. Drives the "enter your code" state on the settings card.
+     */
+    public function hasPendingEmailTwoFactorEnrollment(): bool
+    {
+        return ! $this->hasEmailTwoFactorEnabled() && $this->two_factor_code_hash !== null;
+    }
+
+    /**
+     * The second factor that leads this user's login challenge, or null when
+     * 2FA is off. Email is the only method today; TOTP will take precedence
+     * once it ships.
+     */
+    public function twoFactorLoginMethod(): ?string
+    {
+        return $this->hasEmailTwoFactorEnabled() ? 'email' : null;
+    }
+
+    /**
+     * Whether login must divert through a second-factor challenge.
+     */
+    public function requiresTwoFactorChallenge(): bool
+    {
+        return $this->twoFactorLoginMethod() !== null;
     }
 
     public static function defaultMailBrandName(): string

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Services\TwoFactor\TwoFactorCodeService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,9 +31,34 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(LoginRequest $request, TwoFactorCodeService $codes): RedirectResponse
     {
         $request->authenticate();
+
+        $user = $request->user();
+
+        // 2FA users are held at the challenge: undo the credential login and
+        // stash a pending id; the challenge controller re-logs in only after a
+        // valid second factor. The intended-URL target (if any) survives in the
+        // session and is replayed on success.
+        if ($user && $user->requiresTwoFactorChallenge()) {
+            $remember = $request->boolean('remember');
+
+            Auth::guard('web')->logout();
+
+            $request->session()->put(TwoFactorChallengeController::SESSION_KEY, [
+                'id' => $user->id,
+                'remember' => $remember,
+                'method' => $user->twoFactorLoginMethod(),
+            ]);
+
+            // Email-led challenge: send the first code as login diverts.
+            if ($user->twoFactorLoginMethod() === 'email') {
+                $codes->sendCode($user);
+            }
+
+            return redirect()->route('two-factor.challenge');
+        }
 
         $request->session()->regenerate();
 
