@@ -63,7 +63,7 @@
                         <h3 class="text-sm font-semibold text-gray-700">Primary wallet</h3>
                         <p class="mt-1 text-xs text-gray-500">This wallet receives all invoice payments for now.</p>
 
-                        @if ($wallet && ! $isGettingStarted && auth()->user()->requiresTwoFactorChallenge() && ! auth()->user()->hasTotpEnabled())
+                        @if ($wallet && auth()->user()->requiresTwoFactorChallenge() && ! auth()->user()->hasTotpEnabled())
                             <form method="POST" action="{{ route('wallet.settings.step-up-code') }}" class="mt-3">
                                 @csrf
                                 <button type="submit" class="text-sm text-indigo-600 underline hover:text-indigo-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">
@@ -165,7 +165,7 @@
                                 </div>
                             </div>
 
-                            @if ($wallet && ! $isGettingStarted)
+                            @if ($wallet)
                                 <div class="space-y-4 rounded-lg border border-amber-200 bg-amber-50 p-4">
                                     <div>
                                         <h4 class="text-sm font-semibold text-amber-900">{{ __("Confirm it's you") }}</h4>

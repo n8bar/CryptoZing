@@ -15,6 +15,16 @@ use Illuminate\Validation\ValidationException;
  */
 class TwoFactorSettingsController extends Controller
 {
+    /**
+     * Session flags recording that the user explicitly started an enroll or a
+     * disable from settings. The card keys its code-entry prompts on these, not
+     * on the shared code column — a code minted by another flow (login,
+     * wallet step-up) must never surface an enable/disable form here.
+     */
+    public const ENROLL_PENDING_KEY = 'two_factor.email_enroll_pending';
+
+    public const DISABLE_PENDING_KEY = 'two_factor.email_disable_pending';
+
     public function __construct(private readonly TwoFactorCodeService $codes)
     {
     }
@@ -25,7 +35,16 @@ class TwoFactorSettingsController extends Controller
      */
     public function enroll(Request $request): RedirectResponse
     {
-        $this->codes->sendCode($request->user());
+        $user = $request->user();
+
+        if ($this->codes->tooManyRecentSends($user)) {
+            return back()->withErrors([
+                'code' => __('Too many code requests. Please wait a few minutes before trying again.'),
+            ]);
+        }
+
+        $this->codes->sendCode($user);
+        $request->session()->put(self::ENROLL_PENDING_KEY, true);
 
         return back()->with('status', 'two-factor-code-sent');
     }
@@ -48,6 +67,7 @@ class TwoFactorSettingsController extends Controller
         }
 
         $user->forceFill(['two_factor_email_enabled_at' => now()])->save();
+        $request->session()->forget(self::ENROLL_PENDING_KEY);
 
         return back()->with('status', 'two-factor-enabled');
     }
@@ -70,6 +90,7 @@ class TwoFactorSettingsController extends Controller
         }
 
         $this->codes->sendCode($user);
+        $request->session()->put(self::DISABLE_PENDING_KEY, true);
 
         return back()->with('status', 'two-factor-disable-code-sent');
     }
@@ -98,6 +119,7 @@ class TwoFactorSettingsController extends Controller
             'two_factor_attempts' => 0,
             'two_factor_locked_until' => null,
         ])->save();
+        $request->session()->forget(self::DISABLE_PENDING_KEY);
 
         return back()->with('status', 'two-factor-disabled');
     }

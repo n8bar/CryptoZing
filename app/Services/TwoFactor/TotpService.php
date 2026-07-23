@@ -39,10 +39,34 @@ class TotpService
     }
 
     /**
-     * Verify a submitted app code against the secret, allowing ±30s drift.
+     * Verify a submitted app code against the user's secret, allowing ±30s
+     * drift, and reject replays: a code is accepted only if its time-step is
+     * newer than the last accepted one, which is then recorded.
      */
-    public function verify(string $secret, string $code): bool
+    public function verify(User $user, string $code): bool
     {
-        return (bool) $this->google2fa->verifyKey($secret, $code, self::DRIFT_WINDOW);
+        $secret = (string) $user->two_factor_totp_secret;
+
+        if ($secret === '') {
+            return false;
+        }
+
+        // A non-null oldTimestamp (0 on first use) is required so google2fa
+        // returns the matched time-step rather than a bare `true` — otherwise
+        // the recorded step is useless and replays slip through.
+        $timestamp = $this->google2fa->verifyKeyNewer(
+            $secret,
+            $code,
+            $user->two_factor_totp_last_timestamp ?? 0,
+            self::DRIFT_WINDOW,
+        );
+
+        if ($timestamp === false) {
+            return false;
+        }
+
+        $user->forceFill(['two_factor_totp_last_timestamp' => $timestamp])->save();
+
+        return true;
     }
 }

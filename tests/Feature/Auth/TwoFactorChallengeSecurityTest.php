@@ -23,7 +23,7 @@ class TwoFactorChallengeSecurityTest extends TestCase
         $this->post(route('two-factor.challenge.resend')); // #3
         $this->post(route('two-factor.challenge.resend')); // blocked
 
-        Mail::assertSent(TwoFactorCodeMail::class, 3);
+        Mail::assertQueued(TwoFactorCodeMail::class, 3);
     }
 
     public function test_account_locks_after_five_failed_attempts(): void
@@ -66,7 +66,7 @@ class TwoFactorChallengeSecurityTest extends TestCase
     private function capturedCode(): string
     {
         $code = null;
-        Mail::assertSent(TwoFactorCodeMail::class, function (TwoFactorCodeMail $mail) use (&$code) {
+        Mail::assertQueued(TwoFactorCodeMail::class, function (TwoFactorCodeMail $mail) use (&$code) {
             $code = $mail->code;
 
             return true;

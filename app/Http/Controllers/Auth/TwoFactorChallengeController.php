@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Auth\Concerns\RoutesAuthenticatedUser;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Services\TwoFactor\TotpService;
@@ -20,6 +21,8 @@ use Illuminate\View\View;
  */
 class TwoFactorChallengeController extends Controller
 {
+    use RoutesAuthenticatedUser;
+
     /** Session key holding the half-authenticated login. */
     public const SESSION_KEY = 'two_factor.login';
 
@@ -71,7 +74,7 @@ class TwoFactorChallengeController extends Controller
         // A TOTP user may present their app code or, if they asked for the
         // fallback, an emailed code — accept whichever matches.
         $verifiedByTotp = $user->hasTotpEnabled()
-            && $this->totp->verify((string) $user->two_factor_totp_secret, $validated['code']);
+            && $this->totp->verify($user, $validated['code']);
 
         $verified = $verifiedByTotp || $this->codes->verifyCode($user, $validated['code']);
 
@@ -97,7 +100,7 @@ class TwoFactorChallengeController extends Controller
 
         Cookie::queue(Cookie::forever(AuthenticatedSessionController::RETURNING_COOKIE, '1'));
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        return $this->redirectAuthenticatedUser($request, $user);
     }
 
     /**

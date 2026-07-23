@@ -76,7 +76,10 @@ Route::middleware('auth')->group(function () {
     Route::post('two-factor/email/enroll', [TwoFactorSettingsController::class, 'enroll'])
         ->name('two-factor.email.enroll');
 
+    // Code-verify endpoints carry a per-IP throttle so the 6-digit code can't
+    // be brute-forced from an authenticated (or hijacked) session.
     Route::post('two-factor/email/confirm', [TwoFactorSettingsController::class, 'confirm'])
+        ->middleware('throttle:6,1')
         ->name('two-factor.email.confirm');
 
     // Disabling requires a fresh re-verification code (§1.6).
@@ -84,6 +87,7 @@ Route::middleware('auth')->group(function () {
         ->name('two-factor.email.disable-request');
 
     Route::delete('two-factor/email', [TwoFactorSettingsController::class, 'disable'])
+        ->middleware('throttle:6,1')
         ->name('two-factor.email.disable');
 
     // Authenticator-app (TOTP) enrollment + management (§4).
@@ -94,9 +98,11 @@ Route::middleware('auth')->group(function () {
         ->name('two-factor.totp.setup.show');
 
     Route::post('two-factor/totp/confirm', [TwoFactorTotpController::class, 'confirm'])
+        ->middleware('throttle:6,1')
         ->name('two-factor.totp.confirm');
 
     Route::delete('two-factor/totp', [TwoFactorTotpController::class, 'disable'])
+        ->middleware('throttle:6,1')
         ->name('two-factor.totp.disable');
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])

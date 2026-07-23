@@ -237,7 +237,7 @@ class WalletSettingsController extends Controller
         $code = (string) $request->input('two_factor_code');
 
         $verified = $user->hasTotpEnabled()
-            && app(TotpService::class)->verify((string) $user->two_factor_totp_secret, $code);
+            && app(TotpService::class)->verify($user, $code);
 
         if (! $verified) {
             $verified = app(TwoFactorCodeService::class)->verifyCode($user, $code);

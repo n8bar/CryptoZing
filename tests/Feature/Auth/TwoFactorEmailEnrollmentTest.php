@@ -28,7 +28,7 @@ class TwoFactorEmailEnrollmentTest extends TestCase
         $response = $this->actingAs($user)->post(route('two-factor.email.enroll'));
 
         $response->assertSessionHasNoErrors();
-        Mail::assertSent(TwoFactorCodeMail::class, fn (TwoFactorCodeMail $mail) => $mail->hasTo($user->email));
+        Mail::assertQueued(TwoFactorCodeMail::class, fn (TwoFactorCodeMail $mail) => $mail->hasTo($user->email));
 
         $user->refresh();
         // Round-trip: a pending code is stashed, but 2FA is not yet enabled.
@@ -101,13 +101,38 @@ class TwoFactorEmailEnrollmentTest extends TestCase
         $response->assertSee('Email two-factor authentication is on.');
     }
 
+    public function test_enrollment_sends_are_capped(): void
+    {
+        Mail::fake();
+        $user = User::factory()->create();
+
+        for ($i = 0; $i < 5; $i++) {
+            $this->actingAs($user)->post(route('two-factor.email.enroll'));
+        }
+
+        // Enroll (and its "resend" button) honour the per-user send cap.
+        Mail::assertQueued(TwoFactorCodeMail::class, 3);
+    }
+
+    public function test_code_email_is_queued_not_sent_inline(): void
+    {
+        Mail::fake();
+        $user = User::factory()->create();
+
+        $this->actingAs($user)->post(route('two-factor.email.enroll'));
+
+        // Queued so login/settings never block on SMTP.
+        Mail::assertNothingSent();
+        Mail::assertQueued(TwoFactorCodeMail::class);
+    }
+
     /**
      * Pull the plaintext 6-digit code out of the faked enrollment mail.
      */
     private function capturedCode(): string
     {
         $code = null;
-        Mail::assertSent(TwoFactorCodeMail::class, function (TwoFactorCodeMail $mail) use (&$code) {
+        Mail::assertQueued(TwoFactorCodeMail::class, function (TwoFactorCodeMail $mail) use (&$code) {
             $code = $mail->code;
 
             return true;

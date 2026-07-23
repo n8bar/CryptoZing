@@ -78,7 +78,7 @@ class WalletXpubStepUpTest extends TestCase
 
         app(TwoFactorCodeService::class)->sendCode($user);
         $code = null;
-        Mail::assertSent(TwoFactorCodeMail::class, function (TwoFactorCodeMail $mail) use (&$code) {
+        Mail::assertQueued(TwoFactorCodeMail::class, function (TwoFactorCodeMail $mail) use (&$code) {
             $code = $mail->code;
 
             return true;
@@ -104,6 +104,29 @@ class WalletXpubStepUpTest extends TestCase
 
         $response->assertSessionHasNoErrors();
         $this->assertSame(self::NEW_XPUB, $this->currentXpub($user));
+    }
+
+    public function test_getting_started_flag_does_not_bypass_step_up(): void
+    {
+        $user = $this->userWithWallet();
+
+        $response = $this->actingAs($user)->post(route('wallet.settings.update'), [
+            'bip84_xpub' => self::NEW_XPUB,
+            'getting_started' => 1,
+        ]);
+
+        $response->assertSessionHasErrors('current_password');
+        $this->assertSame(self::OLD_XPUB, $this->currentXpub($user));
+    }
+
+    public function test_wallet_settings_shows_the_step_up_field_when_a_wallet_exists(): void
+    {
+        $user = $this->userWithWallet();
+
+        $response = $this->actingAs($user)->get(route('wallet.settings.edit'));
+
+        $response->assertOk();
+        $response->assertSee('name="current_password"', false);
     }
 
     private function userWithWallet(array $attrs = []): User

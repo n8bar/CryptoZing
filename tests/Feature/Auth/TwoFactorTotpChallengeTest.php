@@ -22,7 +22,7 @@ class TwoFactorTotpChallengeTest extends TestCase
 
         $response->assertRedirect(route('two-factor.challenge'));
         $this->assertGuest();
-        Mail::assertNothingSent();
+        Mail::assertNothingOutgoing();
     }
 
     public function test_totp_user_completes_login_with_an_app_code(): void
@@ -83,6 +83,27 @@ class TwoFactorTotpChallengeTest extends TestCase
         $this->assertGuest();
     }
 
+    public function test_a_totp_code_cannot_be_replayed(): void
+    {
+        Mail::fake();
+        $user = $this->makeTotpUser();
+        $this->post('/login', ['email' => $user->email, 'password' => 'password']);
+
+        $code = app(Google2FA::class)->getCurrentOtp($user->two_factor_totp_secret);
+
+        // First use logs in.
+        $this->post(route('two-factor.challenge.store'), ['code' => $code])
+            ->assertRedirect(route('dashboard', absolute: false));
+        $this->post(route('logout'));
+
+        // Replaying the same code on a fresh challenge is refused.
+        $this->post('/login', ['email' => $user->email, 'password' => 'password']);
+        $response = $this->post(route('two-factor.challenge.store'), ['code' => $code]);
+
+        $response->assertSessionHasErrors('code');
+        $this->assertGuest();
+    }
+
     private function makeTotpUser(): User
     {
         $secret = app(Google2FA::class)->generateSecretKey();
@@ -90,13 +111,14 @@ class TwoFactorTotpChallengeTest extends TestCase
         return User::factory()->create([
             'two_factor_totp_secret' => $secret,
             'two_factor_totp_confirmed_at' => now(),
+            'getting_started_completed_at' => now(),
         ]);
     }
 
     private function capturedCode(): string
     {
         $code = null;
-        Mail::assertSent(TwoFactorCodeMail::class, function (TwoFactorCodeMail $mail) use (&$code) {
+        Mail::assertQueued(TwoFactorCodeMail::class, function (TwoFactorCodeMail $mail) use (&$code) {
             $code = $mail->code;
 
             return true;

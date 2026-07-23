@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Auth\Concerns\RoutesAuthenticatedUser;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Services\TwoFactor\TwoFactorCodeService;
@@ -13,6 +14,8 @@ use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
+    use RoutesAuthenticatedUser;
+
     /**
      * Long-lived marker dropped at login so a later guest redirect can tell an
      * expired session ("you were signed in") apart from a never-authenticated
@@ -52,8 +55,10 @@ class AuthenticatedSessionController extends Controller
                 'method' => $user->twoFactorLoginMethod(),
             ]);
 
-            // Email-led challenge: send the first code as login diverts.
-            if ($user->twoFactorLoginMethod() === 'email') {
+            // Email-led challenge: send the first code as login diverts — unless
+            // the send cap is already reached (a valid code still exists in that
+            // window), so repeated login POSTs can't flood the inbox.
+            if ($user->twoFactorLoginMethod() === 'email' && ! $codes->tooManyRecentSends($user)) {
                 $codes->sendCode($user);
             }
 
@@ -65,23 +70,7 @@ class AuthenticatedSessionController extends Controller
         // Outlives the session so a later expiry can be recognised as one.
         Cookie::queue(Cookie::forever(self::RETURNING_COOKIE, '1'));
 
-        // A return-to-page target stashed by the 419 / session-expiry handler
-        // wins over first-login persona routing — the user was actively
-        // somewhere, so put them back there.
-        if ($request->session()->has('url.intended')) {
-            return redirect()->intended(route('dashboard', absolute: false));
-        }
-
-        $user = $request->user();
-        if ($user && $user->isSupportAgent()) {
-            return redirect()->route('support.dashboard');
-        }
-
-        if ($user && $user->gettingStartedNeedsAutoShow()) {
-            return redirect()->route('getting-started.start');
-        }
-
-        return redirect()->intended(route('dashboard', absolute: false));
+        return $this->redirectAuthenticatedUser($request, $user);
     }
     /**
      * Destroy an authenticated session.

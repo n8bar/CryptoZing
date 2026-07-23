@@ -60,7 +60,7 @@
         <h3 class="text-sm font-semibold text-gray-900">{{ __('Email codes') }}</h3>
 
         @if ($user->hasEmailTwoFactorEnabled())
-            @if ($user->two_factor_code_hash !== null)
+            @if (session(\App\Http\Controllers\Auth\TwoFactorSettingsController::DISABLE_PENDING_KEY))
                 <form method="post" action="{{ route('two-factor.email.disable') }}" class="space-y-4">
                     @csrf
                     @method('delete')
@@ -101,7 +101,7 @@
                     <x-danger-button>{{ __('Disable two-factor') }}</x-danger-button>
                 </form>
             @endif
-        @elseif ($user->hasPendingEmailTwoFactorEnrollment())
+        @elseif (session(\App\Http\Controllers\Auth\TwoFactorSettingsController::ENROLL_PENDING_KEY))
             <form method="post" action="{{ route('two-factor.email.confirm') }}" class="space-y-4">
                 @csrf
 

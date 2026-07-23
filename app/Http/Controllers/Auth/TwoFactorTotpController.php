@@ -76,7 +76,7 @@ class TwoFactorTotpController extends Controller
         $user = $request->user();
 
         if ($user->two_factor_totp_secret === null
-            || ! $this->totp->verify($user->two_factor_totp_secret, $validated['code'])) {
+            || ! $this->totp->verify($user, $validated['code'])) {
             throw ValidationException::withMessages([
                 'code' => __('That code did not match. Check your authenticator app and try again.'),
             ]);
@@ -100,7 +100,7 @@ class TwoFactorTotpController extends Controller
         $user = $request->user();
 
         $verified = $user->two_factor_totp_secret !== null
-            && $this->totp->verify($user->two_factor_totp_secret, $validated['code']);
+            && $this->totp->verify($user, $validated['code']);
 
         if (! $verified) {
             $verified = $this->codes->verifyCode($user, $validated['code']);

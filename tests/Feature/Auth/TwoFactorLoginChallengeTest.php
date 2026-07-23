@@ -31,7 +31,7 @@ class TwoFactorLoginChallengeTest extends TestCase
         $response->assertRedirect(route('two-factor.challenge'));
         $this->assertGuest();
         // Email-led challenge emails a code as the login diverts.
-        Mail::assertSent(TwoFactorCodeMail::class, fn (TwoFactorCodeMail $mail) => $mail->hasTo($user->email));
+        Mail::assertQueued(TwoFactorCodeMail::class, fn (TwoFactorCodeMail $mail) => $mail->hasTo($user->email));
     }
 
     public function test_challenge_page_requires_a_pending_login(): void
@@ -42,7 +42,10 @@ class TwoFactorLoginChallengeTest extends TestCase
     public function test_correct_challenge_code_completes_login(): void
     {
         Mail::fake();
-        $user = User::factory()->create(['two_factor_email_enabled_at' => now()]);
+        $user = User::factory()->create([
+            'two_factor_email_enabled_at' => now(),
+            'getting_started_completed_at' => now(),
+        ]);
 
         $this->post('/login', ['email' => $user->email, 'password' => 'password']);
         $code = $this->capturedCode();
@@ -51,6 +54,53 @@ class TwoFactorLoginChallengeTest extends TestCase
 
         $response->assertRedirect(route('dashboard', absolute: false));
         $this->assertAuthenticatedAs($user->fresh());
+    }
+
+    public function test_challenge_completion_honours_support_agent_routing(): void
+    {
+        Mail::fake();
+        config()->set('support.agent_emails', ['support@example.com']);
+        $user = User::factory()->create([
+            'email' => 'support@example.com',
+            'two_factor_email_enabled_at' => now(),
+            'getting_started_completed_at' => now(),
+        ]);
+
+        $this->post('/login', ['email' => $user->email, 'password' => 'password']);
+        $code = $this->capturedCode();
+
+        $response = $this->post(route('two-factor.challenge.store'), ['code' => $code]);
+
+        $response->assertRedirect(route('support.dashboard'));
+        $this->assertAuthenticatedAs($user->fresh());
+    }
+
+    public function test_challenge_completion_honours_getting_started_routing(): void
+    {
+        Mail::fake();
+        // A fresh (incomplete) user should still land on getting-started, not dashboard.
+        $user = User::factory()->create(['two_factor_email_enabled_at' => now()]);
+
+        $this->post('/login', ['email' => $user->email, 'password' => 'password']);
+        $code = $this->capturedCode();
+
+        $response = $this->post(route('two-factor.challenge.store'), ['code' => $code]);
+
+        $response->assertRedirect(route('getting-started.start'));
+        $this->assertAuthenticatedAs($user->fresh());
+    }
+
+    public function test_login_divert_sends_are_capped(): void
+    {
+        Mail::fake();
+        $user = User::factory()->create(['two_factor_email_enabled_at' => now()]);
+
+        for ($i = 0; $i < 5; $i++) {
+            $this->post('/login', ['email' => $user->email, 'password' => 'password']);
+        }
+
+        // Repeated valid-password logins can't flood the inbox past the cap.
+        Mail::assertQueued(TwoFactorCodeMail::class, 3);
     }
 
     public function test_wrong_challenge_code_is_rejected_and_the_user_stays_a_guest(): void
@@ -86,7 +136,7 @@ class TwoFactorLoginChallengeTest extends TestCase
     private function capturedCode(): string
     {
         $code = null;
-        Mail::assertSent(TwoFactorCodeMail::class, function (TwoFactorCodeMail $mail) use (&$code) {
+        Mail::assertQueued(TwoFactorCodeMail::class, function (TwoFactorCodeMail $mail) use (&$code) {
             $code = $mail->code;
 
             return true;

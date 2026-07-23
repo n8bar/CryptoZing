@@ -128,6 +128,7 @@ class User extends Authenticatable
             'two_factor_locked_until' => 'datetime',
             'two_factor_totp_secret' => 'encrypted',
             'two_factor_totp_confirmed_at' => 'datetime',
+            'two_factor_totp_last_timestamp' => 'integer',
         ];
     }
 
@@ -138,15 +139,6 @@ class User extends Authenticatable
     public function hasEmailTwoFactorEnabled(): bool
     {
         return $this->two_factor_email_enabled_at !== null;
-    }
-
-    /**
-     * Whether enrollment has begun (a code was emailed) but has not yet been
-     * confirmed. Drives the "enter your code" state on the settings card.
-     */
-    public function hasPendingEmailTwoFactorEnrollment(): bool
-    {
-        return ! $this->hasEmailTwoFactorEnabled() && $this->two_factor_code_hash !== null;
     }
 
     /**
