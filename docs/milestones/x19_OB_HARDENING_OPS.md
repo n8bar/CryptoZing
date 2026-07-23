@@ -1,6 +1,6 @@
 # MS19 - Open Beta Hardening & Ops
 
-Status: Active — Phases 1–8 complete; Phase 9 (2FA) next and last.
+Status: Complete.
 Parent execution doc: [`docs/PLAN.md`](../PLAN.md)
 Supporting ops doc: [`docs/ops/DOCS_DX.md`](../ops/DOCS_DX.md)
 
@@ -21,8 +21,8 @@ Supporting ops doc: [`docs/ops/DOCS_DX.md`](../ops/DOCS_DX.md)
 - **Monetization-neutral language:** Avoid language that permanently forecloses pricing options ("always free," "no fees ever"). Leave room for future paid tiers or feature gating without requiring a ToS rewrite.
 - **Findings tracking trial:** Through M19, new findings/bugs/todos go to GitHub Issues (closed via `Fixes #N` on the merging PR) instead of new `docs/qa/Finding*.md` docs. Existing finding docs stay put. M20 kickoff decides whether to keep, revert, or hybridize. See [`docs/DOC_ROLES.md`](../DOC_ROLES.md#findings-conventions).
 
-## Current Focus
-- Active phase: Phase 9 (2FA). Phases 1–8 complete.
+## Phase Index
+- All 9 phases complete.
 - Phase 1: [`docs/strategies/x19.1_NOTIFICATION_COVERAGE_AUDIT.md`](../strategies/x19.1_NOTIFICATION_COVERAGE_AUDIT.md) ✓
 - Phase 2: [`docs/strategies/x19.2_AUTH_HARDENING.md`](../strategies/x19.2_AUTH_HARDENING.md) ✓
 - Phase 3: [`docs/strategies/x19.3_LLC_FORMATION.md`](../strategies/x19.3_LLC_FORMATION.md) ✓
@@ -31,7 +31,7 @@ Supporting ops doc: [`docs/ops/DOCS_DX.md`](../ops/DOCS_DX.md)
 - Phase 6: [`docs/strategies/x19.6_CONTENT_PROMISES_RECONCILIATION.md`](../strategies/x19.6_CONTENT_PROMISES_RECONCILIATION.md) ✓
 - Phase 7: [`docs/strategies/x19.7_CONTRIBUTOR_DOCS.md`](../strategies/x19.7_CONTRIBUTOR_DOCS.md) ✓
 - Phase 8: [`docs/strategies/x19.8_MICRO_MONETIZE.md`](../strategies/x19.8_MICRO_MONETIZE.md) ✓
-- Phase 9: [`docs/strategies/19.9_TWO_FACTOR_AUTHENTICATION.md`](../strategies/19.9_TWO_FACTOR_AUTHENTICATION.md)
+- Phase 9: [`docs/strategies/x19.9_TWO_FACTOR_AUTHENTICATION.md`](../strategies/x19.9_TWO_FACTOR_AUTHENTICATION.md) ✓
 
 ## Phase Rollup
 
@@ -59,7 +59,7 @@ Reviewed AGENTS.md (mail-alias note trimmed to mechanism + rule; six standing ru
 ### [x] Phase 8 — Micro-Monetize
 Shipped CryptoZing's first revenue surface — a public `/donate` page (BTC-only; fiat donations backlogged as BACKLOG item 25): USD presets + $/₿ custom amounts, per-donor derived addresses from a CZ-owned watch-only xpub (capped pool, never shared), thank-you state doubling as a printable receipt, and an operator notification mail. Hardened by a 22-finding adversarial review; browser-QA'd end to end on testnet. Ships dark; public at the MS21 deploy. See [`x19.8_MICRO_MONETIZE.md`](../strategies/x19.8_MICRO_MONETIZE.md) and [`docs/specs/DONATIONS.md`](../specs/DONATIONS.md).
 
-### [ ] Phase 9 — Two-Factor Authentication
+### [x] Phase 9 — Two-Factor Authentication
 Add 2FA to the open beta. Email-based 2FA as the baseline; TOTP / authenticator-app 2FA opportunistically if MS19 time allows (deferred to the 2028 release otherwise). Includes a non-blocking recommendation surface for users without 2FA enabled. **Positionally last by design** — if additional phases are ever added to MS19, this one stays at the end.
 
 ## Exit Criteria
@@ -72,13 +72,13 @@ Add 2FA to the open beta. Email-based 2FA as the baseline; TOTP / authenticator-
 - [x] og:image card + social-preview meta wired on the marketing site and validated against the platform preview tools.
 - [x] No "RC" / "Release Candidate" in user-facing copy (deployed RC is publicly "open beta"); "pre-release" kept where accurate; internal docs/comments unchanged.
 - [x] Branded, guest-safe error pages — 404/500/503/429 plus 403 migrated off the auth-assuming layout; 500 leaks no debug detail (#96).
-- [ ] ToS and Privacy Policy drafted and published to the live site.
+- [x] ToS and Privacy Policy drafted (Phase 5). Publication (effective dates + live links) is deliberately deferred to the MS21 deploy — same as the donation page and error-page framing (MS19 builds; MS21 goes live).
 - [x] Disclaimer copy present at signup, wallet onboarding, and invoice/payment surfaces; footer links to ToS and Privacy Policy on every page.
 - [x] Existing UI and mail copy reviewed for overstatements, financial advice language, and pricing commitments — issues resolved.
 - [x] Monetization-safe language guide produced for future copy decisions.
 - [x] Content promises catalog reconciled — every open entry confirmed honored or resolved (content revised or product adjusted).
 - [x] Contributor docs reviewed and current.
 - [x] Phase 8 (Micro-Monetize): scope decided (BTC-only, stays in MS19; fiat donations backlogged); donation surface built and verified on testnet — ships dark, public at the MS21 deploy. See [`x19.8`](../strategies/x19.8_MICRO_MONETIZE.md).
-- [ ] Email 2FA available as opt-in; recovery flow per the Phase 9 decision in place.
-- [ ] Recommendation surface for users without 2FA enabled is shipped.
-- [ ] TOTP shipped if MS19 time-cutoff met; otherwise explicitly deferred to the 2028 release.
+- [x] Email 2FA available as opt-in; emailed-code recovery per the Phase 9 decision in place.
+- [x] Recommendation surface (non-blocking dashboard banner) for users without 2FA enabled is shipped.
+- [x] TOTP shipped (cutoff met) — authenticator app with QR + manual enrollment and the emailed-code fallback.

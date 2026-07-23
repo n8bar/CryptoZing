@@ -1,5 +1,5 @@
 # PLAN
-_Last updated: 2026-07-18_
+_Last updated: 2026-07-23_
 
 This is the human-facing execution dashboard for open-beta work.
 
@@ -16,11 +16,10 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 
 ## Current
 - Active milestone:
-  - **MS19 - Open Beta Hardening & Ops** — in progress; Phases 1–8 complete. Active phase: **Phase 9 (2FA)**, the last MS19 phase.
-- Status: `active`
-- Next action: MS19 Phase 9 (2FA) — in progress on `claude/m19.9-2fa` per [`19.9_TWO_FACTOR_AUTHENTICATION.md`](strategies/19.9_TWO_FACTOR_AUTHENTICATION.md).
-- Primary next doc: [`docs/milestones/19_OB_HARDENING_OPS.md`](milestones/19_OB_HARDENING_OPS.md)
-- Most recently completed milestone doc: [`docs/milestones/x18_PRERELEASE_CONTENT_SEO.md`](milestones/x18_PRERELEASE_CONTENT_SEO.md)
+  - **None** — **MS19 (Open Beta Hardening & Ops) is complete** (all 9 phases). Next up is **MS20 - Mainnet Cutover Preparation**, pending kickoff.
+- Status: `between milestones`
+- Next action: Kick off **MS20 (Mainnet Cutover Preparation)** per [`docs/milestones/20_MAINNET_CUTOVER_PREP.md`](milestones/20_MAINNET_CUTOVER_PREP.md). Confirm the content-publish gate first (see Milestone Conventions — an article published since MS19 started).
+- Most recently completed milestone doc: [`docs/milestones/x19_OB_HARDENING_OPS.md`](milestones/x19_OB_HARDENING_OPS.md)
 
 ## Published Release Target
 - **First public release: mid-to-late 2027.** The open beta milestone timeline (MS21, targeting 2026-08-25) covers the open beta. The published release target accounts for post-open-beta work needed before an official first release.
@@ -28,7 +27,6 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 ## Active and Upcoming Milestones
 | Status | ID | Milestone | Short intent | Target | Primary doc |
 |---|---|---|---|---|---|
-| [ ] | 19 | Open Beta Hardening & Ops | Open beta hardening before mainnet cutover: notification coverage audit; auth/password policy hardening (419-to-login redirect, session expiry logout); parent/subsidiary LLC formation (entities, EINs, operating agreements); legal layer (ToS, Privacy Policy, disclaimers, monetization-neutral copy review, UI placement); content promises reconciliation; contributor docs refresh; micro-monetize decision; 2FA (email baseline, opportunistic TOTP). | 2026-08-01 | [`docs/milestones/19_OB_HARDENING_OPS.md`](milestones/19_OB_HARDENING_OPS.md) |
 | [ ] | 20 | Mainnet Cutover Preparation | Define and rehearse env flips, wallet validation, mail sanity checks, and backout steps for mainnet cutover. | 2026-08-13 | [`docs/milestones/20_MAINNET_CUTOVER_PREP.md`](milestones/20_MAINNET_CUTOVER_PREP.md) |
 | [ ] | 21 | CryptoZing.app Deployment (Open Beta) | Deploy the open beta under `cryptozing.app`, replace the GitHub Pages placeholder at `/` with the live app landing page without breaking the SEO baseline established in MS15, remove temporary mail aliasing, and complete rollout verification. | 2026-08-25 | [`docs/milestones/21_OB_DEPLOYMENT.md`](milestones/21_OB_DEPLOYMENT.md) |
 | [ ] | 22 | Thorough SEO & Marketing Strategies | Post-deploy discovery investment: thorough SEO pass across live app + site surfaces and an ongoing SEO strategy with scheduled tasks in the .ics; marketing strategy. Scope at kickoff. | 2026-09-15 | [`docs/milestones/22_SEO_MARKETING.md`](milestones/22_SEO_MARKETING.md) |
@@ -54,3 +52,4 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 | [x] | 16 | Mailer & Alerts Polish + Audit | Restore trustworthy outbound mail, delivery safeguards, truthful notification model, sequence-keyed past-due scheduling, persistent queue worker, and Mailgun webhook delivery status feedback. | [`docs/milestones/x16_MAILER_AND_ALERTS_POLISH_AUDIT.md`](milestones/x16_MAILER_AND_ALERTS_POLISH_AUDIT.md) |
 | [x] | 17 | Product Readiness | Rationalize the test suite, replace "owner" with "issuer" in all UI and mail copy, add service health monitoring to the support dashboard, and extend the getting-started flow with a post-payment receipt step. | [`docs/milestones/x17_PRODUCT_READINESS.md`](milestones/x17_PRODUCT_READINESS.md) |
 | [x] | 18 | Pre-Release Content & SEO | Extend the site from a single placeholder to a lightweight content site with educational articles, adapted Helpful Notes, and a staging path — giving search engines substance to rank before RC1 ships. | [`docs/milestones/x18_PRERELEASE_CONTENT_SEO.md`](milestones/x18_PRERELEASE_CONTENT_SEO.md) |
+| [x] | 19 | Open Beta Hardening & Ops | Open-beta hardening before mainnet cutover: notification coverage, auth/session hardening, LLC formation, legal layer, content-promises reconciliation, contributor docs, micro-monetize (donations), and 2FA (email + TOTP). | [`docs/milestones/x19_OB_HARDENING_OPS.md`](milestones/x19_OB_HARDENING_OPS.md) |
