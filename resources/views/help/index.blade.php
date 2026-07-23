@@ -39,6 +39,32 @@
             <section id="wallet-security" class="scroll-mt-24 space-y-4">
                 <h2 class="text-2xl font-semibold tracking-tight text-gray-900 dark:text-slate-100">Wallet &amp; Security</h2>
 
+                <article id="two-factor-recovery" class="scroll-mt-24 rounded-lg border border-gray-200 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-slate-900/60">
+                    <h3 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-slate-100">Two-factor authentication &amp; account recovery</h3>
+                    <p class="mt-1 text-base text-gray-700 dark:text-slate-200">
+                        Turn on two-factor authentication in <span class="font-medium">Settings → Two-Factor Authentication</span> to add a second step at sign-in. You can use an authenticator app, codes we email you, or both.
+                    </p>
+
+                    <div class="mt-6 space-y-4 text-base text-gray-700 dark:text-slate-200">
+                        <div>
+                            <h4 class="text-lg font-semibold tracking-tight text-gray-900 dark:text-slate-100">Your email is your recovery path</h4>
+                            <p class="mt-2">
+                                If you use an authenticator app and lose your device, choose <span class="font-medium">“Email me a code instead”</span> at the sign-in prompt to receive a one-time code by email.
+                            </p>
+                            <p class="mt-3 rounded-md border border-amber-200 bg-amber-50 p-3 text-amber-900 dark:border-amber-400/30 dark:bg-amber-950/30 dark:text-amber-100" style="border-color: currentColor;">
+                                <span class="font-semibold">Important:</span> your email account is your recovery path. If you lose access to your email address, account recreation will be required — there is no further recovery.
+                            </p>
+                        </div>
+
+                        <div>
+                            <h4 class="text-lg font-semibold tracking-tight text-gray-900 dark:text-slate-100">Why there’s no separate backup code</h4>
+                            <p class="mt-2">
+                                For email codes, the emailed code <span class="font-medium">is</span> the second factor, so there’s no separate recovery code to store. We don’t use SMS, which is weak against SIM-swap attacks. Keep your email account secure and recoverable.
+                            </p>
+                        </div>
+                    </div>
+                </article>
+
                 <article id="xpub-safety" class="scroll-mt-24 rounded-lg border border-gray-200 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-slate-900/60">
                     <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
 	                        <div>
