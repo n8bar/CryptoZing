@@ -59,7 +59,15 @@ class TwoFactorChallengeController extends Controller
             return redirect()->route('login');
         }
 
+        if ($this->codes->isLocked($user)) {
+            throw ValidationException::withMessages([
+                'code' => __('Too many attempts. Please wait a few minutes before trying again.'),
+            ]);
+        }
+
         if (! $this->codes->verifyCode($user, $validated['code'])) {
+            $this->codes->recordFailedAttempt($user);
+
             throw ValidationException::withMessages([
                 'code' => __('That code is invalid or has expired. Request a new one and try again.'),
             ]);
@@ -74,5 +82,36 @@ class TwoFactorChallengeController extends Controller
         Cookie::queue(Cookie::forever(AuthenticatedSessionController::RETURNING_COOKIE, '1'));
 
         return redirect()->intended(route('dashboard', absolute: false));
+    }
+
+    /**
+     * Resend an emailed code (also the TOTP email-fallback trigger), subject to
+     * the per-user send cap.
+     */
+    public function resend(Request $request): RedirectResponse
+    {
+        $pending = $request->session()->get(self::SESSION_KEY);
+
+        if (! $pending) {
+            return redirect()->route('login');
+        }
+
+        $user = User::find($pending['id']);
+
+        if (! $user) {
+            $request->session()->forget(self::SESSION_KEY);
+
+            return redirect()->route('login');
+        }
+
+        if ($this->codes->tooManyRecentSends($user)) {
+            return back()->withErrors([
+                'code' => __('Too many code requests. Please wait a few minutes before trying again.'),
+            ]);
+        }
+
+        $this->codes->sendCode($user);
+
+        return back()->with('status', __('A new code is on its way.'));
     }
 }

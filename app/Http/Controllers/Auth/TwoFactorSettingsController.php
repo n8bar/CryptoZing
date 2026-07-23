@@ -51,4 +51,54 @@ class TwoFactorSettingsController extends Controller
 
         return back()->with('status', 'two-factor-enabled');
     }
+
+    /**
+     * Email a re-verification code to begin disabling email 2FA.
+     */
+    public function requestDisable(Request $request): RedirectResponse
+    {
+        $user = $request->user();
+
+        if (! $user->hasEmailTwoFactorEnabled()) {
+            return back();
+        }
+
+        if ($this->codes->tooManyRecentSends($user)) {
+            return back()->withErrors([
+                'code' => __('Too many code requests. Please wait a few minutes before trying again.'),
+            ]);
+        }
+
+        $this->codes->sendCode($user);
+
+        return back()->with('status', 'two-factor-disable-code-sent');
+    }
+
+    /**
+     * Disable email 2FA after re-verifying with a current valid code.
+     */
+    public function disable(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'code' => ['required', 'string'],
+        ]);
+
+        $user = $request->user();
+
+        if (! $this->codes->verifyCode($user, $validated['code'])) {
+            throw ValidationException::withMessages([
+                'code' => __('That code is invalid or has expired. Request a new one and try again.'),
+            ]);
+        }
+
+        $user->forceFill([
+            'two_factor_email_enabled_at' => null,
+            'two_factor_code_hash' => null,
+            'two_factor_code_expires_at' => null,
+            'two_factor_attempts' => 0,
+            'two_factor_locked_until' => null,
+        ])->save();
+
+        return back()->with('status', 'two-factor-disabled');
+    }
 }

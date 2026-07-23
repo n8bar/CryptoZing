@@ -41,8 +41,14 @@ Route::middleware('guest')->group(function () {
     Route::get('two-factor/challenge', [TwoFactorChallengeController::class, 'create'])
         ->name('two-factor.challenge');
 
+    // Per-IP throttle backstops the per-user lockout against distributed guessing.
     Route::post('two-factor/challenge', [TwoFactorChallengeController::class, 'store'])
+        ->middleware('throttle:20,1')
         ->name('two-factor.challenge.store');
+
+    Route::post('two-factor/challenge/resend', [TwoFactorChallengeController::class, 'resend'])
+        ->middleware('throttle:10,1')
+        ->name('two-factor.challenge.resend');
 });
 
 Route::middleware('auth')->group(function () {
@@ -71,6 +77,13 @@ Route::middleware('auth')->group(function () {
 
     Route::post('two-factor/email/confirm', [TwoFactorSettingsController::class, 'confirm'])
         ->name('two-factor.email.confirm');
+
+    // Disabling requires a fresh re-verification code (§1.6).
+    Route::post('two-factor/email/disable-request', [TwoFactorSettingsController::class, 'requestDisable'])
+        ->name('two-factor.email.disable-request');
+
+    Route::delete('two-factor/email', [TwoFactorSettingsController::class, 'disable'])
+        ->name('two-factor.email.disable');
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
