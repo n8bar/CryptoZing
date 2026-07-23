@@ -67,6 +67,22 @@ class TwoFactorTotpChallengeTest extends TestCase
         $response->assertSee('Email me a code instead', false);
     }
 
+    public function test_failed_totp_attempts_hit_the_shared_lockout(): void
+    {
+        Mail::fake();
+        $user = $this->makeTotpUser();
+        $this->post('/login', ['email' => $user->email, 'password' => 'password']);
+
+        for ($i = 0; $i < 5; $i++) {
+            $this->post(route('two-factor.challenge.store'), ['code' => '000000']);
+        }
+
+        $user->refresh();
+        $this->assertNotNull($user->two_factor_locked_until);
+        $this->assertTrue($user->two_factor_locked_until->isFuture());
+        $this->assertGuest();
+    }
+
     private function makeTotpUser(): User
     {
         $secret = app(Google2FA::class)->generateSecretKey();

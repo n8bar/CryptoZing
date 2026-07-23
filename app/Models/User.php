@@ -181,11 +181,20 @@ class User extends Authenticatable
     }
 
     /**
+     * Whether any second factor (email or TOTP) is enabled. Drives the
+     * recommendation banner's suppression.
+     */
+    public function hasAnyTwoFactorEnabled(): bool
+    {
+        return $this->hasEmailTwoFactorEnabled() || $this->hasTotpEnabled();
+    }
+
+    /**
      * Whether login must divert through a second-factor challenge.
      */
     public function requiresTwoFactorChallenge(): bool
     {
-        return $this->twoFactorLoginMethod() !== null;
+        return $this->hasAnyTwoFactorEnabled();
     }
 
     public static function defaultMailBrandName(): string

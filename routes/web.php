@@ -71,6 +71,8 @@ Route::get('/privacy', [LegalController::class, 'privacy'])->name('legal.privacy
 Route::middleware(['auth'])->group(function () {
     // Breeze dashboard
     Route::get('/dashboard', \App\Http\Controllers\DashboardController::class)->name('dashboard');
+    Route::post('/two-factor/recommendation/dismiss', [\App\Http\Controllers\TwoFactorRecommendationController::class, 'dismiss'])
+        ->name('two-factor.recommendation.dismiss');
     Route::patch('/theme', ThemePreferenceController::class)->name('theme.update');
     Route::get('/getting-started', [GettingStartedController::class, 'start'])->name('getting-started.start');
     Route::get('/getting-started/welcome', [GettingStartedController::class, 'welcome'])->name('getting-started.welcome');

@@ -66,6 +66,23 @@ class TwoFactorLoginChallengeTest extends TestCase
         $this->assertGuest();
     }
 
+    public function test_expired_challenge_code_is_rejected(): void
+    {
+        Mail::fake();
+        $user = User::factory()->create(['two_factor_email_enabled_at' => now()]);
+
+        $this->post('/login', ['email' => $user->email, 'password' => 'password']);
+        $code = $this->capturedCode();
+
+        // Push the pending code past its TTL.
+        $user->forceFill(['two_factor_code_expires_at' => now()->subMinute()])->save();
+
+        $response = $this->post(route('two-factor.challenge.store'), ['code' => $code]);
+
+        $response->assertSessionHasErrors('code');
+        $this->assertGuest();
+    }
+
     private function capturedCode(): string
     {
         $code = null;
