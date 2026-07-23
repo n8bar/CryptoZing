@@ -1,5 +1,5 @@
 # Backlog (Post-MVP)
-_Last updated: 2026-07-18_
+_Last updated: 2026-07-22_
 
 This is the canonical post-MVP backlog.
 
@@ -129,6 +129,14 @@ _Carry-forward guardrail from active roadmap scope: suppress duplicate sends for
    - Must make the product usable for in-person cash payments — an itemized sale recorded and settled on the spot, building on the existing off-chain/manual payment recording.
    - USD stays the entry denomination; BTC conversion keeps applying at the invoice level.
    - Ripple surfaces: create/edit form, issuer and public/print views, mail templates, and receipt PDFs once those exist.
+
+## Authentication & Security
+26. **Passkey (WebAuthn) authentication**
+   - Add passkey / WebAuthn (FIDO2) support: platform authenticators (Touch ID, Windows Hello, Android) and roaming security keys (e.g. YubiKey). Phishing-resistant, unlike the TOTP and emailed codes shipped in MS19 Phase 9.
+   - First pass is a second factor in the shared login challenge alongside the authenticator-app and email methods; extend method precedence and the "one primary at a time" switch to include passkeys.
+   - Reuse the emailed-code fallback as the recovery path (no separate recovery codes), and extend the wallet-xpub step-up re-verification to accept a passkey assertion.
+   - Server side via a maintained PHP/Laravel WebAuthn library; store credential id, public key, signature counter, and transports per user (new one-to-many table). Needs a stable Relying Party ID + HTTPS; include signature-counter clone detection.
+   - Later track: passwordless login (passkey as primary factor) once second-factor passkeys ship.
 
 ## Legal & Policy
 21. **Post-beta ToS/Privacy framing removal ([#120](https://github.com/n8bar/CryptoZing/issues/120))**
