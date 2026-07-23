@@ -13,13 +13,13 @@ UID:cz-ms18@cryptozing.app
 END:VEVENT
 BEGIN:VEVENT
 DTSTART;VALUE=DATE:20260508
-DTEND;VALUE=DATE:20260801
+DTEND;VALUE=DATE:20260723
 SUMMARY:MS19 — Open Beta Hardening & Ops
 DESCRIPTION:Open beta hardening: notification coverage, auth/password policy, LLC formation, legal layer (ToS, Privacy Policy, disclaimers, monetization-neutral copy), content promises reconciliation, contributor docs, 2FA (email baseline, optional TOTP).
 UID:cz-ms19@cryptozing.app
 END:VEVENT
 BEGIN:VEVENT
-DTSTART;VALUE=DATE:20260803
+DTSTART;VALUE=DATE:20260724
 DTEND;VALUE=DATE:20260813
 SUMMARY:MS20 — Mainnet Cutover Preparation
 DESCRIPTION:Define and rehearse env flips, wallet validation, mail sanity, and backout steps for mainnet cutover.
