@@ -59,6 +59,8 @@
                 </div>
             @endif
 
+            @include('partials.two-factor-recommendation')
+
             @if (!empty($showGettingStartedPrompt))
                 <div class="rounded-xl border border-indigo-200 bg-indigo-50 p-5 shadow-sm dark:border-indigo-400/25 dark:bg-indigo-950/35"
                      style="border-color: currentColor;"

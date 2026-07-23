@@ -1244,6 +1244,8 @@ class UserSettingsTest extends TestCase
             ->actingAs($owner)
             ->post(route('wallet.settings.update'), [
                 'bip84_xpub' => 'vpub' . str_repeat('b', 40),
+                // Repointing an existing key now requires step-up (§6).
+                'current_password' => 'password',
             ])
             ->assertRedirect(route('wallet.settings.edit'));
 

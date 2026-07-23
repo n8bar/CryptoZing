@@ -63,6 +63,15 @@
                         <h3 class="text-sm font-semibold text-gray-700">Primary wallet</h3>
                         <p class="mt-1 text-xs text-gray-500">This wallet receives all invoice payments for now.</p>
 
+                        @if ($wallet && auth()->user()->requiresTwoFactorChallenge() && ! auth()->user()->hasTotpEnabled())
+                            <form method="POST" action="{{ route('wallet.settings.step-up-code') }}" class="mt-3">
+                                @csrf
+                                <button type="submit" class="text-sm text-indigo-600 underline hover:text-indigo-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">
+                                    {{ __('Email me a verification code') }}
+                                </button>
+                            </form>
+                        @endif
+
                         <form method="POST" action="{{ route('wallet.settings.update') }}"
                               class="mt-4 space-y-6"
                               x-data="walletValidation({
@@ -155,6 +164,38 @@
                                     <x-input-error class="text-xs text-red-600" :messages="$errors->get('bip84_xpub')" />
                                 </div>
                             </div>
+
+                            @if ($wallet)
+                                <div class="space-y-4 rounded-lg border border-amber-200 bg-amber-50 p-4">
+                                    <div>
+                                        <h4 class="text-sm font-semibold text-amber-900">{{ __("Confirm it's you") }}</h4>
+                                        <p class="mt-1 text-xs text-amber-800">
+                                            {{ __('Changing your wallet key changes where invoice payments go. Re-verify to save.') }}
+                                        </p>
+                                    </div>
+
+                                    <div>
+                                        <x-input-label for="current_password" :value="__('Current password')" />
+                                        <x-text-input id="current_password" name="current_password" type="password" class="mt-1 block w-full" autocomplete="current-password" />
+                                        <x-input-error :messages="$errors->get('current_password')" class="mt-2" />
+                                    </div>
+
+                                    @if (auth()->user()->requiresTwoFactorChallenge())
+                                        <div>
+                                            <x-input-label for="two_factor_code" :value="__('Two-factor code')" />
+                                            <x-text-input id="two_factor_code" name="two_factor_code" type="text" inputmode="numeric" autocomplete="one-time-code" class="mt-1 block w-full tracking-widest" />
+                                            <x-input-error :messages="$errors->get('two_factor_code')" class="mt-2" />
+                                            <p class="mt-1 text-xs text-amber-800">
+                                                @if (auth()->user()->hasTotpEnabled())
+                                                    {{ __('Enter a code from your authenticator app.') }}
+                                                @else
+                                                    {{ __('Use the code we email you (button above).') }}
+                                                @endif
+                                            </p>
+                                        </div>
+                                    @endif
+                                </div>
+                            @endif
 
                             <div class="flex items-center gap-4">
                                 @if ($isGettingStartedReplay)

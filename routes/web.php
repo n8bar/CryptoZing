@@ -71,6 +71,8 @@ Route::get('/privacy', [LegalController::class, 'privacy'])->name('legal.privacy
 Route::middleware(['auth'])->group(function () {
     // Breeze dashboard
     Route::get('/dashboard', \App\Http\Controllers\DashboardController::class)->name('dashboard');
+    Route::post('/two-factor/recommendation/dismiss', [\App\Http\Controllers\TwoFactorRecommendationController::class, 'dismiss'])
+        ->name('two-factor.recommendation.dismiss');
     Route::patch('/theme', ThemePreferenceController::class)->name('theme.update');
     Route::get('/getting-started', [GettingStartedController::class, 'start'])->name('getting-started.start');
     Route::get('/getting-started/welcome', [GettingStartedController::class, 'welcome'])->name('getting-started.welcome');
@@ -95,7 +97,11 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/settings/notifications', [NotificationSettingsController::class, 'update'])->name('settings.notifications.update');
     Route::post('/settings/notifications/test-email', [NotificationSettingsController::class, 'sendPreview'])->name('settings.notifications.preview');
     Route::get('/wallet/settings', [WalletSettingsController::class, 'edit'])->name('wallet.settings.edit');
-    Route::post('/wallet/settings', [WalletSettingsController::class, 'update'])->name('wallet.settings.update');
+    Route::post('/wallet/settings', [WalletSettingsController::class, 'update'])
+        ->middleware('throttle:10,1')
+        ->name('wallet.settings.update');
+    Route::post('/wallet/settings/step-up-code', [WalletSettingsController::class, 'sendStepUpCode'])
+        ->name('wallet.settings.step-up-code');
     Route::post('/wallet/settings/validate', [WalletSettingsController::class, 'validateKey'])
         ->name('wallet.settings.validate');
     Route::post('/wallet/settings/accounts', [WalletSettingsController::class, 'storeAccount'])

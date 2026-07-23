@@ -87,6 +87,8 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'two_factor_code_hash',
+        'two_factor_totp_secret',
     ];
 
     /**
@@ -120,7 +122,71 @@ class User extends Authenticatable
             'getting_started_dismissed' => 'boolean',
             'getting_started_replay_started_at' => 'datetime',
             'getting_started_replay_wallet_verified_at' => 'datetime',
+            'two_factor_email_enabled_at' => 'datetime',
+            'two_factor_code_expires_at' => 'datetime',
+            'two_factor_attempts' => 'integer',
+            'two_factor_locked_until' => 'datetime',
+            'two_factor_totp_secret' => 'encrypted',
+            'two_factor_totp_confirmed_at' => 'datetime',
+            'two_factor_totp_last_timestamp' => 'integer',
         ];
+    }
+
+    /**
+     * Whether the user has completed email-2FA enrollment. The enabled-at
+     * timestamp is set only after the round-trip code is confirmed.
+     */
+    public function hasEmailTwoFactorEnabled(): bool
+    {
+        return $this->two_factor_email_enabled_at !== null;
+    }
+
+    /**
+     * Whether the user has a confirmed authenticator-app (TOTP) secret. A
+     * stored-but-unconfirmed secret does not count and never gates login.
+     */
+    public function hasTotpEnabled(): bool
+    {
+        return $this->two_factor_totp_confirmed_at !== null;
+    }
+
+    /**
+     * Whether a TOTP secret has been generated but not yet confirmed — drives
+     * the "finish setup" state on the settings card.
+     */
+    public function hasPendingTotpEnrollment(): bool
+    {
+        return ! $this->hasTotpEnabled() && $this->two_factor_totp_secret !== null;
+    }
+
+    /**
+     * The second factor that leads this user's login challenge, or null when
+     * 2FA is off. TOTP leads when confirmed; email is the fallback/default.
+     */
+    public function twoFactorLoginMethod(): ?string
+    {
+        if ($this->hasTotpEnabled()) {
+            return 'totp';
+        }
+
+        return $this->hasEmailTwoFactorEnabled() ? 'email' : null;
+    }
+
+    /**
+     * Whether any second factor (email or TOTP) is enabled. Drives the
+     * recommendation banner's suppression.
+     */
+    public function hasAnyTwoFactorEnabled(): bool
+    {
+        return $this->hasEmailTwoFactorEnabled() || $this->hasTotpEnabled();
+    }
+
+    /**
+     * Whether login must divert through a second-factor challenge.
+     */
+    public function requiresTwoFactorChallenge(): bool
+    {
+        return $this->hasAnyTwoFactorEnabled();
     }
 
     public static function defaultMailBrandName(): string
