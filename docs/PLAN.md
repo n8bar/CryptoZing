@@ -16,9 +16,9 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 
 ## Current
 - Active milestone:
-  - **None** — **MS19 (Open Beta Hardening & Ops) is complete** (all 9 phases). Next up is **MS20 - Mainnet Cutover Preparation**, pending kickoff.
-- Status: `between milestones`
-- Next action: Kick off **MS20 (Mainnet Cutover Preparation)** per [`docs/milestones/20_MAINNET_CUTOVER_PREP.md`](milestones/20_MAINNET_CUTOVER_PREP.md). Confirm the content-publish gate first (see Milestone Conventions — an article published since MS19 started).
+  - **MS20 - Mainnet Cutover & Alpha Gate** — defined at milestone altitude; not yet begun. Phase strategy docs written as each phase activates.
+- Status: `MS20 defined — content-publish gate unmet, blocks Phase 1 start`
+- Next action: Publish a fresh [`docs/CONTENT_PLAN.md`](CONTENT_PLAN.md) article to clear the entry gate, then start **Phase 1 — Alpha Access Gate** per [`docs/milestones/20_MAINNET_CUTOVER_ALPHA_GATE.md`](milestones/20_MAINNET_CUTOVER_ALPHA_GATE.md).
 - Most recently completed milestone doc: [`docs/milestones/x19_OB_HARDENING_OPS.md`](milestones/x19_OB_HARDENING_OPS.md)
 
 ## Published Release Target
@@ -27,7 +27,7 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 ## Active and Upcoming Milestones
 | Status | ID | Milestone | Short intent | Target | Primary doc |
 |---|---|---|---|---|---|
-| [ ] | 20 | Mainnet Cutover Preparation | Define and rehearse env flips, wallet validation, mail sanity checks, and backout steps for mainnet cutover. | 2026-08-13 | [`docs/milestones/20_MAINNET_CUTOVER_PREP.md`](milestones/20_MAINNET_CUTOVER_PREP.md) |
+| [ ] | 20 | Mainnet Cutover & Alpha Gate | Go live on mainnet privately on the production box (real self-sent payment), add an invite-only alpha access gate, and produce a proven cutover runbook with backout before the public open beta. | 2026-08-13 | [`docs/milestones/20_MAINNET_CUTOVER_ALPHA_GATE.md`](milestones/20_MAINNET_CUTOVER_ALPHA_GATE.md) |
 | [ ] | 21 | CryptoZing.app Deployment (Open Beta) | Deploy the open beta under `cryptozing.app`, replace the GitHub Pages placeholder at `/` with the live app landing page without breaking the SEO baseline established in MS15, remove temporary mail aliasing, and complete rollout verification. | 2026-08-25 | [`docs/milestones/21_OB_DEPLOYMENT.md`](milestones/21_OB_DEPLOYMENT.md) |
 | [ ] | 22 | Thorough SEO & Marketing Strategies | Post-deploy discovery investment: thorough SEO pass across live app + site surfaces and an ongoing SEO strategy with scheduled tasks in the .ics; marketing strategy. Scope at kickoff. | 2026-09-15 | [`docs/milestones/22_SEO_MARKETING.md`](milestones/22_SEO_MARKETING.md) |
 

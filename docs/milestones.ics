@@ -21,8 +21,8 @@ END:VEVENT
 BEGIN:VEVENT
 DTSTART;VALUE=DATE:20260724
 DTEND;VALUE=DATE:20260813
-SUMMARY:MS20 — Mainnet Cutover Preparation
-DESCRIPTION:Define and rehearse env flips, wallet validation, mail sanity, and backout steps for mainnet cutover.
+SUMMARY:MS20 — Mainnet Cutover & Alpha Gate
+DESCRIPTION:Go live on mainnet privately on the production box (real self-sent payment) and add an invite-only alpha access gate; produce a proven cutover runbook with backout before the public open beta.
 UID:cz-ms20@cryptozing.app
 END:VEVENT
 BEGIN:VEVENT
