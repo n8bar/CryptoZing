@@ -94,6 +94,13 @@ _Carry-forward guardrail from active roadmap scope: suppress duplicate sends for
    - Store per-wallet “find your extended public key” guides as data so tabs are config-driven (easy to add/remove wallets).
    - Keep SEO hygiene: canonical URLs, meta descriptions/OG, and avoid indexing duplicate `?from=` variants.
 
+28. **Static rendering for `/learn/*`**
+   - MS20 Phase 2 serves articles from Blade per request, which spends a PHP-FPM worker on every content view out of the same small pool the app uses. This is the exit ramp if content traffic ever competes with payment traffic.
+   - Trigger: Search Console impressions climbing on any `/learn/` URL, or PHP-FPM queueing requests on the box. Impressions lead actual traffic by days, so they're the signal worth watching.
+   - First rung, minutes of work and no code: an nginx micro-cache on `/learn/*`.
+   - Second rung: an artisan command that renders each article through the same Blade views to `public/learn/<slug>/index.html` at build time, so nginx serves files and PHP never touches a content request. Runs in the off-box build step, no authoring change.
+   - Reinstating Eleventy is only the answer if Blade itself turns out to be the problem, which the second rung already rules out.
+
 ## Product UX
 16. **Multi-wallet selection + additional wallets UI**
    - Core wallet-key lineage and cursor safety is now tracked in active open-beta roadmap scope; this post-MVP item builds on that foundation.
