@@ -1,5 +1,5 @@
 # Backlog (Post-MVP)
-_Last updated: 2026-07-22_
+_Last updated: 2026-07-26_
 
 This is the canonical post-MVP backlog.
 
@@ -137,6 +137,12 @@ _Carry-forward guardrail from active roadmap scope: suppress duplicate sends for
    - Reuse the emailed-code fallback as the recovery path (no separate recovery codes), and extend the wallet-xpub step-up re-verification to accept a passkey assertion.
    - Server side via a maintained PHP/Laravel WebAuthn library; store credential id, public key, signature counter, and transports per user (new one-to-many table). Needs a stable Relying Party ID + HTTPS; include signature-counter clone detection.
    - Later track: passwordless login (passkey as primary factor) once second-factor passkeys ship.
+
+27. **Mandatory 2FA after open beta**
+   - Once out of open beta, 2FA stops being opt-in: no account reaches the app without a second factor enrolled.
+   - New accounts enroll during signup; existing accounts hit a forced enrollment gate at next login until they finish.
+   - Any enabled method satisfies the requirement — emailed codes are the floor, TOTP (and later passkeys, item 26) the stronger options. Disable becomes a method switch rather than an off switch.
+   - Retire the MS19 Phase 9 dashboard recommendation banner — nothing left to nudge.
 
 ## Legal & Policy
 21. **Post-beta ToS/Privacy framing removal ([#120](https://github.com/n8bar/CryptoZing/issues/120))**

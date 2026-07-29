@@ -14,7 +14,7 @@ Supporting ops doc: [`docs/ops/OB_ROLLOUT_CHECKLIST.md`](../ops/OB_ROLLOUT_CHECK
 ## Phases
 
 ### Phase 1 — Alpha Access Gate
-New registrations create a pending account that cannot log in until approved. Approve and revoke from a "Pending approvals" list in the support dashboard (`/support`, `EnsureSupportAgent`). Registration UX is unchanged; the gate sits at login, after credentials and 2FA. Independent of mainnet — can lead. Strategy: `20.1_ALPHA_ACCESS_GATE` (when active).
+New registrations create a pending account that cannot log in until approved. Approve and revoke from a "Pending approvals" list in the support dashboard (`/support`, `EnsureSupportAgent`). Registration UX is unchanged; the gate sits at login, after credentials and before the second factor. Independent of mainnet — can lead. Strategy: [`20.1_ALPHA_ACCESS_GATE.md`](../strategies/20.1_ALPHA_ACCESS_GATE.md).
 
 ### Phase 2 — Production Hosting
 Provision the production server that will serve `cryptozing.app` and deploy the app to it, running private. Migrate the article site off GitHub Pages onto this hosting so it ships with the app. Strategy: `20.2_PRODUCTION_HOSTING`.
@@ -26,7 +26,7 @@ Bring the deployed app onto a clean mainnet baseline and configure it for the pr
 Prove the pipeline with real self-sent mainnet payments — an invoice and a donation, each end to end. Exercise the MS14 correction tooling against a wrong-attribution scenario on live data. Confirm mail sanity on mainnet. Capture a cutover runbook and a backout/halt procedure; MS21 runs the runbook. Strategy: `20.4_LIVE_MAINNET_VALIDATION_BACKOUT`.
 
 ## Exit Criteria
-The Phase level criteria move to their respecive strategy doc when strategies are created.
+The Phase level criteria move to their respective strategy doc when strategies are created.
 
 **Phase 1 — Alpha Access Gate**
 - [ ] New registrations create a pending account; registration UX unchanged and fully functional.

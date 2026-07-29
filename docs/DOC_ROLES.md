@@ -31,6 +31,8 @@ Keep these in sync with every merge or scope change.
 - **Retrospective reconstruction**: when backfilling historical docs, label reconstructed phase boundaries explicitly and cite the implementation/history evidence. Do not present inferred phase names or checkpoints as contemporaneous planning facts.
 - **Subagent-aware authoring**: even when a workstream has one primary critical path, write strategy docs with subagent use in mind — keep the main ordered sequence explicit, but call out any known safe parallel sidecars or path-scoped tasks so multi-agent execution does not have to improvise.
 - **Owner labels**: when assigning work by owner, use `Guided User` for tasks that require user-side account access or clicks but where the user should be coached through unfamiliar tooling; reserve plain `User` for work the user can drive directly without coaching.
+- **Item depth**: nest as deep as the work requires — two levels is not a ceiling. Expand an item when a sub-item carries something the parent doesn't: a decision input, a distinct failure mode, a separate owner, or its own verification. A comma-separated list of *steps* is the usual tell that a checklist got flattened into one line; a comma-separated list of *values* is not. Leave genuinely atomic items alone rather than subdividing for symmetry.
+- **Every checkbox is work**: at every level, a checked box means someone did something. Facts, rationale, and properties don't earn a box — fold them into the wording of the item that does the work. Depth is not a licence to give inactionable content its own line.
 - **Lifecycle**: strategy docs may or may not be retired, archived, or folded into milestone/history docs after completion.
 
 ## Checklist-depth separation
