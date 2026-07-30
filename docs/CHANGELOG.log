@@ -1058,3 +1058,6 @@ The dust framing in `20.4_LIVE_MAINNET_VALIDATION_BACKOUT.md` §1.1 was wrong �
 
 2026-07-29 | MS20 phase exit criteria moved to their strategy docs
 With 20.1 through 20.4 written, the phase-grouped exit criteria leave the milestone doc and live in the strategy doc that owns each phase, as the milestone doc said they would. `## Phases` becomes `## Phase Rollup` with a checkbox on each phase heading, matching the convention in x15, x17, x18, and x19 — the phase checkoff is now the rollup, and Exit Criteria carries only the milestone-wide content-promises check. The Phase 2 blurb was also stale: the article site does not ship with the app, it moves to its own repo and container, and the app image carries no CryptoZing public content.
+
+2026-07-29 | Filing-is-not-discharging rule generalized out of the phase doc
+The rule now reads that every Issue our work raises gets named as exit criteria somewhere — current phase preferred, otherwise a future phase or milestone — rather than assuming the phase that surfaced it owns the fix. It lives only in DOC_ROLES; `20.4` §4.6 is back to the phase action of filing the gap, with its exit criterion carrying the follow-through.
