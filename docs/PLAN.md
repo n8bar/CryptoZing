@@ -1,5 +1,5 @@
 # PLAN
-_Last updated: 2026-07-23_
+_Last updated: 2026-07-29_
 
 This is the human-facing execution dashboard for open-beta work.
 
@@ -16,8 +16,8 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 
 ## Current
 - Active milestone:
-  - **MS20 - Mainnet Cutover & Alpha Gate** — defined at milestone altitude; not yet begun. Phase strategy docs written as each phase activates.
-- Status: `MS20 defined — content-publish gate unmet, blocks Phase 1 start`
+  - **MS20 - Mainnet Cutover & Alpha Gate** — all four phase strategies written and approved; not yet begun.
+- Status: `MS20 planned — content-publish gate unmet, blocks Phase 1 start`
 - Next action: Publish a fresh [`docs/CONTENT_PLAN.md`](CONTENT_PLAN.md) article to clear the entry gate, then start **Phase 1 — Alpha Access Gate** per [`docs/milestones/20_MAINNET_CUTOVER_ALPHA_GATE.md`](milestones/20_MAINNET_CUTOVER_ALPHA_GATE.md).
 - Most recently completed milestone doc: [`docs/milestones/x19_OB_HARDENING_OPS.md`](milestones/x19_OB_HARDENING_OPS.md)
 

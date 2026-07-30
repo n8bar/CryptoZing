@@ -1061,3 +1061,6 @@ With 20.1 through 20.4 written, the phase-grouped exit criteria leave the milest
 
 2026-07-29 | Filing-is-not-discharging rule generalized out of the phase doc
 The rule now reads that every Issue our work raises gets named as exit criteria somewhere — current phase preferred, otherwise a future phase or milestone — rather than assuming the phase that surfaced it owns the fix. It lives only in DOC_ROLES; `20.4` §4.6 is back to the phase action of filing the gap, with its exit criterion carrying the follow-through.
+
+2026-07-29 | MS20 phase strategies approved; PLAN and rollup blurbs updated
+All four MS20 phase strategies are written and approved. PLAN's Current block says so and its status reads `MS20 planned` rather than `MS20 defined`; the content-publish gate still blocks Phase 1. With the strategy docs now owning phase mechanics, the milestone rollup blurbs drop back to milestone altitude — the Phase 3 blurb in particular was carrying onboarding steps and the watch-only invariant that 20.3 owns. Each blurb keeps only what a reader needs before opening the strategy: what the phase is for, what gates it, and what it hands downstream.
