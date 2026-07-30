@@ -60,6 +60,7 @@ Keep these in sync with every merge or scope change.
 - **New findings/bugs/todos go to GitHub Issues, not new finding docs.** They are opened as GitHub Issues and closed via `Fixes #N` on the merging PR; strategy docs reference the Issue number rather than spawning a new `docs/qa/Finding*.md`. Existing finding docs under `docs/qa/Finding*.md` remain valid and unchanged. (Settled at M20 kickoff — the M19 trial is now the standing convention.)
 - Each existing finding under `docs/qa/Finding*.md` records `Date:` (when reported) near the top, and adds a `Date fixed:` line once resolved with a brief reference to the milestone, PR, or commit that resolved it.
 - A finding without a `Date fixed:` line is treated as still open.
+- **Filing is not discharging.** An Issue is where a finding is *stored*, not a way for the phase that surfaced it to stop owning it. When a phase's work raises Issues, name them in that phase's exit criteria — closed, or deferred with the reason stated. An Issue standing as exit criteria is encouraged, not a smell.
 
 ## Issue content conventions
 
