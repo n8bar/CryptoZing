@@ -17,13 +17,13 @@ Supporting ops doc: [`docs/ops/OB_ROLLOUT_CHECKLIST.md`](../ops/OB_ROLLOUT_CHECK
 New registrations create a pending account that cannot log in until approved. Approve and revoke from a "Pending approvals" list in the support dashboard (`/support`, `EnsureSupportAgent`). Registration UX is unchanged; the gate sits at login, after credentials and before the second factor. Independent of mainnet — can lead. Strategy: [`20.1_ALPHA_ACCESS_GATE.md`](../strategies/20.1_ALPHA_ACCESS_GATE.md).
 
 ### Phase 2 — Production Hosting
-Provision the production server that will serve `cryptozing.app` and deploy the app to it, running private. Migrate the article site off GitHub Pages onto this hosting so it ships with the app. Strategy: `20.2_PRODUCTION_HOSTING`.
+Provision the production server that will serve `cryptozing.app` and deploy the app to it, running private. Migrate the article site off GitHub Pages onto this hosting so it ships with the app. Strategy: [`20.2_PRODUCTION_HOSTING.md`](../strategies/20.2_PRODUCTION_HOSTING.md).
 
 ### Phase 3 — Mainnet Environment & Wallets
-Bring the deployed app onto a clean mainnet baseline and configure it for the private window. Needs a mainnet donation wallet from the operator before it can start. Onboard two watch-only xpubs — operator invoice and donation, kept separate (never one shared xpub — MS14) — and verify derived addresses against the source wallets before any funds move. No seed or private keys in the product boundary. Carries the mainnet donation-xpub swap from [`x19.8_MICRO_MONETIZE.md`](../strategies/x19.8_MICRO_MONETIZE.md) §1. Strategy: `20.3_MAINNET_ENVIRONMENT_WALLETS`.
+Bring the deployed app onto a clean mainnet baseline and configure it for the private window. Needs a mainnet donation wallet from the operator before it can start. Onboard two watch-only xpubs — operator invoice and donation, kept separate (never one shared xpub — MS14) — and verify derived addresses against the source wallets before any funds move. No seed or private keys in the product boundary. Carries the mainnet donation-xpub swap from [`x19.8_MICRO_MONETIZE.md`](../strategies/x19.8_MICRO_MONETIZE.md) §1. Strategy: [`20.3_MAINNET_ENVIRONMENT_WALLETS.md`](../strategies/20.3_MAINNET_ENVIRONMENT_WALLETS.md).
 
 ### Phase 4 — Live Mainnet Validation & Backout
-Prove the pipeline with real self-sent mainnet payments — an invoice and a donation, each end to end. Exercise the MS14 correction tooling against a wrong-attribution scenario on live data. Confirm mail sanity on mainnet. Capture a cutover runbook and a backout/halt procedure; MS21 runs the runbook. Strategy: `20.4_LIVE_MAINNET_VALIDATION_BACKOUT`.
+Prove the pipeline with real self-sent mainnet payments — an invoice and a donation, each end to end. Exercise the MS14 correction tooling against a wrong-attribution scenario on live data. Confirm mail sanity on mainnet. Capture a cutover runbook and a backout/halt procedure; MS21 runs the runbook. Strategy: [`20.4_LIVE_MAINNET_VALIDATION_BACKOUT.md`](../strategies/20.4_LIVE_MAINNET_VALIDATION_BACKOUT.md).
 
 ## Exit Criteria
 The Phase level criteria move to their respective strategy doc when strategies are created.
