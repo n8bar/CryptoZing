@@ -23,6 +23,7 @@ Content and doc changes go straight to `main`. Branches and PRs are reserved for
 1. [x] Bitcoin pending vs confirmed payments — `/learn/bitcoin-pending-vs-confirmed-payments/`
 2. [x] Accepting Bitcoin payments as a freelancer or small business — `/learn/accepting-bitcoin-payments-freelancer-small-business/`
 3. [x] BTCPay Server alternatives — `/learn/btcpay-server-alternatives/`
+16. [x] How to Receive Bitcoin — `/learn/how-to-receive-bitcoin/`
 
 ## Queue
 
