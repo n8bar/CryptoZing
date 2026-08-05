@@ -3,6 +3,7 @@
 namespace Tests\Feature\Auth;
 
 use App\Http\Controllers\Auth\TwoFactorChallengeController;
+use App\Mail\AccountApprovedMail;
 use App\Mail\TwoFactorCodeMail;
 use App\Models\User;
 use App\Support\AlphaGate;
@@ -155,6 +156,89 @@ class AlphaAccessGateTest extends TestCase
         $this->assertAuthenticatedAs($user);
     }
 
+    public function test_support_dashboard_lists_pending_accounts(): void
+    {
+        $agent = $this->supportAgent();
+        $pending = User::factory()->pending()->create(['name' => 'Waiting Wanda']);
+
+        $response = $this->actingAs($agent)->get(route('support.dashboard'));
+
+        $response->assertStatus(200);
+        $response->assertSee('Waiting Wanda');
+        $response->assertSee($pending->email);
+    }
+
+    public function test_approve_sets_timestamp_queues_mail_and_login_succeeds(): void
+    {
+        Mail::fake();
+        $agent = $this->supportAgent();
+        $pending = User::factory()->pending()->create();
+
+        $response = $this->actingAs($agent)->post(route('support.approvals.approve', $pending));
+
+        $response->assertRedirect();
+        $this->assertTrue($pending->fresh()->isApproved());
+        Mail::assertQueued(AccountApprovedMail::class, fn (AccountApprovedMail $mail) => $mail->hasTo($pending->email));
+
+        $this->post('/logout');
+        $this->post('/login', ['email' => $pending->email, 'password' => 'password']);
+        $this->assertAuthenticatedAs($pending->fresh());
+    }
+
+    public function test_revoke_clears_approval_without_mail(): void
+    {
+        Mail::fake();
+        $agent = $this->supportAgent();
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($agent)->post(route('support.approvals.revoke', $user));
+
+        $response->assertRedirect();
+        $this->assertFalse($user->fresh()->isApproved());
+        Mail::assertNothingQueued();
+    }
+
+    public function test_revoked_live_session_is_unauthenticated_on_next_request(): void
+    {
+        $user = User::factory()->create(['getting_started_completed_at' => now()]);
+
+        $this->post('/login', ['email' => $user->email, 'password' => 'password']);
+        $this->assertAuthenticatedAs($user);
+
+        $user->forceFill(['approved_at' => null])->save();
+
+        // In-test requests share one auth guard, which caches the user
+        // instance; a real next request re-resolves from the session. Drop the
+        // cached guard to simulate that.
+        $this->app['auth']->forgetGuards();
+
+        $response = $this->get(route('dashboard'));
+
+        $response->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
+
+    public function test_approval_actions_are_support_gated(): void
+    {
+        $nonAgent = User::factory()->create();
+        $pending = User::factory()->pending()->create();
+
+        $this->actingAs($nonAgent)->post(route('support.approvals.approve', $pending))->assertStatus(403);
+        $this->actingAs($nonAgent)->post(route('support.approvals.revoke', $pending))->assertStatus(403);
+        $this->assertFalse($pending->fresh()->isApproved());
+    }
+
+    public function test_self_revoke_is_rejected(): void
+    {
+        $agent = $this->supportAgent();
+
+        $response = $this->actingAs($agent)->post(route('support.approvals.revoke', $agent));
+
+        $response->assertRedirect();
+        $response->assertSessionHasErrors('revoke');
+        $this->assertTrue($agent->fresh()->isApproved());
+    }
+
     public function test_migration_backfills_existing_users_as_approved(): void
     {
         Artisan::call('migrate:rollback', ['--path' => self::APPROVED_AT_MIGRATION, '--force' => true]);
@@ -175,6 +259,13 @@ class AlphaAccessGateTest extends TestCase
 
         // MySQL DDL commits implicitly, so this row escapes the test transaction — remove it.
         DB::table('users')->where('email', 'pre-gate@example.com')->delete();
+    }
+
+    private function supportAgent(): User
+    {
+        config()->set('support.agent_emails', ['support@example.com']);
+
+        return User::factory()->create(['email' => 'support@example.com']);
     }
 
     private function capturedCode(): string

@@ -16,6 +16,7 @@ use App\Http\Controllers\InvoicePaymentCorrectionController;
 use App\Http\Controllers\ThemePreferenceController;
 use App\Http\Controllers\HelpController;
 use App\Http\Controllers\GettingStartedController;
+use App\Http\Controllers\Support\SupportApprovalController;
 use App\Http\Controllers\Support\SupportClientController;
 use App\Http\Controllers\Webhooks\MailgunWebhookController;
 use App\Http\Controllers\Support\SupportDashboardController;
@@ -179,6 +180,8 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware(['auth', EnsureSupportAgent::class])->prefix('support')->name('support.')->group(function () {
     Route::get('/', SupportDashboardController::class)->name('dashboard');
+    Route::post('/approvals/{user}/approve', [SupportApprovalController::class, 'approve'])->name('approvals.approve');
+    Route::post('/approvals/{user}/revoke', [SupportApprovalController::class, 'revoke'])->name('approvals.revoke');
     Route::get('/issuers/{issuer}/invoices', [SupportInvoiceController::class, 'index'])->name('issuers.invoices.index');
     Route::get('/issuers/{issuer}/invoices/{invoice}', [SupportInvoiceController::class, 'show'])->name('issuers.invoices.show');
     Route::get('/issuers/{issuer}/clients', [SupportClientController::class, 'index'])->name('issuers.clients.index');

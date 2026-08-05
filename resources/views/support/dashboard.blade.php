@@ -14,8 +14,53 @@
                 <div class="rounded-md bg-green-50 p-3 text-green-700">{{ session('status') }}</div>
             @endif
 
+            @if ($errors->has('revoke'))
+                <div class="rounded-md bg-red-50 p-3 text-red-700">{{ $errors->first('revoke') }}</div>
+            @endif
+
             <div class="rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900 dark:border-blue-400/40 dark:bg-blue-950/30 dark:text-blue-100">
-                This surface is read-only. Support access depends on an active issuer grant and expires automatically.
+                Issuer data on this surface is read-only. Support access depends on an active issuer grant and expires automatically.
+            </div>
+
+            {{-- Alpha gate: pending account approvals --}}
+            <div class="rounded-lg border border-gray-200 bg-white shadow dark:border-white/10 dark:bg-slate-900/80">
+                <div class="border-b border-gray-200 px-6 py-4 dark:border-white/10">
+                    <h3 class="text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400">Pending Approvals</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200 dark:divide-white/10">
+                        <thead class="bg-gray-50 dark:bg-slate-900/90">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Name</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Email</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Registered</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200 bg-white dark:divide-white/10 dark:bg-slate-900/80">
+                            @forelse ($pendingApprovals as $account)
+                                <tr>
+                                    <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">{{ $account->name }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-700 dark:text-slate-300">{{ $account->email }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-700 dark:text-slate-300">{{ $account->created_at?->setTimezone(config('app.timezone'))->toDayDateTimeString() }}</td>
+                                    <td class="px-6 py-4 text-right text-sm">
+                                        <form method="POST" action="{{ route('support.approvals.approve', $account) }}">
+                                            @csrf
+                                            <button type="submit" class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-white hover:bg-indigo-500">Approve</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="px-6 py-10 text-center text-sm text-gray-500 dark:text-slate-400">No accounts awaiting approval.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+                @if ($pendingApprovals->hasPages())
+                    <div class="px-6 py-4">{{ $pendingApprovals->onEachSide(1)->links() }}</div>
+                @endif
             </div>
 
             {{-- Monitoring panel --}}
