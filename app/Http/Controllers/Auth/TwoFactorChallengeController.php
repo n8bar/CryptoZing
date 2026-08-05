@@ -66,10 +66,11 @@ class TwoFactorChallengeController extends Controller
             return redirect()->route('login');
         }
 
-        // Approval revoked while the challenge was pending — drop the
-        // half-authenticated state and refuse before any login completes.
-        if (AlphaGate::blocks($user)) {
-            return $this->refuseUnapproved($request, $user);
+        // Approval revoked (or account banned) while the challenge was
+        // pending — drop the half-authenticated state and refuse before any
+        // login completes.
+        if (($refusal = AlphaGate::refusal($user)) !== null) {
+            return $this->refuseBlocked($request, $user, $refusal);
         }
 
         if ($this->codes->isLocked($user)) {
@@ -130,10 +131,10 @@ class TwoFactorChallengeController extends Controller
             return redirect()->route('login');
         }
 
-        // Same revoked-mid-challenge window as store(): no code goes to an
-        // account that can't complete the login anyway.
-        if (AlphaGate::blocks($user)) {
-            return $this->refuseUnapproved($request, $user);
+        // Same revoked-or-banned-mid-challenge window as store(): no code
+        // goes to an account that can't complete the login anyway.
+        if (($refusal = AlphaGate::refusal($user)) !== null) {
+            return $this->refuseBlocked($request, $user, $refusal);
         }
 
         if ($this->codes->tooManyRecentSends($user)) {
@@ -149,15 +150,15 @@ class TwoFactorChallengeController extends Controller
 
     /**
      * Clear the half-authenticated state and send the user back to login with
-     * the shared awaiting-approval message and their email preserved.
+     * the applicable refusal message and their email preserved.
      */
-    private function refuseUnapproved(Request $request, User $user): RedirectResponse
+    private function refuseBlocked(Request $request, User $user, string $refusal): RedirectResponse
     {
         $request->session()->forget(self::SESSION_KEY);
         $this->codes->clearChallengeState($user);
 
         return redirect()->route('login')
             ->withInput(['email' => $user->email])
-            ->withErrors(['email' => __(AlphaGate::REFUSAL_MESSAGE)]);
+            ->withErrors(['email' => $refusal]);
     }
 }

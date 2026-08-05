@@ -41,17 +41,17 @@ class AuthenticatedSessionController extends Controller
 
         $user = $request->user();
 
-        // Alpha gate: a pending account gets no session and no second-factor
-        // code — refused here, ahead of the 2FA divert, with the credential
-        // login undone.
-        if ($user && AlphaGate::blocks($user)) {
+        // A pending (gate on) or banned (always) account gets no session and
+        // no second-factor code — refused here, ahead of the 2FA divert, with
+        // the credential login undone.
+        if ($user && ($refusal = AlphaGate::refusal($user)) !== null) {
             Auth::guard('web')->logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
 
             return redirect()->route('login')
                 ->withInput($request->only('email', 'remember'))
-                ->withErrors(['email' => __(AlphaGate::REFUSAL_MESSAGE)]);
+                ->withErrors(['email' => $refusal]);
         }
 
         // 2FA users are held at the challenge: undo the credential login and

@@ -41,4 +41,34 @@ class SupportApprovalController extends Controller
 
         return back()->with('status', __(':email revoked.', ['email' => $user->email]));
     }
+
+    /**
+     * Ban an account. Gate-independent: blocks whether or not the alpha gate
+     * is on. No mail — abuse handling is an operator action, not a
+     * notification event.
+     */
+    public function ban(Request $request, User $user): RedirectResponse
+    {
+        // Self-ban locks the operator out of the only surface that can undo it.
+        if ($request->user()->is($user)) {
+            return back()->withErrors(['ban' => __('You can\'t ban your own account.')]);
+        }
+
+        if (! $user->isBanned()) {
+            $user->forceFill(['banned_at' => now()])->save();
+        }
+
+        return back()->with('status', __(':email banned.', ['email' => $user->email]));
+    }
+
+    /**
+     * Lift a ban. Approval state is untouched, so an unbanned account regains
+     * exactly the standing it had before the ban.
+     */
+    public function unban(User $user): RedirectResponse
+    {
+        $user->forceFill(['banned_at' => null])->save();
+
+        return back()->with('status', __(':email unbanned.', ['email' => $user->email]));
+    }
 }
