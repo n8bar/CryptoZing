@@ -37,6 +37,12 @@ return Application::configure(basePath: dirname(__DIR__))
         ReassignInvoiceAddresses::class,
     ])
     ->withMiddleware(function (Middleware $middleware): void {
+        // Alpha gate: a session whose account lost approval is dropped on its
+        // next request, not at its next login.
+        $middleware->web(append: [
+            \App\Http\Middleware\EnsureApprovedUser::class,
+        ]);
+
         $middleware->validateCsrfTokens(except: [
             'webhooks/mailgun',
         ]);

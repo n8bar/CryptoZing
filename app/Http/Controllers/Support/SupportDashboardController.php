@@ -20,8 +20,16 @@ class SupportDashboardController extends Controller
             ->paginate(15)
             ->withQueryString();
 
+        // Alpha gate: accounts awaiting manual approval. Separate page name so
+        // this paginator and the issuer list don't fight over ?page.
+        $pendingApprovals = User::pending()
+            ->orderBy('created_at')
+            ->paginate(15, ['*'], 'pending_page')
+            ->withQueryString();
+
         return view('support.dashboard', [
             'issuers' => $issuers,
+            'pendingApprovals' => $pendingApprovals,
             'monitoring' => $this->monitoringPanel(),
         ]);
     }
