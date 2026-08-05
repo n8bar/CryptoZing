@@ -2,11 +2,14 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Http\Controllers\Auth\TwoFactorChallengeController;
+use App\Mail\TwoFactorCodeMail;
 use App\Models\User;
 use App\Support\AlphaGate;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class AlphaAccessGateTest extends TestCase
@@ -97,6 +100,61 @@ class AlphaAccessGateTest extends TestCase
         $this->assertNotNull(User::where('email', 'gate-off@example.com')->value('approved_at'));
     }
 
+    public function test_pending_account_with_correct_credentials_is_refused(): void
+    {
+        $user = User::factory()->pending()->create();
+
+        $response = $this->post('/login', ['email' => $user->email, 'password' => 'password']);
+
+        $this->assertGuest();
+        $response->assertRedirect(route('login'));
+        $response->assertSessionHasErrors('email');
+        // Entered email survives the refusal per UX guardrails.
+        $response->assertSessionHasInput('email', $user->email);
+    }
+
+    public function test_pending_two_factor_account_is_refused_before_the_challenge(): void
+    {
+        Mail::fake();
+        $user = User::factory()->pending()->create(['two_factor_email_enabled_at' => now()]);
+
+        $response = $this->post('/login', ['email' => $user->email, 'password' => 'password']);
+
+        $this->assertGuest();
+        $response->assertRedirect(route('login'));
+        $response->assertSessionMissing(TwoFactorChallengeController::SESSION_KEY);
+        // No second-factor code goes to an account that can't get in either way.
+        Mail::assertNothingQueued();
+    }
+
+    public function test_account_revoked_mid_challenge_is_refused_with_a_valid_code(): void
+    {
+        Mail::fake();
+        $user = User::factory()->create(['two_factor_email_enabled_at' => now()]);
+
+        $this->post('/login', ['email' => $user->email, 'password' => 'password']);
+        $code = $this->capturedCode();
+
+        $user->forceFill(['approved_at' => null])->save();
+
+        $response = $this->post(route('two-factor.challenge.store'), ['code' => $code]);
+
+        $this->assertGuest();
+        $response->assertRedirect(route('login'));
+        $response->assertSessionHasErrors('email');
+        $response->assertSessionMissing(TwoFactorChallengeController::SESSION_KEY);
+    }
+
+    public function test_gate_disabled_pending_account_logs_in(): void
+    {
+        config(['alpha.gate_enabled' => false]);
+        $user = User::factory()->pending()->create();
+
+        $this->post('/login', ['email' => $user->email, 'password' => 'password']);
+
+        $this->assertAuthenticatedAs($user);
+    }
+
     public function test_migration_backfills_existing_users_as_approved(): void
     {
         Artisan::call('migrate:rollback', ['--path' => self::APPROVED_AT_MIGRATION, '--force' => true]);
@@ -117,5 +175,17 @@ class AlphaAccessGateTest extends TestCase
 
         // MySQL DDL commits implicitly, so this row escapes the test transaction — remove it.
         DB::table('users')->where('email', 'pre-gate@example.com')->delete();
+    }
+
+    private function capturedCode(): string
+    {
+        $code = null;
+        Mail::assertQueued(TwoFactorCodeMail::class, function (TwoFactorCodeMail $mail) use (&$code) {
+            $code = $mail->code;
+
+            return true;
+        });
+
+        return $code;
     }
 }

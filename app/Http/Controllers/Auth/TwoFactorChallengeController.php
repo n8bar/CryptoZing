@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Services\TwoFactor\TotpService;
 use App\Services\TwoFactor\TwoFactorCodeService;
+use App\Support\AlphaGate;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -63,6 +64,12 @@ class TwoFactorChallengeController extends Controller
             $request->session()->forget(self::SESSION_KEY);
 
             return redirect()->route('login');
+        }
+
+        // Approval revoked while the challenge was pending — drop the
+        // half-authenticated state and refuse before any login completes.
+        if (AlphaGate::blocks($user)) {
+            return $this->refuseUnapproved($request, $user);
         }
 
         if ($this->codes->isLocked($user)) {
@@ -123,6 +130,12 @@ class TwoFactorChallengeController extends Controller
             return redirect()->route('login');
         }
 
+        // Same revoked-mid-challenge window as store(): no code goes to an
+        // account that can't complete the login anyway.
+        if (AlphaGate::blocks($user)) {
+            return $this->refuseUnapproved($request, $user);
+        }
+
         if ($this->codes->tooManyRecentSends($user)) {
             return back()->withErrors([
                 'code' => __('Too many code requests. Please wait a few minutes before trying again.'),
@@ -132,5 +145,19 @@ class TwoFactorChallengeController extends Controller
         $this->codes->sendCode($user);
 
         return back()->with('status', __('A new code is on its way.'));
+    }
+
+    /**
+     * Clear the half-authenticated state and send the user back to login with
+     * the shared awaiting-approval message and their email preserved.
+     */
+    private function refuseUnapproved(Request $request, User $user): RedirectResponse
+    {
+        $request->session()->forget(self::SESSION_KEY);
+        $this->codes->clearChallengeState($user);
+
+        return redirect()->route('login')
+            ->withInput(['email' => $user->email])
+            ->withErrors(['email' => __(AlphaGate::REFUSAL_MESSAGE)]);
     }
 }
