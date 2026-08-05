@@ -100,6 +100,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'approved_at' => 'datetime',
             'password' => 'hashed',
             'show_invoice_ids' => 'boolean',
             'auto_receipt_emails' => 'boolean',
@@ -130,6 +131,32 @@ class User extends Authenticatable
             'two_factor_totp_confirmed_at' => 'datetime',
             'two_factor_totp_last_timestamp' => 'integer',
         ];
+    }
+
+    /**
+     * Whether the account has cleared the alpha access gate. Approval is
+     * granted from the support dashboard; the timestamp doubles as an audit
+     * stamp (same pattern as 2FA enablement).
+     */
+    public function isApproved(): bool
+    {
+        return $this->approved_at !== null;
+    }
+
+    /**
+     * Accounts awaiting alpha approval.
+     */
+    public function scopePending($query)
+    {
+        return $query->whereNull('approved_at');
+    }
+
+    /**
+     * Accounts cleared through the alpha gate.
+     */
+    public function scopeApproved($query)
+    {
+        return $query->whereNotNull('approved_at');
     }
 
     /**
