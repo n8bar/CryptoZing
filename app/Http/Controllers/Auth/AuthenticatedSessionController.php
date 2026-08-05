@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\Concerns\RoutesAuthenticatedUser;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Services\TwoFactor\TwoFactorCodeService;
+use App\Support\AlphaGate;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -39,6 +40,19 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $user = $request->user();
+
+        // Alpha gate: a pending account gets no session and no second-factor
+        // code — refused here, ahead of the 2FA divert, with the credential
+        // login undone.
+        if ($user && AlphaGate::blocks($user)) {
+            Auth::guard('web')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect()->route('login')
+                ->withInput($request->only('email', 'remember'))
+                ->withErrors(['email' => __(AlphaGate::REFUSAL_MESSAGE)]);
+        }
 
         // 2FA users are held at the challenge: undo the credential login and
         // stash a pending id; the challenge controller re-logs in only after a
