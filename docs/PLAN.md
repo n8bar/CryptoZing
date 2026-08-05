@@ -16,9 +16,9 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 
 ## Current
 - Active milestone:
-  - **MS20 - Mainnet Cutover & Alpha Gate** — all four phase strategies written and approved; not yet begun.
-- Status: `MS20 planned — content-publish gate unmet, blocks Phase 1 start`
-- Next action: Publish a fresh [`docs/CONTENT_PLAN.md`](CONTENT_PLAN.md) article to clear the entry gate, then start **Phase 1 — Alpha Access Gate** per [`docs/milestones/20_MAINNET_CUTOVER_ALPHA_GATE.md`](milestones/20_MAINNET_CUTOVER_ALPHA_GATE.md).
+  - **MS20 - Mainnet Cutover & Alpha Gate** — in progress; content-publish gate cleared by "How to Receive Bitcoin".
+- Status: `MS20 Phase 1 (Alpha Access Gate) in progress`
+- Next action: Work [`docs/strategies/20.1_ALPHA_ACCESS_GATE.md`](strategies/20.1_ALPHA_ACCESS_GATE.md) on `claude/alpha-access-gate`.
 - Most recently completed milestone doc: [`docs/milestones/x19_OB_HARDENING_OPS.md`](milestones/x19_OB_HARDENING_OPS.md)
 
 ## Published Release Target

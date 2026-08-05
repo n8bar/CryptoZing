@@ -1,6 +1,6 @@
 # MS20 - Mainnet Cutover & Alpha Gate
 
-Status: Not Started.
+Status: In Progress.
 Parent execution doc: [`docs/PLAN.md`](../PLAN.md)
 Supporting ops doc: [`docs/ops/OB_ROLLOUT_CHECKLIST.md`](../ops/OB_ROLLOUT_CHECKLIST.md)
 
@@ -9,7 +9,7 @@ Supporting ops doc: [`docs/ops/OB_ROLLOUT_CHECKLIST.md`](../ops/OB_ROLLOUT_CHECK
 - Gate access so registration stays fully live but new accounts cannot log in until manually approved — an invite-only alpha window. Testers beyond the operator are possible but unlikely.
 
 ## Kickoff preconditions
-- **Content-publish gate (unmet):** per [`docs/PLAN.md`](../PLAN.md) Milestone Conventions, a fresh [`docs/CONTENT_PLAN.md`](../CONTENT_PLAN.md) article must publish before MS20 begins; prior-milestone content does not clear it.
+- **Content-publish gate (met):** cleared by "How to Receive Bitcoin" ([`docs/CONTENT_PLAN.md`](../CONTENT_PLAN.md)).
 
 ## Phase Rollup
 
