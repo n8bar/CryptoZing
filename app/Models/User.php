@@ -101,6 +101,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'approved_at' => 'datetime',
+            'banned_at' => 'datetime',
             'password' => 'hashed',
             'show_invoice_ids' => 'boolean',
             'auto_receipt_emails' => 'boolean',
@@ -141,6 +142,15 @@ class User extends Authenticatable
     public function isApproved(): bool
     {
         return $this->approved_at !== null;
+    }
+
+    /**
+     * Whether the account is banned. Independent of the alpha gate — a ban
+     * blocks access whether or not the gate is enabled.
+     */
+    public function isBanned(): bool
+    {
+        return $this->banned_at !== null;
     }
 
     /**

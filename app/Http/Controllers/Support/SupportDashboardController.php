@@ -27,9 +27,18 @@ class SupportDashboardController extends Controller
             ->paginate(15, ['*'], 'pending_page')
             ->withQueryString();
 
+        // Account lookup by exact email — the surface for ban/unban/revoke
+        // on accounts that aren't in the pending list.
+        $lookupEmail = trim((string) $request->query('account', ''));
+        $lookupAccount = $lookupEmail !== ''
+            ? User::where('email', $lookupEmail)->first()
+            : null;
+
         return view('support.dashboard', [
             'issuers' => $issuers,
             'pendingApprovals' => $pendingApprovals,
+            'lookupEmail' => $lookupEmail,
+            'lookupAccount' => $lookupAccount,
             'monitoring' => $this->monitoringPanel(),
         ]);
     }

@@ -182,6 +182,8 @@ Route::middleware(['auth', EnsureSupportAgent::class])->prefix('support')->name(
     Route::get('/', SupportDashboardController::class)->name('dashboard');
     Route::post('/approvals/{user}/approve', [SupportApprovalController::class, 'approve'])->name('approvals.approve');
     Route::post('/approvals/{user}/revoke', [SupportApprovalController::class, 'revoke'])->name('approvals.revoke');
+    Route::post('/accounts/{user}/ban', [SupportApprovalController::class, 'ban'])->name('accounts.ban');
+    Route::post('/accounts/{user}/unban', [SupportApprovalController::class, 'unban'])->name('accounts.unban');
     Route::get('/issuers/{issuer}/invoices', [SupportInvoiceController::class, 'index'])->name('issuers.invoices.index');
     Route::get('/issuers/{issuer}/invoices/{invoice}', [SupportInvoiceController::class, 'show'])->name('issuers.invoices.show');
     Route::get('/issuers/{issuer}/clients', [SupportClientController::class, 'index'])->name('issuers.clients.index');

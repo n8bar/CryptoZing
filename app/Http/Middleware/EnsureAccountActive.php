@@ -9,24 +9,25 @@ use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Drops a session whose account lost alpha approval, so a revoke takes effect
+ * Drops a session whose account lost the right to hold one — approval revoked
+ * (while the alpha gate is on) or banned (always) — so the change takes effect
  * on the account's next request instead of at its next login. Works under any
  * session driver — the check rides the already-loaded user, no extra queries.
  */
-class EnsureApprovedUser
+class EnsureAccountActive
 {
     public function handle(Request $request, Closure $next): Response
     {
         $user = Auth::guard('web')->user();
 
-        if ($user && AlphaGate::blocks($user)) {
+        if ($user && ($refusal = AlphaGate::refusal($user)) !== null) {
             Auth::guard('web')->logout();
 
             $request->session()->invalidate();
             $request->session()->regenerateToken();
 
             return redirect()->route('login')
-                ->withErrors(['email' => __(AlphaGate::REFUSAL_MESSAGE)]);
+                ->withErrors(['email' => $refusal]);
         }
 
         return $next($request);

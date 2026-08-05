@@ -14,8 +14,8 @@
                 <div class="rounded-md bg-green-50 p-3 text-green-700">{{ session('status') }}</div>
             @endif
 
-            @if ($errors->has('revoke'))
-                <div class="rounded-md bg-red-50 p-3 text-red-700">{{ $errors->first('revoke') }}</div>
+            @if ($errors->has('revoke') || $errors->has('ban'))
+                <div class="rounded-md bg-red-50 p-3 text-red-700">{{ $errors->first('revoke') ?: $errors->first('ban') }}</div>
             @endif
 
             <div class="rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900 dark:border-blue-400/40 dark:bg-blue-950/30 dark:text-blue-100">
@@ -61,6 +61,71 @@
                 @if ($pendingApprovals->hasPages())
                     <div class="px-6 py-4">{{ $pendingApprovals->onEachSide(1)->links() }}</div>
                 @endif
+            </div>
+
+            {{-- Account lookup: ban/unban/revoke surface for any account --}}
+            <div class="rounded-lg border border-gray-200 bg-white shadow dark:border-white/10 dark:bg-slate-900/80">
+                <div class="border-b border-gray-200 px-6 py-4 dark:border-white/10">
+                    <h3 class="text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400">Account Lookup</h3>
+                </div>
+                <div class="px-6 py-5 space-y-4">
+                    <form method="GET" action="{{ route('support.dashboard') }}" class="flex flex-wrap items-center gap-2">
+                        <label for="account" class="sr-only">Account email</label>
+                        <input id="account" name="account" type="email" value="{{ $lookupEmail }}" placeholder="account email"
+                            class="w-72 max-w-full rounded-md border-gray-300 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-white/20 dark:bg-slate-900 dark:text-white">
+                        <button type="submit" class="inline-flex items-center rounded-md border border-gray-300 px-3 py-2 text-xs font-semibold uppercase tracking-wider text-gray-700 hover:bg-gray-50 dark:border-white/20 dark:text-slate-100 dark:hover:bg-white/10">Look up</button>
+                    </form>
+
+                    @if ($lookupEmail !== '' && ! $lookupAccount)
+                        <p class="text-sm text-gray-500 dark:text-slate-400">No account with that email.</p>
+                    @endif
+
+                    @if ($lookupAccount)
+                        <div class="flex flex-wrap items-center justify-between gap-3 rounded-md border border-gray-200 px-4 py-3 dark:border-white/10">
+                            <div>
+                                <p class="text-sm font-medium text-gray-900 dark:text-white">{{ $lookupAccount->name }}</p>
+                                <p class="text-sm text-gray-700 dark:text-slate-300">{{ $lookupAccount->email }}</p>
+                                <p class="text-xs text-gray-500 dark:text-slate-400">
+                                    Registered {{ $lookupAccount->created_at?->setTimezone(config('app.timezone'))->toDayDateTimeString() }}
+                                    —
+                                    @if ($lookupAccount->isBanned())
+                                        <span class="font-semibold text-red-600 dark:text-red-400">Banned</span>
+                                    @elseif ($lookupAccount->isApproved())
+                                        <span class="font-semibold text-green-600 dark:text-green-400">Approved</span>
+                                    @else
+                                        <span class="font-semibold text-amber-600 dark:text-amber-400">Pending</span>
+                                    @endif
+                                </p>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                @if (! $lookupAccount->isApproved() && ! $lookupAccount->isBanned())
+                                    <form method="POST" action="{{ route('support.approvals.approve', $lookupAccount) }}">
+                                        @csrf
+                                        <button type="submit" class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-white hover:bg-indigo-500">Approve</button>
+                                    </form>
+                                @endif
+                                @if ($lookupAccount->isApproved() && ! $lookupAccount->is(auth()->user()))
+                                    <form method="POST" action="{{ route('support.approvals.revoke', $lookupAccount) }}">
+                                        @csrf
+                                        <button type="submit" class="inline-flex items-center rounded-md border border-gray-300 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-gray-700 hover:bg-gray-50 dark:border-white/20 dark:text-slate-100 dark:hover:bg-white/10">Revoke</button>
+                                    </form>
+                                @endif
+                                @if (! $lookupAccount->isBanned() && ! $lookupAccount->is(auth()->user()))
+                                    <form method="POST" action="{{ route('support.accounts.ban', $lookupAccount) }}">
+                                        @csrf
+                                        <button type="submit" class="inline-flex items-center rounded-md bg-red-600 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-white hover:bg-red-500">Ban</button>
+                                    </form>
+                                @endif
+                                @if ($lookupAccount->isBanned())
+                                    <form method="POST" action="{{ route('support.accounts.unban', $lookupAccount) }}">
+                                        @csrf
+                                        <button type="submit" class="inline-flex items-center rounded-md border border-gray-300 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-gray-700 hover:bg-gray-50 dark:border-white/20 dark:text-slate-100 dark:hover:bg-white/10">Unban</button>
+                                    </form>
+                                @endif
+                            </div>
+                        </div>
+                    @endif
+                </div>
             </div>
 
             {{-- Monitoring panel --}}
