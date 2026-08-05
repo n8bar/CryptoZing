@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Support\AlphaGate;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -42,6 +43,15 @@ class RegisteredUserController extends Controller
         ]);
 
         event(new Registered($user));
+
+        // Alpha gate on: the account lands pending with no session; approval
+        // happens from the support dashboard, and getting-started auto-shows
+        // on first login after approval instead of here.
+        if (AlphaGate::enabled()) {
+            return redirect()->route('approval.pending');
+        }
+
+        $user->forceFill(['approved_at' => now()])->save();
 
         Auth::login($user);
 

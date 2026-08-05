@@ -37,8 +37,11 @@ class RegistrationTest extends TestCase
             'password_confirmation' => 'password',
         ]);
 
-        $this->assertAuthenticated();
-        $response->assertRedirect(route('getting-started.welcome'));
+        // Alpha gate (default on): the account exists but lands pending, with
+        // no session until approved from the support dashboard.
+        $this->assertGuest();
+        $response->assertRedirect(route('approval.pending'));
+        $this->assertTrue(User::where('email', 'test@example.com')->exists());
     }
 
     public function test_mixed_case_email_is_accepted_and_preserved_on_registration(): void
@@ -52,8 +55,7 @@ class RegistrationTest extends TestCase
             'password_confirmation' => 'password',
         ]);
 
-        $this->assertAuthenticated();
-        $response->assertRedirect(route('getting-started.welcome'));
+        $response->assertRedirect(route('approval.pending'));
 
         $this->assertDatabaseHas('users', [
             'email' => $email,

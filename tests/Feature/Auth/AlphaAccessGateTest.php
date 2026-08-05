@@ -4,14 +4,14 @@ namespace Tests\Feature\Auth;
 
 use App\Models\User;
 use App\Support\AlphaGate;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class AlphaAccessGateTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     private const APPROVED_AT_MIGRATION = 'database/migrations/2026_08_04_000001_add_approved_at_to_users_table.php';
 
@@ -57,6 +57,44 @@ class AlphaAccessGateTest extends TestCase
         config(['alpha.gate_enabled' => false]);
 
         $this->assertFalse(AlphaGate::enabled());
+    }
+
+    public function test_registration_creates_pending_account_without_session(): void
+    {
+        $response = $this->post('/register', [
+            'name' => 'Gate Tester',
+            'email' => 'gate-tester@example.com',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ]);
+
+        $this->assertGuest();
+        $response->assertRedirect(route('approval.pending'));
+        $this->assertNull(User::where('email', 'gate-tester@example.com')->value('approved_at'));
+    }
+
+    public function test_awaiting_approval_page_is_guest_safe(): void
+    {
+        $response = $this->get(route('approval.pending'));
+
+        $response->assertStatus(200);
+        $response->assertSee('approved');
+    }
+
+    public function test_gate_disabled_registration_logs_in_as_before(): void
+    {
+        config(['alpha.gate_enabled' => false]);
+
+        $response = $this->post('/register', [
+            'name' => 'Gate Off Tester',
+            'email' => 'gate-off@example.com',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ]);
+
+        $this->assertAuthenticated();
+        $response->assertRedirect(route('getting-started.welcome'));
+        $this->assertNotNull(User::where('email', 'gate-off@example.com')->value('approved_at'));
     }
 
     public function test_migration_backfills_existing_users_as_approved(): void

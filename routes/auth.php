@@ -20,6 +20,11 @@ Route::middleware('guest')->group(function () {
 
     Route::post('register', [RegisteredUserController::class, 'store']);
 
+    // Post-registration landing while the alpha gate holds the account
+    // pending — guest-safe because approval happens before any session exists.
+    Route::view('awaiting-approval', 'auth.awaiting-approval')
+        ->name('approval.pending');
+
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
         ->name('login');
 
