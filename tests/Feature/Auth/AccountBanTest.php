@@ -97,6 +97,56 @@ class AccountBanTest extends TestCase
         $response->assertSee(route('support.accounts.unban', $user));
     }
 
+    public function test_account_lookup_matches_partial_email(): void
+    {
+        $agent = $this->supportAgent();
+        $user = User::factory()->create(['email' => 'partial-target@example.com', 'name' => 'Partial Pat']);
+
+        $response = $this->actingAs($agent)->get(route('support.dashboard', ['account' => 'partial-target']));
+
+        $response->assertStatus(200);
+        $response->assertSee('Partial Pat');
+        $response->assertSee(route('support.accounts.ban', $user));
+    }
+
+    public function test_account_lookup_shows_every_match(): void
+    {
+        $agent = $this->supportAgent();
+        $first = User::factory()->create(['email' => 'twin-one@example.com']);
+        $second = User::factory()->create(['email' => 'twin-two@example.com']);
+
+        $response = $this->actingAs($agent)->get(route('support.dashboard', ['account' => 'twin-']));
+
+        $response->assertSee($first->email);
+        $response->assertSee($second->email);
+    }
+
+    public function test_account_lookup_treats_sql_wildcards_as_literals(): void
+    {
+        $agent = $this->supportAgent();
+        User::factory()->create(['email' => 'wildcard-victim@example.com']);
+
+        $response = $this->actingAs($agent)->get(route('support.dashboard', ['account' => '%']));
+
+        $response->assertDontSee('wildcard-victim@example.com');
+        $response->assertSee('No account matching');
+    }
+
+    public function test_account_lookup_caps_results_with_a_note(): void
+    {
+        $agent = $this->supportAgent();
+        foreach (range(1, 11) as $i) {
+            User::factory()->create(['email' => sprintf('flood-%02d@example.com', $i)]);
+        }
+
+        $response = $this->actingAs($agent)->get(route('support.dashboard', ['account' => 'flood-']));
+
+        $response->assertSee('flood-01@example.com');
+        $response->assertSee('flood-10@example.com');
+        $response->assertDontSee('flood-11@example.com');
+        $response->assertSee('narrow the search');
+    }
+
     public function test_ban_and_unban_actions_are_support_gated(): void
     {
         $nonAgent = User::factory()->create();
