@@ -156,5 +156,5 @@ _Carry-forward guardrail from active roadmap scope: suppress duplicate sends for
    - Revisit once donation-page traffic or user requests suggest demand; fiat in scope likely means its own milestone.
 
 23. **Per-transaction fee vs. published fee criticism (content promise 1.1)**
-   - Before shipping any per-transaction fee: revisit the criticism of processors "taking a cut they expect you to absorb" in `site/learn/accepting-bitcoin-payments-freelancer-small-business.md:17` — see `CONTENT_PROMISES.md` Major 1.
+   - Before shipping any per-transaction fee: revisit the criticism of processors "taking a cut they expect you to absorb" in `learn/accepting-bitcoin-payments-freelancer-small-business.md:17` in `n8bar/cryptozing-site` — see `CONTENT_PROMISES.md` Major 1.
    - Options, decided at that time: make the fee structurally different (customer-visible or non-per-transaction, e.g. subscription/freemium); narrow the criticism in the article; or retire the article and publish an updated replacement as part of the monetization effort.
