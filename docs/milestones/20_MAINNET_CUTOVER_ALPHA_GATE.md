@@ -13,8 +13,8 @@ Supporting ops doc: [`docs/ops/OB_ROLLOUT_CHECKLIST.md`](../ops/OB_ROLLOUT_CHECK
 
 ## Phase Rollup
 
-### [ ] Phase 1 — Alpha Access Gate
-New registrations land pending and cannot log in until approved from the support dashboard. Registration stays open and unchanged. Independent of mainnet, so it can lead. Also carries the gate-independent account ban (§8) so the abuse lever exists before open beta. Strategy: [`20.1_ALPHA_ACCESS_GATE.md`](../strategies/20.1_ALPHA_ACCESS_GATE.md).
+### [x] Phase 1 — Alpha Access Gate
+New registrations land pending and cannot log in until approved from the support dashboard. Registration stays open and unchanged. Independent of mainnet, so it can lead. Also carries the gate-independent account ban (§8) so the abuse lever exists before open beta. Strategy: [`x20.1_ALPHA_ACCESS_GATE.md`](../strategies/x20.1_ALPHA_ACCESS_GATE.md).
 
 ### [ ] Phase 2 — Production Hosting
 Provision the production server and deploy the app to it, running private, on the same Docker recipe published for self-hosters. The article site moves off GitHub Pages into its own repo and container, so the app image carries no CryptoZing public content. Strategy: [`20.2_PRODUCTION_HOSTING.md`](../strategies/20.2_PRODUCTION_HOSTING.md).
