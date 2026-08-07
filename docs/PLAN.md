@@ -1,5 +1,5 @@
 # PLAN
-_Last updated: 2026-07-29_
+_Last updated: 2026-08-07_
 
 This is the human-facing execution dashboard for open-beta work.
 
@@ -22,14 +22,14 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 - Most recently completed milestone doc: [`docs/milestones/x19_OB_HARDENING_OPS.md`](milestones/x19_OB_HARDENING_OPS.md)
 
 ## Published Release Target
-- **First public release: mid-to-late 2027.** The open beta milestone timeline (MS21, targeting 2026-08-25) covers the open beta. The published release target accounts for post-open-beta work needed before an official first release.
+- **First public release: mid-to-late 2027.** The open beta milestone timeline (MS21, targeting 2026-09-01) covers the open beta. The published release target accounts for post-open-beta work needed before an official first release.
 
 ## Active and Upcoming Milestones
 | Status | ID | Milestone | Short intent | Target | Primary doc |
 |---|---|---|---|---|---|
-| [ ] | 20 | Mainnet Cutover & Alpha Gate | Provision production hosting, go live on mainnet privately (real self-sent payment) with an invite-only alpha access gate, migrate the article site off GitHub Pages, and prove a cutover runbook with backout before the public open beta. | 2026-08-13 | [`docs/milestones/20_MAINNET_CUTOVER_ALPHA_GATE.md`](milestones/20_MAINNET_CUTOVER_ALPHA_GATE.md) |
-| [ ] | 21 | CryptoZing.app Deployment (Open Beta) | Deploy the open beta under `cryptozing.app`, replace the GitHub Pages placeholder at `/` with the live app landing page without breaking the SEO baseline established in MS15, remove temporary mail aliasing, and complete rollout verification. | 2026-08-25 | [`docs/milestones/21_OB_DEPLOYMENT.md`](milestones/21_OB_DEPLOYMENT.md) |
-| [ ] | 22 | Thorough SEO & Marketing Strategies | Post-deploy discovery investment: thorough SEO pass across live app + site surfaces and an ongoing SEO strategy with scheduled tasks in the .ics; marketing strategy. Scope at kickoff. | 2026-09-15 | [`docs/milestones/22_SEO_MARKETING.md`](milestones/22_SEO_MARKETING.md) |
+| [ ] | 20 | Mainnet Cutover & Alpha Gate | Provision production hosting, go live on mainnet privately (real self-sent payment) with an invite-only alpha access gate, migrate the article site off GitHub Pages, and prove a cutover runbook with backout before the public open beta. | 2026-08-20 | [`docs/milestones/20_MAINNET_CUTOVER_ALPHA_GATE.md`](milestones/20_MAINNET_CUTOVER_ALPHA_GATE.md) |
+| [ ] | 21 | CryptoZing.app Deployment (Open Beta) | Deploy the open beta under `cryptozing.app`, replace the GitHub Pages placeholder at `/` with the live app landing page without breaking the SEO baseline established in MS15, remove temporary mail aliasing, and complete rollout verification. | 2026-09-01 | [`docs/milestones/21_OB_DEPLOYMENT.md`](milestones/21_OB_DEPLOYMENT.md) |
+| [ ] | 22 | Thorough SEO & Marketing Strategies | Post-deploy discovery investment: thorough SEO pass across live app + site surfaces and an ongoing SEO strategy with scheduled tasks in the .ics; marketing strategy. Scope at kickoff. | 2026-09-22 | [`docs/milestones/22_SEO_MARKETING.md`](milestones/22_SEO_MARKETING.md) |
 
 ## Completed Milestones
 | Status | ID | Milestone | Short intent | Primary doc |
