@@ -71,16 +71,20 @@
                 <div class="px-6 py-5 space-y-4">
                     <form method="GET" action="{{ route('support.dashboard') }}" class="flex flex-wrap items-center gap-2">
                         <label for="account" class="sr-only">Account email</label>
-                        <input id="account" name="account" type="email" value="{{ $lookupEmail }}" placeholder="account email"
+                        <input id="account" name="account" type="text" value="{{ $lookupEmail }}" placeholder="account email (partial ok)"
                             class="w-72 max-w-full rounded-md border-gray-300 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-white/20 dark:bg-slate-900 dark:text-white">
                         <button type="submit" class="inline-flex items-center rounded-md border border-gray-300 px-3 py-2 text-xs font-semibold uppercase tracking-wider text-gray-700 hover:bg-gray-50 dark:border-white/20 dark:text-slate-100 dark:hover:bg-white/10">Look up</button>
                     </form>
 
-                    @if ($lookupEmail !== '' && ! $lookupAccount)
-                        <p class="text-sm text-gray-500 dark:text-slate-400">No account with that email.</p>
+                    @if ($lookupEmail !== '' && $lookupAccounts->isEmpty())
+                        <p class="text-sm text-gray-500 dark:text-slate-400">No account matching that email.</p>
                     @endif
 
-                    @if ($lookupAccount)
+                    @if ($lookupOverflow)
+                        <p class="text-sm text-amber-600 dark:text-amber-400">More than 10 matches — narrow the search.</p>
+                    @endif
+
+                    @foreach ($lookupAccounts as $lookupAccount)
                         <div class="flex flex-wrap items-center justify-between gap-3 rounded-md border border-gray-200 px-4 py-3 dark:border-white/10">
                             <div>
                                 <p class="text-sm font-medium text-gray-900 dark:text-white">{{ $lookupAccount->name }}</p>
@@ -124,7 +128,7 @@
                                 @endif
                             </div>
                         </div>
-                    @endif
+                    @endforeach
                 </div>
             </div>
 
