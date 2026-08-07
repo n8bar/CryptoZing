@@ -17,8 +17,8 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 ## Current
 - Active milestone:
   - **MS20 - Mainnet Cutover & Alpha Gate** — in progress; content-publish gate cleared by "How to Receive Bitcoin".
-- Status: `MS20 Phase 1 (Alpha Access Gate) complete — PR #136; Phase 2 next`
-- Next action: Merge PR #136, then start **Phase 2 — Production Hosting** per [`docs/strategies/20.2_PRODUCTION_HOSTING.md`](strategies/20.2_PRODUCTION_HOSTING.md). Completed Phase 1 strategy: [`x20.1_ALPHA_ACCESS_GATE.md`](strategies/x20.1_ALPHA_ACCESS_GATE.md).
+- Status: `MS20 Phase 2 (Production Hosting) in progress — host decisions made (§2.1/§2.2)`
+- Next action: Work [`docs/strategies/20.2_PRODUCTION_HOSTING.md`](strategies/20.2_PRODUCTION_HOSTING.md) — §1 site split (agent, parallel) and [User] server provisioning per the §2.2.7 record.
 - Most recently completed milestone doc: [`docs/milestones/x19_OB_HARDENING_OPS.md`](milestones/x19_OB_HARDENING_OPS.md)
 
 ## Published Release Target
