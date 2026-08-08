@@ -1,0 +1,57 @@
+# Front nginx for the published recipe (M20.2 §3.2.2).
+# ${CZ_SERVER_NAME} is substituted at container start by the nginx image's
+# envsubst machinery; nginx runtime variables ($host, $uri, …) pass through.
+
+server {
+    listen 80;
+    server_name ${CZ_SERVER_NAME};
+
+    # ACME webroot so cert renewal works while nginx holds port 80.
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+
+server {
+    listen 443 ssl;
+    http2 on;
+    server_name ${CZ_SERVER_NAME};
+
+    ssl_certificate     /etc/letsencrypt/live/${CZ_SERVER_NAME}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/${CZ_SERVER_NAME}/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+
+    root /var/www/html/public;
+    index index.php;
+    client_max_body_size 12m;
+
+    add_header X-Content-Type-Options nosniff always;
+    add_header X-Frame-Options SAMEORIGIN always;
+    add_header Referrer-Policy strict-origin-when-cross-origin always;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        try_files $uri =404;
+        include fastcgi_params;
+        fastcgi_pass app:9000;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param HTTPS on;
+    }
+
+    location ~* \.(css|js|png|jpg|jpeg|gif|svg|ico|woff2?)$ {
+        expires 7d;
+        access_log off;
+        try_files $uri =404;
+    }
+
+    location ~ /\.(?!well-known) {
+        deny all;
+    }
+}
