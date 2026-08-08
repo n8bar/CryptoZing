@@ -1,0 +1,27 @@
+# Overlay for OUR alpha deployment only (M20.2 §3.3) — the published recipe
+# is compose.production.yaml by itself. This adds the article-site container
+# and swaps the front nginx to the /learn-proxying, noindexing alpha config:
+#
+#   docker compose -f compose.production.yaml -f compose.alpha.yaml up -d
+
+services:
+  web:
+    # Fixed name so the certbot deploy hook can reload it by name (§2.8).
+    container_name: cz-nginx
+    volumes:
+      - ./docker/production/nginx/templates-alpha:/etc/nginx/templates:ro
+      - app-public:/var/www/html/public:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - ./certbot-webroot:/var/www/certbot:ro
+    depends_on:
+      - app
+      - site
+
+  site:
+    image: ghcr.io/n8bar/cryptozing-site:latest
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
