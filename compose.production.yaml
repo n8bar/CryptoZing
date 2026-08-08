@@ -1,0 +1,84 @@
+# Production compose — the recipe published for self-hosters (M20.2 §3.2),
+# and the one our own box runs. Sail's compose.yaml is dev-only.
+#
+#   docker compose -f compose.production.yaml up -d
+#
+# Expects a host .env alongside this file (never baked into the image),
+# TLS certs under /etc/letsencrypt, and an ACME webroot at ./certbot-webroot.
+# See docs/ops/get-live/ for the full walkthrough.
+
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+x-app: &app
+  image: ghcr.io/n8bar/cryptozing-app:${CZ_TAG:-latest}
+  restart: unless-stopped
+  env_file: .env
+  logging: *logging
+  volumes:
+    - ./storage:/var/www/html/storage
+  depends_on:
+    db:
+      condition: service_healthy
+
+services:
+  app:
+    <<: *app
+    volumes:
+      - ./storage:/var/www/html/storage
+      - app-public:/shared/public
+
+  web:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    # Only the template variable — no app secrets in this container.
+    environment:
+      CZ_SERVER_NAME: ${CZ_SERVER_NAME}
+    logging: *logging
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/production/nginx/templates:/etc/nginx/templates:ro
+      - app-public:/var/www/html/public:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - ./certbot-webroot:/var/www/certbot:ro
+    depends_on:
+      - app
+
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    logging: *logging
+    # Internal network only — no published ports.
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    volumes:
+      - dbdata:/var/lib/mysql
+      - ./docker/production/mysql/prod.cnf:/etc/mysql/conf.d/prod.cnf:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h127.0.0.1 -u\"$$MYSQL_USER\" -p\"$$MYSQL_PASSWORD\" --silent"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+
+  queue:
+    <<: *app
+    command: php artisan queue:work --tries=3 --timeout=90 --max-time=3600
+
+  # Also covers the payment watcher: wallet:watch-payments runs as a
+  # per-minute scheduled command, not an always-on process (§2.3.1.2).
+  scheduler:
+    <<: *app
+    command: php artisan schedule:work
+
+volumes:
+  dbdata:
+  app-public:

@@ -1,0 +1,7 @@
+# Production MySQL tuning (M20.2 §2.3.4): sized to the data we carry
+# (~50 MB today), not the general-purpose defaults.
+[mysqld]
+innodb_buffer_pool_size = 256M
+# performance_schema idles at ~200 MB resident — off on a 4 GB box.
+performance_schema = OFF
+skip-name-resolve
