@@ -14,7 +14,9 @@ done
 # Refresh the shared volume nginx serves static assets from, when mounted.
 if [ -d /shared/public ]; then
     rm -rf /shared/public/..?* /shared/public/.[!.]* /shared/public/* 2>/dev/null || true
-    cp -a public/. /shared/public/
+    # Plain -R: preserving times/ownership on a volume root we may not own
+    # turns into a fatal error under set -e.
+    cp -R public/. /shared/public/
 fi
 
 # Cache config/routes/views against the runtime environment.

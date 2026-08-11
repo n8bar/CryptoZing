@@ -48,7 +48,10 @@ COPY docker/production/php.ini /usr/local/etc/php/conf.d/zz-prod.ini
 COPY docker/production/php-fpm-pool.conf /usr/local/etc/php-fpm.d/zz-prod.conf
 COPY --chmod=755 docker/production/entrypoint.sh /usr/local/bin/entrypoint.sh
 
-RUN mkdir -p storage bootstrap/cache && chown -R app:app storage bootstrap/cache
+# /shared/public pre-owned by app so the named volume inherits uid 1000 on
+# first mount — without this, the entrypoint can't populate a fresh volume.
+RUN mkdir -p storage bootstrap/cache /shared/public \
+    && chown -R app:app storage bootstrap/cache /shared/public
 
 USER app
 EXPOSE 9000
