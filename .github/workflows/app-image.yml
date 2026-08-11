@@ -1,0 +1,40 @@
+# M20.2 §4.1: build and publish the production app image in CI, never on the
+# box. Same mechanism as cryptozing-site's container workflow.
+name: App Image
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/production/Dockerfile
+          push: true
+          tags: |
+            ghcr.io/n8bar/cryptozing-app:${{ github.sha }}
+            ghcr.io/n8bar/cryptozing-app:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
