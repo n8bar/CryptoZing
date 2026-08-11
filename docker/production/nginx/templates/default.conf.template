@@ -25,6 +25,10 @@ server {
     ssl_certificate_key /etc/letsencrypt/live/${CZ_SERVER_NAME}/privkey.pem;
     ssl_protocols TLSv1.2 TLSv1.3;
 
+    # Docker's embedded DNS; variable upstreams below force per-request
+    # resolution so container replacement never leaves nginx on a dead IP.
+    resolver 127.0.0.11 valid=10s;
+
     root /var/www/html/public;
     index index.php;
     client_max_body_size 12m;
@@ -40,7 +44,8 @@ server {
     location ~ \.php$ {
         try_files $uri =404;
         include fastcgi_params;
-        fastcgi_pass app:9000;
+        set $app_upstream app:9000;
+        fastcgi_pass $app_upstream;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         fastcgi_param HTTPS on;
     }
