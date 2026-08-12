@@ -3,7 +3,7 @@
 Purpose: make wallet setup mainnet-first and approachable for non-technical users while keeping derivation safety intact. Applies to the primary wallet on `/wallet/settings`; additional wallets UI is deferred to post-open-beta until multi-wallet selection is in scope.
 
 ## Goals
-- One-step setup: network derives from `WALLET_NETWORK` (`mainnet`, `testnet4`, or `testnet3`); user only pastes a wallet account key (BIP84 xpub/zpub/vpub/tpub).
+- One-step setup: network derives from `WALLET_NETWORK` (`mainnet`, `testnet4`, or `testnet3`); user only pastes a wallet account key or an output descriptor (see Key Formats & Script Types).
 - Clear, confidence-building guidance with inline “show me how” steps and wallet-specific hints.
 - Fast, calm validation that preserves user input and avoids layout jumps.
 - Friendly error recovery and explicit testnet-only cues when relevant; no network noise on mainnet.
@@ -95,6 +95,14 @@ Purpose: make wallet setup mainnet-first and approachable for non-technical user
   - that using separate receive and spend apps or accounts is the safest recommended pattern, without making separate apps a hard product requirement
 
 Helpful Notes may keep mainnet-style prefix examples (`xpub` / `zpub`) in its explanatory import guidance. Wallet-settings-specific prefix hints should remain env-aware.
+
+## Key Formats & Script Types
+- Accepted inputs: BIP84 account keys (`zpub`/`vpub`, bare `xpub`/`tpub`) deriving bech32 addresses (`bc1q`/`tb1q`), BIP86 account keys (bare `xpub`/`tpub`) deriving bech32m addresses (`bc1p`/`tb1p`), and output descriptors `wpkh(...)`/`tr(...)` (key origins and a `/0/*` suffix tolerated). Anything else gets the standard unsupported-format rejection.
+- A key that states its own script type (SLIP-132 prefix, descriptor wrapper) is saved with it and no choice is shown. A bare `xpub`/`tpub` is valid for either BIP84 or BIP86, so the form asks which address format the wallet expects, in plain language with env-aware examples; bare keys default to Native SegWit.
+- A saved key has one script type and all derivation for it uses that type; changing type goes through the normal key-replacement flow. The donation wallet key accepts the same inputs with the same semantics.
+- The derive-test preview shows the sample address in the saved script type so the user can match it against their wallet app before saving. BIP21 URIs, QR codes, and other address surfaces render both address formats alike.
+- Descriptor parse failures and script-type contradictions follow the standard validation pattern (input preserved, field refocused, conflict named); when a chosen type contradicts what the key states, the key wins. Signing material in any input form (`xprv`/`tprv`, seed words) is rejected with the seed-warning copy and never persisted or logged.
+- The "Where do I find this?" accordion covers Taproot account export and notes descriptors are accepted as pasted.
 
 ## Copy & Tone
 - Avoid jargon in headings; use “Wallet settings” and “Wallet account key.”
