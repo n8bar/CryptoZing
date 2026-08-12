@@ -27,11 +27,11 @@ class InvoiceAddressCommandsTest extends TestCase
         $this->mock(HdWallet::class, function ($mock) use ($wallet) {
             $mock->shouldReceive('deriveAddress')
                 ->once()
-                ->with($wallet->bip84_xpub, 0, 'testnet')
+                ->with($wallet->bip84_xpub, 0, 'testnet', 'bip84')
                 ->andReturn('tb1qassign00000000000000000000000000000');
             $mock->shouldReceive('deriveAddress')
                 ->once()
-                ->with($wallet->bip84_xpub, 1, 'testnet')
+                ->with($wallet->bip84_xpub, 1, 'testnet', 'bip84')
                 ->andReturn('tb1qassign11111111111111111111111111111');
         });
 
@@ -78,7 +78,7 @@ class InvoiceAddressCommandsTest extends TestCase
         $this->mock(HdWallet::class, function ($mock) use ($wallet) {
             $mock->shouldReceive('deriveAddress')
                 ->once()
-                ->with($wallet->bip84_xpub, 7, 'testnet')
+                ->with($wallet->bip84_xpub, 7, 'testnet', 'bip84')
                 ->andReturn('tb1qmatchedaddress0000000000000000000');
         });
 
@@ -130,7 +130,7 @@ class InvoiceAddressCommandsTest extends TestCase
         $this->mock(HdWallet::class, function ($mock) use ($wallet) {
             $mock->shouldReceive('deriveAddress')
                 ->once()
-                ->with($wallet->bip84_xpub, 3, 'testnet')
+                ->with($wallet->bip84_xpub, 3, 'testnet', 'bip84')
                 ->andReturn('tb1qreassigned3333333333333333333333333');
         });
 

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Donation;
+use App\Services\WalletKeyInput;
 use Illuminate\Support\Facades\DB;
 
 class DonationAddressAllocator
@@ -50,7 +51,10 @@ class DonationAddressAllocator
             }
 
             $index = (int) (Donation::query()->where('network', $network)->max('derivation_index') ?? -1) + 1;
-            $address = $this->hdWallet->deriveAddress((string) config('donations.xpub'), $index, $network);
+            // The donation key follows the same input semantics as onboarding:
+            // descriptors/SLIP-132 state their script type, bare keys are bip84.
+            $parsed = WalletKeyInput::parse((string) config('donations.xpub'));
+            $address = $this->hdWallet->deriveAddress($parsed['key'], $index, $network, $parsed['script_type'] ?? 'bip84');
 
             return Donation::query()->create(array_merge([
                 'derivation_index' => $index,

@@ -26,6 +26,7 @@
             <li>Copy the account public key from your wallet. Do not copy a single address. It usually starts with {{ $prefixExamples }}.</li>
             <li>Paste here. You can verify below before saving.</li>
         </ol>
+        <p>Taproot accounts work too — their key looks the same, so pick Taproot when we ask which address type your wallet shows. Descriptor exports like <span class="font-mono">wpkh(...)</span> or <span class="font-mono">tr(...)</span> can be pasted as-is.</p>
         <div class="grid gap-2 sm:grid-cols-2">
             <div class="rounded border border-gray-200 bg-white px-3 py-2 dark:border-slate-700 dark:bg-slate-900/70">
                 <div class="font-semibold text-slate-900 dark:text-slate-100">Ledger Live</div>
