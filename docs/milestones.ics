@@ -24,21 +24,21 @@ SEQUENCE:0
 END:VEVENT
 BEGIN:VEVENT
 DTSTART;VALUE=DATE:20260724
-DTEND;VALUE=DATE:20260820
+DTEND;VALUE=DATE:20260822
 SUMMARY:MS20 — Mainnet Cutover & Alpha Gate
 DESCRIPTION:Go live on mainnet privately on the production box (real self-sent payment) and add an invite-only alpha access gate; produce a proven cutover runbook with backout before the public open beta.
 UID:cz-ms20@cryptozing.app
-DTSTAMP:20260811T023253Z
-SEQUENCE:1
+DTSTAMP:20260812T040642Z
+SEQUENCE:2
 END:VEVENT
 BEGIN:VEVENT
 DTSTART;VALUE=DATE:20260822
-DTEND;VALUE=DATE:20260901
+DTEND;VALUE=DATE:20260902
 SUMMARY:MS21 — CryptoZing.app Deployment (Open Beta)
 DESCRIPTION:Deploy the open beta under cryptozing.app, replace GitHub Pages placeholder, remove temporary mail aliasing, complete rollout verification.
 UID:cz-ms21@cryptozing.app
-DTSTAMP:20260811T023253Z
-SEQUENCE:1
+DTSTAMP:20260812T040642Z
+SEQUENCE:2
 END:VEVENT
 BEGIN:VEVENT
 DTSTART;VALUE=DATE:20260902
