@@ -13,6 +13,7 @@ class WalletSetting extends Model
         'user_id',
         'network',
         'bip84_xpub',
+        'script_type',
         'onboarded_at',
         'unsupported_configuration_active',
         'unsupported_configuration_source',

@@ -7,7 +7,7 @@ use RuntimeException;
 
 class HdWallet
 {
-    public function deriveAddress(string $xpub, int $index, string $network = 'testnet'): string
+    public function deriveAddress(string $xpub, int $index, string $network = 'testnet', string $scriptType = 'bip84'): string
     {
         $script = base_path('node_scripts/derive-address.cjs');
         if (!file_exists($script)) {
@@ -20,6 +20,7 @@ class HdWallet
             $xpub,
             (string) $index,
             $network,
+            $scriptType,
         ]);
 
         if (!$result->successful()) {
