@@ -29,7 +29,8 @@ class WalletUnsupportedConfigurationDetector
     {
         $network = $this->lineage->normalizeNetwork((string) $wallet->network);
         $xpub = (string) $wallet->bip84_xpub;
-        $fingerprint = $this->lineage->fingerprint($network, $xpub);
+        $scriptType = (string) ($wallet->script_type ?? 'bip84');
+        $fingerprint = $this->lineage->fingerprint($network, $xpub, $scriptType);
         $scanLimit = $this->proactiveScanLimit($wallet, $fingerprint, $network);
 
         if ($scanLimit <= 0) {
@@ -38,7 +39,7 @@ class WalletUnsupportedConfigurationDetector
 
         $derivedAddresses = [];
         for ($index = 0; $index < $scanLimit; $index++) {
-            $derivedAddresses[$index] = $this->wallet->deriveAddress($xpub, $index, $network);
+            $derivedAddresses[$index] = $this->wallet->deriveAddress($xpub, $index, $network, $scriptType);
         }
 
         $knownInvoiceAddresses = Invoice::query()

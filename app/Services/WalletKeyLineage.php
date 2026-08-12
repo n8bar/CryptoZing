@@ -23,15 +23,24 @@ class WalletKeyLineage
         return strtolower(trim($network));
     }
 
-    public function fingerprint(string $network, string $xpub): string
+    public function fingerprint(string $network, string $xpub, string $scriptType = 'bip84'): string
     {
-        return hash('sha256', $this->normalizeNetwork($network) . '|' . $this->normalizeXpub($xpub));
+        // bip84 keeps the historic two-part hash so existing cursors,
+        // invoices, and evidence rows stay attached to their lineage.
+        $suffix = $scriptType === 'bip84' ? '' : '|' . $scriptType;
+
+        return hash('sha256', $this->normalizeNetwork($network) . '|' . $this->normalizeXpub($xpub) . $suffix);
+    }
+
+    private function walletScriptType(WalletSetting $wallet): string
+    {
+        return (string) ($wallet->script_type ?? 'bip84');
     }
 
     public function previewCursor(WalletSetting $wallet): array
     {
         $network = $this->normalizeNetwork((string) $wallet->network);
-        $fingerprint = $this->fingerprint($network, (string) $wallet->bip84_xpub);
+        $fingerprint = $this->fingerprint($network, (string) $wallet->bip84_xpub, $this->walletScriptType($wallet));
 
         $cursor = WalletKeyCursor::query()
             ->where('user_id', $wallet->user_id)
@@ -65,10 +74,10 @@ class WalletKeyLineage
     public function deriveInvoiceLineage(WalletSetting $wallet, int $index): array
     {
         $network = $this->normalizeNetwork((string) $wallet->network);
-        $fingerprint = $this->fingerprint($network, (string) $wallet->bip84_xpub);
+        $fingerprint = $this->fingerprint($network, (string) $wallet->bip84_xpub, $this->walletScriptType($wallet));
 
         return [
-            'payment_address' => $this->wallet->deriveAddress((string) $wallet->bip84_xpub, $index, $network),
+            'payment_address' => $this->wallet->deriveAddress((string) $wallet->bip84_xpub, $index, $network, $this->walletScriptType($wallet)),
             'derivation_index' => $index,
             'wallet_key_fingerprint' => $fingerprint,
             'wallet_network' => $network,
@@ -107,13 +116,13 @@ class WalletKeyLineage
 
         return (int) ($preparedLineage['derivation_index'] ?? -1) === $index
             && ($preparedLineage['wallet_network'] ?? null) === $network
-            && ($preparedLineage['wallet_key_fingerprint'] ?? null) === $this->fingerprint($network, (string) $wallet->bip84_xpub);
+            && ($preparedLineage['wallet_key_fingerprint'] ?? null) === $this->fingerprint($network, (string) $wallet->bip84_xpub, $this->walletScriptType($wallet));
     }
 
     private function lockedCursorAndIndex(WalletSetting $wallet): array
     {
         $network = $this->normalizeNetwork((string) $wallet->network);
-        $fingerprint = $this->fingerprint($network, (string) $wallet->bip84_xpub);
+        $fingerprint = $this->fingerprint($network, (string) $wallet->bip84_xpub, $this->walletScriptType($wallet));
 
         $cursor = WalletKeyCursor::query()
             ->where('user_id', $wallet->user_id)
@@ -191,7 +200,7 @@ class WalletKeyLineage
             $index = (int) $invoice->derivation_index;
 
             if (! array_key_exists($index, $derived)) {
-                $derived[$index] = $this->wallet->deriveAddress((string) $wallet->bip84_xpub, $index, $network);
+                $derived[$index] = $this->wallet->deriveAddress((string) $wallet->bip84_xpub, $index, $network, $this->walletScriptType($wallet));
             }
 
             if ($derived[$index] === $invoice->payment_address) {
