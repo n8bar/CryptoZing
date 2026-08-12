@@ -47,13 +47,14 @@ class WalletSettingsController extends Controller
     public function validateKey(WalletKeyPreviewRequest $request)
     {
         $network = Config::get('wallet.default_network', 'testnet');
-        $xpub = $request->validated()['bip84_xpub'];
+        $validated = $request->validated();
 
         try {
             $address = app(HdWallet::class)->deriveAddress(
-                $xpub,
+                $validated['bip84_xpub'],
                 0,
-                $network
+                $network,
+                $validated['script_type']
             );
         } catch (\Throwable $e) {
             return response()->json([
@@ -80,7 +81,8 @@ class WalletSettingsController extends Controller
             app(HdWallet::class)->deriveAddress(
                 $payload['bip84_xpub'],
                 0,
-                $payload['network']
+                $payload['network'],
+                $payload['script_type']
             );
         } catch (\Throwable $e) {
             return back()
@@ -103,6 +105,7 @@ class WalletSettingsController extends Controller
         $wallet = $user->walletSetting()->updateOrCreate(['user_id' => $user->id], [
             'network' => $payload['network'],
             'bip84_xpub' => $payload['bip84_xpub'],
+            'script_type' => $payload['script_type'],
             'onboarded_at' => now(),
         ]);
 
@@ -169,7 +172,8 @@ class WalletSettingsController extends Controller
             app(HdWallet::class)->deriveAddress(
                 $payload['bip84_xpub'],
                 0,
-                $payload['network']
+                $payload['network'],
+                $payload['script_type']
             );
         } catch (\Throwable $e) {
             return back()
@@ -257,7 +261,9 @@ class WalletSettingsController extends Controller
         }
 
         return $lineage->normalizeNetwork((string) $existingWallet->network) !== $lineage->normalizeNetwork((string) ($payload['network'] ?? ''))
-            || $lineage->normalizeXpub((string) $existingWallet->bip84_xpub) !== $lineage->normalizeXpub((string) ($payload['bip84_xpub'] ?? ''));
+            || $lineage->normalizeXpub((string) $existingWallet->bip84_xpub) !== $lineage->normalizeXpub((string) ($payload['bip84_xpub'] ?? ''))
+            // Same key under a different script type is a different address chain — a repoint.
+            || ($existingWallet->script_type ?? 'bip84') !== ($payload['script_type'] ?? 'bip84');
     }
 
     private function logDedicatedGuidanceSave(
