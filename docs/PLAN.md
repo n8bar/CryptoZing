@@ -17,8 +17,8 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 ## Current
 - Active milestone:
   - **MS20 - Mainnet Cutover & Alpha Gate** — in progress; content-publish gate cleared by "How to Receive Bitcoin".
-- Status: `MS20 Phase 2 (Production Hosting) agent work complete — app live at the private hostname; remaining: operator eyes-on items (§5.6/§5.7, §6.2.2) and two apex-worded exit criteria pending review`
-- Next action: Work [`docs/strategies/20.2_PRODUCTION_HOSTING.md`](strategies/20.2_PRODUCTION_HOSTING.md) — §1 site split (agent, parallel) and [User] server provisioning per the §2.2.7 record.
+- Status: `MS20 Phase 2 complete — production live at the private hostname. Phase 3 (Mainnet Environment & Wallets) next; gated on operator wallets (20.3 §1)`
+- Next action: Work [`docs/strategies/x20.2_PRODUCTION_HOSTING.md`](strategies/x20.2_PRODUCTION_HOSTING.md) — §1 site split (agent, parallel) and [User] server provisioning per the §2.2.7 record.
 - Most recently completed milestone doc: [`docs/milestones/x19_OB_HARDENING_OPS.md`](milestones/x19_OB_HARDENING_OPS.md)
 
 ## Published Release Target

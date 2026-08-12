@@ -32,7 +32,7 @@ _(Phase strategy docs to be written when this milestone becomes active.)_
 Carried items (fold into phase docs when active):
 - [ ] [#81](https://github.com/n8bar/CryptoZing/issues/81) Re-run mail stress testing when the mailer service is upgraded or switched — likely lands at or after the production mail cutover. Deferred-test list in [`x19.1_NOTIFICATION_COVERAGE_AUDIT.md`](../strategies/x19.1_NOTIFICATION_COVERAGE_AUDIT.md) §6.
 - [ ] Donation env vars set in production at deploy: `DONATION_WALLET_XPUB` (mainnet swap tracked in MS20), `DONATION_NOTIFY_EMAIL`, `DONATION_MAX_UNPAID_ADDRESSES`. See [`x19.8_MICRO_MONETIZE.md`](../strategies/x19.8_MICRO_MONETIZE.md) §1.
-- [ ] Retire GitHub Pages at cutover, once the site container serves `/learn/*` from the production box. Eleventy moves with the content repo in MS20 Phase 2 per [`20.2_PRODUCTION_HOSTING.md`](../strategies/20.2_PRODUCTION_HOSTING.md) §4 and stays as that repo's build.
+- [ ] Retire GitHub Pages at cutover, once the site container serves `/learn/*` from the production box. Eleventy moves with the content repo in MS20 Phase 2 per [`x20.2_PRODUCTION_HOSTING.md`](../strategies/x20.2_PRODUCTION_HOSTING.md) §4 and stays as that repo's build.
 
 ## Exit Criteria
 _(To be detailed when active.)_
