@@ -1,5 +1,5 @@
 # PLAN
-_Last updated: 2026-08-07_
+_Last updated: 2026-08-11_
 
 This is the human-facing execution dashboard for open-beta work.
 
@@ -18,7 +18,7 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 - Active milestone:
   - **MS20 - Mainnet Cutover & Alpha Gate** — in progress; content-publish gate cleared by "How to Receive Bitcoin".
 - Status: `MS20 Phase 2 complete — production live at the private hostname. Phase 3 (Mainnet Environment & Wallets) next; gated on operator wallets (20.3 §1)`
-- Next action: Work [`docs/strategies/x20.2_PRODUCTION_HOSTING.md`](strategies/x20.2_PRODUCTION_HOSTING.md) — §1 site split (agent, parallel) and [User] server provisioning per the §2.2.7 record.
+- Next action: [User] create the mainnet invoice + donation wallets ([`docs/strategies/20.3_MAINNET_ENVIRONMENT_WALLETS.md`](strategies/20.3_MAINNET_ENVIRONMENT_WALLETS.md) §1); everything after in 20.3 is agent work.
 - Most recently completed milestone doc: [`docs/milestones/x19_OB_HARDENING_OPS.md`](milestones/x19_OB_HARDENING_OPS.md)
 
 ## Published Release Target
