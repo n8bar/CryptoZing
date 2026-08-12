@@ -17,8 +17,8 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 ## Current
 - Active milestone:
   - **MS20 - Mainnet Cutover & Alpha Gate** — in progress; content-publish gate cleared by "How to Receive Bitcoin".
-- Status: `MS20 Phase 2 complete — production live at the private hostname. Phase 3 (Taproot Wallet Support) inserted ahead of Mainnet Environment & Wallets (now Phase 4); operator wallets will be Taproot. All future milestone dates slid two weeks.`
-- Next action: [User] confirm 20.3 protocol coverage and approve the strategy/spec delta ([`docs/strategies/20.3_TAPROOT_WALLET_SUPPORT.md`](strategies/20.3_TAPROOT_WALLET_SUPPORT.md) Decisions §1); implementation follows approval.
+- Status: `MS20 Phase 3 (Taproot Wallet Support) in progress — spec and strategy approved; implementation is next.`
+- Next action: [Agent] implement [`docs/strategies/20.3_TAPROOT_WALLET_SUPPORT.md`](strategies/20.3_TAPROOT_WALLET_SUPPORT.md) §2 on `claude/taproot-wallet-support`.
 - Most recently completed milestone doc: [`docs/milestones/x19_OB_HARDENING_OPS.md`](milestones/x19_OB_HARDENING_OPS.md)
 
 ## Published Release Target
