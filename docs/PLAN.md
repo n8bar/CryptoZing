@@ -17,19 +17,19 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 ## Current
 - Active milestone:
   - **MS20 - Mainnet Cutover & Alpha Gate** — in progress; content-publish gate cleared by "How to Receive Bitcoin".
-- Status: `MS20 Phase 2 complete — production live at the private hostname. Phase 3 (Mainnet Environment & Wallets) next; gated on operator wallets (20.3 §1)`
-- Next action: [User] create the mainnet invoice + donation wallets ([`docs/strategies/20.3_MAINNET_ENVIRONMENT_WALLETS.md`](strategies/20.3_MAINNET_ENVIRONMENT_WALLETS.md) §1); everything after in 20.3 is agent work.
+- Status: `MS20 Phase 2 complete — production live at the private hostname. Phase 3 (Taproot Wallet Support) inserted ahead of Mainnet Environment & Wallets (now Phase 4); operator wallets will be Taproot. All future milestone dates slid two weeks.`
+- Next action: [User] confirm 20.3 protocol coverage and approve the strategy/spec delta ([`docs/strategies/20.3_TAPROOT_WALLET_SUPPORT.md`](strategies/20.3_TAPROOT_WALLET_SUPPORT.md) Decisions §1); implementation follows approval.
 - Most recently completed milestone doc: [`docs/milestones/x19_OB_HARDENING_OPS.md`](milestones/x19_OB_HARDENING_OPS.md)
 
 ## Published Release Target
-- **First public release: mid-to-late 2027.** The open beta milestone timeline (MS21, targeting 2026-09-02) covers the open beta. The published release target accounts for post-open-beta work needed before an official first release.
+- **First public release: mid-to-late 2027.** The open beta milestone timeline (MS21, targeting 2026-09-16) covers the open beta. The published release target accounts for post-open-beta work needed before an official first release.
 
 ## Active and Upcoming Milestones
 | Status | ID | Milestone | Short intent | Target | Primary doc |
 |---|---|---|---|---|---|
-| [ ] | 20 | Mainnet Cutover & Alpha Gate | Provision production hosting, go live on mainnet privately (real self-sent payment) with an invite-only alpha access gate, migrate the article site off GitHub Pages, and prove a cutover runbook with backout before the public open beta. | 2026-08-22 | [`docs/milestones/20_MAINNET_CUTOVER_ALPHA_GATE.md`](milestones/20_MAINNET_CUTOVER_ALPHA_GATE.md) |
-| [ ] | 21 | CryptoZing.app Deployment (Open Beta) | Deploy the open beta under `cryptozing.app`, replace the GitHub Pages placeholder at `/` with the live app landing page without breaking the SEO baseline established in MS15, remove temporary mail aliasing, and complete rollout verification. | 2026-09-02 | [`docs/milestones/21_OB_DEPLOYMENT.md`](milestones/21_OB_DEPLOYMENT.md) |
-| [ ] | 22 | Thorough SEO & Marketing Strategies | Post-deploy discovery investment: thorough SEO pass across live app + site surfaces and an ongoing SEO strategy with scheduled tasks in the .ics; marketing strategy. Scope at kickoff. | 2026-09-22 | [`docs/milestones/22_SEO_MARKETING.md`](milestones/22_SEO_MARKETING.md) |
+| [ ] | 20 | Mainnet Cutover & Alpha Gate | Provision production hosting, go live on mainnet privately (real self-sent payment) with an invite-only alpha access gate, migrate the article site off GitHub Pages, and prove a cutover runbook with backout before the public open beta. | 2026-09-05 | [`docs/milestones/20_MAINNET_CUTOVER_ALPHA_GATE.md`](milestones/20_MAINNET_CUTOVER_ALPHA_GATE.md) |
+| [ ] | 21 | CryptoZing.app Deployment (Open Beta) | Deploy the open beta under `cryptozing.app`, replace the GitHub Pages placeholder at `/` with the live app landing page without breaking the SEO baseline established in MS15, remove temporary mail aliasing, and complete rollout verification. | 2026-09-16 | [`docs/milestones/21_OB_DEPLOYMENT.md`](milestones/21_OB_DEPLOYMENT.md) |
+| [ ] | 22 | Thorough SEO & Marketing Strategies | Post-deploy discovery investment: thorough SEO pass across live app + site surfaces and an ongoing SEO strategy with scheduled tasks in the .ics; marketing strategy. Scope at kickoff. | 2026-10-06 | [`docs/milestones/22_SEO_MARKETING.md`](milestones/22_SEO_MARKETING.md) |
 
 ## Completed Milestones
 | Status | ID | Milestone | Short intent | Primary doc |

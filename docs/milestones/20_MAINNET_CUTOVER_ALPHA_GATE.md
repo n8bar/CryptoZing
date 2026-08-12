@@ -19,11 +19,14 @@ New registrations land pending and cannot log in until approved from the support
 ### [x] Phase 2 — Production Hosting
 Provision the production server and deploy the app to it, running private, on the same Docker recipe published for self-hosters. The article site moves off GitHub Pages into its own repo and container, so the app image carries no CryptoZing public content. Strategy: [`x20.2_PRODUCTION_HOSTING.md`](../strategies/x20.2_PRODUCTION_HOSTING.md).
 
-### [ ] Phase 3 — Mainnet Environment & Wallets
-Clean mainnet baseline on the deployed box, with separate watch-only invoice and donation xpubs (never one shared key — MS14) verified before any funds move. Needs a mainnet donation wallet from the operator before it can start. Carries the mainnet donation-xpub swap from [`x19.8_MICRO_MONETIZE.md`](../strategies/x19.8_MICRO_MONETIZE.md) §1. Strategy: [`20.3_MAINNET_ENVIRONMENT_WALLETS.md`](../strategies/20.3_MAINNET_ENVIRONMENT_WALLETS.md).
+### [ ] Phase 3 — Taproot Wallet Support
+The watch-only wallet layer gains Taproot (BIP86) receive support — script-type-aware key onboarding and bech32m derivation — so the operator wallets and merchant onboarding are Taproot-capable at cutover, not retrofitted after. Spec-first; code rides a PR. Strategy: [`20.3_TAPROOT_WALLET_SUPPORT.md`](../strategies/20.3_TAPROOT_WALLET_SUPPORT.md).
 
-### [ ] Phase 4 — Live Mainnet Validation & Backout
-Real self-sent mainnet payments end to end, correction tooling against live data, and mail sanity on mainnet. Leaves behind the cutover runbook and halt procedure MS21 executes. Strategy: [`20.4_LIVE_MAINNET_VALIDATION_BACKOUT.md`](../strategies/20.4_LIVE_MAINNET_VALIDATION_BACKOUT.md).
+### [ ] Phase 4 — Mainnet Environment & Wallets
+Clean mainnet baseline on the deployed box, with separate watch-only invoice and donation xpubs (never one shared key — MS14) verified before any funds move. Needs a mainnet donation wallet from the operator before it can start. Carries the mainnet donation-xpub swap from [`x19.8_MICRO_MONETIZE.md`](../strategies/x19.8_MICRO_MONETIZE.md) §1. Strategy: [`20.4_MAINNET_ENVIRONMENT_WALLETS.md`](../strategies/20.4_MAINNET_ENVIRONMENT_WALLETS.md).
+
+### [ ] Phase 5 — Live Mainnet Validation & Backout
+Real self-sent mainnet payments end to end, correction tooling against live data, and mail sanity on mainnet. Leaves behind the cutover runbook and halt procedure MS21 executes. Strategy: [`20.5_LIVE_MAINNET_VALIDATION_BACKOUT.md`](../strategies/20.5_LIVE_MAINNET_VALIDATION_BACKOUT.md).
 
 ## Exit Criteria
 - [ ] Content promises catalog checked — no work in this milestone introduced or violated a [`docs/CONTENT_PROMISES.md`](../CONTENT_PROMISES.md) entry.
