@@ -17,8 +17,8 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 ## Current
 - Active milestone:
   - **MS20 - Mainnet Cutover & Alpha Gate** — in progress; content-publish gate cleared by "How to Receive Bitcoin".
-- Status: `MS20 Phase 3 (Taproot Wallet Support) in progress — spec and strategy approved; implementation is next.`
-- Next action: [Agent] implement [`docs/strategies/20.3_TAPROOT_WALLET_SUPPORT.md`](strategies/20.3_TAPROOT_WALLET_SUPPORT.md) §2 on `claude/taproot-wallet-support`.
+- Status: `MS20 Phase 3 (Taproot Wallet Support) in progress — §2 implemented (PR #143), local suite green; Testnet4 end-to-end proof next.`
+- Next action: [Agent] run [`docs/strategies/20.3_TAPROOT_WALLET_SUPPORT.md`](strategies/20.3_TAPROOT_WALLET_SUPPORT.md) §3.2–§3.3 on the branch; PR [#143](https://github.com/n8bar/CryptoZing/pull/143) merges after the PR Tests gate and §3 completes.
 - Most recently completed milestone doc: [`docs/milestones/x19_OB_HARDENING_OPS.md`](milestones/x19_OB_HARDENING_OPS.md)
 
 ## Published Release Target
