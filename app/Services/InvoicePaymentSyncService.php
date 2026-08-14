@@ -14,6 +14,7 @@ class InvoicePaymentSyncService
         private readonly InvoicePaymentDetector $detector,
         private readonly InvoiceAlertService $alerts,
         private readonly UnsupportedConfigurationEvidenceService $unsupportedEvidence,
+        private readonly ConfirmationPolicy $confirmationPolicy,
     ) {
     }
 
@@ -113,7 +114,9 @@ class InvoicePaymentSyncService
             if (! $usdRate && $invoice->btc_rate) {
                 $usdRate = (float) $invoice->btc_rate;
             }
-            $requiredConfirmations = (int) config('blockchain.confirmations_required', 1);
+            $requiredConfirmations = $this->confirmationPolicy->requiredConfirmations(
+                $invoice->amount_usd === null ? null : (float) $invoice->amount_usd
+            );
             $liveTxids = collect($results)->pluck('txid')->filter()->all();
 
             $droppedCount = InvoicePayment::query()

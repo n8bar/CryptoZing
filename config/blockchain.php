@@ -1,7 +1,8 @@
 <?php
 
 return [
-    'confirmations_required' => (int) env('BLOCKCHAIN_CONFIRMATIONS_REQUIRED', 1),
+    // "maxUsdExclusive:confirmations" pairs, "*" is the catch-all top tier.
+    'confirmation_tiers' => env('BLOCKCHAIN_CONFIRMATION_TIERS', \App\Services\ConfirmationPolicy::DEFAULT_TIERS),
     'getting_started_sync' => [
         'enabled' => (bool) env('GETTING_STARTED_SYNC_INVOICE_PAYMENTS', true),
         'throttle_seconds' => (int) env('GETTING_STARTED_SYNC_THROTTLE_SECONDS', 60),

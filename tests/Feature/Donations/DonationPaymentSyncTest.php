@@ -33,7 +33,7 @@ class DonationPaymentSyncTest extends TestCase
         ]);
     }
 
-    public function test_seen_payment_marks_donation_paid_and_queues_one_operator_mail(): void
+    public function test_confirmed_payment_marks_donation_paid_and_queues_one_operator_mail(): void
     {
         $paidDonation = $this->makePendingDonation('tb1qdonation0', 0);
         $untouchedDonation = $this->makePendingDonation('tb1qdonation1', 1);
@@ -44,7 +44,7 @@ class DonationPaymentSyncTest extends TestCase
                     'tb1qdonation0' => [
                         [
                             'txid' => 'donation-tx-1',
-                            'status' => ['confirmed' => false],
+                            'status' => ['confirmed' => true, 'block_height' => 250000],
                             'vout' => [
                                 ['scriptpubkey_address' => 'tb1qdonation0', 'value' => 50000],
                             ],
@@ -52,6 +52,7 @@ class DonationPaymentSyncTest extends TestCase
                     ],
                     'tb1qdonation1' => [],
                 ]);
+            $mock->shouldReceive('tipHeight')->andReturn(250000);
         });
 
         $this->artisan('wallet:watch-payments')->assertSuccessful();
@@ -76,7 +77,68 @@ class DonationPaymentSyncTest extends TestCase
         Mail::assertQueuedCount(1);
     }
 
-    public function test_multiple_transactions_to_one_address_are_summed(): void
+    public function test_unconfirmed_payment_leaves_donation_pending_with_no_mail(): void
+    {
+        $donation = $this->makePendingDonation('tb1qdonation0', 0);
+
+        $this->mock(MempoolClient::class, function ($mock) {
+            $mock->shouldReceive('transactionsForAddresses')
+                ->andReturn([
+                    'tb1qdonation0' => [
+                        [
+                            'txid' => 'donation-tx-1',
+                            'status' => ['confirmed' => false],
+                            'vout' => [
+                                ['scriptpubkey_address' => 'tb1qdonation0', 'value' => 50000],
+                            ],
+                        ],
+                    ],
+                ]);
+            $mock->shouldReceive('tipHeight')->andReturn(250000);
+        });
+
+        $this->artisan('wallet:watch-payments')->assertSuccessful();
+
+        $this->assertDatabaseHas('donations', [
+            'id' => $donation->id,
+            'status' => 'pending',
+            'txid' => null,
+        ]);
+        Mail::assertNothingQueued();
+    }
+
+    public function test_confirmed_payment_below_a_raised_fewest_tier_stays_pending(): void
+    {
+        config()->set('blockchain.confirmation_tiers', '*:2');
+        app()->forgetInstance(\App\Services\ConfirmationPolicy::class);
+
+        $donation = $this->makePendingDonation('tb1qdonation0', 0);
+
+        $this->mock(MempoolClient::class, function ($mock) {
+            $mock->shouldReceive('transactionsForAddresses')
+                ->andReturn([
+                    'tb1qdonation0' => [
+                        [
+                            'txid' => 'donation-tx-1',
+                            'status' => ['confirmed' => true, 'block_height' => 250000],
+                            'vout' => [
+                                ['scriptpubkey_address' => 'tb1qdonation0', 'value' => 50000],
+                            ],
+                        ],
+                    ],
+                ]);
+            $mock->shouldReceive('tipHeight')->andReturn(250000);
+        });
+
+        $this->artisan('wallet:watch-payments')->assertSuccessful();
+
+        $this->assertDatabaseHas('donations', [
+            'id' => $donation->id,
+            'status' => 'pending',
+        ]);
+    }
+
+    public function test_only_confirmed_transactions_count_toward_the_paid_total(): void
     {
         $donation = $this->makePendingDonation('tb1qdonation0', 0);
 
@@ -93,7 +155,7 @@ class DonationPaymentSyncTest extends TestCase
                         ],
                         [
                             'txid' => 'donation-tx-1',
-                            'status' => ['confirmed' => true],
+                            'status' => ['confirmed' => true, 'block_height' => 250000],
                             'vout' => [
                                 ['scriptpubkey_address' => 'tb1qdonation0', 'value' => 30000],
                                 ['scriptpubkey_address' => 'tb1qothers', 'value' => 99999],
@@ -101,6 +163,7 @@ class DonationPaymentSyncTest extends TestCase
                         ],
                     ],
                 ]);
+            $mock->shouldReceive('tipHeight')->andReturn(250001);
         });
 
         $this->artisan('wallet:watch-payments')->assertSuccessful();
@@ -108,7 +171,7 @@ class DonationPaymentSyncTest extends TestCase
         $this->assertDatabaseHas('donations', [
             'id' => $donation->id,
             'status' => 'paid',
-            'sats_received' => 50000,
+            'sats_received' => 30000,
         ]);
     }
 
@@ -143,13 +206,14 @@ class DonationPaymentSyncTest extends TestCase
                     'tb1qdonation0' => [
                         [
                             'txid' => 'donation-tx-1',
-                            'status' => ['confirmed' => false],
+                            'status' => ['confirmed' => true, 'block_height' => 250000],
                             'vout' => [
                                 ['scriptpubkey_address' => 'tb1qdonation0', 'value' => 50000],
                             ],
                         ],
                     ],
                 ]);
+            $mock->shouldReceive('tipHeight')->andReturn(250000);
         });
 
         $this->artisan('wallet:watch-payments')->assertSuccessful();

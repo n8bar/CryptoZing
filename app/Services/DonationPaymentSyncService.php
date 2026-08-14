@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\Mail;
 class DonationPaymentSyncService
 {
     public function __construct(
-        private readonly MempoolClient $mempoolClient
+        private readonly MempoolClient $mempoolClient,
+        private readonly ConfirmationPolicy $confirmationPolicy,
     ) {
     }
 
@@ -38,8 +39,15 @@ class DonationPaymentSyncService
                 $donations->pluck('address')->all()
             );
 
+            $tipHeight = null;
+
             foreach ($donations as $donation) {
-                $seen = $this->seenPaymentTotal($transactions[$donation->address] ?? [], $donation->address);
+                $seen = $this->confirmedPaymentTotal(
+                    $transactions[$donation->address] ?? [],
+                    $donation->address,
+                    (string) $network,
+                    $tipHeight
+                );
                 if (! $seen) {
                     continue;
                 }
@@ -93,18 +101,43 @@ class DonationPaymentSyncService
     }
 
     /**
-     * Total sats across every transaction paying this address, with the txid
-     * of the first paying tx in the response.
+     * Total sats across every sufficiently confirmed transaction paying this
+     * address, with the txid of the first qualifying tx in the response.
+     * Donations confirm at the fewest-confirmations tier (spec:
+     * PARTIAL_PAYMENTS+CONFIRMATIONS.md §Confirmation Gate).
      *
      * @param  array<int, mixed>  $transactions
      * @return array{txid: string, sats: int}|null
      */
-    private function seenPaymentTotal(array $transactions, string $address): ?array
-    {
+    private function confirmedPaymentTotal(
+        array $transactions,
+        string $address,
+        string $network,
+        ?int &$tipHeight
+    ): ?array {
+        $required = $this->confirmationPolicy->minimumRequired();
         $total = 0;
         $txid = null;
 
         foreach ($transactions as $tx) {
+            $status = $tx['status'] ?? [];
+            if (! ($status['confirmed'] ?? false)) {
+                continue;
+            }
+
+            $blockHeight = $status['block_height'] ?? null;
+            $confirmations = 1;
+            if ($blockHeight) {
+                $tipHeight ??= $this->mempoolClient->tipHeight($network);
+                if ($tipHeight && $tipHeight >= $blockHeight) {
+                    $confirmations = $tipHeight - $blockHeight + 1;
+                }
+            }
+
+            if ($confirmations < $required) {
+                continue;
+            }
+
             $sats = 0;
             foreach ($tx['vout'] ?? [] as $output) {
                 if (($output['scriptpubkey_address'] ?? null) === $address) {

@@ -7,6 +7,7 @@ use App\Models\Invoice;
 use App\Policies\ClientPolicy;
 use App\Policies\InvoicePolicy;
 use App\Services\Blockchain\MempoolClient;
+use App\Services\ConfirmationPolicy;
 use App\Services\MailAlias;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -20,6 +21,12 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->singleton(MempoolClient::class, function ($app) {
             return new MempoolClient(config('blockchain'));
+        });
+
+        $this->app->singleton(ConfirmationPolicy::class, function ($app) {
+            return new ConfirmationPolicy(
+                (string) $app['config']->get('blockchain.confirmation_tiers', ConfirmationPolicy::DEFAULT_TIERS)
+            );
         });
 
         $this->app->singleton(MailAlias::class, function ($app) {
