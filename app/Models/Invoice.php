@@ -448,7 +448,7 @@ class Invoice extends Model
 
                 if (!$this->paid_at) {
                     // The confirmation that crossed the total into paid — the time
-                    // everyone finally agreed on settlement. See PARTIAL_PAYMENTS.md.
+                    // everyone finally agreed on settlement. See PARTIAL_PAYMENTS_CONFIRMATIONS.md.
                     $this->paid_at = $reference ?? $this->settlementCrossingTime($expectedUsd) ?? now();
                 }
             } elseif (!in_array($this->status, ['draft','void'], true)) {

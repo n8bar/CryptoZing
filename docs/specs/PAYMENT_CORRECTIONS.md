@@ -10,7 +10,7 @@ This doc is canonical for:
 - UI/authorization rules for payment correction actions
 - the boundary between detected-payment interpretation tools and manual adjustment entries
 
-This doc complements [`docs/specs/PARTIAL_PAYMENTS.md`](PARTIAL_PAYMENTS.md). Manual adjustments remain a separate ledger feature; this spec covers correction of detected on-chain rows that should no longer count toward an invoice.
+This doc complements [`docs/specs/PARTIAL_PAYMENTS_CONFIRMATIONS.md`](PARTIAL_PAYMENTS_CONFIRMATIONS.md). Manual adjustments remain a separate ledger feature; this spec covers correction of detected on-chain rows that should no longer count toward an invoice.
 
 Wrong-invoice cases include stale-address reuse: an old valid CryptoZing invoice address may receive later funds that were intended for a different invoice or business purpose. That is an invoice-attribution problem, not unsupported-wallet evidence by itself.
 

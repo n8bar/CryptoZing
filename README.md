@@ -216,7 +216,7 @@ docker/      Container setup
 - Post-payment onboarding spec: [`docs/specs/POST_PAYMENT_ONBOARDING.md`](docs/specs/POST_PAYMENT_ONBOARDING.md)
 - Notifications spec: [`docs/specs/NOTIFICATIONS.md`](docs/specs/NOTIFICATIONS.md)
 - Payment corrections spec: [`docs/specs/PAYMENT_CORRECTIONS.md`](docs/specs/PAYMENT_CORRECTIONS.md)
-- Partial payments spec: [`docs/specs/PARTIAL_PAYMENTS.md`](docs/specs/PARTIAL_PAYMENTS.md)
+- Partial payments spec: [`docs/specs/PARTIAL_PAYMENTS_CONFIRMATIONS.md`](docs/specs/PARTIAL_PAYMENTS_CONFIRMATIONS.md)
 - Donations spec: [`docs/specs/DONATIONS.md`](docs/specs/DONATIONS.md)
 
 For coding conventions, workflow expectations, and environment reminders, see [`AGENTS.md`](AGENTS.md).
