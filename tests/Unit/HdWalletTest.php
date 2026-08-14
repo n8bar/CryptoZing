@@ -97,4 +97,15 @@ class HdWalletTest extends TestCase
         $wallet = new HdWallet();
         $wallet->deriveAddress(self::TESTNET_VPUB, 0, 'mainnet');
     }
+
+    public function test_rejects_private_version_key_even_though_upstream_gates_block_it(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Unsupported xpub format');
+
+        // BIP32 spec test-vector root key; the helper must refuse private
+        // version bytes outright rather than neuter them.
+        $wallet = new HdWallet();
+        $wallet->deriveAddress('xprv9s21ZrQH143K3QTDL4LXw2F7HEK3wJUD2nW2nRk4stbPy6cq3jPPqjiChkVvvNKmPGJxWUtg6LnF5kejMRNNU3TGtRBeJgk33yuGBxrMPHi', 0, 'mainnet');
+    }
 }

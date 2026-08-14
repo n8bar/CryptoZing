@@ -92,4 +92,16 @@ class WalletKeyInputTest extends TestCase
 
         WalletKeyInput::parse('tr(xprv9s21ZrQH143K3QTDL4LXw2F7HEK3wJUD2nW2nRk4stbPy6cq3jPPqjiChkVvvNKmPGJxWUtg6LnF5kejMRNNU3TGtRBeJgk33yuGBxrMPHi/0/*)');
     }
+
+    public function test_slip132_private_prefixes_are_rejected_as_signing_material(): void
+    {
+        foreach (['yprv', 'uprv', 'Yprv', 'Uprv', 'Zprv', 'Vprv'] as $prefix) {
+            try {
+                WalletKeyInput::parse($prefix . '9s21ZrQH143K3QTDL4LXw2F7HEK3wJUD2nW2nRk4stbPy6cq3jPPqjiChkVvvNKmPGJxWUtg6LnF5kejMRNNU3TGtRBeJgk33yuGBxrMPHi');
+                $this->fail("{$prefix} was not rejected");
+            } catch (InvalidArgumentException $e) {
+                $this->assertSame('signing-material', $e->getMessage(), $prefix);
+            }
+        }
+    }
 }

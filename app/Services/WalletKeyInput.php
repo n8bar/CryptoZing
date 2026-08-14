@@ -23,7 +23,7 @@ class WalletKeyInput
     {
         $trimmed = trim($raw);
 
-        if (preg_match('/[xtzv]prv[A-Za-z0-9]+/', $trimmed)) {
+        if (preg_match('/[xyztuvYZUV]prv[A-Za-z0-9]+/', $trimmed)) {
             throw new InvalidArgumentException('signing-material');
         }
         if (preg_match('/^[a-z]+( +[a-z]+){11,}$/i', $trimmed)) {

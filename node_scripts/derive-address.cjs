@@ -47,9 +47,9 @@ const versionFromKey = (key) => {
 };
 
 const versionEntry = (version) => {
-  return Object.values(VERSIONS).find(
-    (entry) => entry.public === version || entry.private === version
-  );
+  // Public version bytes only: a private-version key (xprv/tprv/…) must never
+  // be usable here, even though the surrounding app already rejects it.
+  return Object.values(VERSIONS).find((entry) => entry.public === version);
 };
 
 const NETWORK_ALIASES = {
