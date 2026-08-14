@@ -26,7 +26,7 @@ class DonationAllocationTest extends TestCase
     {
         $this->mock(HdWallet::class, function ($mock) {
             $mock->shouldReceive('deriveAddress')
-                ->with('tpubDonationTest', 0, 'testnet4')
+                ->with('tpubDonationTest', 0, 'testnet4', 'bip84')
                 ->once()
                 ->andReturn('tb1qdonation0');
         });
@@ -69,11 +69,11 @@ class DonationAllocationTest extends TestCase
     {
         $this->mock(HdWallet::class, function ($mock) {
             $mock->shouldReceive('deriveAddress')
-                ->with('tpubDonationTest', 0, 'testnet4')
+                ->with('tpubDonationTest', 0, 'testnet4', 'bip84')
                 ->once()
                 ->andReturn('tb1qdonation0');
             $mock->shouldReceive('deriveAddress')
-                ->with('tpubDonationTest', 1, 'testnet4')
+                ->with('tpubDonationTest', 1, 'testnet4', 'bip84')
                 ->once()
                 ->andReturn('tb1qdonation1');
         });
@@ -101,7 +101,7 @@ class DonationAllocationTest extends TestCase
 
         $this->mock(HdWallet::class, function ($mock) {
             $mock->shouldReceive('deriveAddress')
-                ->with('tpubDonationTest', 0, 'testnet4')
+                ->with('tpubDonationTest', 0, 'testnet4', 'bip84')
                 ->once()
                 ->andReturn('tb1qnet0');
         });

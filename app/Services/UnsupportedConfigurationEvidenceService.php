@@ -106,7 +106,7 @@ class UnsupportedConfigurationEvidenceService
         }
 
         $currentNetwork = $this->lineage->normalizeNetwork((string) $wallet->network);
-        $currentFingerprint = $this->lineage->fingerprint($currentNetwork, (string) $wallet->bip84_xpub);
+        $currentFingerprint = $this->lineage->fingerprint($currentNetwork, (string) $wallet->bip84_xpub, (string) ($wallet->script_type ?? 'bip84'));
 
         if ($currentNetwork !== $invoice->wallet_network || $currentFingerprint !== $invoice->wallet_key_fingerprint) {
             return;

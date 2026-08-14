@@ -16,6 +16,7 @@ Alpine.data('walletValidation', (config = {}) => ({
     expectedPrefix: config.expectedPrefix || '',
     hasServerError: Boolean(config.hasServerError),
     lastValidatedValue: null,
+    scriptType: config.scriptType || 'bip84',
 
     init() {
         if (this.$refs.input) {
@@ -47,9 +48,39 @@ Alpine.data('walletValidation', (config = {}) => ({
         return this.normalizeValue(this.value) !== this.normalizeValue(this.initialValue);
     },
 
+    // A key that states its own script type (SLIP-132 prefix or descriptor
+    // wrapper) never shows the choice; only bare xpub/tpub keys ask.
+    statedScriptType() {
+        const cleaned = this.cleanedValue();
+        if (/^tr\(/i.test(cleaned)) {
+            return 'bip86';
+        }
+        if (/^wpkh\(/i.test(cleaned) || /^(zpub|vpub)/.test(cleaned)) {
+            return 'bip84';
+        }
+        return null;
+    },
+
+    showsScriptTypeChoice() {
+        const cleaned = this.cleanedValue();
+        return /^(xpub|tpub)/.test(cleaned) && !cleaned.includes('(');
+    },
+
+    handleScriptTypeChange() {
+        this.lastValidatedValue = null;
+        if (this.cleanedValue()) {
+            this.validate({ force: true });
+        }
+    },
+
     handleInput() {
         this.hasServerError = false;
         this.lastValidatedValue = null;
+
+        const stated = this.statedScriptType();
+        if (stated) {
+            this.scriptType = stated;
+        }
 
         if (this.status !== 'idle') {
             this.status = 'idle';
@@ -104,7 +135,7 @@ Alpine.data('walletValidation', (config = {}) => ({
                     'Accept': 'application/json',
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
                 },
-                body: JSON.stringify({ bip84_xpub: cleaned }),
+                body: JSON.stringify({ bip84_xpub: cleaned, script_type: this.scriptType }),
             });
 
             let payload = {};

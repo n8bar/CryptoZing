@@ -13,7 +13,10 @@
     @php
         $oldXpub = old('bip84_xpub');
         $xpubValue = ($oldXpub !== null && $oldXpub !== '') ? $oldXpub : (optional($wallet)->bip84_xpub ?? '');
+        $scriptTypeValue = old('script_type', optional($wallet)->script_type ?? 'bip84');
         $prefixExamples = $defaultNetwork === 'mainnet' ? 'xpub or zpub' : 'vpub or tpub';
+        $segwitAddressPrefix = $defaultNetwork === 'mainnet' ? 'bc1q' : 'tb1q';
+        $taprootAddressPrefix = $defaultNetwork === 'mainnet' ? 'bc1p' : 'tb1p';
         $isTestnet = $defaultNetwork !== 'mainnet';
         $isGettingStarted = request()->boolean('getting_started');
         $isGettingStartedReplay = (bool) ($isGettingStartedReplay ?? false);
@@ -77,6 +80,7 @@
                               x-data="walletValidation({
                                   validationUrl: '{{ route('wallet.settings.validate') }}',
                                   initialValue: @js($xpubValue),
+                                  scriptType: @js($scriptTypeValue),
                                   expectedPrefix: @js($prefixExamples),
                                   hasServerError: @js($errors->has('bip84_xpub')),
                               })"
@@ -163,6 +167,32 @@
                                     <div x-show="status === 'error'" class="text-red-600" role="alert" x-text="message"></div>
                                     <x-input-error class="text-xs text-red-600" :messages="$errors->get('bip84_xpub')" />
                                 </div>
+
+                                <fieldset class="mt-2 rounded-md border border-slate-200 px-3 py-2 dark:border-slate-600"
+                                          x-show="showsScriptTypeChoice()"
+                                          @if (! preg_match('/^(xpub|tpub)/', $xpubValue) || str_contains($xpubValue, '(')) style="display: none;" @endif>
+                                    <legend class="px-1 text-xs font-medium text-slate-700 dark:text-slate-300">{{ __('Address type for this key') }}</legend>
+                                    <p class="text-xs text-gray-500">{{ __("This key doesn't say which address format your wallet uses. Pick the one your wallet shows.") }}</p>
+                                    <div class="mt-2 space-y-1 text-sm text-slate-800 dark:text-slate-200">
+                                        <label class="flex items-center gap-2">
+                                            <input type="radio" name="script_type" value="bip84"
+                                                   class="border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                                                   x-model="scriptType"
+                                                   @change="handleScriptTypeChange"
+                                                   @checked($scriptTypeValue !== 'bip86')>
+                                            <span>{{ __('Native SegWit — addresses start with') }} <span class="font-mono">{{ $segwitAddressPrefix }}</span></span>
+                                        </label>
+                                        <label class="flex items-center gap-2">
+                                            <input type="radio" name="script_type" value="bip86"
+                                                   class="border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                                                   x-model="scriptType"
+                                                   @change="handleScriptTypeChange"
+                                                   @checked($scriptTypeValue === 'bip86')>
+                                            <span>{{ __('Taproot — addresses start with') }} <span class="font-mono">{{ $taprootAddressPrefix }}</span></span>
+                                        </label>
+                                    </div>
+                                    <x-input-error class="mt-1 text-xs text-red-600" :messages="$errors->get('script_type')" />
+                                </fieldset>
                             </div>
 
                             @if ($wallet)

@@ -5,13 +5,19 @@ const bitcoin = require('bitcoinjs-lib');
 const bs58check = require('bs58check').default;
 
 const usage = () => {
-  console.error('Usage: derive-address <xpub> <index> <network>');
+  console.error('Usage: derive-address <xpub> <index> <network> [scriptType]');
   process.exit(1);
 };
 
-const [, , xpub, indexArg, networkArg = 'testnet'] = process.argv;
+const [, , xpub, indexArg, networkArg = 'testnet', scriptTypeArg = 'bip84'] = process.argv;
 if (!xpub || typeof indexArg === 'undefined') {
   usage();
+}
+
+const scriptType = scriptTypeArg.toString().trim().toLowerCase();
+if (!['bip84', 'bip86'].includes(scriptType)) {
+  console.error(`Unknown script type: ${scriptTypeArg}`);
+  process.exit(1);
 }
 
 const index = Number.parseInt(indexArg, 10);
@@ -24,11 +30,11 @@ const bip32 = bip32Factory.BIP32Factory(tinysecp);
 
 const VERSIONS = {
   // P2WPKH (BIP84) slip-132
-  zpub: { public: 0x04b24746, private: 0x04b2430c, network: 'mainnet' },
-  vpub: { public: 0x045f1cf6, private: 0x045f18bc, network: 'testnet' },
-  // Default BIP32 (helps older exports)
-  xpub: { public: 0x0488b21e, private: 0x0488ade4, network: 'mainnet' },
-  tpub: { public: 0x043587cf, private: 0x04358394, network: 'testnet' },
+  zpub: { public: 0x04b24746, private: 0x04b2430c, network: 'mainnet', slip132: true },
+  vpub: { public: 0x045f1cf6, private: 0x045f18bc, network: 'testnet', slip132: true },
+  // Default BIP32 (helps older exports; also BIP86 account keys)
+  xpub: { public: 0x0488b21e, private: 0x0488ade4, network: 'mainnet', slip132: false },
+  tpub: { public: 0x043587cf, private: 0x04358394, network: 'testnet', slip132: false },
 };
 
 const versionFromKey = (key) => {
@@ -41,9 +47,9 @@ const versionFromKey = (key) => {
 };
 
 const versionEntry = (version) => {
-  return Object.values(VERSIONS).find(
-    (entry) => entry.public === version || entry.private === version
-  );
+  // Public version bytes only: a private-version key (xprv/tprv/…) must never
+  // be usable here, even though the surrounding app already rejects it.
+  return Object.values(VERSIONS).find((entry) => entry.public === version);
 };
 
 const NETWORK_ALIASES = {
@@ -91,10 +97,23 @@ try {
     },
   };
 
+  // SLIP-132 prefixes state BIP84; they cannot carry a Taproot account key.
+  if (scriptType === 'bip86' && entry.slip132) {
+    throw new Error('Script type conflicts with key format.');
+  }
+
   const node = bip32.fromBase58(xpub, network);
-  // Enforce external chain (0) per BIP84; invoices use m/84'/coin_type'/0'/0/index.
+  // Enforce external chain (0); invoices use m/{84'|86'}/coin_type'/0'/0/index.
   const child = node.derive(0).derive(index);
-  const { address } = bitcoin.payments.p2wpkh({ pubkey: child.publicKey, network: base });
+  let address;
+  if (scriptType === 'bip86') {
+    bitcoin.initEccLib(tinysecp);
+    // x-only internal key per BIP86: drop the parity byte, key-path-only tweak.
+    const internalPubkey = child.publicKey.slice(1, 33);
+    ({ address } = bitcoin.payments.p2tr({ internalPubkey, network: base }));
+  } else {
+    ({ address } = bitcoin.payments.p2wpkh({ pubkey: child.publicKey, network: base }));
+  }
   if (!address) {
     throw new Error('Failed to derive address');
   }

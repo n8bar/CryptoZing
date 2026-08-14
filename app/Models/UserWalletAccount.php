@@ -16,6 +16,7 @@ class UserWalletAccount extends Model
         'label',
         'network',
         'bip84_xpub',
+        'script_type',
         'active',
     ];
 
