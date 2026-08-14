@@ -62,6 +62,9 @@
 - Codex owns the terminal tooling: you drive Sail, git, and related commands—assume the user doesn’t have a shell open unless they say otherwise.
 - For `.cybercreek/` changelog/findings handling, follow `.cybercreek/AGENTS_LOCAL.md`.
 - When you add or rename spec docs, update the README’s documentation section in the same commit so GitHub viewers always see the latest links.
+- Prod (the VPS) is driven only via one-shot `ssh deploy@... '<command>'` invocations — never a lingering remote shell; a bare terminal always means local/Sail.
+- Before any destructive command on either environment, read back `WALLET_NETWORK`, `APP_PUBLIC_URL`, and `MAIL_ALIAS_ENABLED` from the target's env and state which box it is.
+- Prod keeps `APP_ENV=production` so destructive artisan commands demand `--force`.
 
 ## Roles
 - Special-invocation agent roles live under [`AgentRoles/`](AgentRoles/) (e.g., Harvey for skeptical progress readouts).
