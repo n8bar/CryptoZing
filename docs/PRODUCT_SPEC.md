@@ -67,8 +67,8 @@ Issuers create invoices in USD, derive a unique Bitcoin receive address per invo
 - BTC request amounts, BIP21 links, and QR output must follow the rate behavior defined in [`docs/specs/RATES.md`](specs/RATES.md).
 - Per-payment USD snapshots are preserved when on-chain payments are detected so settled USD does not float retroactively with BTC price changes.
 - Outstanding payment requests target the current outstanding balance rather than the original invoice BTC snapshot.
-- Small-balance resolution, adjustment handling, manual-adjustment reversal, over/underpayment thresholds, and payment history rules are defined in [`docs/specs/PARTIAL_PAYMENTS_CONFIRMATIONS.md`](specs/PARTIAL_PAYMENTS_CONFIRMATIONS.md). Manual adjustments are append-only ledger rows; issuer-facing undo is handled by creating an equal-and-opposite reversal entry rather than editing or deleting the original row in place.
-- Confirmation thresholds, RBF handling, and unconfirmed-transaction cleanup rules are defined in [`docs/specs/PARTIAL_PAYMENTS_CONFIRMATIONS.md`](specs/PARTIAL_PAYMENTS_CONFIRMATIONS.md).
+- Small-balance resolution, adjustment handling, manual-adjustment reversal, over/underpayment thresholds, and payment history rules are defined in [`docs/specs/PARTIAL_PAYMENTS+CONFIRMATIONS.md`](specs/PARTIAL_PAYMENTS+CONFIRMATIONS.md). Manual adjustments are append-only ledger rows; issuer-facing undo is handled by creating an equal-and-opposite reversal entry rather than editing or deleting the original row in place.
+- Confirmation thresholds, RBF handling, and unconfirmed-transaction cleanup rules are defined in [`docs/specs/PARTIAL_PAYMENTS+CONFIRMATIONS.md`](specs/PARTIAL_PAYMENTS+CONFIRMATIONS.md).
 - Owner correction handling for wrongly attributed on-chain payments is defined in [`docs/specs/PAYMENT_CORRECTIONS.md`](specs/PAYMENT_CORRECTIONS.md); this includes wrong-invoice cases caused by later use of an old valid CryptoZing invoice address. Ignored rows must remain auditable while being excluded from active settlement math, issuer/support audit views may still show the ignored state, reattributed payments must remain visible in issuer audit history on both source and destination invoices, active reattributions must expose an explicit undo path back to the immutable source invoice and must not offer ignore until that undo returns the payment there, source-invoice public/print surfaces must not show or count reattributed-out payments, destination-invoice public/print surfaces must show and count the active payment without exposing source-invoice provenance or related-invoice links, public/print and dashboard settlement surfaces must exclude ignored rows, queued payment-related deliveries that become untruthful after a correction must be skipped rather than deleted, and destructive invoice deletion must be treated as a purge path that is blocked at both the app and persistence layers until related bookkeeping history has been intentionally removed or resolved.
 
 ### Wallets and automatic payment attribution
@@ -105,7 +105,7 @@ Issuers create invoices in USD, derive a unique Bitcoin receive address per invo
 
 ## Canonical Spec Map
 - Rates and BTC/USD behavior: [`docs/specs/RATES.md`](specs/RATES.md)
-- Partial payments, confirmations, adjustments, and outstanding summaries: [`docs/specs/PARTIAL_PAYMENTS_CONFIRMATIONS.md`](specs/PARTIAL_PAYMENTS_CONFIRMATIONS.md)
+- Partial payments, confirmations, adjustments, and outstanding summaries: [`docs/specs/PARTIAL_PAYMENTS+CONFIRMATIONS.md`](specs/PARTIAL_PAYMENTS+CONFIRMATIONS.md)
 - Payment correction / ignore-restore behavior: [`docs/specs/PAYMENT_CORRECTIONS.md`](specs/PAYMENT_CORRECTIONS.md)
 - Outbound invoice communication, receipts, and alerts: [`docs/specs/NOTIFICATIONS.md`](specs/NOTIFICATIONS.md)
 - Print/public behavior: [`docs/specs/PRINT_PUBLIC_POLISH.md`](specs/PRINT_PUBLIC_POLISH.md)
