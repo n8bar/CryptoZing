@@ -24,10 +24,6 @@ Anything still in open-beta scope belongs in [`docs/PLAN.md`](PLAN.md) and its l
    - Allow per-invoice address derivation from multiple co-signers.
    - Note: small-balance resolution (manual credit to close dust residuals) is now defined in the active product spec and partial-payments spec.
 
-28. **Value-Tiered Confirmation Requirements**
-   - Scale required confirmations with invoice value instead of the single global `BLOCKCHAIN_CONFIRMATIONS_REQUIRED`.
-   - Configurable thresholds (e.g., 1 conf under a small amount, stepping up for larger invoices).
-
 ## Email & Notifications
 _Carry-forward guardrail from active roadmap scope: suppress duplicate sends for the same invoice and notice class inside a configurable cooldown window unless an explicit follow-up class is selected._
 

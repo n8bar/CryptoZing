@@ -53,7 +53,9 @@ Ignore/restore correction handling for wrongly attributed on-chain rows is defin
 - `paid`: confirmed USD meets or exceeds expected after the confirmation threshold is satisfied.
 
 ### Confirmation Gate
-- Default confirmation threshold: 1, configurable via `BLOCKCHAIN_CONFIRMATIONS_REQUIRED`.
+- Required confirmations scale with the invoice's value at creation: higher-value invoices require more confirmations before a payment counts as confirmed.
+- Tier boundaries and their confirmation counts are operator-configurable.
+- Donations confirm at the fewest-confirmations tier.
 - Post-open-beta direction: allow a per-user required-confirmations setting with app-default fallback.
 - Invoice transitions to `paid` only when confirmed USD totals satisfy expected USD.
 - `paid_at` is set only on confirmed transition.
