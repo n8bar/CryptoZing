@@ -3,11 +3,50 @@
 namespace App\Http\Requests\Concerns;
 
 use App\Services\WalletKeyInput;
+use Illuminate\Contracts\Validation\Validator as ValidatorContract;
 use InvalidArgumentException;
 
 trait NormalizesWalletKeyInput
 {
     private ?string $walletKeyInputError = null;
+
+    private bool $walletKeyInputSafeToEcho = false;
+
+    /**
+     * Failed validation flashes the input to the session, which for a pasted
+     * seed phrase or private key would persist signing material in plaintext
+     * and echo it back into the form. Only recognizable public key material is
+     * worth repopulating, so anything else is scrubbed once the rejection
+     * message has been produced. The handler flashes the underlying request,
+     * not this one.
+     */
+    protected function failedValidation(ValidatorContract $validator): void
+    {
+        if (! $this->walletKeyInputSafeToEcho) {
+            $this->merge(['bip84_xpub' => '']);
+            app('request')->merge(['bip84_xpub' => '']);
+        }
+
+        parent::failedValidation($validator);
+    }
+
+    /**
+     * Whether a rejected value may be echoed back into the form. The browser
+     * strips whitespace before submitting, so a pasted seed phrase arrives
+     * concatenated and never reaches the signing-material check — recognizing
+     * what is safe beats trying to enumerate what is not.
+     */
+    private function walletKeyInputIsSafeToEcho(string $raw): bool
+    {
+        $compact = (string) preg_replace('/\s+/', '', $raw);
+
+        if (preg_match('/prv/i', $compact)) {
+            return false;
+        }
+
+        return preg_match('/^(x|y|z|t|u|v)pub[A-Za-z0-9]*$/i', $compact) === 1
+            || str_contains($compact, '(');
+    }
 
     /**
      * Parse the raw key input before whitespace normalization so seed phrases
@@ -23,6 +62,8 @@ trait NormalizesWalletKeyInput
 
         $chosen = $this->input('script_type');
         $chosen = in_array($chosen, ['bip84', 'bip86'], true) ? $chosen : null;
+
+        $this->walletKeyInputSafeToEcho = $this->walletKeyInputIsSafeToEcho($raw);
 
         try {
             $parsed = WalletKeyInput::parse($raw);
