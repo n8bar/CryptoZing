@@ -3,11 +3,32 @@
 namespace App\Http\Requests\Concerns;
 
 use App\Services\WalletKeyInput;
+use Illuminate\Contracts\Validation\Validator as ValidatorContract;
 use InvalidArgumentException;
 
 trait NormalizesWalletKeyInput
 {
     private ?string $walletKeyInputError = null;
+
+    private bool $walletKeyInputIsSigningMaterial = false;
+
+    /**
+     * Failed validation flashes the input to the session, which for a pasted
+     * seed phrase or private key would persist signing material in plaintext
+     * and echo it back into the form. Scrub it once the rejection message has
+     * been produced. Input we merely failed to recognize is left alone, so an
+     * ordinary typo still comes back. The handler flashes the underlying
+     * request, not this one.
+     */
+    protected function failedValidation(ValidatorContract $validator): void
+    {
+        if ($this->walletKeyInputIsSigningMaterial) {
+            $this->merge(['bip84_xpub' => '']);
+            app('request')->merge(['bip84_xpub' => '']);
+        }
+
+        parent::failedValidation($validator);
+    }
 
     /**
      * Parse the raw key input before whitespace normalization so seed phrases
@@ -32,6 +53,7 @@ trait NormalizesWalletKeyInput
                 'malformed-descriptor' => 'We could not read that descriptor. Copy the receive descriptor exactly as your wallet exports it.',
                 default => 'That key format is not supported. Paste an account public key or a wpkh()/tr() receive descriptor.',
             };
+            $this->walletKeyInputIsSigningMaterial = $e->getMessage() === 'signing-material';
             $this->merge(['script_type' => $chosen ?? 'bip84']);
 
             return;
