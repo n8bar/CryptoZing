@@ -1573,7 +1573,7 @@ class UserSettingsTest extends TestCase
         $response->assertJsonValidationErrors(['bip84_xpub']);
     }
 
-    public function test_wallet_settings_discards_unrecognized_key_input(): void
+    public function test_wallet_settings_preserves_input_on_invalid_key(): void
     {
         $owner = User::factory()->create();
 
@@ -1587,9 +1587,7 @@ class UserSettingsTest extends TestCase
 
         $response->assertRedirect(route('wallet.settings.edit'));
         $response->assertSessionHasErrors('bip84_xpub');
-        // Unrecognized input is indistinguishable from a pasted seed phrase, so
-        // it is not echoed back. Public keys and descriptors still repopulate.
-        $response->assertSessionHasInput('bip84_xpub', '');
+        $response->assertSessionHasInput('bip84_xpub', 'not-a-key');
     }
 
     public function test_additional_wallet_rejects_wrong_network_key(): void

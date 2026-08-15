@@ -85,6 +85,65 @@ class WalletKeyInputTest extends TestCase
         WalletKeyInput::parse('abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about');
     }
 
+    public function test_seed_phrase_without_spaces_is_rejected_as_signing_material(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('signing-material');
+
+        // The browser strips whitespace before submitting, so this is the form
+        // a pasted mnemonic actually arrives in.
+        WalletKeyInput::parse('abandonabandonabandonabandonabandonabandonabandonabandonabandonabandonabandonabout');
+    }
+
+    public function test_seed_phrase_split_across_lines_is_rejected_as_signing_material(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('signing-material');
+
+        WalletKeyInput::parse("legal\nwinner\tthank  year wave sausage worth useful legal winner thank yellow");
+    }
+
+    public function test_twenty_four_word_seed_phrase_is_rejected_as_signing_material(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('signing-material');
+
+        WalletKeyInput::parse(str_repeat('abandon ', 23) . 'art');
+    }
+
+    public function test_wif_private_key_is_rejected_as_signing_material(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('signing-material');
+
+        WalletKeyInput::parse('5HueCGU8rMjxEXxiPuD5BDku4MkFqeZyd4dZ1jvhTVqvbTLvyTJ');
+    }
+
+    public function test_raw_hex_private_key_is_rejected_as_signing_material(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('signing-material');
+
+        WalletKeyInput::parse('1e99423a4ed27608a15a2616a2b0e9e52ced330ac530edcc32c8ffc6a526aedd');
+    }
+
+    public function test_account_public_key_is_not_mistaken_for_signing_material(): void
+    {
+        $parsed = WalletKeyInput::parse(self::XPUB);
+
+        $this->assertSame(self::XPUB, $parsed['key']);
+    }
+
+    public function test_ordinary_junk_is_not_treated_as_signing_material(): void
+    {
+        // Short unrecognized input must stay a plain format rejection so the
+        // form can hand it back.
+        $parsed = WalletKeyInput::parse('not-a-key');
+
+        $this->assertSame('not-a-key', $parsed['key']);
+        $this->assertNull($parsed['script_type']);
+    }
+
     public function test_descriptor_containing_private_key_is_rejected(): void
     {
         $this->expectException(InvalidArgumentException::class);

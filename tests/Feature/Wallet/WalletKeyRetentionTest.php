@@ -64,6 +64,31 @@ class WalletKeyRetentionTest extends TestCase
         $this->assertStringNotContainsString($stripped, json_encode(session()->all(), JSON_UNESCAPED_SLASHES));
     }
 
+    public function test_wif_private_key_is_not_flashed_to_the_session(): void
+    {
+        $user = User::factory()->create();
+        $wif = '5HueCGU8rMjxEXxiPuD5BDku4MkFqeZyd4dZ1jvhTVqvbTLvyTJ';
+
+        $response = $this->actingAs($user)->post(route('wallet.settings.update'), [
+            'bip84_xpub' => $wif,
+        ]);
+
+        $response->assertSessionHasErrors('bip84_xpub');
+        $this->assertStringNotContainsString($wif, json_encode(session()->all(), JSON_UNESCAPED_SLASHES));
+    }
+
+    public function test_unrecognized_input_is_still_flashed_so_the_form_repopulates(): void
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->post(route('wallet.settings.update'), [
+            'bip84_xpub' => 'not-a-key',
+        ]);
+
+        $response->assertSessionHasErrors('bip84_xpub');
+        $this->assertStringContainsString('not-a-key', json_encode(session()->all(), JSON_UNESCAPED_SLASHES));
+    }
+
     public function test_rejected_descriptor_is_still_flashed_so_the_form_repopulates(): void
     {
         $user = User::factory()->create();

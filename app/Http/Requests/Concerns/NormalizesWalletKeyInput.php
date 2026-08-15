@@ -10,42 +10,24 @@ trait NormalizesWalletKeyInput
 {
     private ?string $walletKeyInputError = null;
 
-    private bool $walletKeyInputSafeToEcho = false;
+    private bool $walletKeyInputIsSigningMaterial = false;
 
     /**
      * Failed validation flashes the input to the session, which for a pasted
      * seed phrase or private key would persist signing material in plaintext
-     * and echo it back into the form. Only recognizable public key material is
-     * worth repopulating, so anything else is scrubbed once the rejection
-     * message has been produced. The handler flashes the underlying request,
-     * not this one.
+     * and echo it back into the form. Scrub it once the rejection message has
+     * been produced. Input we merely failed to recognize is left alone, so an
+     * ordinary typo still comes back. The handler flashes the underlying
+     * request, not this one.
      */
     protected function failedValidation(ValidatorContract $validator): void
     {
-        if (! $this->walletKeyInputSafeToEcho) {
+        if ($this->walletKeyInputIsSigningMaterial) {
             $this->merge(['bip84_xpub' => '']);
             app('request')->merge(['bip84_xpub' => '']);
         }
 
         parent::failedValidation($validator);
-    }
-
-    /**
-     * Whether a rejected value may be echoed back into the form. The browser
-     * strips whitespace before submitting, so a pasted seed phrase arrives
-     * concatenated and never reaches the signing-material check — recognizing
-     * what is safe beats trying to enumerate what is not.
-     */
-    private function walletKeyInputIsSafeToEcho(string $raw): bool
-    {
-        $compact = (string) preg_replace('/\s+/', '', $raw);
-
-        if (preg_match('/prv/i', $compact)) {
-            return false;
-        }
-
-        return preg_match('/^(x|y|z|t|u|v)pub[A-Za-z0-9]*$/i', $compact) === 1
-            || str_contains($compact, '(');
     }
 
     /**
@@ -63,8 +45,6 @@ trait NormalizesWalletKeyInput
         $chosen = $this->input('script_type');
         $chosen = in_array($chosen, ['bip84', 'bip86'], true) ? $chosen : null;
 
-        $this->walletKeyInputSafeToEcho = $this->walletKeyInputIsSafeToEcho($raw);
-
         try {
             $parsed = WalletKeyInput::parse($raw);
         } catch (InvalidArgumentException $e) {
@@ -73,6 +53,7 @@ trait NormalizesWalletKeyInput
                 'malformed-descriptor' => 'We could not read that descriptor. Copy the receive descriptor exactly as your wallet exports it.',
                 default => 'That key format is not supported. Paste an account public key or a wpkh()/tr() receive descriptor.',
             };
+            $this->walletKeyInputIsSigningMaterial = $e->getMessage() === 'signing-material';
             $this->merge(['script_type' => $chosen ?? 'bip84']);
 
             return;
