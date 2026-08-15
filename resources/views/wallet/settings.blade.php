@@ -172,7 +172,7 @@
                                           x-show="showsScriptTypeChoice()"
                                           @if (! preg_match('/^(xpub|tpub)/', $xpubValue) || str_contains($xpubValue, '(')) style="display: none;" @endif>
                                     <legend class="px-1 text-xs font-medium text-slate-700 dark:text-slate-300">{{ __('Address type for this key') }}</legend>
-                                    <p class="text-xs text-gray-500">{{ __("This key doesn't say which address format your wallet uses. Pick the one your wallet shows.") }}</p>
+                                    <p class="text-xs font-bold text-red-600 dark:text-red-400">{{ __("This key doesn't say which address format your wallet uses. Pick the one your wallet shows.") }}</p>
                                     <div class="mt-2 space-y-1 text-sm text-slate-800 dark:text-slate-200">
                                         <label class="flex items-center gap-2">
                                             <input type="radio" name="script_type" value="bip84"
