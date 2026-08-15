@@ -79,7 +79,7 @@ MAIL_OUTBOUND_ENABLED=false       # flip on once mail is configured
 MAIL_ALIAS_ENABLED=false
 
 SUPPORT_AGENT_EMAILS=you@example.com
-DONATION_WALLET_XPUB=             # blank = no /donate page
+DONATION_WALLET_XPUB=             # blank = no /donate page; Taproot needs tr(xpub.../0/*)
 
 # compose-level settings
 CZ_SERVER_NAME=your.domain
