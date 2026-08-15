@@ -57,7 +57,7 @@ Part 2 should make these points clear in concise language:
 - Part 1 onboarding remains defined in [`docs/specs/ONBOARD_SPEC.md`](ONBOARD_SPEC.md).
 - Receipt review and acknowledgment behavior remain defined in [`docs/specs/NOTIFICATIONS.md`](NOTIFICATIONS.md).
 - Ignore/reattribution behavior remains defined in [`docs/specs/PAYMENT_CORRECTIONS.md`](PAYMENT_CORRECTIONS.md).
-- Small-balance resolution and overpay/tip handling remain defined in [`docs/specs/PARTIAL_PAYMENTS.md`](PARTIAL_PAYMENTS.md).
+- Small-balance resolution and overpay/tip handling remain defined in [`docs/specs/PARTIAL_PAYMENTS+CONFIRMATIONS.md`](PARTIAL_PAYMENTS+CONFIRMATIONS.md).
 
 ## MS17 Intent
 - Fold this work into the early part of MS17 rather than creating a standalone milestone.

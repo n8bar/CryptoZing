@@ -2,7 +2,7 @@
 
 Status: Complete as of 2026-03-26.
 Parent execution doc: [`docs/PLAN.md`](../PLAN.md)
-Supporting docs: [`docs/PRODUCT_SPEC.md`](../PRODUCT_SPEC.md), [`docs/specs/PAYMENT_CORRECTIONS.md`](../specs/PAYMENT_CORRECTIONS.md), [`docs/specs/PARTIAL_PAYMENTS.md`](../specs/PARTIAL_PAYMENTS.md), [`docs/specs/WALLET_XPUB_UX_SPEC.md`](../specs/WALLET_XPUB_UX_SPEC.md), [`docs/specs/ONBOARD_SPEC.md`](../specs/ONBOARD_SPEC.md), [`docs/qa/Finding1.md`](../qa/Finding1.md)
+Supporting docs: [`docs/PRODUCT_SPEC.md`](../PRODUCT_SPEC.md), [`docs/specs/PAYMENT_CORRECTIONS.md`](../specs/PAYMENT_CORRECTIONS.md), [`docs/specs/PARTIAL_PAYMENTS+CONFIRMATIONS.md`](../specs/PARTIAL_PAYMENTS+CONFIRMATIONS.md), [`docs/specs/WALLET_XPUB_UX_SPEC.md`](../specs/WALLET_XPUB_UX_SPEC.md), [`docs/specs/ONBOARD_SPEC.md`](../specs/ONBOARD_SPEC.md), [`docs/qa/Finding1.md`](../qa/Finding1.md)
 
 This is the milestone execution doc for MS14. It tracks milestone-level objectives plus phase-level progress only.
 

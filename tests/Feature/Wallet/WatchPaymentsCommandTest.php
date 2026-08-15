@@ -892,4 +892,49 @@ class WatchPaymentsCommandTest extends TestCase
     {
         return app(WalletKeyLineage::class)->fingerprint($network, $xpub);
     }
+
+    public function test_high_value_invoice_payment_stays_unconfirmed_below_its_tier(): void
+    {
+        Carbon::setTestNow(Carbon::parse('2025-01-05 08:00:00', 'UTC'));
+        $invoice = $this->makeInvoice();
+        $invoice->forceFill(['amount_usd' => 10_000])->save();
+        $invoice->refresh();
+
+        $base = config('blockchain.mempool.testnet_base');
+
+        Cache::put(BtcRate::CACHE_KEY, [
+            'rate_usd' => 38_000,
+            'as_of' => Carbon::now(),
+            'source' => 'test',
+        ], BtcRate::TTL);
+
+        Http::fake([
+            "{$base}/address/{$invoice->payment_address}/txs" => Http::response([
+                [
+                    'txid' => 'tier789',
+                    'status' => [
+                        'confirmed' => true,
+                        'block_height' => 250000,
+                        'block_time' => Carbon::now()->subMinutes(5)->timestamp,
+                    ],
+                    'vout' => [
+                        [
+                            'scriptpubkey_address' => $invoice->payment_address,
+                            'value' => 1_000_000,
+                        ],
+                    ],
+                ],
+            ], 200),
+            // Tip gives the tx 2 confirmations; a $10k invoice needs 3.
+            "{$base}/blocks/tip/height" => Http::response('250001', 200),
+        ]);
+
+        $this->artisan('wallet:watch-payments')
+            ->assertExitCode(0);
+
+        $invoice->refresh();
+        $this->assertSame('pending', $invoice->status);
+        $this->assertNull($invoice->payment_confirmed_at);
+        $this->assertNull($invoice->paid_at);
+    }
 }

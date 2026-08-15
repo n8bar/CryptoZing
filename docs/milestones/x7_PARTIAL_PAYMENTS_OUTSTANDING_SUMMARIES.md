@@ -2,7 +2,7 @@
 
 Status: Complete (retrospective reconstruction).
 Historical execution window: 2025-11-13 through 2025-11-17.
-Canonical requirements descendant: [`docs/specs/PARTIAL_PAYMENTS.md`](../specs/PARTIAL_PAYMENTS.md)
+Canonical requirements descendant: [`docs/specs/PARTIAL_PAYMENTS+CONFIRMATIONS.md`](../specs/PARTIAL_PAYMENTS+CONFIRMATIONS.md)
 
 > Reconstructed on 2026-07-18 from the prospective partial-payments spec, implementation commits, historical PLAN snapshots, tests, and the changelog. The three phases below describe evidence-backed implementation clusters; they were not named or closed as formal phases at the time.
 
