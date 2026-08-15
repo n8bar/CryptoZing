@@ -3,7 +3,7 @@
     <span aria-hidden="true">&middot;</span>
     <a href="{{ route('legal.privacy') }}" class="underline underline-offset-2 hover:text-gray-700 dark:hover:text-slate-200">Privacy Policy</a>
     <span aria-hidden="true">&middot;</span>
-    @if (config('donations.xpub'))
+    @if (\App\Services\DonationKey::isUsable())
         <a href="{{ route('donate.show') }}" class="underline underline-offset-2 hover:text-gray-700 dark:hover:text-slate-200">Donate</a>
     @else
         <a href="https://cryptozing.app/donate" class="underline underline-offset-2 hover:text-gray-700 dark:hover:text-slate-200">Support CryptoZing</a>

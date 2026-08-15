@@ -7,6 +7,9 @@ Use this when preparing the open-beta deployment; keep APP_PUBLIC_URL and mail s
 - Verify secrets: MAIL_* creds valid for production domain; MAILGUN_WEBHOOK_SIGNING_KEY set to the signing key from the Mailgun dashboard (Webhooks section); queue/DB/cache endpoints reachable; env files up to date.
 - Current Mailgun sending-domain assumption is US-region `mailer.cryptozing.app`, so the matching endpoint is `MAILGUN_ENDPOINT=api.mailgun.net` unless the provider region changes later.
 
+## Wallet configuration
+- Run `./vendor/bin/sail artisan wallet:check-config` (or equivalent in prod) and confirm it exits clean. It fails the deploy when `DONATION_WALLET_XPUB` is malformed, is signing material, belongs to the other network, or is the same account key as an onboarded invoice wallet — a shared key derives the same addresses on both chains, so payments collide and attribution is lost.
+
 ## Mail aliasing flip
 - Set MAIL_ALIAS_ENABLED=false (and clear MAIL_ALIAS_DOMAIN if present).
 - MS16 Phase 2 already proved the app can deliver through Mailgun HTTP API with a temporary alias-off send to controlled dev inboxes on 2026-03-28; treat that as transport proof only, not as the open-beta sign-off for the target environment.

@@ -48,6 +48,7 @@
 ./vendor/bin/sail up -d
 ./vendor/bin/sail artisan test
 ./vendor/bin/sail artisan wallet:assign-invoice-addresses --dry-run
+./vendor/bin/sail artisan wallet:check-config
 ./vendor/bin/sail artisan wallet:watch-payments
 ```
 
