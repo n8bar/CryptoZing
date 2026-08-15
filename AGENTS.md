@@ -29,7 +29,7 @@
 - GitHub `main` is canonical. New work branches follow `codex/<task>`, and existing PRs must be updated via their original source branch rather than alternate branches.
 - PRs are gated by GitHub Actions `PR Tests`; keep branches current with `origin/main` before requesting review. Docs-only PRs (Markdown anywhere + `docs/**`, including `milestones.ics`) skip the suite via `paths-ignore`, so run milestone-date checks locally (the consistency test is local-only anyway).
 - Doc-only changes may be committed directly to `main` — no branch or PR required. "Doc-only" is the same carve-out as the PR gate: Markdown anywhere + `docs/**`, including `milestones.ics`. Anything touching code still goes through a `codex/<task>` (Claude: `claude/<task>`) branch + PR. Direct `.ics` commits bypass the PR entirely, so run milestone-date checks locally after any such change.
-- Small copy-only view tweaks (wording or emphasis in Blade templates, no logic) also go directly to `main` — no branch or PR. Run the touching feature tests and rebuild assets if classes changed.
+- Small copy-only view tweaks don't need a PR — commit straight to `main` or let them ride another PR.
 
 ## Multi-Agent Coordination
 - Primary and secondary agents are role-based, not capability-limited: secondaries can work docs, code, tests, or modules within their stated task.
