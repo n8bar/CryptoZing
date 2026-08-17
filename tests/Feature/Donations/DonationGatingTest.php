@@ -52,6 +52,31 @@ class DonationGatingTest extends TestCase
         $response->assertDontSee('>Donate</a>', false);
     }
 
+    /**
+     * A set-but-unusable key used to register the routes anyway, so the page
+     * went live and only failed at the first donor (#149).
+     */
+    public function test_donate_routes_are_absent_when_the_xpub_is_not_a_usable_key(): void
+    {
+        $this->rebootWithXpub('tprvPhpunitNeverAKey');
+
+        $this->get('/donate')->assertNotFound();
+        $this->post('/donate')->assertNotFound();
+        $this->get('/donate/status')->assertNotFound();
+        $this->post('/donate/reset')->assertNotFound();
+    }
+
+    public function test_footer_links_to_cryptozing_donate_page_when_the_xpub_is_unusable(): void
+    {
+        $this->rebootWithXpub('tprvPhpunitNeverAKey');
+
+        $response = $this->get('/login');
+
+        $response->assertOk();
+        $response->assertSee('Support CryptoZing');
+        $response->assertDontSee('>Donate</a>', false);
+    }
+
     public function test_donate_routes_and_local_footer_link_exist_with_xpub_configured(): void
     {
         $this->get('/donate')->assertOk();

@@ -45,8 +45,11 @@ Route::get('p/{token}', [InvoiceController::class, 'publicPrint'])
     ->name('invoices.public-print');
 
 // /donate is CryptoZing's own funding page, not a per-instance feature (#135):
-// without a donation xpub the routes never register.
-if (config('donations.xpub')) {
+// without a usable donation xpub the routes never register. Gating on the
+// parsed key rather than on truthiness keeps a malformed value from producing
+// a live page that 500s at the first donor (#149) — `wallet:check-config` is
+// where the operator sees why.
+if (\App\Services\DonationKey::isUsable()) {
     Route::get('donate', [\App\Http\Controllers\DonationController::class, 'show'])
         ->name('donate.show');
     Route::post('donate', [\App\Http\Controllers\DonationController::class, 'allocate'])
