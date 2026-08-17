@@ -17,8 +17,8 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 ## Current
 - Active milestone:
   - **MS20 - Mainnet Cutover & Alpha Gate** — in progress; content-publish gate cleared by "How to Receive Bitcoin".
-- Status: `Alpha deployed on the merge sha; MS20 Phase 4 (Mainnet Environment & Wallets) next.`
-- Next action: [User] confirm the two mainnet xpubs are separate keys (not two accounts under one seed) and keep both seeds off the box per [`docs/strategies/20.4_MAINNET_ENVIRONMENT_WALLETS.md`](strategies/20.4_MAINNET_ENVIRONMENT_WALLETS.md) §1.3–1.4.
+- Status: `MS20 Phase 4 complete — box on mainnet with separate watch-only invoice and donation keys; Phase 5 (Live Mainnet Validation & Backout) next.`
+- Next action: Issue a small mainnet invoice and confirm its address derives from the operator invoice key, then [User] self-send the payment per [`docs/strategies/20.5_LIVE_MAINNET_VALIDATION_BACKOUT.md`](strategies/20.5_LIVE_MAINNET_VALIDATION_BACKOUT.md) §1.1–1.3.
 - Most recently completed milestone doc: [`docs/milestones/x19_OB_HARDENING_OPS.md`](milestones/x19_OB_HARDENING_OPS.md)
 
 ## Published Release Target

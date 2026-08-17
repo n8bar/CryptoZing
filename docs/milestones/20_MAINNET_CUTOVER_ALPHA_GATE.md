@@ -22,8 +22,8 @@ Provision the production server and deploy the app to it, running private, on th
 ### [x] Phase 3 — Taproot Wallet Support
 The watch-only wallet layer gains Taproot (BIP86) receive support — script-type-aware key onboarding and bech32m derivation — so the operator wallets and merchant onboarding are Taproot-capable at cutover, not retrofitted after. Spec-first; code rides a PR. Strategy: [`x20.3_TAPROOT_WALLET_SUPPORT.md`](../strategies/x20.3_TAPROOT_WALLET_SUPPORT.md).
 
-### [ ] Phase 4 — Mainnet Environment & Wallets
-Clean mainnet baseline on the deployed box, with separate watch-only invoice and donation xpubs (never one shared key — MS14) verified before any funds move. Needs a mainnet donation wallet from the operator before it can start. Carries the mainnet donation-xpub swap from [`x19.8_MICRO_MONETIZE.md`](../strategies/x19.8_MICRO_MONETIZE.md) §1. Strategy: [`20.4_MAINNET_ENVIRONMENT_WALLETS.md`](../strategies/20.4_MAINNET_ENVIRONMENT_WALLETS.md).
+### [x] Phase 4 — Mainnet Environment & Wallets
+Clean mainnet baseline on the deployed box, with separate watch-only invoice and donation xpubs (never one shared key — MS14) verified before any funds move. Needs a mainnet donation wallet from the operator before it can start. Carries the mainnet donation-xpub swap from [`x19.8_MICRO_MONETIZE.md`](../strategies/x19.8_MICRO_MONETIZE.md) §1. Strategy: [`x20.4_MAINNET_ENVIRONMENT_WALLETS.md`](../strategies/x20.4_MAINNET_ENVIRONMENT_WALLETS.md).
 
 ### [ ] Phase 5 — Live Mainnet Validation & Backout
 Real self-sent mainnet payments end to end, correction tooling against live data, and mail sanity on mainnet. Leaves behind the cutover runbook and halt procedure MS21 executes. Strategy: [`20.5_LIVE_MAINNET_VALIDATION_BACKOUT.md`](../strategies/20.5_LIVE_MAINNET_VALIDATION_BACKOUT.md).
