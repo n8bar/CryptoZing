@@ -261,6 +261,68 @@ class InvoiceNotificationTest extends TestCase
         ]);
     }
 
+    /**
+     * #154: a payment in flight is not evidence of underpayment. The alert gate
+     * counted confirmed payments only while treating any payment row as
+     * activity, so a fully-paid invoice read as 100% short between detection
+     * and its first confirmation.
+     */
+    public function test_no_underpayment_alert_while_a_full_payment_is_unconfirmed(): void
+    {
+        Queue::fake();
+        [$invoice] = $this->makeInvoiceWithClient();
+
+        $expectedSats = (int) round($invoice->amount_btc * Invoice::SATS_PER_BTC);
+
+        InvoicePayment::create([
+            'invoice_id' => $invoice->id,
+            'txid' => 'tx-full-unconfirmed',
+            'sats_received' => $expectedSats,
+            'detected_at' => Carbon::now(),
+            'confirmed_at' => null,
+        ]);
+
+        $invoice->refresh()->refreshPaymentState();
+
+        app(InvoiceAlertService::class)->checkPaymentThresholds($invoice->fresh('payments'));
+
+        $this->assertDatabaseMissing('invoice_deliveries', [
+            'invoice_id' => $invoice->id,
+            'type' => 'client_underpay_alert',
+        ]);
+
+        $this->assertDatabaseMissing('invoice_deliveries', [
+            'invoice_id' => $invoice->id,
+            'type' => 'issuer_underpay_alert',
+        ]);
+    }
+
+    public function test_underpayment_alert_still_fires_for_a_short_unconfirmed_payment(): void
+    {
+        Queue::fake();
+        [$invoice] = $this->makeInvoiceWithClient();
+
+        $expectedSats = (int) round($invoice->amount_btc * Invoice::SATS_PER_BTC);
+
+        InvoicePayment::create([
+            'invoice_id' => $invoice->id,
+            'txid' => 'tx-short-unconfirmed',
+            'sats_received' => (int) round($expectedSats * 0.6),
+            'detected_at' => Carbon::now(),
+            'confirmed_at' => null,
+        ]);
+
+        $invoice->refresh()->refreshPaymentState();
+
+        app(InvoiceAlertService::class)->checkPaymentThresholds($invoice->fresh('payments'));
+
+        $this->assertDatabaseHas('invoice_deliveries', [
+            'invoice_id' => $invoice->id,
+            'type' => 'client_underpay_alert',
+            'context_key' => 'tx-short-unconfirmed',
+        ]);
+    }
+
     public function test_resolving_small_balance_marks_paid_and_skips_underpay_nags(): void
     {
         Queue::fake();

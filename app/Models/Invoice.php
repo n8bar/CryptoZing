@@ -366,12 +366,16 @@ class Invoice extends Model
             return false;
         }
 
-        $confirmedUsd = $this->sumPaymentsUsd(true);
-        if ($confirmedUsd + self::UNDERPAY_USD_TOLERANCE >= $expectedUsd) {
+        // Judged against every active payment, confirmed or not (#154). A
+        // payment in flight is evidence of a payment, not of a shortfall —
+        // counting confirmed value only made a fully paid invoice read as
+        // 100% short until its first confirmation landed.
+        $receivedUsd = $this->sumPaymentsUsd();
+        if ($receivedUsd + self::UNDERPAY_USD_TOLERANCE >= $expectedUsd) {
             return false;
         }
 
-        $deficitUsd = max($expectedUsd - $confirmedUsd, 0);
+        $deficitUsd = max($expectedUsd - $receivedUsd, 0);
         $percent = ($deficitUsd / $expectedUsd) * 100;
 
         return $deficitUsd >= self::UNDERPAY_USD_TOLERANCE || $percent >= self::UNDERPAY_PERCENT_TOLERANCE;
@@ -404,12 +408,13 @@ class Invoice extends Model
             return null;
         }
 
-        $confirmedUsd = $this->sumPaymentsUsd(true);
-        if ($confirmedUsd + self::UNDERPAY_USD_TOLERANCE >= $expectedUsd) {
+        // Same payment set as hasSignificantUnderpayment (#154).
+        $receivedUsd = $this->sumPaymentsUsd();
+        if ($receivedUsd + self::UNDERPAY_USD_TOLERANCE >= $expectedUsd) {
             return null;
         }
 
-        $deficitUsd = max($expectedUsd - $confirmedUsd, 0);
+        $deficitUsd = max($expectedUsd - $receivedUsd, 0);
         return ($deficitUsd / $expectedUsd) * 100;
     }
 
