@@ -33,6 +33,8 @@ Keep these in sync with every merge or scope change.
 - **Owner labels**: when assigning work by owner, use `Guided User` for tasks that require user-side account access or clicks but where the user should be coached through unfamiliar tooling; reserve plain `User` for work the user can drive directly without coaching.
 - **Item depth**: nest as deep as the work requires — two levels is not a ceiling. Expand an item when a sub-item carries something the parent doesn't: a decision input, a distinct failure mode, a separate owner, or its own verification. A comma-separated list of *steps* is the usual tell that a checklist got flattened into one line; a comma-separated list of *values* is not. Leave genuinely atomic items alone rather than subdividing for symmetry.
 - **Every checkbox is work**: at every level, a checked box means someone did something. Facts, rationale, and properties don't earn a box — fold them into the wording of the item that does the work. Depth is not a licence to give inactionable content its own line.
+- **Actionable phrasing**: lead with the observation. `Do Y if X` hides the work of noticing X and reads as a caveat; write the check as the action and hang the response off it as sub-items.
+- **State scope, don't defend it**: wording that changes what gets done belongs in the item. A sentence explaining why the scope was chosen is journaling — it goes in the commit message, not the checklist.
 - **Lifecycle**: strategy docs may or may not be retired, archived, or folded into milestone/history docs after completion.
 
 ## Checklist-depth separation
