@@ -217,6 +217,7 @@ docker/      Container setup
 - Notifications spec: [`docs/specs/NOTIFICATIONS.md`](docs/specs/NOTIFICATIONS.md)
 - Payment corrections spec: [`docs/specs/PAYMENT_CORRECTIONS.md`](docs/specs/PAYMENT_CORRECTIONS.md)
 - Partial payments spec: [`docs/specs/PARTIAL_PAYMENTS+CONFIRMATIONS.md`](docs/specs/PARTIAL_PAYMENTS+CONFIRMATIONS.md)
+- Partial payments audit & test plan: [`docs/qa/AUDIT_PARTIAL_PAYMENTS+CONFIRMATIONS.md`](docs/qa/AUDIT_PARTIAL_PAYMENTS+CONFIRMATIONS.md)
 - Donations spec: [`docs/specs/DONATIONS.md`](docs/specs/DONATIONS.md)
 
 For coding conventions, workflow expectations, and environment reminders, see [`AGENTS.md`](AGENTS.md).

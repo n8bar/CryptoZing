@@ -9,139 +9,72 @@ This doc is canonical for:
 
 Ignore/restore correction handling for wrongly attributed on-chain rows is defined separately in [`docs/specs/PAYMENT_CORRECTIONS.md`](PAYMENT_CORRECTIONS.md). That flow preserves original `invoice_payments` rows for audit and is distinct from manual adjustments.
 
+Verification status, the test plan, mechanics, and open questions live in [`docs/qa/AUDIT_PARTIAL_PAYMENTS+CONFIRMATIONS.md`](../qa/AUDIT_PARTIAL_PAYMENTS+CONFIRMATIONS.md). This doc states required behavior only.
+
 ## Goals
 - Record every on-chain payment that hits an invoice address, even if the amount is below the invoice total.
-- Surface a `partial` status so issuers/clients know funds have arrived but more is due.
-- Preserve the BTC/USD rate at the moment we detect each payment for accurate receipts/statements.
-- Provide enough metadata for future features (receipt mail, delivery logs, dashboards) to reference payment history.
+- Surface a `partial` status so issuers and clients know funds have arrived but more is due.
+- Preserve the BTC/USD rate at the moment each payment is detected, so receipts and statements reflect what the money was worth when it arrived.
+- Carry enough payment history for receipts, delivery logs, and dashboards to reference.
 
-## Data Model
-1. **`invoice_payments` table**
-    - `id`, `invoice_id`, `txid`, `vout_index` (optional), `sats_received`, `detected_at`, `confirmed_at`, `block_height`, `usd_rate`, `fiat_amount`.
-    - JSON column `raw_tx` (optional) for debugging or future proofs.
-    - Index on (`invoice_id`, `txid`) to prevent duplicates.
+## Ledger
+- Every payment to an invoice address is recorded individually, with the sats received and the USD value at the moment it was first detected. The same transaction is never counted twice; multiple outputs of one transaction to the same address count once, summed.
+- `amount_usd` is canonical. The BTC amount shown when an invoice is created is a display snapshot — expected and outstanding are USD.
+- Outstanding USD is expected minus confirmed value, with each payment valued at its own captured rate. Outstanding BTC is derived from the latest available rate at view time, never locked at creation.
+- Payments that arrive while an invoice is still `draft` are recorded when they arrive. Money that reached the address is tracked whatever the invoice's status; the status governs only what is displayed.
 
-2. **Invoice columns**
-    - `amount_usd` remains canonical. `amount_btc` is the initial display snapshot, but expected/outstanding are driven by USD.
-    - Add `status` enum entries: `draft`, `sent`, `pending`, `partial`, `paid`, `void`.
-    - New computed totals:
-        - `paid_usd` / `confirmed_usd`: sum of payment `fiat_amount` values (per-payment rate snapshots).
-        - `paid_sats` / `confirmed_sats`: sum of sats for logging and display.
-        - `outstanding_usd = expected_usd - confirmed_usd` (floats with each payment’s rate).
-        - `outstanding_btc`/`outstanding_sats` are derived from the current/latest available BTC/USD rate at view time (used for QR/BIP21), not locked at creation.
+## Tolerance
+- ±100 sats, valued at the payment's captured rate, applies wherever confirmed value is compared against expected.
+- It absorbs rounding, not residuals. The small-balance control starts at $1.00 and owns everything above the noise.
 
-## Watcher Behavior
-- Tolerance is ±100 sats, valued at the payment's captured rate, and applies wherever confirmed value is compared against expected: it absorbs rounding, not residuals. The small-balance control starts at $1.00 and owns everything above the noise.
-- When detector finds a tx:
-    1. Record (or update) a row in `invoice_payments`.
-    2. Recompute totals:
-        - Sats received/confirmed (for history/logs).
-        - USD received/confirmed using each payment’s captured rate.
-    3. Status transitions:
-        - `sent` → `pending` when unconfirmed payments exist but confirmed USD < expected.
-        - `sent`/`pending` → `partial` when confirmed USD > 0 but below expected.
-        - `partial`/`pending` → `paid` when confirmed USD ≥ expected USD − tolerance (confirmation threshold enforced).
-        - `draft` stays draft if we really want to block payments until “sent” — TBD.
-    4. `paid_at` is the settlement timestamp — the `confirmed_at` of the confirmation that most recently crosses the cumulative confirmed total from below the expected total to at-or-above it (the latest total re-cross): the time everyone finally agreed the invoice was paid. Among surviving confirmed payments the cumulative is monotonic, so this is the payment that first reaches the expected total; a later, redundant payment is not the crossing. Confirmation timestamps update when block data arrives.
-- Handle multiple payments per tx/address pair gracefully (e.g., same tx sends two outputs to us) by summing `sats_received`.
-
-## Confirmation and RBF Safety
-### Status Flow
+## Status Flow
 - `sent`: no payments detected.
-- `pending`: unconfirmed payments detected; awaiting confirmations.
-- `partial`: confirmed payments received but confirmed USD remains below expected.
-- `paid`: confirmed USD meets or exceeds expected USD − tolerance after the confirmation threshold is satisfied.
+- `pending`: unconfirmed payments detected, awaiting confirmations.
+- `partial`: confirmed value received but still below expected less tolerance.
+- `paid`: confirmed value meets or exceeds expected less tolerance, once the confirmation threshold is satisfied.
+- `paid_at` is the settlement timestamp — the `confirmed_at` of the confirmation that most recently crosses the cumulative confirmed total from below the expected total to at-or-above it: the time everyone finally agreed the invoice was paid. Among surviving confirmed payments the cumulative is monotonic, so this is the payment that first reaches the expected total; a later, redundant payment is not the crossing.
+- `paid_at` is set only on a confirmed transition, and cleared if the invoice leaves `paid`.
 
-### Confirmation Gate
+## Confirmation Gate
 - Required confirmations scale with the invoice's value at creation: higher-value invoices require more confirmations before a payment counts as confirmed.
 - Tier boundaries and their confirmation counts are operator-configurable.
 - Donations confirm at the fewest-confirmations tier.
-- Post-open-beta direction: allow a per-user required-confirmations setting with app-default fallback.
-- Invoice transitions to `paid` only when confirmed USD totals satisfy expected USD − tolerance.
-- `paid_at` is set only on confirmed transition.
 
-### RBF and dropped transaction handling
-- On each watcher run:
-  - fetch current mempool transactions for the invoice address
-  - for stored unconfirmed txids that are no longer present, drop or ignore them
-  - never drop confirmed txs
-  - deduplicate by txid so a replacement is treated as the live record rather than additive
-- Recompute sats, per-payment USD, outstanding balance, and invoice status after cleanup.
-- Log dropped or replaced tx events; issuer notification remains optional.
+## RBF and Dropped Transactions
+- A replacement supersedes the transaction it replaces rather than adding to it.
+- An unconfirmed transaction that is no longer in the mempool stops counting toward the invoice. A confirmed transaction is never dropped.
+- Totals, outstanding balance, and status always reflect the surviving set.
+- Dropped and replaced transactions are logged. Notifying the issuer about them is optional.
 
 ## USD Snapshot
-- When we log each payment, capture the USD/BTC rate:
-    - Use the cached rate if it’s fresh (< defined TTL), otherwise call `BtcRate::refresh`.
-    - Store `usd_rate` and `fiat_amount = sats_received / 1e8 * usd_rate`.
-- Treat the original USD invoice total as canonical; each payment reduces the outstanding USD balance using its captured `usd_rate` so issuers always see dollars knocked off at the moment funds arrived (BTC volatility never retroactively changes settled USD). Multiple partials can carry different rates.
-- Issuer/public summary boxes always present USD first (e.g., `Expected: $500.00 (0.0123 BTC)`, `Outstanding: $125.00 (~0.0031 BTC at current rate)`). Received/confirmed USD reflect the sum of per-payment fiat amounts, and outstanding displays the exact residual (no display-side tolerance masking).
-- QR/BIP21 requests target the *current outstanding USD balance*, converted to BTC using the latest available rate (or cached rate) at view time; once the balance hits zero, the QR omits the `amount` parameter altogether.
+- The rate captured when a payment is first detected is the rate that payment keeps. BTC volatility never retroactively changes settled USD, and multiple partials can each carry a different rate.
+- Each payment reduces the outstanding USD balance at its own captured rate, so issuers see dollars knocked off as of the moment funds arrived.
+- Issuer and public summaries present USD first (`Expected: $500.00 (0.0123 BTC)`, `Outstanding: $125.00 (~0.0031 BTC at current rate)`). Outstanding shows the exact residual, with no display-side tolerance masking.
+- Payment requests target the current outstanding USD balance converted at the latest available rate at view time. Once nothing is outstanding, the request carries no amount.
 
-## UI / API
-1. **Invoice Show Page**
-    - Payment summary card with:
-        - Total expected vs paid vs outstanding (BTC + USD).
-        - Status badge showing `Partial` when applicable.
-    - Payment history table (one row per `invoice_payments` row) showing txid, amount, detected/confirmed timestamps, fiat value.
-    - Alerts for underpayments (e.g., outstanding > 0).
-
-2. **Print/Public View**
-    - Mirror the payment history (maybe condensed) so clients see what we received.
-    - Paid watermark only once status `paid`; otherwise show an “Outstanding balance” note.
-
-3. **API / JSON**
-    - If we expose invoices via API, include payment fragments + totals.
+## Payment Visibility
+- Issuers see every payment that has arrived: amount, transaction, detection and confirmation times, and the USD value it was captured at.
+- Clients see the same history on the public view, and an outstanding-balance note until the invoice is paid. The paid watermark appears only at `paid`.
+- Issuers can annotate any payment with a short note.
 
 ## Interactions with Invoice Delivery
-- Receipt emails should enumerate the payments and total settled amount.
-- Delivery log should note whether auto-receipts fired after full payment or partial payment updates.
+- Receipt emails enumerate the payments and the total settled amount.
+- The delivery log records which notices fired and when, including whether a receipt followed full payment or a partial-payment update.
 
 ## Small Balance Resolution
-- Outstanding USD/BTC should display the exact residual (no UI masking for dust). Status `paid` hinges solely on confirmed USD >= expected USD − tolerance.
-- When the residual is below the small-balance threshold, surface an explicit “Resolve small balance” control that records a manual credit adjustment for the remaining USD (at the latest available rate) and marks the invoice paid. The adjustment is logged in `invoice_payments` as an `is_adjustment` row for auditability. Threshold rule: `max($1.00, min(1% of expected USD, $50.00 cap))`.
-- Do not auto-settle residuals; issuers must opt-in via the control.
+- Outstanding USD and BTC display the exact residual, with no UI masking for dust.
+- When the residual is below the small-balance threshold, issuers get an explicit "Resolve small balance" control that records a manual credit adjustment for the remaining USD at the latest available rate and marks the invoice paid. The adjustment is logged as an `is_adjustment` row for auditability. Threshold: `max($1.00, min(1% of expected USD, $50.00 cap))`.
+- Residuals are never auto-settled. Issuers opt in via the control.
 
-## Manual Adjustment Reversal
-- Manual adjustments are append-only ledger entries. Issuers must not edit or delete the recorded amount/direction in place.
-- Issuer invoice payment history should expose an inline reversal path for manual adjustment rows:
-  - first click on `Reverse` / `adjustment` reveals `Confirm` / `reverse` / `entry`
-  - clicking `Reverse adjustment` again before confirmation re-hides the confirm control
-- Confirming the reversal creates a second manual adjustment row on the same invoice with equal-and-opposite `sats_received` and `fiat_amount` values so the original accounting effect is cancelled exactly.
-- Reversal rows preserve the original adjustment's USD/BTC snapshot rather than repricing at the latest rate.
-- The generated reversal note is `reversal of {txid}` where `{txid}` is the original manual adjustment row identifier.
-- Both rows remain visible in payment history after reversal. Reversal is the supported issuer-facing `oops` path for manual adjustments.
+## Manual Adjustments and Reversal
+- Manual adjustments are append-only ledger entries. Issuers cannot edit or delete a recorded amount or direction in place.
+- Reversing an adjustment creates a second adjustment on the same invoice with equal-and-opposite values, cancelling the original accounting effect exactly.
+- Reversal rows preserve the original adjustment's USD/BTC snapshot rather than repricing at the latest rate, and carry a `reversal of {txid}` note naming the row they cancel.
+- Both rows stay visible in payment history. Reversal is the supported issuer-facing correction path for manual adjustments.
 
-## Testing
-- Unit tests for `Invoice` accessors (paid/confirmed USD and sats, outstanding USD/BTC, status transitions).
-- Watcher feature tests covering:
-    - First partial payment logged (USD reduced at payment’s rate).
-    - Multiple partials summing to paid across different rates.
-    - Confirmations updating existing payment rows.
-    - Overpayments (money above expected) flagged but still mark invoice `paid`.
-    - Unconfirmed payment does not mark paid, then flips to paid after confirmations meet threshold.
-    - RBF replacement removes the old live tx from totals and avoids double-counting.
-    - Dropped unconfirmed tx shrinks totals and reverts status appropriately.
-- Feature tests covering manual adjustment reversal:
-    - the reveal/collapse control flow on manual adjustment rows
-    - equal-and-opposite reversal row creation with `reversal of {txid}` note
-    - invoice/payment/alert recomputation after reversal
-- Blade tests / snapshots for the payment history table and public view.
-
-## Completed Tasks
-1. ✅ `invoice_payments` table stores every tx with sats + USD snapshot per detection.
-2. ✅ Watcher (`wallet:watch-payments`) records multiple partials per invoice and refreshes status/outstanding totals automatically.
-3. ✅ UI shows payment history, USD-first summary, and QR codes that target the outstanding balance.
-4. ✅ Watcher tolerance (±100 sats) is enforced and detection/confirmation timestamps surface in the payment history UI.
-5. ✅ Payment history rows display the captured USD rate/fiat amount and issuers can annotate each payment with short notes.
-6. ✅ Automatic invoice delivery + paid receipt emails log to `invoice_deliveries`, with queue-backed mailers and profile toggles.
-7. ✅ Issuers can record manual adjustments (credit/debit) when a payment exceeds tolerance, and both issuers + clients see alerts when over/under payments exceed 15% of the invoice total (client messaging reiterates that overpayments default to gratuities unless they notify the sender).
-8. ✅ Proactive partial-payment alerts: clients see “send one payment” guidance across invoice emails/public views, watchers send a one-time warning email (plus issuer FYI + delivery log) after the second payment attempt, and tests cover the new flow.
-
-## Clarifications
-- **Draft invoices**: payments may arrive even while status is `draft` (each invoice address is unique), so the watcher still logs them immediately. The UI simply defers showing payment history until the invoice is marked `sent` to avoid confusing “pending drafts.”
-- **Overpayments / Tips**: record the surplus (treat it as a tip by default), keep status `paid`, and introduce two levels of handling:
-    - **Noise tolerance** (≤ $10 USD equivalent or ≤ 1% of invoice) — simply show the extra as part of the payment history without alerts.
-    - **Significant overpay** (> tolerance) — flag the invoice for the issuer (UI + notification) and make clear that the surplus may be an intentional tip or an accidental overpayment. Issuer guidance may suggest refund/credit follow-up when the surplus looks accidental, but the default copy should avoid sounding overly prescriptive about what to do with intentional tips. If a client has multiple overpaid invoices, batch the refund/credit calculation so the issuer can settle them in one transaction. Future automation can email the client with those options if we don’t act within a configured SLA so mistaken overpayments can be corrected.
-
-## Post-open-beta Direction
-- Add a per-user required-confirmations setting (1-6) used by the watcher, with app-default fallback.
+## Over and Underpayment
+- A surplus is recorded and treated as a tip by default, and the invoice stays `paid`.
+- Surplus within noise (≤ $10 USD equivalent or ≤ 1% of the invoice) appears in payment history without alerts.
+- Surplus beyond that is flagged to the issuer, and client messaging makes clear that overpayments are treated as gratuities unless the sender says otherwise. Issuer guidance may suggest a refund or credit when a surplus looks accidental, without being prescriptive about intentional tips.
+- Over and underpayments beyond 15% of the invoice total alert both the issuer and the client.
+- Client-facing payment alerts describe only what is true of the payment at the time they are sent, including whether it is confirmed.
