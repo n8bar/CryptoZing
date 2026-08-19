@@ -728,7 +728,7 @@ class InvoicePaymentDisplayTest extends TestCase
         $response->assertSee('$120.00', false);
     }
 
-    public function test_outstanding_balance_zeroed_within_tolerance(): void
+    public function test_small_outstanding_balance_offers_the_resolve_control(): void
     {
         Cache::put(BtcRate::CACHE_KEY, [
             'rate_usd' => 45_000,
@@ -745,7 +745,9 @@ class InvoicePaymentDisplayTest extends TestCase
         ]);
 
         $expectedSats = (int) round($invoice->amount_btc * Invoice::SATS_PER_BTC);
-        $partialSats = $expectedSats - 50;
+        // Beyond the +/-100 sat tolerance, so this is a residual the issuer
+        // resolves rather than rounding the settlement comparison absorbs.
+        $partialSats = $expectedSats - 1_000;
         $fiatAmount = round(($partialSats / Invoice::SATS_PER_BTC) * 45_000, 2);
 
         InvoicePayment::create([
@@ -764,7 +766,7 @@ class InvoicePaymentDisplayTest extends TestCase
             ->actingAs($owner)
             ->get(route('invoices.show', $invoice->fresh('payments')));
 
-        $response->assertSeeInOrder(['Outstanding balance', '$0.02'], false);
+        $response->assertSeeInOrder(['Outstanding balance', '$0.45'], false);
         $response->assertSee('Resolve small balance', false);
     }
 

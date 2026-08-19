@@ -31,7 +31,7 @@ Ignore/restore correction handling for wrongly attributed on-chain rows is defin
         - `outstanding_btc`/`outstanding_sats` are derived from the current/latest available BTC/USD rate at view time (used for QR/BIP21), not locked at creation.
 
 ## Watcher Behavior
-- Increase tolerance to ±100 sats to ignore tiny rounding differences.
+- Tolerance is ±100 sats, valued at the payment's captured rate, and applies wherever confirmed value is compared against expected: it absorbs rounding, not residuals. The small-balance control starts at $1.00 and owns everything above the noise.
 - When detector finds a tx:
     1. Record (or update) a row in `invoice_payments`.
     2. Recompute totals:
@@ -40,7 +40,7 @@ Ignore/restore correction handling for wrongly attributed on-chain rows is defin
     3. Status transitions:
         - `sent` → `pending` when unconfirmed payments exist but confirmed USD < expected.
         - `sent`/`pending` → `partial` when confirmed USD > 0 but below expected.
-        - `partial`/`pending` → `paid` when confirmed USD ≥ expected (confirmation threshold enforced).
+        - `partial`/`pending` → `paid` when confirmed USD ≥ expected USD − tolerance (confirmation threshold enforced).
         - `draft` stays draft if we really want to block payments until “sent” — TBD.
     4. `paid_at` is the settlement timestamp — the `confirmed_at` of the confirmation that most recently crosses the cumulative confirmed total from below the expected total to at-or-above it (the latest total re-cross): the time everyone finally agreed the invoice was paid. Among surviving confirmed payments the cumulative is monotonic, so this is the payment that first reaches the expected total; a later, redundant payment is not the crossing. Confirmation timestamps update when block data arrives.
 - Handle multiple payments per tx/address pair gracefully (e.g., same tx sends two outputs to us) by summing `sats_received`.
@@ -50,14 +50,14 @@ Ignore/restore correction handling for wrongly attributed on-chain rows is defin
 - `sent`: no payments detected.
 - `pending`: unconfirmed payments detected; awaiting confirmations.
 - `partial`: confirmed payments received but confirmed USD remains below expected.
-- `paid`: confirmed USD meets or exceeds expected after the confirmation threshold is satisfied.
+- `paid`: confirmed USD meets or exceeds expected USD − tolerance after the confirmation threshold is satisfied.
 
 ### Confirmation Gate
 - Required confirmations scale with the invoice's value at creation: higher-value invoices require more confirmations before a payment counts as confirmed.
 - Tier boundaries and their confirmation counts are operator-configurable.
 - Donations confirm at the fewest-confirmations tier.
 - Post-open-beta direction: allow a per-user required-confirmations setting with app-default fallback.
-- Invoice transitions to `paid` only when confirmed USD totals satisfy expected USD.
+- Invoice transitions to `paid` only when confirmed USD totals satisfy expected USD − tolerance.
 - `paid_at` is set only on confirmed transition.
 
 ### RBF and dropped transaction handling
@@ -97,7 +97,7 @@ Ignore/restore correction handling for wrongly attributed on-chain rows is defin
 - Delivery log should note whether auto-receipts fired after full payment or partial payment updates.
 
 ## Small Balance Resolution
-- Outstanding USD/BTC should display the exact residual (no UI masking for dust). Status `paid` hinges solely on confirmed USD >= expected USD.
+- Outstanding USD/BTC should display the exact residual (no UI masking for dust). Status `paid` hinges solely on confirmed USD >= expected USD − tolerance.
 - When the residual is below the small-balance threshold, surface an explicit “Resolve small balance” control that records a manual credit adjustment for the remaining USD (at the latest available rate) and marks the invoice paid. The adjustment is logged in `invoice_payments` as an `is_adjustment` row for auditability. Threshold rule: `max($1.00, min(1% of expected USD, $50.00 cap))`.
 - Do not auto-settle residuals; issuers must opt-in via the control.
 

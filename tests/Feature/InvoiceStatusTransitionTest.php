@@ -196,6 +196,85 @@ class InvoiceStatusTransitionTest extends TestCase
     }
 
     // -----------------------------------------------------------------------
+    // ±100 sat tolerance on the settlement comparison
+    // -----------------------------------------------------------------------
+
+    public function test_shortfall_inside_the_sat_tolerance_settles(): void
+    {
+        Carbon::setTestNow(Carbon::parse('2025-06-05 10:00:00', 'UTC'));
+
+        $invoice = $this->makeInvoiceWithNetwork('testnet');
+        // $400 at 40_000 => 1_000_000 sats expected; 100 sats is $0.04.
+
+        $base = config('blockchain.mempool.testnet_base');
+
+        Cache::put(BtcRate::CACHE_KEY, [
+            'rate_usd' => 40_000,
+            'as_of' => Carbon::now(),
+            'source' => 'test',
+        ], BtcRate::TTL);
+
+        Http::fake([
+            "{$base}/address/{$invoice->payment_address}/txs" => Http::response([
+                [
+                    'txid' => 'inside-tolerance',
+                    'status' => [
+                        'confirmed' => true,
+                        'block_height' => 300_400,
+                        'block_time' => Carbon::now()->subMinutes(3)->timestamp,
+                    ],
+                    // 50 sats short — $0.02 against a $0.04 tolerance.
+                    'vout' => [['scriptpubkey_address' => $invoice->payment_address, 'value' => 999_950]],
+                ],
+            ], 200),
+            "{$base}/blocks/tip/height" => Http::response('300401', 200),
+        ]);
+
+        $this->artisan('wallet:watch-payments')->assertExitCode(0);
+
+        $invoice->refresh();
+        $this->assertSame('paid', $invoice->status);
+        $this->assertNotNull($invoice->paid_at);
+    }
+
+    public function test_shortfall_beyond_the_sat_tolerance_stays_partial(): void
+    {
+        Carbon::setTestNow(Carbon::parse('2025-06-06 10:00:00', 'UTC'));
+
+        $invoice = $this->makeInvoiceWithNetwork('testnet');
+
+        $base = config('blockchain.mempool.testnet_base');
+
+        Cache::put(BtcRate::CACHE_KEY, [
+            'rate_usd' => 40_000,
+            'as_of' => Carbon::now(),
+            'source' => 'test',
+        ], BtcRate::TTL);
+
+        Http::fake([
+            "{$base}/address/{$invoice->payment_address}/txs" => Http::response([
+                [
+                    'txid' => 'beyond-tolerance',
+                    'status' => [
+                        'confirmed' => true,
+                        'block_height' => 300_500,
+                        'block_time' => Carbon::now()->subMinutes(3)->timestamp,
+                    ],
+                    // 300 sats short — $0.12, outside the tolerance.
+                    'vout' => [['scriptpubkey_address' => $invoice->payment_address, 'value' => 999_700]],
+                ],
+            ], 200),
+            "{$base}/blocks/tip/height" => Http::response('300501', 200),
+        ]);
+
+        $this->artisan('wallet:watch-payments')->assertExitCode(0);
+
+        $invoice->refresh();
+        $this->assertSame('partial', $invoice->status);
+        $this->assertNull($invoice->paid_at);
+    }
+
+    // -----------------------------------------------------------------------
     // Watcher skips voided invoices (transition blocked)
     // -----------------------------------------------------------------------
 

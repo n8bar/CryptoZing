@@ -445,7 +445,7 @@ class Invoice extends Model
         $hasUnconfirmed = $this->hasUnconfirmedPayments();
 
         if ($expectedUsd !== null && $expectedUsd > 0) {
-            if ($confirmedUsd >= $expectedUsd) {
+            if ($confirmedUsd + $this->satToleranceUsd() >= $expectedUsd) {
                 if ($this->status !== 'paid') {
                     $this->status = 'paid';
                     $becamePaid = true;
@@ -470,6 +470,27 @@ class Invoice extends Model
         if ($becamePaid && $this->status === 'paid') {
             event(new \App\Events\InvoicePaid($this->fresh(['client','user','deliveries'])));
         }
+    }
+
+    /**
+     * PAYMENT_SAT_TOLERANCE expressed in USD, so the settlement comparison can
+     * absorb rounding without reaching into residual territory — 100 sats is
+     * cents, while the small-balance control starts at a dollar. Valued at the
+     * rate that priced the money which arrived, falling back to the invoice's
+     * own rate when nothing is confirmed yet.
+     */
+    private function satToleranceUsd(): float
+    {
+        $rate = $this->activePayments()
+            ->filter(fn (InvoicePayment $payment) => $this->paymentIsConfirmed($payment))
+            ->sortByDesc('confirmed_at')
+            ->first()?->usd_rate ?? $this->btc_rate;
+
+        if (! $rate) {
+            return 0.0;
+        }
+
+        return (self::PAYMENT_SAT_TOLERANCE / self::SATS_PER_BTC) * (float) $rate;
     }
 
     public function refreshPaymentLedger(?Carbon $reference = null, ?int $paymentConfirmations = null): void
