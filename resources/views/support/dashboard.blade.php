@@ -175,22 +175,29 @@
 
                     {{-- Watcher health --}}
                     <div class="px-6 py-5">
-                        <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400">Watcher last seen</p>
-                        @if ($monitoring['last_payment_at'])
+                        <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400">Watcher</p>
+                        @if ($monitoring['watcher_last_ran_at'])
                             <p class="mt-1 text-sm font-semibold
                                 {{ $monitoring['watcher_stale'] ? 'text-amber-600 dark:text-amber-400' : 'text-gray-900 dark:text-white' }}">
-                                {{ \Illuminate\Support\Carbon::parse($monitoring['last_payment_at'])->setTimezone(config('app.timezone'))->toDayDateTimeString() }}
+                                {{ $monitoring['watcher_last_ran_at']->setTimezone(config('app.timezone'))->toDayDateTimeString() }}
                             </p>
                             @if ($monitoring['watcher_stale'])
                                 <p class="mt-0.5 text-xs text-amber-600 dark:text-amber-400">
-                                    No activity in over {{ $monitoring['stale_minutes'] }} minutes — worth checking.
+                                    No completed run in over {{ $monitoring['stale_minutes'] }} minutes — worth checking.
                                 </p>
                             @else
-                                <p class="mt-0.5 text-xs text-green-600 dark:text-green-400">recent</p>
+                                <p class="mt-0.5 text-xs text-green-600 dark:text-green-400">on schedule</p>
                             @endif
                         @else
-                            <p class="mt-1 text-sm text-gray-400 dark:text-slate-500">No on-chain payments recorded yet.</p>
+                            <p class="mt-1 text-xs text-amber-600 dark:text-amber-400">No completed run recorded yet — worth checking.</p>
                         @endif
+                        <p class="mt-2 text-xs text-gray-500 dark:text-slate-400">
+                            @if ($monitoring['last_payment_at'])
+                                Last on-chain payment: {{ \Illuminate\Support\Carbon::parse($monitoring['last_payment_at'])->setTimezone(config('app.timezone'))->toDayDateTimeString() }}
+                            @else
+                                No on-chain payments recorded yet.
+                            @endif
+                        </p>
                     </div>
 
                 </div>

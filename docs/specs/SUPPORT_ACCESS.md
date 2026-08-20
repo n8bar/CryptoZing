@@ -87,6 +87,8 @@ The owner setting copy should communicate all of these points in plain language:
   - that the view is read-only support access
   - when the access expires
 - If the grant expires or is revoked while support is navigating, the next request must deny access cleanly.
+- The service-health panel reports watcher liveness from the watcher's own last completed run, readable from any container serving the dashboard.
+- Payment recency is separate context on the panel and never stands in for watcher liveness; a watcher with no recorded run reads as needing attention, not as healthy.
 
 ## Data Model Requirements
 The owner record must persist enough state to determine whether support access is currently valid.
