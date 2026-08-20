@@ -42,30 +42,59 @@ class DonationPaymentSyncService
             $tipHeight = null;
 
             foreach ($donations as $donation) {
+                $txs = $transactions[$donation->address] ?? [];
+
                 $seen = $this->confirmedPaymentTotal(
-                    $transactions[$donation->address] ?? [],
+                    $txs,
                     $donation->address,
                     (string) $network,
                     $tipHeight
                 );
-                if (! $seen) {
+
+                if ($seen) {
+                    $donation->forceFill([
+                        'status' => 'paid',
+                        'txid' => $seen['txid'],
+                        'sats_received' => $seen['sats'],
+                        'paid_at' => now(),
+                    ])->save();
+
+                    $newlyPaid[] = $donation;
+
+                    Log::info('donation.payment.detected', [
+                        'donation_id' => $donation->id,
+                        'txid' => $seen['txid'],
+                        'sats' => $seen['sats'],
+                    ]);
+
+                    continue;
+                }
+
+                // The operator hears about a donation when it is first seen,
+                // not when the confirmation gate settles it (DONATIONS.md).
+                // The snapshot is provisional; the paid flip rewrites it from
+                // the confirmed transaction.
+                if ($donation->notified_at) {
+                    continue;
+                }
+
+                $observed = $this->anyPaymentTotal($txs, $donation->address);
+                if (! $observed) {
                     continue;
                 }
 
                 $donation->forceFill([
-                    'status' => 'paid',
-                    'txid' => $seen['txid'],
-                    'sats_received' => $seen['sats'],
-                    'paid_at' => now(),
+                    'txid' => $observed['txid'],
+                    'sats_received' => $observed['sats'],
                 ])->save();
 
-                $newlyPaid[] = $donation;
-
-                Log::info('donation.payment.detected', [
+                Log::info('donation.payment.seen', [
                     'donation_id' => $donation->id,
-                    'txid' => $seen['txid'],
-                    'sats' => $seen['sats'],
+                    'txid' => $observed['txid'],
+                    'sats' => $observed['sats'],
                 ]);
+
+                $this->notifyOperator($donation);
             }
         }
 
@@ -138,6 +167,36 @@ class DonationPaymentSyncService
                 continue;
             }
 
+            $sats = 0;
+            foreach ($tx['vout'] ?? [] as $output) {
+                if (($output['scriptpubkey_address'] ?? null) === $address) {
+                    $sats += (int) ($output['value'] ?? 0);
+                }
+            }
+
+            if ($sats > 0 && ! empty($tx['txid'])) {
+                $total += $sats;
+                $txid ??= (string) $tx['txid'];
+            }
+        }
+
+        return $total > 0 && $txid !== null ? ['txid' => $txid, 'sats' => $total] : null;
+    }
+
+    /**
+     * Total sats across every transaction paying this address, confirmed or
+     * not, with the txid of the first qualifying tx — "seen" for the
+     * first-notice mail, with no confirmation gate applied.
+     *
+     * @param  array<int, mixed>  $transactions
+     * @return array{txid: string, sats: int}|null
+     */
+    private function anyPaymentTotal(array $transactions, string $address): ?array
+    {
+        $total = 0;
+        $txid = null;
+
+        foreach ($transactions as $tx) {
             $sats = 0;
             foreach ($tx['vout'] ?? [] as $output) {
                 if (($output['scriptpubkey_address'] ?? null) === $address) {

@@ -77,7 +77,11 @@ class DonationPaymentSyncTest extends TestCase
         Mail::assertQueuedCount(1);
     }
 
-    public function test_unconfirmed_payment_leaves_donation_pending_with_no_mail(): void
+    /**
+     * DONATIONS.md: the operator is notified when a donation is first seen,
+     * before the confirmation gate settles it. The row stays pending.
+     */
+    public function test_unconfirmed_payment_stays_pending_and_queues_the_first_seen_operator_mail(): void
     {
         $donation = $this->makePendingDonation('tb1qdonation0', 0);
 
@@ -102,9 +106,67 @@ class DonationPaymentSyncTest extends TestCase
         $this->assertDatabaseHas('donations', [
             'id' => $donation->id,
             'status' => 'pending',
-            'txid' => null,
+            'txid' => 'donation-tx-1',
+            'sats_received' => 50000,
         ]);
-        Mail::assertNothingQueued();
+        $this->assertNull($donation->fresh()->paid_at);
+        $this->assertNotNull($donation->fresh()->notified_at);
+
+        Mail::assertQueued(DonationReceivedMail::class, function (DonationReceivedMail $mail) {
+            return $mail->hasTo('operator@example.test');
+        });
+        Mail::assertQueuedCount(1);
+    }
+
+    public function test_first_seen_mail_is_not_repeated_on_later_passes_or_at_confirmation(): void
+    {
+        $donation = $this->makePendingDonation('tb1qdonation0', 0);
+
+        $unconfirmed = [
+            'tb1qdonation0' => [
+                [
+                    'txid' => 'donation-tx-1',
+                    'status' => ['confirmed' => false],
+                    'vout' => [
+                        ['scriptpubkey_address' => 'tb1qdonation0', 'value' => 50000],
+                    ],
+                ],
+            ],
+        ];
+        $confirmed = [
+            'tb1qdonation0' => [
+                [
+                    'txid' => 'donation-tx-1',
+                    'status' => ['confirmed' => true, 'block_height' => 250000],
+                    'vout' => [
+                        ['scriptpubkey_address' => 'tb1qdonation0', 'value' => 50000],
+                    ],
+                ],
+            ],
+        ];
+
+        $this->mock(MempoolClient::class, function ($mock) use ($unconfirmed, $confirmed) {
+            $mock->shouldReceive('transactionsForAddresses')
+                ->andReturn($unconfirmed, $unconfirmed, $confirmed);
+            $mock->shouldReceive('tipHeight')->andReturn(250000);
+        });
+
+        $this->artisan('wallet:watch-payments')->assertSuccessful();
+        Mail::assertQueuedCount(1);
+        $this->assertSame('pending', $donation->fresh()->status);
+
+        $this->artisan('wallet:watch-payments')->assertSuccessful();
+        $this->artisan('wallet:watch-payments')->assertSuccessful();
+
+        $this->assertDatabaseHas('donations', [
+            'id' => $donation->id,
+            'status' => 'paid',
+            'txid' => 'donation-tx-1',
+            'sats_received' => 50000,
+        ]);
+        $this->assertNotNull($donation->fresh()->paid_at);
+
+        Mail::assertQueuedCount(1);
     }
 
     public function test_confirmed_payment_below_a_raised_fewest_tier_stays_pending(): void
