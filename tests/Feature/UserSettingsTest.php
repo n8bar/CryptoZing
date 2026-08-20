@@ -782,7 +782,6 @@ class UserSettingsTest extends TestCase
         $response->assertSee('name="show_mail_logo"', false);
         $response->assertSeeText('Send yourself a test email');
         $response->assertSee(route('settings.notifications.preview'), false);
-        $response->assertDontSee('name="auto_receipt_emails"', false);
         $response->assertDontSeeText('dashboard, invoices list, and invoice payment history will point you to the review/send action');
         $response->assertDontSeeText('RC');
         $response->assertDontSeeText('MS16');

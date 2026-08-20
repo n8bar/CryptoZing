@@ -19,14 +19,14 @@ Audited 2026-08-19 against the code. The spec previously carried these as a ✅ 
 
 **Item 4.** The tolerance was never wired: `Invoice::PAYMENT_SAT_TOLERANCE` was declared and read nowhere, so settlement compared confirmed USD to expected USD with no slack. A real mainnet invoice sat `partial` on a 12.89 sat shortfall (#156, fixed in PR #160). Per-row confirmation timestamps still do not surface — the history table shows a Detected column and only the word `Confirmed`/`Pending` per row.
 
-**Item 6.** Neither invoice delivery nor the client receipt is automatic; both are issuer-initiated. The only automatic reaction to `InvoicePaid` is the issuer notice. `auto_receipt_emails` exists as a column, fillable entry, and cast with zero consumers — the same dead-declaration pattern as item 4. Tracked in #159.
+**Item 6.** Neither invoice delivery nor the client receipt is automatic; both are issuer-initiated. The only automatic reaction to `InvoicePaid` is the issuer notice. `auto_receipt_emails` existed as a column, fillable entry, and cast with zero consumers — the same dead-declaration pattern as item 4. Dropped in #159: NOTIFICATIONS.md records manual, owner-reviewed receipts as the deliberate RC1 policy, so the toggle had nothing to govern.
 
-**Item 8.** Acknowledgments fire on every new payment including the first; there is no second-payment counter and no partial-payment warning delivery type. The dedupe keys on txid rather than invoice. Tracked in #159.
+**Item 8.** Acknowledgments fire on every new payment including the first; there is no second-payment counter and no partial-payment warning delivery type. The dedupe keys on txid rather than invoice. The claim left the spec with the Completed Tasks list removal (#159).
 
 **Coverage gaps found in the same pass**
 
 - No test asserts the watcher persists `usd_rate` / `fiat_amount`. Fixtures use a `btc_rate` identical to the faked cache rate, so `paymentFiatValue()`'s fallback produces the same number if the snapshot write were removed.
-- `tests/Feature/PublicShareTest.php` asserts `assertDontSee('Send one payment:')` — a string with a colon that appears in no view, so it passes vacuously.
+- `tests/Feature/PublicShareTest.php` asserts `assertDontSee('Send one payment:')` — a string with a colon that appears in no view, so it passes vacuously. Fixed in #159: now asserts the rendered string `Send one payment (if possible):` unescaped.
 - The zero-balance QR rule (omit `amount` when nothing is outstanding) is implemented but unreachable: outstanding reaches zero only when the invoice is `paid`, and both views hide the QR at `paid`.
 
 ## Open questions
