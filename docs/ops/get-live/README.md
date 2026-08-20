@@ -130,5 +130,6 @@ Uploads and logs live in `./storage` — include it in file backups.
 
 - Every service restarts automatically (`restart: unless-stopped`) — a reboot brings the whole stack back.
 - The queue worker and scheduler run as their own containers off the same image; the payment watcher runs from the scheduler every minute.
+- `docker compose ps` reports health per service: the app answers a PHP-FPM ping, while the queue and scheduler answer on a heartbeat their worker loops refresh — so a worker still running but wedged reads `unhealthy` rather than fine.
 - Container logs are capped (10 MB × 3 files per service).
 - The image runs as a non-root user (uid 1000) and ships no `.env`, no dev dependencies, and no CryptoZing site content.

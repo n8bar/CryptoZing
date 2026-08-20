@@ -5,6 +5,7 @@ use App\Console\Commands\BackfillInvoicePayments;
 use App\Console\Commands\ReassignInvoiceAddresses;
 use App\Console\Commands\SendPastDueInvoiceAlerts;
 use App\Console\Commands\WatchInvoicePayments;
+use App\Support\WorkerHeartbeat;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Application;
@@ -23,6 +24,12 @@ return Application::configure(basePath: dirname(__DIR__))
             ->withoutOverlapping()
             ->runInBackground();
         $schedule->command('invoices:send-past-due-alerts')->dailyAt('02:00');
+
+        // Proves the minute tick actually fired, which is what the scheduler
+        // container's healthcheck reads. See App\Support\WorkerHeartbeat.
+        $schedule->call(fn () => WorkerHeartbeat::touch(WorkerHeartbeat::SCHEDULER))
+            ->everyMinute()
+            ->name('worker-heartbeat');
     })
     ->withRouting(
         web: __DIR__.'/../routes/web.php',

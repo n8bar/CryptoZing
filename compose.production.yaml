@@ -69,15 +69,33 @@ services:
       retries: 5
       start_period: 60s
 
+  # Both workers run the app image without PHP-FPM, so the image's FPM ping
+  # cannot speak for them (#153). Each refreshes a heartbeat as its loop turns
+  # and answers on the age of it — a wedged worker goes quiet while its process
+  # stays up, which is the failure the restart policy alone never catches.
   queue:
     <<: *app
     command: php artisan queue:work --tries=3 --timeout=90 --max-time=3600
+    healthcheck:
+      # The loop turns every few seconds, idle or not.
+      test: ["CMD", "php", "/var/www/html/docker/production/worker-healthcheck.php", "queue", "60"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
 
   # Also covers the payment watcher: wallet:watch-payments runs as a
   # per-minute scheduled command, not an always-on process (§2.3.1.2).
   scheduler:
     <<: *app
     command: php artisan schedule:work
+    healthcheck:
+      # One tick a minute, and the first waits for the top of the next one.
+      test: ["CMD", "php", "/var/www/html/docker/production/worker-healthcheck.php", "scheduler", "180"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 120s
 
 volumes:
   dbdata:
