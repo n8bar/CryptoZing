@@ -54,6 +54,10 @@ _Carry-forward guardrail from active roadmap scope: suppress duplicate sends for
    - Include storage, validation, replacement/removal, and email-client-safe fallback behavior.
    - Keep this separate from the open-beta KISS mail-branding controls, which are limited to brand-shell text fields plus a default-logo on/off toggle.
 
+28. **DMARC enforcement on the sending subdomain**
+   - Move `_dmarc.mailer.cryptozing.app` from `p=none` to `p=quarantine` once user traffic has produced a clean aggregate-report history (rua collectors: Mailgun DMARC monitor + OnDMARC; sources should show only Mailgun IPs, all passing aligned).
+   - DNS-only change; verify a delivered message still shows `dmarc=pass` afterward. Context: #161/#166 — alignment already passes strictly, only enforcement is deferred.
+
 ## Support & Admin Roles
 
 20. **Support agent / maintainer role separation**
