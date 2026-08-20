@@ -60,12 +60,14 @@
    1. Triggered when the invoice reflects a significant overpayment (15% threshold for the open beta).
    2. The client alert should explain that overpayments are treated as gratuities by default and tell the client to contact the sender if the overpayment was accidental.
    3. The owner alert should report the overpayment percentage and prompt a disposition decision — keep as tip, credit the client, or record a manual adjustment/refund — with a link back into the app.
+   4. The alert is judged against the client's payments only; an issuer ledger adjustment never triggers it and can only clear a pending one.
 
 4. **Significant Underpayment Alert (Owner + Client)**
    1. Triggered when the invoice still carries a significant remaining balance after payment activity (15% threshold for the open beta).
    2. The client alert should neutrally communicate that a balance remains, include the outstanding USD amount, and link to the public invoice so the client can settle; where appropriate, it may encourage completing the remaining balance in one payment for convenience.
    3. The owner alert should report the outstanding balance and link back to the invoice for follow-up or manual adjustment.
    4. Fragmented or repeated partial payments should not create a separate repeated-warning alert family; they should continue to use the final underpayment behavior instead.
+   5. The alert requires a shortfall in the client's payments themselves; an issuer ledger adjustment (for example a reopened balance) never triggers it and can only clear a pending one.
 
 ## 5. Outbound Mail and History
 1. Outbound invoice communication should use a shared queued delivery path and shared delivery history so send outcomes remain auditable.

@@ -1289,12 +1289,32 @@
                     </div>
                 @endif
 
-                <div class="rounded-lg bg-white p-6 shadow">
+                <div class="rounded-lg bg-white p-6 shadow"
+                     x-data="{
+                         expectedUsd: @js((float) ($invoice->amount_usd ?? 0)),
+                         settledUsd: @js(round($invoice->sumPaymentsUsd(true), 2)),
+                         alertPercent: @js(\App\Models\Invoice::CLIENT_ALERT_PERCENT),
+                         confirmedOverage: false,
+                         overageUsd: 0,
+                         maybeConfirmOverage(event) {
+                             if (this.confirmedOverage) return;
+                             const form = event.target;
+                             const amount = parseFloat(form.amount_usd.value);
+                             if (form.direction.value !== 'increase' || !(this.expectedUsd > 0) || !(amount > 0)) return;
+                             const overage = this.settledUsd + amount - this.expectedUsd;
+                             if (overage > 0 && (overage / this.expectedUsd) * 100 >= this.alertPercent) {
+                                 event.preventDefault();
+                                 this.overageUsd = overage;
+                                 this.$dispatch('open-modal', 'confirm-adjustment-overage');
+                             }
+                         },
+                     }">
                 <h3 class="text-sm font-semibold text-gray-700">Manual adjustments</h3>
                 <p class="mt-1 text-xs text-gray-500">
                     Credit or reopen balances without editing on-chain payments. Use this when a payment misses the tolerance threshold.
                 </p>
-                <form method="POST" action="{{ route('invoices.payments.adjustments.store', $invoice) }}" class="mt-4 space-y-4">
+                <form method="POST" action="{{ route('invoices.payments.adjustments.store', $invoice) }}" class="mt-4 space-y-4"
+                      id="manual-adjustment-form" x-on:submit="maybeConfirmOverage($event)">
                     @csrf
                     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         <div>
@@ -1326,6 +1346,26 @@
                         <x-primary-button>Add adjustment</x-primary-button>
                     </div>
                 </form>
+
+                <x-modal name="confirm-adjustment-overage" focusable maxWidth="md">
+                    <div class="p-6">
+                        <h2 class="text-lg font-medium text-gray-900">Confirm adjustment</h2>
+                        <p class="mt-2 text-sm text-gray-600">
+                            This credit puts the settled total
+                            <span class="font-semibold" x-text="'$' + overageUsd.toFixed(2)"></span>
+                            over the invoice total. The client will not be emailed about the overage.
+                        </p>
+                        <div class="mt-6 flex justify-end gap-3">
+                            <x-secondary-button type="button" x-on:click="$dispatch('close')">
+                                Cancel
+                            </x-secondary-button>
+                            <x-primary-button type="button"
+                                              x-on:click="confirmedOverage = true; $dispatch('close'); $nextTick(() => document.getElementById('manual-adjustment-form').requestSubmit())">
+                                Record adjustment
+                            </x-primary-button>
+                        </div>
+                    </div>
+                </x-modal>
             </div>
 
                 {{-- Public link (shareable print view) --}}

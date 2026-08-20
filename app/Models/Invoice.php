@@ -383,18 +383,28 @@ class Invoice extends Model
 
     public function overpaymentPercent(): ?float
     {
+        // Client payments only — an issuer ledger adjustment is not a client
+        // payment and never creates an overpayment (#158).
+        return $this->surplusPercent($this->sumPaymentsUsd(true, onChainOnly: true));
+    }
+
+    private function ledgerOverpaymentPercent(): ?float
+    {
+        return $this->surplusPercent($this->sumPaymentsUsd(true));
+    }
+
+    private function surplusPercent(float $paidUsd): ?float
+    {
         $expectedUsd = $this->amount_usd !== null ? (float) $this->amount_usd : null;
         if ($expectedUsd === null || $expectedUsd <= 0) {
             return null;
         }
 
-        $confirmedUsd = $this->sumPaymentsUsd(true);
-        if ($confirmedUsd <= $expectedUsd) {
+        if ($paidUsd <= $expectedUsd) {
             return null;
         }
 
-        $surplusUsd = $confirmedUsd - $expectedUsd;
-        return ($surplusUsd / $expectedUsd) * 100;
+        return (($paidUsd - $expectedUsd) / $expectedUsd) * 100;
     }
 
     public function underpaymentPercent(): ?float
@@ -418,15 +428,45 @@ class Invoice extends Model
         return ($deficitUsd / $expectedUsd) * 100;
     }
 
+    private function onChainUnderpaymentPercent(): ?float
+    {
+        $expectedUsd = $this->amount_usd !== null ? (float) $this->amount_usd : null;
+        if ($expectedUsd === null || $expectedUsd <= 0) {
+            return null;
+        }
+
+        if ($this->activeOnChainPayments()->isEmpty()) {
+            return null;
+        }
+
+        $receivedUsd = $this->sumPaymentsUsd(onChainOnly: true);
+        if ($receivedUsd + self::UNDERPAY_USD_TOLERANCE >= $expectedUsd) {
+            return null;
+        }
+
+        $deficitUsd = max($expectedUsd - $receivedUsd, 0);
+        return ($deficitUsd / $expectedUsd) * 100;
+    }
+
+    /**
+     * Client alerts need the threshold crossed by the client's own payments
+     * AND by the adjusted ledger: an issuer adjustment never creates an
+     * alert, and one that resolves the balance clears a pending one (#158).
+     */
     public function requiresClientOverpayAlert(): bool
     {
-        $percent = $this->overpaymentPercent();
-        return $percent !== null && $percent >= self::CLIENT_ALERT_PERCENT;
+        return $this->percentMeetsClientAlertThreshold($this->overpaymentPercent())
+            && $this->percentMeetsClientAlertThreshold($this->ledgerOverpaymentPercent());
     }
 
     public function requiresClientUnderpayAlert(): bool
     {
-        $percent = $this->underpaymentPercent();
+        return $this->percentMeetsClientAlertThreshold($this->onChainUnderpaymentPercent())
+            && $this->percentMeetsClientAlertThreshold($this->underpaymentPercent());
+    }
+
+    private function percentMeetsClientAlertThreshold(?float $percent): bool
+    {
         return $percent !== null && $percent >= self::CLIENT_ALERT_PERCENT;
     }
 
@@ -721,9 +761,9 @@ class Invoice extends Model
         return $base . $path;
     }
 
-    public function sumPaymentsUsd(bool $confirmedOnly = false): float
+    public function sumPaymentsUsd(bool $confirmedOnly = false, bool $onChainOnly = false): float
     {
-        $payments = $this->activePayments();
+        $payments = $onChainOnly ? $this->activeOnChainPayments() : $this->activePayments();
 
         if ($confirmedOnly) {
             $payments = $payments->filter(fn (InvoicePayment $payment) => $this->paymentIsConfirmed($payment));
