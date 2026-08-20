@@ -54,7 +54,6 @@ class ProfileTest extends TestCase
         $user = User::factory()->create([
             'show_overpayment_gratuity_note' => false,
             'show_qr_refresh_reminder' => false,
-            'auto_receipt_emails' => true,
         ]);
 
         $response = $this
@@ -63,7 +62,6 @@ class ProfileTest extends TestCase
                 'name' => 'Test User',
                 'email' => 'test@example.com',
                 'show_invoice_ids' => true,
-                'auto_receipt_emails' => false,
                 'show_overpayment_gratuity_note' => true,
                 'show_qr_refresh_reminder' => true,
             ]);
@@ -78,7 +76,6 @@ class ProfileTest extends TestCase
         $this->assertSame('test@example.com', $user->email);
         $this->assertNull($user->email_verified_at);
         $this->assertTrue($user->show_invoice_ids);
-        $this->assertTrue($user->auto_receipt_emails);
         $this->assertFalse($user->show_overpayment_gratuity_note);
         $this->assertFalse($user->show_qr_refresh_reminder);
     }

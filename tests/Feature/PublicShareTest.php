@@ -186,7 +186,7 @@ class PublicShareTest extends TestCase
             ->assertDontSee('Payment history')
             ->assertDontSee('BTC address')
             ->assertDontSee('Payment QR')
-            ->assertDontSee('Send one payment:')
+            ->assertDontSee('Send one payment (if possible):', false)
             ->assertDontSee('<svg', false);
     }
 
