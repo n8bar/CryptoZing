@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Invoice;
 use App\Services\DonationPaymentSyncService;
 use App\Services\InvoicePaymentSyncService;
+use App\Support\WatcherLiveness;
 use Illuminate\Console\Command;
 
 class WatchInvoicePayments extends Command
@@ -70,6 +71,10 @@ class WatchInvoicePayments extends Command
         if (! $this->option('invoice')) {
             $donations = $this->donationSyncService->syncPending();
             $this->info("Checked {$donations['checked']} donation addresses, {$donations['paid']} newly paid.");
+
+            // A single-invoice run is not a full sweep, so only unfiltered
+            // runs count as liveness for the support dashboard (#163).
+            WatcherLiveness::recordCompletedRun();
         }
 
         return Command::SUCCESS;

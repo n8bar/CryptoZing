@@ -6,7 +6,9 @@ use App\Models\Client;
 use App\Models\Invoice;
 use App\Models\InvoicePayment;
 use App\Models\User;
+use App\Support\WatcherLiveness;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Cache;
 use Tests\TestCase;
 
 class SupportMonitoringTest extends TestCase
@@ -110,44 +112,39 @@ class SupportMonitoringTest extends TestCase
         $this->assertStringNotContainsString('old@example.com', $response->getContent());
     }
 
-    public function test_watcher_healthy_shows_recent_label(): void
+    /**
+     * #163: watcher liveness comes from the watcher's own run stamp, so a
+     * quiet hour with no payments must not read as a stale watcher.
+     */
+    public function test_watcher_reads_healthy_from_fresh_run_stamp_despite_no_payments(): void
     {
         $agent = $this->supportAgent();
-        $issuer = User::factory()->create();
-        $invoice = $this->makeInvoice($issuer);
-
-        InvoicePayment::create([
-            'invoice_id'    => $invoice->id,
-            'txid'          => 'tx-mon-health',
-            'sats_received' => 10000,
-            'is_adjustment' => false,
-            'detected_at'   => now()->subMinutes(10),
-            'confirmed_at'  => now()->subMinutes(9),
-            'usd_rate'      => 50000,
-            'fiat_amount'   => 5.00,
-        ]);
+        WatcherLiveness::recordCompletedRun();
 
         $this->actingAs($agent)
             ->get(route('support.dashboard'))
             ->assertOk()
-            ->assertSee('recent');
+            ->assertSee('on schedule')
+            ->assertDontSee('worth checking');
     }
 
-    public function test_watcher_staleness_flag_triggers_past_threshold(): void
+    public function test_watcher_reads_stale_from_old_run_stamp_despite_recent_payment(): void
     {
         $agent = $this->supportAgent();
         config(['support.watcher_stale_minutes' => 30]);
 
+        Cache::forever(WatcherLiveness::CACHE_KEY, now()->subMinutes(65)->toIso8601String());
+
         $issuer = User::factory()->create();
         $invoice = $this->makeInvoice($issuer);
 
         InvoicePayment::create([
             'invoice_id'    => $invoice->id,
-            'txid'          => 'tx-mon-stale',
+            'txid'          => 'tx-mon-dead-watcher',
             'sats_received' => 10000,
             'is_adjustment' => false,
-            'detected_at'   => now()->subMinutes(60),
-            'confirmed_at'  => now()->subMinutes(59),
+            'detected_at'   => now()->subMinutes(5),
+            'confirmed_at'  => now()->subMinutes(4),
             'usd_rate'      => 50000,
             'fiat_amount'   => 5.00,
         ]);
@@ -155,7 +152,36 @@ class SupportMonitoringTest extends TestCase
         $this->actingAs($agent)
             ->get(route('support.dashboard'))
             ->assertOk()
-            ->assertSee('No activity in over 30 minutes');
+            ->assertSee('No completed run in over 30 minutes');
+    }
+
+    public function test_watcher_with_no_recorded_run_reads_as_needing_attention(): void
+    {
+        $agent = $this->supportAgent();
+
+        $this->actingAs($agent)
+            ->get(route('support.dashboard'))
+            ->assertOk()
+            ->assertSee('No completed run recorded yet');
+    }
+
+    public function test_watch_command_records_a_completed_run_stamp(): void
+    {
+        $this->assertNull(WatcherLiveness::lastCompletedRunAt());
+
+        $this->artisan('wallet:watch-payments')->assertExitCode(0);
+
+        $this->assertNotNull(WatcherLiveness::lastCompletedRunAt());
+    }
+
+    public function test_single_invoice_run_does_not_record_a_completed_run_stamp(): void
+    {
+        $issuer = User::factory()->create();
+        $invoice = $this->makeInvoice($issuer);
+
+        $this->artisan('wallet:watch-payments', ['--invoice' => $invoice->id])->assertExitCode(0);
+
+        $this->assertNull(WatcherLiveness::lastCompletedRunAt());
     }
 
     public function test_adjustment_payments_excluded_from_watcher_health(): void
@@ -166,7 +192,7 @@ class SupportMonitoringTest extends TestCase
         $issuer = User::factory()->create();
         $invoice = $this->makeInvoice($issuer);
 
-        // Only an adjustment — should not count as watcher activity
+        // Only an adjustment — the payment-recency reading counts on-chain rows only
         InvoicePayment::create([
             'invoice_id'    => $invoice->id,
             'txid'          => 'tx-adj',
@@ -190,6 +216,8 @@ class SupportMonitoringTest extends TestCase
         $issuer = User::factory()->create();
         $invoice = $this->makeInvoice($issuer);
 
+        WatcherLiveness::recordCompletedRun();
+
         InvoicePayment::create([
             'invoice_id'    => $invoice->id,
             'txid'          => 'tx-mon-ok',
@@ -206,7 +234,8 @@ class SupportMonitoringTest extends TestCase
             ->assertOk()
             ->assertSee('Service Health')
             ->assertSee('no failures')
-            ->assertSee('recent');
+            ->assertSee('on schedule')
+            ->assertSee('Last on-chain payment');
     }
 
     public function test_no_payments_recorded_yet_renders_cleanly(): void

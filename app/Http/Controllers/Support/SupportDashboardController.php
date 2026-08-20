@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Support;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Support\WatcherLiveness;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -70,16 +71,21 @@ class SupportDashboardController extends Controller
             ->where('is_adjustment', false)
             ->max(DB::raw('COALESCE(detected_at, created_at)'));
 
+        // Liveness comes from the watcher's own run stamp, never from payment
+        // recency — a quiet hour is not a dead watcher, and a payment landing
+        // says nothing about the watcher since (#163). No stamp reads stale.
         $staleMinutes = config('support.watcher_stale_minutes', 60);
-        $watcherStale = $lastPaymentAt !== null
-            && now()->diffInMinutes($lastPaymentAt, false) < -$staleMinutes;
+        $watcherLastRanAt = WatcherLiveness::lastCompletedRunAt();
+        $watcherStale = $watcherLastRanAt === null
+            || $watcherLastRanAt->lt(now()->subMinutes($staleMinutes));
 
         return [
-            'queue_depth'     => $queueDepth,
-            'recent_failures' => $recentFailures,
-            'last_payment_at' => $lastPaymentAt,
-            'watcher_stale'   => $watcherStale,
-            'stale_minutes'   => $staleMinutes,
+            'queue_depth'         => $queueDepth,
+            'recent_failures'     => $recentFailures,
+            'last_payment_at'     => $lastPaymentAt,
+            'watcher_last_ran_at' => $watcherLastRanAt,
+            'watcher_stale'       => $watcherStale,
+            'stale_minutes'       => $staleMinutes,
         ];
     }
 }
