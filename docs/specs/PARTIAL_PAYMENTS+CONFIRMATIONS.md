@@ -68,6 +68,7 @@ Verification status, the test plan, mechanics, and open questions live in [`docs
 
 ## Manual Adjustments and Reversal
 - Manual adjustments are append-only ledger entries. Issuers cannot edit or delete a recorded amount or direction in place.
+- Recording an adjustment that would push the settled total past the client overpayment-alert threshold requires an explicit issuer confirmation that states the amount by which the total would exceed the invoice.
 - Reversing an adjustment creates a second adjustment on the same invoice with equal-and-opposite values, cancelling the original accounting effect exactly.
 - Reversal rows preserve the original adjustment's USD/BTC snapshot rather than repricing at the latest rate, and carry a `reversal of {txid}` note naming the row they cancel.
 - Both rows stay visible in payment history. Reversal is the supported issuer-facing correction path for manual adjustments.
@@ -77,4 +78,5 @@ Verification status, the test plan, mechanics, and open questions live in [`docs
 - Surplus within noise (≤ $10 USD equivalent or ≤ 1% of the invoice) appears in payment history without alerts.
 - Surplus beyond that is flagged to the issuer, and client messaging makes clear that overpayments are treated as gratuities unless the sender says otherwise. Issuer guidance may suggest a refund or credit when a surplus looks accidental, without being prescriptive about intentional tips.
 - Over and underpayments beyond 15% of the invoice total alert both the issuer and the client.
+- Over/underpayment alerts judge the client's payments. An issuer ledger adjustment is not a client payment: an adjustment may clear an alert condition, but never creates one and never generates client mail.
 - Client-facing payment alerts describe only what is true of the payment at the time they are sent, including whether it is confirmed.
