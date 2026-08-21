@@ -25,6 +25,19 @@ class InvoicePaymentCorrectionTest extends TestCase
         parent::tearDown();
     }
 
+    /**
+     * Correction audit events go to the dedicated audit channel; spy it while
+     * leaving the rest of the Log facade permissive.
+     */
+    private function spyAuditLog(): \Mockery\MockInterface
+    {
+        Log::spy();
+        $audit = \Mockery::spy(\Psr\Log\LoggerInterface::class);
+        Log::shouldReceive('channel')->with('audit')->andReturn($audit);
+
+        return $audit;
+    }
+
     public function test_owner_can_ignore_payment_reopen_invoice_and_hide_ignored_row_from_print_surfaces(): void
     {
         Carbon::setTestNow(Carbon::parse('2025-01-10 12:00:00', 'UTC'));
@@ -38,7 +51,7 @@ class InvoicePaymentCorrectionTest extends TestCase
                 'data' => ['amount' => '50000.00'],
             ], 200),
         ]);
-        Log::spy();
+        $audit = $this->spyAuditLog();
 
         [$owner, $client, $invoice] = $this->makeInvoice([
             'amount_usd' => 5,
@@ -120,7 +133,7 @@ class InvoicePaymentCorrectionTest extends TestCase
             ->assertDontSee('tx-ignore-1', false)
             ->assertDontSee('Shared wallet receive outside invoice flow', false);
 
-        Log::shouldHaveReceived('info')
+        $audit->shouldHaveReceived('info')
             ->with('invoice.payment.ignored', \Mockery::on(function (array $context) use ($invoice, $payment, $owner): bool {
                 return $context['invoice_id'] === $invoice->id
                     && $context['payment_id'] === $payment->id
@@ -136,7 +149,7 @@ class InvoicePaymentCorrectionTest extends TestCase
     public function test_owner_can_restore_ignored_payment_and_skip_stale_underpay_and_overpay_deliveries(): void
     {
         Carbon::setTestNow(Carbon::parse('2025-01-11 09:00:00', 'UTC'));
-        Log::spy();
+        $audit = $this->spyAuditLog();
 
         [$owner, $client, $invoice] = $this->makeInvoice([
             'amount_usd' => 100,
@@ -233,7 +246,7 @@ class InvoicePaymentCorrectionTest extends TestCase
         $deliveries->each(fn ($delivery) => $delivery->refresh());
         $this->assertTrue($deliveries->every(fn ($delivery) => $delivery->status === 'skipped'));
 
-        Log::shouldHaveReceived('info')
+        $audit->shouldHaveReceived('info')
             ->with('invoice.payment.restored', \Mockery::on(function (array $context) use ($invoice, $ignoredPayment, $owner): bool {
                 return $context['invoice_id'] === $invoice->id
                     && $context['payment_id'] === $ignoredPayment->id
@@ -243,6 +256,61 @@ class InvoicePaymentCorrectionTest extends TestCase
                     && $context['status_after'] === 'paid';
             }))
             ->once();
+    }
+
+    public function test_restore_backdates_paid_at_to_the_settlement_crossing_on_a_tolerance_settled_invoice(): void
+    {
+        Carbon::setTestNow(Carbon::parse('2025-01-12 08:00:00', 'UTC'));
+
+        [$owner, $client, $invoice] = $this->makeInvoice([
+            'amount_usd' => 25,
+            'btc_rate' => 50_000,
+            'amount_btc' => 0.0005,
+        ]);
+
+        // 49,980 sats = $24.99 — short of $25.00 but inside the 100-sat
+        // settlement tolerance, so the invoice settles only via tolerance.
+        $crossing = Carbon::now()->subHours(2);
+        $payment = InvoicePayment::create([
+            'invoice_id' => $invoice->id,
+            'txid' => 'tx-tolerance-1',
+            'sats_received' => 49_980,
+            'detected_at' => $crossing->copy()->subMinute(),
+            'confirmed_at' => $crossing,
+            'usd_rate' => 50_000,
+            'fiat_amount' => 24.99,
+        ]);
+
+        $invoice->refresh()->refreshPaymentLedger();
+        $invoice->refresh();
+        $this->assertSame('paid', $invoice->status);
+        $this->assertTrue($invoice->paid_at->equalTo($crossing));
+
+        Carbon::setTestNow(Carbon::parse('2025-01-12 09:00:00', 'UTC'));
+
+        $this->actingAs($owner)
+            ->patch(route('invoices.payments.ignore', [$invoice, $payment]), [
+                'correction_payment_id' => $payment->id,
+                'ignore_reason' => 'Drill: treated as misattributed',
+            ])
+            ->assertRedirect();
+
+        $invoice->refresh();
+        $this->assertSame('sent', $invoice->status);
+        $this->assertNull($invoice->paid_at);
+
+        Carbon::setTestNow(Carbon::parse('2025-01-12 10:00:00', 'UTC'));
+
+        $this->actingAs($owner)
+            ->patch(route('invoices.payments.restore', [$invoice, $payment]))
+            ->assertRedirect();
+
+        $invoice->refresh();
+        $this->assertSame('paid', $invoice->status);
+        $this->assertTrue(
+            $invoice->paid_at->equalTo($crossing),
+            "paid_at should return to the settlement crossing, got {$invoice->paid_at}"
+        );
     }
 
     public function test_owner_can_reattribute_payment_to_another_owned_invoice_and_public_surfaces_follow_active_destination(): void
@@ -258,7 +326,7 @@ class InvoicePaymentCorrectionTest extends TestCase
                 'data' => ['amount' => '50000.00'],
             ], 200),
         ]);
-        Log::spy();
+        $audit = $this->spyAuditLog();
 
         [$owner, $client, $sourceInvoice] = $this->makeInvoice([
             'number' => 'INV-REATTR-SRC',
@@ -374,7 +442,7 @@ class InvoicePaymentCorrectionTest extends TestCase
             ->assertOk()
             ->assertSee('tx-reattribute-1', false);
 
-        Log::shouldHaveReceived('info')
+        $audit->shouldHaveReceived('info')
             ->with('invoice.payment.reattributed', \Mockery::on(function (array $context) use ($owner, $payment, $sourceInvoice, $destinationInvoice): bool {
                 return $context['invoice_id'] === $sourceInvoice->id
                     && $context['payment_id'] === $payment->id
@@ -396,7 +464,7 @@ class InvoicePaymentCorrectionTest extends TestCase
     public function test_owner_can_undo_reattribution_from_destination_context_and_restore_source_accounting(): void
     {
         Carbon::setTestNow(Carbon::parse('2025-01-12 14:00:00', 'UTC'));
-        Log::spy();
+        $audit = $this->spyAuditLog();
 
         [$owner, , $sourceInvoice] = $this->makeInvoice([
             'number' => 'INV-UNDO-SRC',
@@ -463,7 +531,7 @@ class InvoicePaymentCorrectionTest extends TestCase
             ->assertDontSee('Correction menu: Applied Here', false)
             ->assertDontSee('Undo reattribution', false);
 
-        Log::shouldHaveReceived('info')
+        $audit->shouldHaveReceived('info')
             ->with('invoice.payment.reattribution_undone', \Mockery::on(function (array $context) use ($owner, $payment, $sourceInvoice, $destinationInvoice): bool {
                 return $context['invoice_id'] === $sourceInvoice->id
                     && $context['payment_id'] === $payment->id

@@ -77,7 +77,7 @@ class InvoicePaymentCorrectionController extends Controller
                     : null
             );
 
-            Log::info('invoice.payment.ignored', [
+            Log::channel('audit')->info('invoice.payment.ignored', [
                 'invoice_id' => $invoice->id,
                 'payment_id' => $payment->id,
                 'user_id' => $request->user()->id,
@@ -119,7 +119,7 @@ class InvoicePaymentCorrectionController extends Controller
 
             $refreshed = $this->refreshCorrectionTargets($invoice);
 
-            Log::info('invoice.payment.restored', [
+            Log::channel('audit')->info('invoice.payment.restored', [
                 'invoice_id' => $invoice->id,
                 'payment_id' => $payment->id,
                 'user_id' => $request->user()->id,
@@ -220,7 +220,7 @@ class InvoicePaymentCorrectionController extends Controller
                     : null
             );
 
-            Log::info('invoice.payment.reattributed', [
+            Log::channel('audit')->info('invoice.payment.reattributed', [
                 'invoice_id' => $invoice->id,
                 'payment_id' => $payment->id,
                 'user_id' => $request->user()->id,
@@ -284,7 +284,7 @@ class InvoicePaymentCorrectionController extends Controller
 
             $refreshed = $this->refreshCorrectionTargets($invoice, $destination);
 
-            Log::info('invoice.payment.reattribution_undone', [
+            Log::channel('audit')->info('invoice.payment.reattribution_undone', [
                 'invoice_id' => $invoice->id,
                 'payment_id' => $payment->id,
                 'user_id' => $request->user()->id,
