@@ -798,8 +798,10 @@ class Invoice extends Model
 
     /**
      * The confirmed_at of the confirmation at which the time-sorted cumulative
-     * confirmed total first reaches the expected total — the latest re-cross
-     * into paid. Returns null if no confirmation reaches the total.
+     * confirmed total first reaches the expected total, judged with the same
+     * sat tolerance as the paid gate so tolerance-settled invoices find their
+     * crossing too — the latest re-cross into paid. Returns null if no
+     * confirmation reaches the total.
      */
     private function settlementCrossingTime(float $expectedUsd): ?\Illuminate\Support\Carbon
     {
@@ -807,10 +809,12 @@ class Invoice extends Model
             ->filter(fn (InvoicePayment $p) => $this->paymentIsConfirmed($p))
             ->sortBy(fn (InvoicePayment $p) => optional($p->confirmed_at ?? $p->created_at)->getTimestamp() ?? 0);
 
+        $toleranceUsd = $this->satToleranceUsd();
+
         $cumulative = 0.0;
         foreach ($confirmed as $payment) {
             $cumulative += $this->paymentFiatValue($payment);
-            if ($cumulative >= $expectedUsd) {
+            if ($cumulative + $toleranceUsd >= $expectedUsd) {
                 return $payment->confirmed_at ?? $payment->created_at;
             }
         }
