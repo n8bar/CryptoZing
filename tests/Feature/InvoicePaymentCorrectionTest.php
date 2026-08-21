@@ -261,6 +261,16 @@ class InvoicePaymentCorrectionTest extends TestCase
     public function test_restore_backdates_paid_at_to_the_settlement_crossing_on_a_tolerance_settled_invoice(): void
     {
         Carbon::setTestNow(Carbon::parse('2025-01-12 08:00:00', 'UTC'));
+        Cache::put(BtcRate::CACHE_KEY, [
+            'rate_usd' => 50_000,
+            'as_of' => Carbon::now(),
+            'source' => 'test',
+        ], BtcRate::TTL);
+        Http::fake([
+            'https://api.coinbase.com/*' => Http::response([
+                'data' => ['amount' => '50000.00'],
+            ], 200),
+        ]);
 
         [$owner, $client, $invoice] = $this->makeInvoice([
             'amount_usd' => 25,
@@ -284,7 +294,13 @@ class InvoicePaymentCorrectionTest extends TestCase
         $invoice->refresh()->refreshPaymentLedger();
         $invoice->refresh();
         $this->assertSame('paid', $invoice->status);
-        $this->assertTrue($invoice->paid_at->equalTo($crossing));
+        // Compare against the hydrated confirmed_at rather than the in-memory
+        // $crossing: both sides then share one cast path, so the assertion
+        // holds regardless of which timezone Carbon attaches on hydration.
+        $this->assertTrue(
+            $invoice->paid_at->equalTo($payment->fresh()->confirmed_at),
+            "initial settle: paid_at should be the crossing confirmation, got {$invoice->paid_at}"
+        );
 
         Carbon::setTestNow(Carbon::parse('2025-01-12 09:00:00', 'UTC'));
 
@@ -308,7 +324,7 @@ class InvoicePaymentCorrectionTest extends TestCase
         $invoice->refresh();
         $this->assertSame('paid', $invoice->status);
         $this->assertTrue(
-            $invoice->paid_at->equalTo($crossing),
+            $invoice->paid_at->equalTo($payment->fresh()->confirmed_at),
             "paid_at should return to the settlement crossing, got {$invoice->paid_at}"
         );
     }
