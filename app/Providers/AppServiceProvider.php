@@ -8,7 +8,10 @@ use App\Policies\ClientPolicy;
 use App\Policies\InvoicePolicy;
 use App\Services\Blockchain\MempoolClient;
 use App\Services\ConfirmationPolicy;
+use App\Listeners\ApplyMailAlias;
 use App\Services\MailAlias;
+use Illuminate\Mail\Events\MessageSending;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
@@ -44,6 +47,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Event::listen(MessageSending::class, ApplyMailAlias::class);
+
         Gate::policy(Client::class, ClientPolicy::class);
         Gate::policy(Invoice::class, InvoicePolicy::class);
     }

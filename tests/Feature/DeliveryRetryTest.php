@@ -59,7 +59,7 @@ class DeliveryRetryTest extends TestCase
     private function runJob(InvoiceDelivery $delivery): void
     {
         (new DeliverInvoiceMail($delivery))
-            ->handle(app(MailAlias::class), app(InvoiceDeliveryService::class));
+            ->handle(app(InvoiceDeliveryService::class));
     }
 
     public function test_transient_failure_retries_then_succeeds_with_a_single_send(): void
@@ -111,7 +111,7 @@ class DeliveryRetryTest extends TestCase
         // Each in-budget attempt re-raises and leaves the delivery retryable, never terminal.
         for ($i = 0; $i < 3; $i++) {
             try {
-                $job->handle(app(MailAlias::class), app(InvoiceDeliveryService::class));
+                $job->handle(app(InvoiceDeliveryService::class));
                 $this->fail('Expected each attempt to throw.');
             } catch (\RuntimeException $e) {
                 $last = $e;

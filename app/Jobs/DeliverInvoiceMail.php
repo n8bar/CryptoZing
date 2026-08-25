@@ -17,7 +17,6 @@ use App\Models\Invoice;
 use App\Models\InvoiceDelivery;
 use App\Models\InvoicePayment;
 use App\Services\InvoiceDeliveryService;
-use App\Services\MailAlias;
 use App\Services\MailgunEventLookup;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -43,7 +42,7 @@ class DeliverInvoiceMail implements ShouldQueue
     {
     }
 
-    public function handle(MailAlias $mailAlias, InvoiceDeliveryService $deliveries): void
+    public function handle(InvoiceDeliveryService $deliveries): void
     {
         $delivery = $this->delivery->fresh();
         if (!$delivery) {
@@ -173,9 +172,11 @@ class DeliverInvoiceMail implements ShouldQueue
         // back to `queued` so a retry re-attempts; terminal `failed` is recorded
         // only once retries are exhausted, in failed().
         try {
-            $mailer = Mail::to($mailAlias->convert($delivery->recipient));
+            // Recipients go in raw; ApplyMailAlias rewrites them for every
+            // outbound path at MessageSending (#175).
+            $mailer = Mail::to($delivery->recipient);
             if ($delivery->cc) {
-                $mailer->cc($mailAlias->convert($delivery->cc));
+                $mailer->cc($delivery->cc);
             }
             $sentMessage = $mailer->send($mailable);
         } catch (\Throwable $e) {

@@ -603,7 +603,7 @@ class InvoiceDeliveryTest extends TestCase
         });
     }
 
-    public function test_deliver_invoice_mail_applies_alias_converter(): void
+    public function test_deliver_invoice_mail_hands_raw_recipients_to_the_mailer(): void
     {
         Mail::fake();
         Queue::fake();
@@ -646,16 +646,20 @@ class InvoiceDeliveryTest extends TestCase
         ]);
 
         $job = new DeliverInvoiceMail($delivery);
-        $job->handle(app(MailAlias::class), app(InvoiceDeliveryService::class));
+        $job->handle(app(InvoiceDeliveryService::class));
 
         $this->assertDatabaseHas('invoice_deliveries', [
             'id' => $delivery->id,
             'status' => 'sent',
         ]);
 
+        // Aliasing moved to ApplyMailAlias on MessageSending (#175), which
+        // Mail::fake() never reaches. The job's contract is now that it passes
+        // the delivery's own recipients through untouched; the rewrite itself
+        // is covered end to end in MailAliasingTest.
         Mail::assertSent(InvoiceReadyMail::class, function (InvoiceReadyMail $mail) {
-            return $mail->hasTo('client.example.com@cryptozing.app')
-                && $mail->hasCc('owner.gmail.com@cryptozing.app');
+            return $mail->hasTo('client@example.com')
+                && $mail->hasCc('owner@gmail.com');
         });
         Mail::assertNothingQueued();
     }
@@ -706,7 +710,7 @@ class InvoiceDeliveryTest extends TestCase
         ]);
 
         $job = new DeliverInvoiceMail($delivery);
-        $job->handle(app(MailAlias::class), app(InvoiceDeliveryService::class));
+        $job->handle(app(InvoiceDeliveryService::class));
 
         $this->assertDatabaseHas('invoice_deliveries', [
             'id' => $delivery->id,
@@ -778,7 +782,7 @@ class InvoiceDeliveryTest extends TestCase
         ]);
 
         $job = new DeliverInvoiceMail($delivery);
-        $job->handle(app(MailAlias::class), app(InvoiceDeliveryService::class));
+        $job->handle(app(InvoiceDeliveryService::class));
 
         $this->assertDatabaseHas('invoice_deliveries', [
             'id' => $delivery->id,
@@ -824,7 +828,7 @@ class InvoiceDeliveryTest extends TestCase
         ]);
 
         $job = new DeliverInvoiceMail($delivery);
-        $job->handle(app(MailAlias::class), app(InvoiceDeliveryService::class));
+        $job->handle(app(InvoiceDeliveryService::class));
 
         $this->assertDatabaseHas('invoice_deliveries', [
             'id' => $delivery->id,
@@ -877,7 +881,7 @@ class InvoiceDeliveryTest extends TestCase
         ]);
 
         $job = new DeliverInvoiceMail($duplicate);
-        $job->handle(app(MailAlias::class), app(InvoiceDeliveryService::class));
+        $job->handle(app(InvoiceDeliveryService::class));
 
         $this->assertDatabaseHas('invoice_deliveries', [
             'id' => $duplicate->id,
@@ -932,7 +936,7 @@ class InvoiceDeliveryTest extends TestCase
         ]);
 
         $job = new DeliverInvoiceMail($duplicate);
-        $job->handle(app(MailAlias::class), app(InvoiceDeliveryService::class));
+        $job->handle(app(InvoiceDeliveryService::class));
 
         $this->assertDatabaseHas('invoice_deliveries', [
             'id' => $duplicate->id,
@@ -983,7 +987,7 @@ class InvoiceDeliveryTest extends TestCase
         ])->save();
 
         $job = new DeliverInvoiceMail($delivery);
-        $job->handle(app(MailAlias::class), app(InvoiceDeliveryService::class));
+        $job->handle(app(InvoiceDeliveryService::class));
 
         $this->assertDatabaseHas('invoice_deliveries', [
             'id' => $delivery->id,
