@@ -30,4 +30,3 @@ Real self-sent mainnet payments end to end, correction tooling against live data
 
 ## Exit Criteria
 - [x] Content promises catalog checked — no work in this milestone introduced or violated a [`docs/CONTENT_PROMISES.md`](../CONTENT_PROMISES.md) entry. Majors 1–4 and all 19 minors hold. Phase 4 §5's watch-only audit and Phase 5's live validation strengthen minors 5, 6, 8–12, 18, and 19 rather than straining any. Donations are voluntary and customer-visible, so major 2's fee-free claim is untouched; Taproot and tiered confirmations add nothing on major 3's stated-limitations list. No customer-facing content shipped, so no new entries.
-  - One coupling recorded rather than resolved here: the Phase 1 alpha gate contradicts minor 15's "just sign up … and send an invoice". Inert today — no published surface routes a reader to signup — and MS21's `ALPHA_GATE_ENABLED=false` step now names the promise it protects.

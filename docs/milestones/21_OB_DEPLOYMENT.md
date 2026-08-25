@@ -51,7 +51,7 @@ Carried from the MS20 cutover as it actually ran. Several of these fail **silent
 2. [ ] Switch the certbot renewal authenticator to `webroot` if the hostname was issued standalone. Standalone renewals fail silently once nginx owns port 80, and the failure surfaces sixty days later.
 3. [ ] Set `CZ_SERVER_NAME` to the new hostname so the nginx template renders for it.
 4. [ ] Set `APP_URL`, with `APP_PUBLIC_URL` following it. Everything in outbound mail derives from this.
-5. [ ] Set `ALPHA_GATE_ENABLED=false` to end the invite-only window. This gates a content promise, not just access: `btcpay-server-alternatives.md` tells readers to "just sign up, complete the quick walk-through and send an invoice" ([`CONTENT_PROMISES.md`](../CONTENT_PROMISES.md) minor 15). Publishing the landing page with the gate still on makes that false the moment a reader can reach signup.
+5. [ ] Set `ALPHA_GATE_ENABLED=false` to end the invite-only window.
 6. [ ] Turn prod-side aliasing off: `MAIL_ALIAS_ENABLED=false`, clear `MAIL_ALIAS_DOMAIN`. Non-prod keeps aliasing as its containment.
 7. [ ] Run migrations before services come up on the new image.
 8. [ ] Recreate **every** service, not just the app — each holds its own copy of the environment.
