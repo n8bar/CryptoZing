@@ -1,33 +1,100 @@
 # Open Beta Rollout Checklist (CryptoZing.app)
 
-Use this when preparing the open-beta deployment; keep APP_PUBLIC_URL and mail settings aligned per environment.
+This is the doc MS21 executes: the cutover runbook, then the halt procedure if the cutover goes wrong.
 
-## Pre-flight
-- Confirm environment: APP_PUBLIC_URL set to intended host (e.g., https://cryptozing.app), WALLET_NETWORK matches network in use.
-- Verify secrets: MAIL_* creds valid for production domain; MAILGUN_WEBHOOK_SIGNING_KEY set to the signing key from the Mailgun dashboard (Webhooks section); queue/DB/cache endpoints reachable; env files up to date.
-- Current Mailgun sending-domain assumption is US-region `mailer.cryptozing.app`, so the matching endpoint is `MAILGUN_ENDPOINT=api.mailgun.net` unless the provider region changes later.
+The runbook is written from the MS20 mainnet cutover as it actually ran, not from how it was planned. Where a step exists because something bit us, the reason is stated — under pressure, a step with no reason is the first one skipped.
 
-## Wallet configuration
-- Run `./vendor/bin/sail artisan wallet:check-config` (or equivalent in prod) and confirm it exits clean. It fails the deploy when `DONATION_WALLET_XPUB` is malformed, is signing material, belongs to the other network, or is the same account key as an onboarded invoice wallet — a shared key derives the same addresses on both chains, so payments collide and attribution is lost.
+Production is driven with one-shot `ssh deploy@<box> '<command>'` invocations from `/opt/cryptozing`. Every `docker compose` command below assumes `-f compose.production.yaml` from that directory.
 
-## Mail aliasing flip
-- Set MAIL_ALIAS_ENABLED=false (and clear MAIL_ALIAS_DOMAIN if present).
-- MS16 Phase 2 already proved the app can deliver through Mailgun HTTP API with a temporary alias-off send to controlled dev inboxes on 2026-03-28; treat that as transport proof only, not as the open-beta sign-off for the target environment.
-- Send a test invoice email and a paid receipt to real recipients; verify links, headers, and rendering.
-- Register the Mailgun webhook in the Mailgun dashboard: POST `https://cryptozing.app/webhooks/mailgun` for `delivered`, `failed`, and `permanent_fail` event types. Copy the signing key to `MAILGUN_WEBHOOK_SIGNING_KEY`.
-- Confirm DKIM/SPF/DMARC pass on the production domain.
+---
 
-## Database + migrations
-- Take a backup/snapshot.
-- Run `./vendor/bin/sail artisan migrate --force` (or equivalent in prod) and confirm no pending migrations remain.
+## Cutover runbook
 
-## Application smoke
-- Run basic smoke tests: dashboard loads, create invoice, enable share, view public link, send delivery, mark paid (or simulate via watcher/manual).
-- Verify public links show correct APP_PUBLIC_URL and retain noindex headers.
-- Confirm watcher/queue processes are running and logs are clean.
+### 0. Before you touch anything
 
-## Post-deploy checks
-- Review logs/alerts for mail, watcher, and error rates.
-- Spot-check invoices/clients for ownership/auth anomalies.
-- Update CHANGELOG/PLAN with any scope or operational notes observed during rollout.
-- **MS14 correction tooling exercise (part of MS20 definition of done):** Once live payments are flowing, exercise the ignore/restore/reattribute correction tooling against at least one real or plausible wrong-attribution scenario. This is the first opportunity to validate the tooling against real on-chain conditions. Document the outcome — pass or any gaps found — before considering MS20 closed.
+- [ ] Take a fresh database dump and verify it opens. A halt is only as good as the backup it restores; the nightly is up to 24 hours stale.
+- [ ] Confirm the age identity that decrypts the dumps is in hand. It lives off-box in the password manager, so **the box cannot restore itself** — a halt needs the dev machine.
+- [ ] Note the currently deployed `CZ_TAG`. That sha is the rollback target, and its image is already cached on the box.
+- [ ] Confirm `APP_KEY` is in the password manager. Backups are unreadable without it.
+
+### 1. Environment flips, in the order they have to happen
+
+Order matters here — several of these fail silently if taken out of sequence.
+
+- [ ] DNS resolves the new hostname to the box, and TLS is issued for it **before** anything points at it. Mail sent with links to a hostname that has no certificate is not recoverable by editing env afterward; it is already in someone's inbox.
+- [ ] Switch the certbot renewal authenticator to `webroot` if the new hostname was issued standalone. Standalone renewals fail silently once nginx owns port 80, and the failure surfaces sixty days later.
+- [ ] Set `CZ_SERVER_NAME` to the new hostname so the nginx template renders for it.
+- [ ] Set `APP_URL`, with `APP_PUBLIC_URL` following it, to the new public host. Everything in outbound mail derives from this.
+- [ ] Confirm `MAIL_ALIAS_ENABLED=false` and clear `MAIL_ALIAS_DOMAIN`. Aliasing rewrites recipients to the catch-all, which hides exactly the delivery failures this cutover needs to surface.
+- [ ] Set `ALPHA_GATE_ENABLED=false` to end the invite-only window.
+- [ ] Run migrations before services come up on the new image.
+- [ ] Recreate **every** service, not just the app. The queue worker and scheduler each hold their own copy of the environment; an app that reports the new config while a worker still runs the old one is the failure mode this step exists to prevent.
+
+### 2. Wallet validation, before any funds move
+
+Nothing in this section moves money. It runs first precisely so a derivation mismatch costs nothing.
+
+- [ ] `wallet:check-config` exits clean. It fails the deploy when the donation xpub is malformed, is signing material, belongs to the other network, or is the same account key as an onboarded invoice wallet. A shared key derives the same addresses on both chains, so payments collide and attribution is lost — this is the MS14 failure, and the check is the guard against repeating it.
+- [ ] Derive the first several invoice addresses on the box and compare them index-by-index against the source wallet. Diff against a fresh derivation, not against a transcript from an earlier step.
+- [ ] Derive donation addresses and compare them the same way.
+- [ ] Confirm the app does not flag the key as an unsupported wallet configuration.
+- [ ] Confirm the invoice and donation chains advance independently — allocating on one key must not move the other's cursor.
+- [ ] Any mismatch stops the cutover. Do not proceed to mail.
+
+### 3. Mail sanity
+
+- [ ] `MAIL_*` credentials valid for the production sending domain, with `MAILGUN_ENDPOINT` matching the provider region (`api.mailgun.net` for a US-region domain).
+- [ ] **Re-register the Mailgun webhook against the new hostname** for `delivered`, `failed`, and `permanent_fail`. The webhook is registered per-URL; changing the public host silently orphans the old registration and delivery status stops flowing back, leaving the log stuck on queued.
+- [ ] Set `MAILGUN_WEBHOOK_SIGNING_KEY` from the dashboard.
+- [ ] Send a real invoice email and a paid receipt to a real inbox.
+- [ ] Confirm delivery status flows back and lands on the delivery log rather than staying queued.
+- [ ] Confirm every link in the sent mail resolves to `APP_PUBLIC_URL` — not localhost, not the apex, not the previous private hostname.
+- [ ] Confirm SPF, DKIM, and DMARC all pass and are strictly aligned, read from the `Authentication-Results` header of a message that actually arrived.
+
+### 4. Post-deploy checks, and who signs them off
+
+| | Check | Owner |
+|---|---|---|
+| [ ] | `docker compose ps` reports healthy per service — the app answers a PHP-FPM ping; queue and scheduler answer on a heartbeat their worker loops refresh, so a wedged-but-running worker reads `unhealthy` rather than fine | Agent |
+| [ ] | No pending migrations remain | Agent |
+| [ ] | Smoke the core path end to end: dashboard loads, create an invoice, enable its share link, load that link signed out, send a delivery | Agent |
+| [ ] | Spot-check invoices and clients for ownership and auth anomalies — no record reachable by an account that should not see it | Agent |
+| [ ] | Watcher liveness stamp is fresh, and the support dashboard's stale tile is quiet | Agent |
+| [ ] | Spot-check the payment ledger against the chain: address, sats, block, and settlement time | Agent |
+| [ ] | Public links carry the right host and retain their noindex headers | Agent |
+| [ ] | Logs and alerts reviewed for mail, watcher, and error rates | Agent |
+| [ ] | Invoice and receipt mail read in a real client — headers, sender, rendering | User |
+| [ ] | Derived receive addresses appear as expected in the source wallets | User |
+| [ ] | Final sign-off that the deployment is fit to be public | User |
+| [ ] | PLAN and CHANGELOG updated with any scope or operational note the rollout turned up | Agent |
+
+A queue container with a high restart count is not by itself a fault: the worker runs with `--max-time=3600` and exits hourly by design, so roughly one restart per hour of uptime is expected. Compare the count against uptime before treating it as a symptom.
+
+---
+
+## Halt procedure
+
+Run this when the cutover has gone wrong and the priority is to stop the bleeding, not to diagnose. Diagnose after the box is quiet.
+
+- [ ] **1. Stop the watcher and queue worker**, so nothing auto-acts on bad state. `docker compose stop queue scheduler` — the watcher is a per-minute scheduled run inside the scheduler, not its own service, so stopping the scheduler stops the watcher. Leave the app up; a reachable app that does nothing is easier to reason about than a dark box.
+- [ ] **2. Set `MAIL_OUTBOUND_ENABLED=false`** and recreate the app so it holds the change. Mail is the one side effect that leaves your control entirely, so it stops first among the things still running.
+- [ ] **3. Roll back to the previous image tag.** Set `CZ_TAG` to the sha noted in §0 and `up -d`. Prior images are cached on the box, so this needs no registry pull and no network.
+- [ ] **4. Restore the database from the most recent verified backup.** Dumps are `age`-encrypted with the identity held off-box, so this runs from the dev machine, not from the box. Restore into a scratch database and check it before pointing the app at it.
+- [ ] **5. Bring the box back up** and confirm service health before letting anything resume.
+
+### What a halt cannot undo
+
+State these plainly before starting, because a halt that is believed to undo more than it does causes the second incident.
+
+- **Coins already sent.** Bitcoin does not have a rollback. A restored database will not know about a payment that arrived after the dump, and the watcher will re-detect it when it resumes.
+- **Mail already delivered.** Every notice that reached an inbox stays there, including any that was wrong.
+- **Webhook events already accepted** by the provider, and any third party that has already acted on them.
+- **Anything a customer already saw** — a public invoice link that was open in a browser, a page already loaded.
+- **Time.** A restore returns the database to the dump, so anything recorded between the dump and the halt is gone unless it is re-derivable from the chain.
+
+---
+
+## Reference
+
+- Deployment recipe, including first start, updating, and backups: [`get-live/README.md`](get-live/README.md)
+- Correction tooling behavior and its audit trail: [`../specs/PAYMENT_CORRECTIONS.md`](../specs/PAYMENT_CORRECTIONS.md)
