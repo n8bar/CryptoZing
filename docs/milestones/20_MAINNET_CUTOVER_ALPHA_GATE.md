@@ -2,7 +2,7 @@
 
 Status: In Progress.
 Parent execution doc: [`docs/PLAN.md`](../PLAN.md)
-Supporting ops doc: [`docs/ops/PRODUCTION_OPS.md`](../ops/PRODUCTION_OPS.md)
+Supporting ops doc: [`docs/ops/RUNNING_THE_SERVER.md`](../ops/RUNNING_THE_SERVER.md)
 
 ## Milestone Objectives
 - Stand up production hosting and take CryptoZing live on mainnet before the public open beta: deploy to the prod server, flip to mainnet on a clean baseline, onboard real watch-only xpubs, and prove the payment pipeline with real Bitcoin payments — an invoice and a donation.

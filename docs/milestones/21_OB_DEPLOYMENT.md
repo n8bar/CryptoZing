@@ -4,7 +4,7 @@
 
 Status: Not started.
 Parent execution doc: [`docs/PLAN.md`](../PLAN.md)
-Supporting ops doc: [`docs/ops/PRODUCTION_OPS.md`](../ops/PRODUCTION_OPS.md)
+Supporting ops doc: [`docs/ops/RUNNING_THE_SERVER.md`](../ops/RUNNING_THE_SERVER.md)
 
 ## Milestone Objectives
 - Deploy the open beta under `cryptozing.app`.
@@ -31,7 +31,13 @@ _(Phase strategy docs to be written when this milestone becomes active.)_
 
 ### Cutover sequence (fold into the phase docs when active)
 
-Carried from the MS20 cutover as it actually ran. Several of these fail **silently** out of sequence — the deploy looks fine and the damage surfaces later. Standing operational knowledge that outlives this milestone — how the box is driven, backups, and the halt procedure — lives in [`docs/ops/PRODUCTION_OPS.md`](../ops/PRODUCTION_OPS.md).
+Carried from the MS20 cutover as it actually ran. Several of these fail **silently** out of sequence — the deploy looks fine and the damage surfaces later. Operating knowledge that applies to any CryptoZing server — services, health, backups, restore, and the halt procedure — lives in [`docs/ops/RUNNING_THE_SERVER.md`](../ops/RUNNING_THE_SERVER.md).
+
+**How our box is driven.** Ours, not general, so it lives here rather than in the ops doc:
+
+- One-shot `ssh deploy@<box> '<command>'` invocations from `/opt/cryptozing`. Never a lingering remote shell.
+- **Every `docker compose` command takes both compose files:** `-f compose.production.yaml -f compose.alpha.yaml`. The first alone is the recipe published for self-hosters; ours adds the article-site container and swaps the front nginx to the `/learn`-proxying, noindexing config. An `up -d` that omits the overlay drops the site container and silently reconfigures nginx. `ps` and `exec` read the running containers either way, which is what makes the omission easy to miss until it bites.
+- Backups: a nightly systemd timer dumps on the box, `age`-encrypted; the dev machine pulls on its own timer and holds the only decrypting identity. So a restore runs from the dev machine, and the retention window is owned off-box.
 
 **Before touching anything**
 
@@ -82,6 +88,7 @@ Carried from the MS20 cutover as it actually ran. Several of these fail **silent
 9. [ ] [User] Invoice and receipt mail read in a real client — headers, sender, rendering.
 10. [ ] [User] Derived receive addresses appear as expected in the source wallets.
 11. [ ] [User] Final sign-off that the deployment is fit to be public.
+12. [ ] Follow [`docs/ops/RUNNING_THE_SERVER.md`](../ops/RUNNING_THE_SERVER.md) against the live server and confirm it is accurate and sufficient — a runbook nobody has walked since it was written is a guess. Correct it where it is wrong.
 
 Carried items (fold into phase docs when active):
 - [ ] [#81](https://github.com/n8bar/CryptoZing/issues/81) Re-run mail stress testing when the mailer service is upgraded or switched — likely lands at or after the production mail cutover. Deferred-test list in [`x19.1_NOTIFICATION_COVERAGE_AUDIT.md`](../strategies/x19.1_NOTIFICATION_COVERAGE_AUDIT.md) §6.

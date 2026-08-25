@@ -2,7 +2,7 @@
 
 Status: Complete as of 2026-04-02.
 Parent execution doc: [`docs/PLAN.md`](../PLAN.md)
-Supporting docs: [`docs/specs/NOTIFICATIONS.md`](../specs/NOTIFICATIONS.md), [`docs/PRODUCT_SPEC.md`](../PRODUCT_SPEC.md), [`docs/ops/PRODUCTION_OPS.md`](../ops/PRODUCTION_OPS.md)
+Supporting docs: [`docs/specs/NOTIFICATIONS.md`](../specs/NOTIFICATIONS.md), [`docs/PRODUCT_SPEC.md`](../PRODUCT_SPEC.md), [`docs/ops/RUNNING_THE_SERVER.md`](../ops/RUNNING_THE_SERVER.md)
 
 This is the milestone execution doc for MS16. It tracks milestone-level objectives plus phase-level progress only.
 
