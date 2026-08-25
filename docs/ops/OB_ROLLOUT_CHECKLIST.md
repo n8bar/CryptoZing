@@ -1,8 +1,10 @@
 # Open Beta Rollout Checklist (CryptoZing.app)
 
-This is the doc MS21 executes: the cutover runbook, then the halt procedure if the cutover goes wrong.
+Two procedures for the maintainer operating this deployment: the **cutover runbook** for taking CryptoZing from the private alpha to the public open beta, and the **halt procedure** for when a cutover goes wrong.
 
-The runbook is written from the MS20 mainnet cutover as it actually ran, not from how it was planned. Where a step exists because something bit us, the reason is stated — under pressure, a step with no reason is the first one skipped.
+Self-hosting a CryptoZing instance is a different job — see [`get-live/README.md`](get-live/README.md).
+
+Every step here came out of performing this for real, and the halt procedure has been rehearsed end to end against production. Where a step exists because something bit us, the reason is stated — under pressure, a step with no reason is the first one skipped.
 
 Production is driven with one-shot `ssh deploy@<box> '<command>'` invocations from `/opt/cryptozing`.
 
@@ -42,7 +44,7 @@ Order matters here — several of these fail silently if taken out of sequence.
 
 Nothing in this section moves money. It runs first precisely so a derivation mismatch costs nothing.
 
-- [ ] `wallet:check-config` exits clean. It fails the deploy when the donation xpub is malformed, is signing material, belongs to the other network, or is the same account key as an onboarded invoice wallet. A shared key derives the same addresses on both chains, so payments collide and attribution is lost — this is the MS14 failure, and the check is the guard against repeating it.
+- [ ] `wallet:check-config` exits clean. It fails the deploy when the donation xpub is malformed, is signing material, belongs to the other network, or is the same account key as an onboarded invoice wallet. A shared key derives the same addresses on both chains, so payments collide and attribution is lost; this check is the guard against repeating it.
 - [ ] Derive the first several invoice addresses on the box and compare them index-by-index against the source wallet. Diff against a fresh derivation, not against a transcript from an earlier step.
 - [ ] Derive donation addresses and compare them the same way.
 - [ ] Confirm the app does not flag the key as an unsupported wallet configuration.
@@ -84,7 +86,7 @@ A queue container with a high restart count is not by itself a fault: the worker
 
 Run this when the cutover has gone wrong and the priority is to stop the bleeding, not to diagnose. Diagnose after the box is quiet.
 
-This procedure has been rehearsed end to end against production. The notes marked **rehearsal** are things that went wrong while proving it, not hypotheticals.
+The notes marked **rehearsal** are things that went wrong while proving this procedure, not hypotheticals.
 
 - [ ] **1. Stop the watcher and queue worker**, so nothing auto-acts on bad state. `stop queue scheduler` — the watcher is a per-minute scheduled run inside the scheduler, not its own service, so stopping the scheduler stops the watcher. Leave the app up; a reachable app that does nothing is easier to reason about than a dark box.
 - [ ] **2. Set `MAIL_OUTBOUND_ENABLED=false`** and recreate the app so it holds the change. Mail is the one side effect that leaves your control entirely, so it stops first among the things still running. Recreating is what makes this take — the container rebuilds its config cache at boot, so editing `.env` alone changes nothing.

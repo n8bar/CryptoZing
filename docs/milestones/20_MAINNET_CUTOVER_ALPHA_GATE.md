@@ -25,8 +25,8 @@ The watch-only wallet layer gains Taproot (BIP86) receive support — script-typ
 ### [x] Phase 4 — Mainnet Environment & Wallets
 Clean mainnet baseline on the deployed box, with separate watch-only invoice and donation xpubs (never one shared key — MS14) verified before any funds move. Needs a mainnet donation wallet from the operator before it can start. Carries the mainnet donation-xpub swap from [`x19.8_MICRO_MONETIZE.md`](../strategies/x19.8_MICRO_MONETIZE.md) §1. Strategy: [`x20.4_MAINNET_ENVIRONMENT_WALLETS.md`](../strategies/x20.4_MAINNET_ENVIRONMENT_WALLETS.md).
 
-### [ ] Phase 5 — Live Mainnet Validation & Backout
-Real self-sent mainnet payments end to end, correction tooling against live data, and mail sanity on mainnet. Leaves behind the cutover runbook and halt procedure MS21 executes. Strategy: [`20.5_LIVE_MAINNET_VALIDATION_BACKOUT.md`](../strategies/20.5_LIVE_MAINNET_VALIDATION_BACKOUT.md).
+### [x] Phase 5 — Live Mainnet Validation & Backout
+Real self-sent mainnet payments end to end, correction tooling against live data, and mail sanity on mainnet. Leaves behind the cutover runbook and halt procedure MS21 executes. Strategy: [`x20.5_LIVE_MAINNET_VALIDATION_BACKOUT.md`](../strategies/x20.5_LIVE_MAINNET_VALIDATION_BACKOUT.md).
 
 ## Exit Criteria
 - [ ] Content promises catalog checked — no work in this milestone introduced or violated a [`docs/CONTENT_PROMISES.md`](../CONTENT_PROMISES.md) entry.
