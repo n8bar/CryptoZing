@@ -4,7 +4,15 @@ This is the doc MS21 executes: the cutover runbook, then the halt procedure if t
 
 The runbook is written from the MS20 mainnet cutover as it actually ran, not from how it was planned. Where a step exists because something bit us, the reason is stated — under pressure, a step with no reason is the first one skipped.
 
-Production is driven with one-shot `ssh deploy@<box> '<command>'` invocations from `/opt/cryptozing`. Every `docker compose` command below assumes `-f compose.production.yaml` from that directory.
+Production is driven with one-shot `ssh deploy@<box> '<command>'` invocations from `/opt/cryptozing`.
+
+**Every `docker compose` command on our deployment takes both compose files:**
+
+```
+docker compose -f compose.production.yaml -f compose.alpha.yaml <command>
+```
+
+`compose.production.yaml` alone is the recipe published for self-hosters. Our box adds `compose.alpha.yaml`, which contributes the article-site container and swaps the front nginx to the `/learn`-proxying, noindexing config. An `up -d` that omits the overlay drops the site container and silently reconfigures nginx — a bad surprise at any time, and a much worse one mid-halt. `ps` and `exec` read the running containers either way, which is what makes the omission easy to miss until it bites.
 
 ---
 
@@ -76,11 +84,16 @@ A queue container with a high restart count is not by itself a fault: the worker
 
 Run this when the cutover has gone wrong and the priority is to stop the bleeding, not to diagnose. Diagnose after the box is quiet.
 
-- [ ] **1. Stop the watcher and queue worker**, so nothing auto-acts on bad state. `docker compose stop queue scheduler` — the watcher is a per-minute scheduled run inside the scheduler, not its own service, so stopping the scheduler stops the watcher. Leave the app up; a reachable app that does nothing is easier to reason about than a dark box.
-- [ ] **2. Set `MAIL_OUTBOUND_ENABLED=false`** and recreate the app so it holds the change. Mail is the one side effect that leaves your control entirely, so it stops first among the things still running.
-- [ ] **3. Roll back to the previous image tag.** Set `CZ_TAG` to the sha noted in §0 and `up -d`. Prior images are cached on the box, so this needs no registry pull and no network.
-- [ ] **4. Restore the database from the most recent verified backup.** Dumps are `age`-encrypted with the identity held off-box, so this runs from the dev machine, not from the box. Restore into a scratch database and check it before pointing the app at it.
-- [ ] **5. Bring the box back up** and confirm service health before letting anything resume.
+This procedure has been rehearsed end to end against production. The notes marked **rehearsal** are things that went wrong while proving it, not hypotheticals.
+
+- [ ] **1. Stop the watcher and queue worker**, so nothing auto-acts on bad state. `stop queue scheduler` — the watcher is a per-minute scheduled run inside the scheduler, not its own service, so stopping the scheduler stops the watcher. Leave the app up; a reachable app that does nothing is easier to reason about than a dark box.
+- [ ] **2. Set `MAIL_OUTBOUND_ENABLED=false`** and recreate the app so it holds the change. Mail is the one side effect that leaves your control entirely, so it stops first among the things still running. Recreating is what makes this take — the container rebuilds its config cache at boot, so editing `.env` alone changes nothing.
+- [ ] **3. Roll back to the previous image tag.** Set `CZ_TAG` to the sha noted in §0 and `up -d` **with both compose files**. Prior images are cached on the box, so this needs no registry pull and no network. Check first whether the rollback crosses a migration boundary — older code against a newer schema is its own outage.
+  - **rehearsal:** `up -d` restarts the queue and scheduler that step 1 just stopped. Re-run `stop queue scheduler` immediately after, and confirm it before moving on, or the workers act on the state you are still repairing.
+- [ ] **4. Restore the database from the most recent verified backup.** Dumps are `age`-encrypted with the identity held off-box, so this runs from the dev machine, not from the box. Restore into a scratch database and check it before pointing the app at it: table count, row counts, and one value you know the answer to.
+  - Confirm the dump you are restoring is **newer than any repair you care about**. A nightly is up to 24 hours stale and will happily undo the same day's fixes.
+  - **rehearsal:** clear stale scheduler locks after restoring — `DELETE FROM cache_locks WHERE \`key\` LIKE '%framework/schedule%'`. A dump cut while the watcher holds its `withoutOverlapping()` mutex captures that lock, and restoring reinstates it. The watcher then silently does not run until the lock expires, which can be ~24 hours. This cost 8 minutes of a rehearsal that knew to look for it; in a real halt it would read as "the watcher is dead after the restore."
+- [ ] **5. Bring the box back up** and confirm service health before letting anything resume. Watch for the watcher's run stamp to actually advance — healthy containers are not proof the scheduled work resumed.
 
 ### What a halt cannot undo
 
