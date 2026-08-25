@@ -16,10 +16,10 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 
 ## Current
 - Active milestone:
-  - **MS20 - Mainnet Cutover & Alpha Gate** — in progress; content-publish gate cleared by "How to Receive Bitcoin".
-- Status: `MS20 Phase 5 complete — all five phases closed. The milestone's content-promises exit check is the only thing outstanding.`
-- Next action: Run the MS20 content-promises check against [`docs/CONTENT_PROMISES.md`](CONTENT_PROMISES.md), then close MS20 and open MS21.
-- Most recently completed milestone doc: [`docs/milestones/x19_OB_HARDENING_OPS.md`](milestones/x19_OB_HARDENING_OPS.md)
+  - **MS21 - CryptoZing.app Deployment (Open Beta)** — not started; needs its content-publish gate cleared before it can begin.
+- Status: `MS20 closed — live on mainnet privately, cutover runbook and halt procedure both proven by execution. MS21 is a stub awaiting phase strategy docs.`
+- Next action: Clear MS21's content-publish gate, then build out its phase strategy docs from the cutover material carried in [`docs/milestones/21_OB_DEPLOYMENT.md`](milestones/21_OB_DEPLOYMENT.md).
+- Most recently completed milestone doc: [`docs/milestones/x20_MAINNET_CUTOVER_ALPHA_GATE.md`](milestones/x20_MAINNET_CUTOVER_ALPHA_GATE.md)
 
 ## Published Release Target
 - **First public release: mid-to-late 2027.** The open beta milestone timeline (MS21, targeting 2026-09-16) covers the open beta. The published release target accounts for post-open-beta work needed before an official first release.
@@ -27,7 +27,6 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 ## Active and Upcoming Milestones
 | Status | ID | Milestone | Short intent | Target | Primary doc |
 |---|---|---|---|---|---|
-| [ ] | 20 | Mainnet Cutover & Alpha Gate | Provision production hosting, go live on mainnet privately (real self-sent payment) with an invite-only alpha access gate, migrate the article site off GitHub Pages, and prove a cutover runbook with backout before the public open beta. | 2026-09-05 | [`docs/milestones/20_MAINNET_CUTOVER_ALPHA_GATE.md`](milestones/20_MAINNET_CUTOVER_ALPHA_GATE.md) |
 | [ ] | 21 | CryptoZing.app Deployment (Open Beta) | Deploy the open beta under `cryptozing.app`, replace the GitHub Pages placeholder at `/` with the live app landing page without breaking the SEO baseline established in MS15, remove temporary mail aliasing, and complete rollout verification. | 2026-09-16 | [`docs/milestones/21_OB_DEPLOYMENT.md`](milestones/21_OB_DEPLOYMENT.md) |
 | [ ] | 22 | Thorough SEO & Marketing Strategies | Post-deploy discovery investment: thorough SEO pass across live app + site surfaces and an ongoing SEO strategy with scheduled tasks in the .ics; marketing strategy. Scope at kickoff. | 2026-10-06 | [`docs/milestones/22_SEO_MARKETING.md`](milestones/22_SEO_MARKETING.md) |
 
@@ -53,3 +52,4 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 | [x] | 17 | Product Readiness | Rationalize the test suite, replace "owner" with "issuer" in all UI and mail copy, add service health monitoring to the support dashboard, and extend the getting-started flow with a post-payment receipt step. | [`docs/milestones/x17_PRODUCT_READINESS.md`](milestones/x17_PRODUCT_READINESS.md) |
 | [x] | 18 | Pre-Release Content & SEO | Extend the site from a single placeholder to a lightweight content site with educational articles, adapted Helpful Notes, and a staging path — giving search engines substance to rank before RC1 ships. | [`docs/milestones/x18_PRERELEASE_CONTENT_SEO.md`](milestones/x18_PRERELEASE_CONTENT_SEO.md) |
 | [x] | 19 | Open Beta Hardening & Ops | Open-beta hardening before mainnet cutover: notification coverage, auth/session hardening, LLC formation, legal layer, content-promises reconciliation, contributor docs, micro-monetize (donations), and 2FA (email + TOTP). | [`docs/milestones/x19_OB_HARDENING_OPS.md`](milestones/x19_OB_HARDENING_OPS.md) |
+| [x] | 20 | Mainnet Cutover & Alpha Gate | Provision production hosting, go live on mainnet privately (real self-sent payment) with an invite-only alpha access gate, migrate the article site off GitHub Pages, and prove a cutover runbook with backout before the public open beta. | [`docs/milestones/x20_MAINNET_CUTOVER_ALPHA_GATE.md`](milestones/x20_MAINNET_CUTOVER_ALPHA_GATE.md) |
