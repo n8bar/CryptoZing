@@ -115,7 +115,7 @@ Issuers create invoices in USD, derive a unique Bitcoin receive address per invo
 - Wallet import and wallet UX: [`docs/specs/WALLET_XPUB_UX_SPEC.md`](specs/WALLET_XPUB_UX_SPEC.md)
 - Support access: [`docs/specs/SUPPORT_ACCESS.md`](specs/SUPPORT_ACCESS.md)
 - Cross-cutting UX and accessibility rules: [`docs/UX_GUARDRAILS.md`](UX_GUARDRAILS.md)
-- Docs and contributor-experience scope: [`docs/ops/DOCS_DX.md`](ops/DOCS_DX.md)
+- Contributor onboarding: [`docs/ops/get-live/QUICK_START.md`](ops/get-live/QUICK_START.md), [`docs/ops/get-live/CONTRIBUTOR_WALKTHROUGH.md`](ops/get-live/CONTRIBUTOR_WALKTHROUGH.md)
 - Running a server and recovery: [`docs/ops/RUNNING_THE_SERVER.md`](ops/RUNNING_THE_SERVER.md)
 
 ## Current Cross-Feature Constraints

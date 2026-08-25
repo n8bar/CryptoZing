@@ -2,7 +2,7 @@
 
 Status: Complete.
 Parent execution doc: [`docs/PLAN.md`](../PLAN.md)
-Supporting ops doc: [`docs/ops/DOCS_DX.md`](../ops/DOCS_DX.md)
+Supporting strategy doc: [`docs/strategies/x19.7_CONTRIBUTOR_DOCS.md`](../strategies/x19.7_CONTRIBUTOR_DOCS.md)
 
 ## Milestone Objectives
 - Document notification coverage so the full outbound mail surface is explicitly accounted for before open beta.

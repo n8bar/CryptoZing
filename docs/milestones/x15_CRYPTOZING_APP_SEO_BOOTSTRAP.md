@@ -2,7 +2,7 @@
 
 Status: Complete as of 2026-03-27.
 Parent execution doc: [`docs/PLAN.md`](../PLAN.md)
-Supporting docs: [`site/index.html`](../../site/index.html), [`site/sitemap.xml`](../../site/sitemap.xml), [`site/robots.txt`](../../site/robots.txt), [`docs/PRODUCT_SPEC.md`](../PRODUCT_SPEC.md)
+Supporting docs: [`site/index.html`](https://github.com/n8bar/cryptozing-site/blob/main/index.html), [`site/sitemap.xml`](https://github.com/n8bar/cryptozing-site/blob/main/sitemap.xml), [`site/robots.txt`](https://github.com/n8bar/cryptozing-site/blob/main/robots.txt), [`docs/PRODUCT_SPEC.md`](../PRODUCT_SPEC.md). The site moved to its own repo in MS20.2; those links resolve there.
 
 This is the milestone execution doc for MS15. It tracks milestone-level objectives plus phase-level progress only.
 SEO-oriented content work has already had a couple passes; MS15 should refine only what this milestone proves needs adjustment rather than reopening the placeholder for a broad rewrite.
@@ -16,7 +16,7 @@ SEO-oriented content work has already had a couple passes; MS15 should refine on
 ## Current Focus
 - Active phase: **None**
 - Current objective: milestone complete.
-- Primary surfaces: [`site/index.html`](../../site/index.html), [`site/sitemap.xml`](../../site/sitemap.xml), [`site/robots.txt`](../../site/robots.txt)
+- Primary surfaces: [`site/index.html`](https://github.com/n8bar/cryptozing-site/blob/main/index.html), [`site/sitemap.xml`](https://github.com/n8bar/cryptozing-site/blob/main/sitemap.xml), [`site/robots.txt`](https://github.com/n8bar/cryptozing-site/blob/main/robots.txt)
 
 ## Phase Rollup
 1. [x] Phase 1 - Discovery + Indexing Baseline
