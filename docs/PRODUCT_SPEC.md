@@ -116,7 +116,7 @@ Issuers create invoices in USD, derive a unique Bitcoin receive address per invo
 - Support access: [`docs/specs/SUPPORT_ACCESS.md`](specs/SUPPORT_ACCESS.md)
 - Cross-cutting UX and accessibility rules: [`docs/UX_GUARDRAILS.md`](UX_GUARDRAILS.md)
 - Docs and contributor-experience scope: [`docs/ops/DOCS_DX.md`](ops/DOCS_DX.md)
-- Rollout verification: [`docs/ops/OB_ROLLOUT_CHECKLIST.md`](ops/OB_ROLLOUT_CHECKLIST.md)
+- Production operations and recovery: [`docs/ops/PRODUCTION_OPS.md`](ops/PRODUCTION_OPS.md)
 
 ## Current Cross-Feature Constraints
 - Additional wallet storage exists, but invoice-level multi-wallet selection remains deferred to post-MVP and is tracked in [`docs/BACKLOG.md`](BACKLOG.md).

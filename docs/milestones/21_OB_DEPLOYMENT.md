@@ -4,7 +4,7 @@
 
 Status: Not started.
 Parent execution doc: [`docs/PLAN.md`](../PLAN.md)
-Supporting ops doc: [`docs/ops/OB_ROLLOUT_CHECKLIST.md`](../ops/OB_ROLLOUT_CHECKLIST.md)
+Supporting ops doc: [`docs/ops/PRODUCTION_OPS.md`](../ops/PRODUCTION_OPS.md)
 
 ## Milestone Objectives
 - Deploy the open beta under `cryptozing.app`.
@@ -28,6 +28,60 @@ _(Phase strategy docs to be written when this milestone becomes active.)_
 - Phase 1 — Pre-deploy verification: env, wallet, mail, DNS, SEO baseline check, self-host verification
 - Phase 2 — Deploy and cutover
 - Phase 3 — Post-deploy verification and rollout sign-off
+
+### Cutover sequence (fold into the phase docs when active)
+
+Carried from the MS20 cutover as it actually ran. Several of these fail **silently** out of sequence — the deploy looks fine and the damage surfaces later. Standing operational knowledge that outlives this milestone — how the box is driven, backups, and the halt procedure — lives in [`docs/ops/PRODUCTION_OPS.md`](../ops/PRODUCTION_OPS.md).
+
+**Before touching anything**
+
+1. [ ] Take a fresh database dump and verify it opens. A halt is only as good as the backup it restores.
+2. [ ] Confirm the `age` identity is in hand — the box cannot restore itself.
+3. [ ] Note the deployed `CZ_TAG`. That sha is the rollback target and its image is already cached on the box.
+
+**Environment flips, in the order they have to happen** → Phase 2
+
+1. [ ] DNS resolves the new hostname **and TLS is issued** before anything points at it. Mail already sent with links to a certless host is in someone's inbox; no amount of env editing recalls it.
+2. [ ] Switch the certbot renewal authenticator to `webroot` if the hostname was issued standalone. Standalone renewals fail silently once nginx owns port 80, and the failure surfaces sixty days later.
+3. [ ] Set `CZ_SERVER_NAME` to the new hostname so the nginx template renders for it.
+4. [ ] Set `APP_URL`, with `APP_PUBLIC_URL` following it. Everything in outbound mail derives from this.
+5. [ ] Set `ALPHA_GATE_ENABLED=false` to end the invite-only window.
+6. [ ] Turn prod-side aliasing off: `MAIL_ALIAS_ENABLED=false`, clear `MAIL_ALIAS_DOMAIN`. Non-prod keeps aliasing as its containment.
+7. [ ] Run migrations before services come up on the new image.
+8. [ ] Recreate **every** service, not just the app — each holds its own copy of the environment.
+
+**Wallet validation, before any funds move** → Phase 1
+
+1. [ ] `wallet:check-config` exits clean. It fails the deploy when the donation xpub is malformed, is signing material, belongs to the other network, or is the same account key as an onboarded invoice wallet. A shared key derives the same addresses on both chains, so payments collide and attribution is lost.
+2. [ ] Derive the first several invoice addresses on the box and compare index-by-index against the source wallet, diffing a fresh derivation rather than an earlier transcript.
+3. [ ] Derive donation addresses and compare the same way.
+4. [ ] Confirm the app does not flag the key as an unsupported wallet configuration.
+5. [ ] Confirm the invoice and donation chains advance independently.
+6. [ ] Any mismatch stops the cutover. Do not proceed to mail.
+
+**Mail sanity** → Phase 1
+
+1. [ ] `MAIL_*` credentials valid for the production sending domain, `MAILGUN_ENDPOINT` matching the provider region.
+2. [ ] **Re-register the Mailgun webhook against the new hostname** for `delivered`, `failed`, and `permanent_fail`. The webhook is registered per-URL; changing the public host silently orphans the old registration and delivery status stops flowing back, leaving the log stuck on queued.
+3. [ ] Set `MAILGUN_WEBHOOK_SIGNING_KEY` from the dashboard.
+4. [ ] Send a real invoice email and a paid receipt to a real inbox.
+5. [ ] Confirm delivery status flows back onto the delivery log rather than staying queued.
+6. [ ] Confirm every link resolves to `APP_PUBLIC_URL` — not localhost, not the apex, not the previous private hostname.
+7. [ ] Confirm SPF, DKIM, and DMARC pass and are strictly aligned, read from a message that actually arrived.
+
+**Post-deploy verification and sign-off** → Phase 3
+
+1. [ ] [Agent] `docker compose ps` healthy per service.
+2. [ ] [Agent] No pending migrations remain.
+3. [ ] [Agent] Smoke the core path: dashboard loads, create an invoice, enable its share link, load it signed out, send a delivery.
+4. [ ] [Agent] Spot-check invoices and clients for ownership and auth anomalies.
+5. [ ] [Agent] Watcher run stamp fresh and the stale tile quiet.
+6. [ ] [Agent] Spot-check the payment ledger against the chain: address, sats, block, settlement time.
+7. [ ] [Agent] Public links carry the right host and retain noindex headers.
+8. [ ] [Agent] Logs and alerts reviewed for mail, watcher, and error rates.
+9. [ ] [User] Invoice and receipt mail read in a real client — headers, sender, rendering.
+10. [ ] [User] Derived receive addresses appear as expected in the source wallets.
+11. [ ] [User] Final sign-off that the deployment is fit to be public.
 
 Carried items (fold into phase docs when active):
 - [ ] [#81](https://github.com/n8bar/CryptoZing/issues/81) Re-run mail stress testing when the mailer service is upgraded or switched — likely lands at or after the production mail cutover. Deferred-test list in [`x19.1_NOTIFICATION_COVERAGE_AUDIT.md`](../strategies/x19.1_NOTIFICATION_COVERAGE_AUDIT.md) §6.
