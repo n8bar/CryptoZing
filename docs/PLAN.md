@@ -1,5 +1,5 @@
 # PLAN
-_Last updated: 2026-08-11_
+_Last updated: 2026-08-24_
 
 This is the human-facing execution dashboard for open-beta work.
 
@@ -17,8 +17,8 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 ## Current
 - Active milestone:
   - **MS20 - Mainnet Cutover & Alpha Gate** — in progress; content-publish gate cleared by "How to Receive Bitcoin".
-- Status: `MS20 Phase 4 complete — box on mainnet with separate watch-only invoice and donation keys; Phase 5 (Live Mainnet Validation & Backout) next.`
-- Next action: Issue a small mainnet invoice and confirm its address derives from the operator invoice key, then [User] self-send the payment per [`docs/strategies/20.5_LIVE_MAINNET_VALIDATION_BACKOUT.md`](strategies/20.5_LIVE_MAINNET_VALIDATION_BACKOUT.md) §1.1–1.3.
+- Status: `MS20 Phase 5 in progress — invoice, donation, mail sanity, and correction tooling all validated against real mainnet money; runbook and halt procedure remain.`
+- Next action: Close [#170](https://github.com/n8bar/CryptoZing/issues/170), then write and prove the cutover runbook and halt procedure per [`docs/strategies/20.5_LIVE_MAINNET_VALIDATION_BACKOUT.md`](strategies/20.5_LIVE_MAINNET_VALIDATION_BACKOUT.md) §5.
 - Most recently completed milestone doc: [`docs/milestones/x19_OB_HARDENING_OPS.md`](milestones/x19_OB_HARDENING_OPS.md)
 
 ## Published Release Target
