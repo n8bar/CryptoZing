@@ -18,7 +18,7 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 - Active milestone:
   - **MS20 - Mainnet Cutover & Alpha Gate** — in progress; content-publish gate cleared by "How to Receive Bitcoin".
 - Status: `MS20 Phase 5 in progress — invoice, donation, mail sanity, and correction tooling all validated against real mainnet money; runbook and halt procedure remain.`
-- Next action: Close [#170](https://github.com/n8bar/CryptoZing/issues/170), then write and prove the cutover runbook and halt procedure per [`docs/strategies/20.5_LIVE_MAINNET_VALIDATION_BACKOUT.md`](strategies/20.5_LIVE_MAINNET_VALIDATION_BACKOUT.md) §5.
+- Next action: Write and prove the cutover runbook and halt procedure per [`docs/strategies/20.5_LIVE_MAINNET_VALIDATION_BACKOUT.md`](strategies/20.5_LIVE_MAINNET_VALIDATION_BACKOUT.md) §5, then the §6 verification pass.
 - Most recently completed milestone doc: [`docs/milestones/x19_OB_HARDENING_OPS.md`](milestones/x19_OB_HARDENING_OPS.md)
 
 ## Published Release Target
