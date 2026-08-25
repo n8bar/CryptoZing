@@ -117,12 +117,24 @@ Pin `CZ_TAG` to a commit-sha tag instead of `latest` if you want explicit, rollb
 
 ## Backups
 
-The database lives in the `dbdata` volume. A nightly dump kept off the server is the minimum:
+The database lives in the `dbdata` volume. A nightly dump kept off the server is the minimum. Dump `cache`, `cache_locks`, and `sessions` schema-only — they are regenerable, and capturing their rows causes real trouble on restore:
 
 ```bash
-docker compose -f compose.production.yaml exec db \
-  sh -c 'mysqldump -ucryptozing -p"$MYSQL_PASSWORD" cryptozing' | gzip > backup-$(date +%F).sql.gz
+# Everything except the ephemeral tables.
+docker compose -f compose.production.yaml exec db sh -c 'mysqldump \
+  --single-transaction --routines --triggers \
+  --ignore-table=cryptozing.cache \
+  --ignore-table=cryptozing.cache_locks \
+  --ignore-table=cryptozing.sessions \
+  -ucryptozing -p"$MYSQL_PASSWORD" cryptozing' | gzip > backup-$(date +%F).sql.gz
+
+# Those three, schema only, so a restore into an empty database still works.
+docker compose -f compose.production.yaml exec db sh -c 'mysqldump \
+  --single-transaction --no-data \
+  -ucryptozing -p"$MYSQL_PASSWORD" cryptozing cache cache_locks sessions' | gzip >> backup-$(date +%F).sql.gz
 ```
+
+The scheduler holds a `withoutOverlapping()` mutex in `cache_locks` while the payment watcher runs. A dump taken at that moment captures the lock, and restoring it silently stops the watcher until the lock expires — up to a day, with every container still reporting healthy. Excluding the row data avoids it. Dumping `sessions` schema-only likewise keeps a restore from reviving logins from the backup's moment.
 
 Uploads and logs live in `./storage` — include it in file backups.
 
