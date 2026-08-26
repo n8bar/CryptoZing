@@ -93,6 +93,7 @@ Carried from the MS20 cutover as it actually ran. Several of these fail **silent
 Carried items (fold into phase docs when active):
 - [ ] [#81](https://github.com/n8bar/CryptoZing/issues/81) Re-run mail stress testing when the mailer service is upgraded or switched — likely lands at or after the production mail cutover. Deferred-test list in [`x19.1_NOTIFICATION_COVERAGE_AUDIT.md`](../strategies/x19.1_NOTIFICATION_COVERAGE_AUDIT.md) §6.
 - [ ] Donation env vars set in production at deploy: `DONATION_WALLET_XPUB` (mainnet swap tracked in MS20), `DONATION_NOTIFY_EMAIL`, `DONATION_MAX_UNPAID_ADDRESSES`. See [`x19.8_MICRO_MONETIZE.md`](../strategies/x19.8_MICRO_MONETIZE.md) §1.
+- [ ] Self-host analytics: stand up Umami on our own subdomain and repoint the content repo's `_layouts/default.njk` script off Umami Cloud. Land it before the Privacy Policy publishes in Phase 2, so §2 and §7 go live describing first-party measurement rather than naming a third-party provider. Independent of the DNS cutover — the box already runs the app.
 - [ ] Retire GitHub Pages at cutover, once the site container serves `/learn/*` from the production box. Eleventy moves with the content repo in MS20 Phase 2 per [`x20.2_PRODUCTION_HOSTING.md`](../strategies/x20.2_PRODUCTION_HOSTING.md) §4 and stays as that repo's build.
 
 ## Exit Criteria
