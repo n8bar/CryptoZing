@@ -9,7 +9,7 @@ Placeholders in `[brackets]` resolve at MS21 deploy. Structure adapted from the 
 **Privacy Policy**
 *Effective: `[date]` · Operated by CryptoZing LLC*
 
-*(intro — APPROVED)* CryptoZing is a Bitcoin invoicing service run by CryptoZing LLC. This policy explains what information the Service collects, why, and what happens to it. The short version: we collect what we need to run the Service, we don't sell your information, and we don't run ads or third-party analytics.
+*(intro — APPROVED)* CryptoZing is a Bitcoin invoicing service run by CryptoZing LLC. This policy explains what information the Service collects, why, and what happens to it. The short version: we collect what we need to run the Service, we don't sell your information, and we don't run ads or track you across the web.
 
 **1. Information you give us.** *(APPROVED)*
 - *Account*: your name, email address, and password (stored hashed — we can't read it).
@@ -21,6 +21,7 @@ Placeholders in `[brackets]` resolve at MS21 deploy. Structure adapted from the 
 **2. Information we collect automatically.** *(APPROVED)*
 - *Log and session data*: signing in records your IP address and browser details with your session. Our operational logs record events like email deliveries (recipient address and outcome) and views of public invoice pages (viewer IP address).
 - *Cookies*: we set first-party cookies for sign-in sessions and security. There are no advertising, analytics, or cross-site tracking cookies.
+- *Website analytics*: pages viewed on our marketing site, plus referrer, browser, and a country derived from your IP. Our provider (Section 7) turns your IP and browser into an identifier that resets daily rather than storing either — it can't follow you across days or to other sites. Signed-in app pages and invoice pages carry no analytics.
 - *Blockchain activity*: payment activity at the Bitcoin addresses derived from your xpub, observed from the public blockchain.
 
 **3. What your xpub lets us see.** *(APPROVED)*
@@ -40,6 +41,7 @@ We share information with service providers that help us run CryptoZing — each
 - An email delivery provider (like Mailgun) processes recipient addresses and message content.
 - A blockchain data service (like mempool.space) answers payment-watching queries about individual invoice addresses; those queries come from our servers and carry no account identity and no xpub.
 - An exchange-rate source (like Coinbase) provides the BTC–USD rate we display; those requests carry no user data at all.
+- An analytics provider (like Umami) counts page views on our marketing site; it receives the page address, referrer, and browser details, and derives country from your IP without storing it.
 - Hosting and infrastructure providers store and transmit Service data as part of running it.
 - Other providers as the Service grows — the same rule applies: each gets only what it needs to provide its service.
 
