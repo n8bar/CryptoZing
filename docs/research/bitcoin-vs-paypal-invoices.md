@@ -50,7 +50,7 @@ The choice is bilateral. The issuer's fee preference does not erase the client's
 
 - PayPal may hold funds and payments can enter disputes, reversals, or card chargebacks. Eligible transactions may receive Seller Protection; do not describe every dispute as an automatic seller loss.
 - Bitcoin has no chargeback mechanism. After sufficient confirmation, the payer cannot unilaterally reverse the payment through the network.
-- A Bitcoin refund remains possible, but it is a new transaction initiated by the recipient. Irreversibility does not cancel contractual, customer-service, or legal obligations.
+- A Bitcoin refund remains possible, but it is a new transaction initiated by the issuer. Irreversibility does not cancel contractual, customer-service, or legal obligations.
 - Treat the client's desire for buyer protection as a legitimate tradeoff. It is one reason some clients may refuse Bitcoin, not the only reason.
 - Link confirmation mechanics to the pending-versus-confirmed article.
 
@@ -59,7 +59,7 @@ The choice is bilateral. The issuer's fee preference does not erase the client's
 - A USD-denominated invoice keeps the obligation understandable in dollars and narrows exchange-rate exposure; it does not eliminate volatility.
 - CryptoZing keeps USD canonical, recomputes the requested BTC from the current rate, and values each payment at the rate captured when it is detected.
 - The practical exposure includes the interval between loading the payment amount and detection, plus however long the issuer continues holding BTC afterward.
-- If the recipient needs dollars, the conversion path and its timing belong in the decision.
+- If the issuer needs dollars, the conversion path and its timing belong in the decision.
 
 ### 6. The actual decision
 
