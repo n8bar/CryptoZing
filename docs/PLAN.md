@@ -16,9 +16,9 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 
 ## Current
 - Active milestone:
-  - **MS21 - CryptoZing.app Deployment (Open Beta)** — not started; needs its content-publish gate cleared before it can begin.
+  - **MS21 - CryptoZing.app Deployment (Open Beta)** — not started; content-publish gate cleared, awaiting phase strategy docs.
 - Status: `MS20 closed — live on mainnet privately, cutover runbook and halt procedure both proven by execution. MS21 is a stub awaiting phase strategy docs.`
-- Next action: Clear MS21's content-publish gate, then build out its phase strategy docs from the cutover material carried in [`docs/milestones/21_OB_DEPLOYMENT.md`](milestones/21_OB_DEPLOYMENT.md).
+- Next action: Build out MS21's phase strategy docs from the cutover material carried in [`docs/milestones/21_OB_DEPLOYMENT.md`](milestones/21_OB_DEPLOYMENT.md).
 - Most recently completed milestone doc: [`docs/milestones/x20_MAINNET_CUTOVER_ALPHA_GATE.md`](milestones/x20_MAINNET_CUTOVER_ALPHA_GATE.md)
 
 ## Published Release Target
