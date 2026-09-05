@@ -1,5 +1,5 @@
 # PLAN
-_Last updated: 2026-08-24_
+_Last updated: 2026-09-05_
 
 This is the human-facing execution dashboard for open-beta work.
 
@@ -16,9 +16,9 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 
 ## Current
 - Active milestone:
-  - **MS21 - CryptoZing.app Deployment (Open Beta)** — not started; content-publish gate cleared, awaiting phase strategy docs.
-- Status: `MS20 closed — live on mainnet privately, cutover runbook and halt procedure both proven by execution. MS21 is a stub awaiting phase strategy docs.`
-- Next action: Build out MS21's phase strategy docs from the cutover material carried in [`docs/milestones/21_OB_DEPLOYMENT.md`](milestones/21_OB_DEPLOYMENT.md).
+  - **MS21 - CryptoZing.app Deployment (Open Beta)** — strategy drafts ready for review; content-publish gate cleared, execution not started.
+- Status: `MS20 closed — live on mainnet privately, cutover runbook and halt procedure both proven by execution. M21's three phase strategies are drafted and awaiting review.`
+- Next action: Review M21's deployment plan in [`docs/milestones/21_OB_DEPLOYMENT.md`](milestones/21_OB_DEPLOYMENT.md) before beginning execution.
 - Most recently completed milestone doc: [`docs/milestones/x20_MAINNET_CUTOVER_ALPHA_GATE.md`](milestones/x20_MAINNET_CUTOVER_ALPHA_GATE.md)
 
 ## Published Release Target

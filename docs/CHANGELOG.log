@@ -1086,3 +1086,6 @@ Removed the proposed article from the content queue and deleted its research out
 
 2026-09-04 | Custodial-versus-noncustodial article published; MS21 content gate cleared
 Article 5 from the content queue is live at `/learn/custodial-vs-noncustodial-bitcoin-payments/`, published from the content repo. That satisfies the one-article-per-milestone gate for MS21, so the milestone can begin; the next action is building out its phase strategy docs.
+
+2026-09-05 | M21's three deployment phase strategies drafted for review
+Added 21.1_PRE_DEPLOY_VERIFICATION.md, 21.2_DEPLOY_AND_CUTOVER.md, and 21.3_ROLLOUT_VERIFICATION_SIGNOFF.md. The milestone now owns a phase rollup and links to each ordered checklist; PLAN, README, and AGENTS identify the pending strategy review without starting execution. The drafts carry forward M20's proven mainnet state and recovery procedure, correct the Mailgun failure-hook identifiers, prepare the private-to-public indexing split, preserve existing content and signed-link handling, and retain M19.5's exact legal placement rules. Analytics keeps its recorded non-gating fallback with truthful provider disclosure; #81 is evaluated only against its mailer upgrade/switch trigger. The content-repo/container boundary replaces stale app-repo site/build paths. Milestone dates are unchanged.
