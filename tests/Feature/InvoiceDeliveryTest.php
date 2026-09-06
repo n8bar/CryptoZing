@@ -547,6 +547,13 @@ class InvoiceDeliveryTest extends TestCase
             ->assertSee('Resend invoice email')
             ->assertSee('Resend invoice')
             ->assertDontSee('Send invoice email');
+
+        // The client's address changed since; it was still sent, so it is still a resend.
+        $client->update(['email' => 'new-address@example.com']);
+
+        $this->actingAs($owner)->get(route('invoices.show', $invoice))
+            ->assertOk()
+            ->assertSee('Resend invoice email');
     }
 
     public function test_manual_send_cooldown_matches_recipient_case_insensitively(): void

@@ -201,13 +201,10 @@
 
             @php
                 $canDeliver = $invoice->client && !empty($invoice->client->email) && $invoice->public_enabled;
-                $clientEmail = strtolower(trim((string) ($invoice->client->email ?? '')));
-                $hasSentToClient = $clientEmail !== '' && $invoice->deliveries->contains(
-                    fn ($delivery) => $delivery->type === 'send'
-                        && $delivery->status === 'sent'
-                        && strtolower(trim((string) $delivery->recipient)) === $clientEmail
+                $hasBeenSent = $invoice->deliveries->contains(
+                    fn ($delivery) => $delivery->type === 'send' && $delivery->status === 'sent'
                 );
-                $sendLabel = $hasSentToClient ? 'Resend invoice' : 'Send invoice';
+                $sendLabel = $hasBeenSent ? 'Resend invoice' : 'Send invoice';
                 $onboardingGlow = 'ring-2 ring-indigo-300 ring-offset-2 ring-offset-white dark:ring-indigo-400/70 dark:ring-offset-slate-900';
                 $gettingStartedMarker = '👉';
             @endphp

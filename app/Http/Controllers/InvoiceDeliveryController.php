@@ -63,10 +63,11 @@ class InvoiceDeliveryController extends Controller
 
         $message = $validated['message'] ?? null;
 
-        // A second send of an already-delivered invoice is deliberate: it goes
-        // out as its own delivery, and only the short manual cooldown holds it
-        // off (#182). The refusal is recorded so the delivery log stays truthful.
-        if ($this->deliveries->hasSentDeliveryTo($invoice, 'send', $recipient)) {
+        // A second send of an already-sent invoice is deliberate, whoever it
+        // went to before: it goes out as its own delivery, and only the short
+        // manual cooldown holds it off (#182). A refusal is recorded so the
+        // delivery log stays truthful.
+        if ($this->deliveries->hasSentDelivery($invoice, 'send')) {
             $delivery = $this->deliveries->queueResend($invoice, 'send', $recipient, $cc, $message)
                 ?? $this->deliveries->skip(
                     $invoice,

@@ -152,11 +152,10 @@ class InvoiceDeliveryService
         return $this->queue($invoice, $type, $recipient, $cc, $message, $contextKey);
     }
 
-    public function hasSentDeliveryTo(Invoice $invoice, string $type, string $recipient): bool
+    public function hasSentDelivery(Invoice $invoice, string $type): bool
     {
         return $invoice->deliveries()
             ->where('type', $type)
-            ->whereRaw('LOWER(TRIM(recipient)) = ?', [$this->normalizeRecipient($recipient)])
             ->where('status', 'sent')
             ->exists();
     }
