@@ -1,6 +1,6 @@
 # MS21 — CryptoZing.app Open Beta
 
-Status: Replacement strategy drafts for review — execution not started.
+Status: Phase 1 in progress.
 Drafted: 2026-09-05.
 Parent: [PLAN.md](../PLAN.md)
 
@@ -8,7 +8,7 @@ Parent: [PLAN.md](../PLAN.md)
 
 The existing alpha deployment becomes beta at `https://cryptozing.app`. It keeps the same VPS, database, accounts, wallets, and mail service; `alpha.cryptozing.app` is retired. The apex moves from GitHub Pages to the existing production stack, with Laravel serving `/` and the content container retaining the published `/learn/*` URLs.
 
-The [content-publish gate](../CONTENT_PLAN.md) was met on 2026-09-04. Next: review the replacement phase strategies below before execution.
+The [content-publish gate](../CONTENT_PLAN.md) was met on 2026-09-04. Next: [M21.1](../strategies/21.1_PRE_DEPLOY_VERIFICATION.md) in progress.
 
 ## Accepted baseline
 
