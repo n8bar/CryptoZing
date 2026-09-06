@@ -67,7 +67,7 @@ class InvoiceDeliveryController extends Controller
         // went to before: it goes out as its own delivery, and only the short
         // manual cooldown holds it off (#182). A refusal is recorded so the
         // delivery log stays truthful.
-        if ($this->deliveries->hasSentDelivery($invoice, 'send')) {
+        if ($this->deliveries->hasCompletedSend($invoice, 'send')) {
             $delivery = $this->deliveries->queueResend($invoice, 'send', $recipient, $cc, $message)
                 ?? $this->deliveries->skip(
                     $invoice,

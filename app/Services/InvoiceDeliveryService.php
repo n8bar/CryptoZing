@@ -152,7 +152,7 @@ class InvoiceDeliveryService
         return $this->queue($invoice, $type, $recipient, $cc, $message, $contextKey);
     }
 
-    public function hasSentDelivery(Invoice $invoice, string $type): bool
+    public function hasCompletedSend(Invoice $invoice, string $type): bool
     {
         return $invoice->deliveries()
             ->where('type', $type)
