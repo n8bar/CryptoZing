@@ -49,10 +49,10 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="landing-type-baseline antialiased min-h-screen bg-gray-900 text-slate-100">
-    <div class="relative overflow-hidden min-h-screen">
+    <div class="relative overflow-hidden min-h-screen flex flex-col">
         <div class="absolute inset-0 bg-gradient-to-br from-indigo-900/60 via-gray-900 to-black pointer-events-none"></div>
 
-        <div class="relative max-w-6xl mx-auto px-6 py-12 lg:py-16">
+        <div class="relative flex-1 w-full max-w-6xl mx-auto px-6 py-12 lg:py-16">
             @if (Route::has('login'))
                 <div class="flex justify-end mb-10">
                     @auth
@@ -164,7 +164,10 @@
                     <img src="{{ asset('images/CZ.png') }}" alt="CryptoZing" class="mx-auto h-[28rem] w-auto">
                 </div>
             </div>
+        </div>
 
+        {{-- Anchored below the content; the top margin clears the cards' staggered offsets. --}}
+        <div class="relative mt-12 md:mt-16">
             <x-legal-footer />
         </div>
     </div>
