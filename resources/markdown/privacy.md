@@ -1,5 +1,5 @@
 **Privacy Policy**
-*Effective: [date] · Operated by CryptoZing LLC*
+*Effective: September 6, 2026 · Operated by CryptoZing LLC*
 
 CryptoZing is a Bitcoin invoicing service run by CryptoZing LLC. This policy explains what information the Service collects, why, and what happens to it. The short version: we collect what we need to run the Service, we don't sell your information, and we don't run ads or track you across the web.
 

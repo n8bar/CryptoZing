@@ -1,5 +1,5 @@
 **Terms of Service**
-*Effective: [date] · Operated by CryptoZing LLC*
+*Effective: September 6, 2026 · Operated by CryptoZing LLC*
 
 Welcome to CryptoZing, a Bitcoin invoicing service run by CryptoZing LLC. CryptoZing ("the Service") is **beta software** — use it for low-stakes invoices first; it isn't built to be relied on for production-critical or high-value payment workflows. By creating an account or using the Service, you agree to these Terms. If you don't agree with them, please don't use the Service.
 
