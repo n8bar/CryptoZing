@@ -1101,3 +1101,6 @@ Rebuilt from the milestone at 997a532, reconciled with completed M19/M20 work an
 
 2026-09-05 | M21 phase strategies approved
 M21.1, M21.2, and M21.3 move from draft to approved execution direction; AGENTS no longer flags them as awaiting review. Execution and milestone dates are unchanged.
+
+2026-09-06 | Self-hosted Umami live; Phase 1 overlay on the box
+Analytics now run on our own Umami instance at stats.cryptozing.app (own Postgres, apex certificate, noindexed, backed up nightly), closing the 2026-08-25 carried item before the policy publishes; the content site loads only that script and Cloud collection has ended. The same rollout put the M21.1 overlay on the box: pinned site image with publish/rollback, template sets selected by env, and docker-init in front of the app services after the scheduler's unreaped children exhausted the deploy user's process limit. The apex certificate (apex, www, stats) is issued; unattended renewal switches to webroot at cutover.
