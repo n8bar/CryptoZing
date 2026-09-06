@@ -19,9 +19,10 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 return Application::configure(basePath: dirname(__DIR__))
     ->withEvents(discover: false)
     ->withSchedule(function (Schedule $schedule): void {
+        // 10-minute mutex expiry: a scheduler recreate mid-run strands the lock (default 24 h); a real run takes seconds (#188).
         $schedule->command('wallet:watch-payments')
             ->everyMinute()
-            ->withoutOverlapping()
+            ->withoutOverlapping(10)
             ->runInBackground();
         $schedule->command('invoices:send-past-due-alerts')->dailyAt('02:00');
 

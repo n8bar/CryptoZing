@@ -13,7 +13,7 @@ TAG="${1:?usage: deploy.sh <image-tag>}"
 IMAGE="ghcr.io/n8bar/cryptozing-app"
 
 FILES=(-f compose.production.yaml)
-# Our alpha deployment layers the site container in; self-hosters won't have it.
+# Our deployment layers the site container in; self-hosters won't have it.
 [ -f compose.alpha.yaml ] && FILES+=(-f compose.alpha.yaml)
 
 # Persist the tag so later compose invocations keep serving it.
@@ -29,6 +29,10 @@ docker compose "${FILES[@]}" pull
 docker compose "${FILES[@]}" run --rm app php artisan migrate --force
 
 docker compose "${FILES[@]}" up -d --remove-orphans
+
+# Recreating the scheduler mid-run strands its withoutOverlapping mutex (#188).
+docker compose "${FILES[@]}" exec -T app php artisan schedule:clear-cache \
+    || echo "WARN: schedule:clear-cache failed; clear framework/schedule-* rows from cache_locks by hand (#188)" >&2
 
 # §4.2.4: nothing may still be running another tag of the app image.
 stale=$(docker ps --format '{{.Names}} {{.Image}}' \

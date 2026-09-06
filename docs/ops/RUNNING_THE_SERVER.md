@@ -20,10 +20,11 @@ Recreating is also what makes an `.env` change take at all: the container rebuil
 
 `docker compose ps` reports health per service: the app answers a PHP-FPM ping, while the queue and scheduler answer on a heartbeat their worker loops refresh — so a worker still running but wedged reads `unhealthy` rather than fine.
 
-Two things that look like faults and are not:
+Three things that read wrong at a glance:
 
 - **Healthy containers are not proof that scheduled work is running.** The watcher's own run stamp is the liveness signal, and the support dashboard's stale tile reads from it. Watch the stamp advance.
 - **A high restart count on the queue container is expected.** The worker runs with `--max-time=3600` and exits hourly by design, so roughly one restart per hour of uptime is normal. Compare the count against uptime before treating it as a symptom.
+- **Recreating the scheduler mid-run strands its `withoutOverlapping` mutex until it expires.** Every later tick skips as "has mutex" while everything reads healthy. The deploy script clears it after bringing services up; after any recreate, confirm the watcher stamp advances within a couple of minutes.
 
 ---
 

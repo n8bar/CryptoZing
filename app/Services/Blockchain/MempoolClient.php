@@ -3,6 +3,7 @@
 namespace App\Services\Blockchain;
 
 use Illuminate\Http\Client\Pool;
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -51,12 +52,16 @@ class MempoolClient
         foreach ($addresses as $address) {
             $response = $responses[$address] ?? null;
 
-            if (! $response || ! $response->ok()) {
+            // A transport-level failure leaves the ConnectionException itself
+            // in the pool slot rather than a Response (#187); treat it like a
+            // non-2xx reply for this address and keep going.
+            if (! $response instanceof Response || ! $response->ok()) {
                 Log::warning('Mempool transactions fetch failed', [
                     'network' => $network,
                     'address' => $address,
-                    'status' => $response?->status(),
-                    'body' => $response?->body(),
+                    'status' => $response instanceof Response ? $response->status() : null,
+                    'body' => $response instanceof Response ? $response->body() : null,
+                    'error' => $response instanceof \Throwable ? $response->getMessage() : null,
                 ]);
 
                 $transactions[$address] = [];
