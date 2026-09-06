@@ -32,6 +32,14 @@ class ProductionComposeHealthcheckTest extends TestCase
         }
     }
 
+    public function test_the_app_services_run_under_an_init_that_reaps_finished_children(): void
+    {
+        preg_match('/^x-app: &app\n(?<block>(?:  .*\n)+)/m', $this->compose(), $anchor);
+
+        $this->assertNotEmpty($anchor, 'the shared app anchor is missing');
+        $this->assertStringContainsString("\n  init: true\n", $anchor['block']);
+    }
+
     /**
      * @return list<array{script: string, worker: string}>
      */
@@ -39,7 +47,7 @@ class ProductionComposeHealthcheckTest extends TestCase
     {
         preg_match_all(
             '#"(/var/www/html/\S+/worker-healthcheck\.php)",\s*"([a-z]+)"#',
-            (string) file_get_contents(base_path('compose.production.yaml')),
+            $this->compose(),
             $matches,
             PREG_SET_ORDER,
         );
@@ -48,5 +56,10 @@ class ProductionComposeHealthcheckTest extends TestCase
             fn (array $match) => ['script' => $match[1], 'worker' => $match[2]],
             $matches,
         );
+    }
+
+    private function compose(): string
+    {
+        return (string) file_get_contents(base_path('compose.production.yaml'));
     }
 }
