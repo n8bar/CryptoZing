@@ -7,6 +7,7 @@ use App\Models\InvoiceDelivery;
 use App\Services\InvoiceDeliveryService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class InvoiceDeliveryController extends Controller
@@ -60,13 +61,25 @@ class InvoiceDeliveryController extends Controller
         $recipient = $invoice->client->email;
         $cc = $request->boolean('cc_self') ? $invoice->user->email : null;
 
-        $delivery = $this->deliveries->queue(
-            $invoice,
-            'send',
-            $recipient,
-            $cc,
-            $validated['message'] ?? null
-        );
+        $message = $validated['message'] ?? null;
+
+        // A second send of an already-delivered invoice is deliberate: it goes
+        // out as its own delivery, and only the short manual cooldown holds it
+        // off (#182). The refusal is recorded so the delivery log stays truthful.
+        if ($this->deliveries->hasSentDeliveryTo($invoice, 'send', $recipient)) {
+            $delivery = $this->deliveries->queueResend($invoice, 'send', $recipient, $cc, $message)
+                ?? $this->deliveries->skip(
+                    $invoice,
+                    'send',
+                    $recipient,
+                    'Invoice email skipped because the same notice was already queued or sent recently.',
+                    $cc,
+                    $message,
+                    'resend_cooldown_' . Str::uuid(),
+                );
+        } else {
+            $delivery = $this->deliveries->queue($invoice, 'send', $recipient, $cc, $message);
+        }
 
         if ($delivery->status === 'queued') {
             $updates = ['delivery_message_draft' => null];

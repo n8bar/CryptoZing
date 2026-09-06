@@ -1514,6 +1514,15 @@
                         <p class="mt-1 text-xs font-medium text-gray-700">To: {{ $invoice->client->email ?? '—' }}</p>
                     </div>
                 </div>
+                @php
+                    $clientEmail = strtolower(trim((string) ($invoice->client->email ?? '')));
+                    $hasSentToClient = $clientEmail !== '' && $invoice->deliveries->contains(
+                        fn ($delivery) => $delivery->type === 'send'
+                            && $delivery->status === 'sent'
+                            && strtolower(trim((string) $delivery->recipient)) === $clientEmail
+                    );
+                    $sendLabel = $hasSentToClient ? 'Resend invoice' : 'Send invoice';
+                @endphp
                 <form method="POST" action="{{ route('invoices.deliver', $invoice) }}" class="mt-3 space-y-3"
                       data-delivery-message-form
                       data-delivery-draft-url="{{ route('invoices.deliver.draft', $invoice) }}">
@@ -1542,7 +1551,7 @@
                             :disabled="!$canDeliver"
                             class="{{ $gettingStartedContext ? $onboardingGlow : '' }}"
                             :data-getting-started-highlight="$gettingStartedContext ? 'deliver-send-invoice' : null">
-                            {{ $gettingStartedContext ? $gettingStartedMarker . ' Send invoice' : 'Send invoice' }}
+                            {{ $gettingStartedContext ? $gettingStartedMarker . ' ' . $sendLabel : $sendLabel }}
                         </x-primary-button>
                     </div>
                 </form>

@@ -119,8 +119,13 @@ class InvoiceDeliveryService
         );
     }
 
-    public function queueResend(Invoice $invoice, string $type, string $recipient): ?InvoiceDelivery
-    {
+    public function queueResend(
+        Invoice $invoice,
+        string $type,
+        string $recipient,
+        ?string $cc = null,
+        ?string $message = null,
+    ): ?InvoiceDelivery {
         $cooldownMinutes = $this->manualSendCooldownMinutes();
 
         if ($cooldownMinutes > 0) {
@@ -144,7 +149,16 @@ class InvoiceDeliveryService
 
         $contextKey = 'resend_' . Str::uuid();
 
-        return $this->queue($invoice, $type, $recipient, contextKey: $contextKey);
+        return $this->queue($invoice, $type, $recipient, $cc, $message, $contextKey);
+    }
+
+    public function hasSentDeliveryTo(Invoice $invoice, string $type, string $recipient): bool
+    {
+        return $invoice->deliveries()
+            ->where('type', $type)
+            ->whereRaw('LOWER(TRIM(recipient)) = ?', [$this->normalizeRecipient($recipient)])
+            ->where('status', 'sent')
+            ->exists();
     }
 
     public function deliveryExists(
