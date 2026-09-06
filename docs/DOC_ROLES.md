@@ -27,6 +27,7 @@ Keep these in sync with every merge or scope change.
 ## Strategy doc rules
 
 - **Authority**: strategy docs own ordered execution sequencing for an active workstream. They are authoritative for "what do we do next?" and resumption context, but **not canonical for product scope or behavior** — canonical requirements still live in `PLAN.md`, `PRODUCT_SPEC.md`, and the relevant `docs/specs/**` files.
+- **Reference, don't repeat**: link standing workflow rules, specs, and runbooks instead of restating them. Keep phase-specific actions and sequencing explicit, including safety-critical ordering.
 - **Breakout threshold**: create a separate strategy doc when a phase's size, sequencing, or verification depth warrants the breakout. Do not create a one-phase strategy merely for filename symmetry; keep a small phase's detailed checklist in its milestone doc.
 - **Retrospective reconstruction**: when backfilling historical docs, label reconstructed phase boundaries explicitly and cite the implementation/history evidence. Do not present inferred phase names or checkpoints as contemporaneous planning facts.
 - **Subagent-aware authoring**: even when a workstream has one primary critical path, write strategy docs with subagent use in mind — keep the main ordered sequence explicit, but call out any known safe parallel sidecars or path-scoped tasks so multi-agent execution does not have to improvise.

@@ -53,7 +53,7 @@
 ```
 
 ## Environment Notes (Do these without having to be reminded)
-- M21's three deployment phase strategies are drafted in [`docs/milestones/21_OB_DEPLOYMENT.md`](docs/milestones/21_OB_DEPLOYMENT.md); review is pending and execution has not started. The existing mainnet data/wallets are the baseline; the milestone owns the current phase status.
+- M21 status, deployment context, and phase strategies live in [`docs/milestones/21_OB_DEPLOYMENT.md`](docs/milestones/21_OB_DEPLOYMENT.md); strategy review is pending.
 - Wallet xpub onboarding lives at `/wallet/settings`; invoices expect a configured wallet or redirect there.
 - **Data hygiene:** As of 2025-11-16 the app only holds seed/test data—no real customers yet. Remove this note (and treat production emails accordingly) once live customer data exists.
 - CryptoZing must remain watch-only: never put private keys or seed phrases into tracked repo files, app config, database seeders, fixtures, tests, or normal application flows. If local testnet funding keys are needed for developer-only scenario setup, keep them only in untracked local storage (for example under `.cybercreek/`) and outside the product boundary.
