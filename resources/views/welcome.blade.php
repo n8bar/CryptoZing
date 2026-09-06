@@ -1,10 +1,43 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full bg-gray-900">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full bg-gray-900 dark">
 <head>
+    @php
+        // Public metadata mirrors what cryptozing.app publishes at / (M21.1 §1.4).
+        $publicUrl = rtrim((string) config('app.public_url'), '/') . '/';
+        $title = 'CryptoZing | Bitcoin Invoicing with Payment Tracking';
+        $description = 'CryptoZing is an open-source Bitcoin invoicing app for USD-first invoices, unique Bitcoin addresses, and reliable on-chain payment tracking.';
+        $ogImage = $publicUrl . 'og-preview.png';
+        $structuredData = json_encode([
+            '@context' => 'https://schema.org',
+            '@type' => 'SoftwareApplication',
+            'name' => 'CryptoZing',
+            'applicationCategory' => 'BusinessApplication',
+            'operatingSystem' => 'Web',
+            'url' => $publicUrl,
+            'image' => $ogImage,
+            'description' => $description,
+        ], JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP);
+    @endphp
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>CryptoZing - Home</title>
+    <title>{{ $title }}</title>
+    <meta name="description" content="{{ $description }}">
+    <link rel="canonical" href="{{ $publicUrl }}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ $publicUrl }}">
+    <meta property="og:title" content="{{ $title }}">
+    <meta property="og:description" content="{{ $description }}">
+    <meta property="og:image" content="{{ $ogImage }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $title }}">
+    <meta name="twitter:description" content="{{ $description }}">
+    <meta name="twitter:image" content="{{ $ogImage }}">
+    <script type="application/ld+json">{!! $structuredData !!}</script>
+
+    <x-favicon />
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700" rel="stylesheet" />
@@ -19,18 +52,24 @@
             @if (Route::has('login'))
                 <div class="flex justify-end mb-10">
                     @auth
-                        <div class="flex items-center gap-3">
+                        <div class="flex flex-wrap items-center justify-end gap-3">
                             <a href="{{ route('help') }}" class="inline-flex items-center rounded-md bg-white/10 px-4 py-2 text-sm font-semibold text-slate-100 shadow-sm ring-1 ring-white/20 hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-indigo-400">
                                 Helpful Notes
+                            </a>
+                            <a href="{{ config('app.guides_url') }}" class="inline-flex items-center rounded-md bg-white/10 px-4 py-2 text-sm font-semibold text-slate-100 shadow-sm ring-1 ring-white/20 hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+                                Guides
                             </a>
                             <a href="{{ url('/dashboard') }}" class="inline-flex items-center rounded-md bg-white/10 px-4 py-2 text-sm font-semibold text-slate-100 shadow-sm ring-1 ring-white/20 hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-indigo-400">
                                 Dashboard
                             </a>
                         </div>
                     @else
-                        <div class="flex items-center gap-3">
+                        <div class="flex flex-wrap items-center justify-end gap-3">
                             <a href="{{ route('help') }}" class="inline-flex items-center rounded-md bg-white/10 px-4 py-2 text-sm font-semibold text-slate-100 shadow-sm ring-1 ring-white/20 hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-indigo-400">
                                 Helpful Notes
+                            </a>
+                            <a href="{{ config('app.guides_url') }}" class="inline-flex items-center rounded-md bg-white/10 px-4 py-2 text-sm font-semibold text-slate-100 shadow-sm ring-1 ring-white/20 hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+                                Guides
                             </a>
                             <a href="{{ route('login') }}" class="inline-flex items-center rounded-md bg-white/10 px-4 py-2 text-sm font-semibold text-slate-100 shadow-sm ring-1 ring-white/20 hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-indigo-400">
                                 Log in
@@ -121,6 +160,8 @@
                     <img src="{{ asset('images/CZ.png') }}" alt="CryptoZing" class="mx-auto h-[28rem] w-auto">
                 </div>
             </div>
+
+            <x-legal-footer />
         </div>
     </div>
 </body>

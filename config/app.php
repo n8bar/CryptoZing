@@ -56,6 +56,9 @@ return [
 
     'public_url' => env('APP_PUBLIC_URL', env('APP_URL', 'http://localhost')),
 
+    // Where the landing page's "Guides" link points; absolute by default so it works on any install.
+    'guides_url' => env('GUIDES_URL', 'https://cryptozing.app/learn/'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
