@@ -1,13 +1,13 @@
 # CryptoZing — Terms of Service (DRAFT / WORK IN PROGRESS)
 
-Status: Draft complete — intro + §1–§16 and the disposition-walk edits all **approved**. Remaining before publication: the MS21 placeholder swap.
+Status: Published (M21.2). Mirrors `resources/markdown/terms.md`.
 Self-drafted, not legal advice (per the "no lawyer for RC1" decision in [`../strategies/x19.5_LEGAL_LAYER.md`](../strategies/x19.5_LEGAL_LAYER.md)).
 Placeholders in `[brackets]` resolve at MS21 deploy. Risk boilerplate adapted from the 37signals policies base (CC BY 4.0); bespoke crypto/non-custody/beta clauses drafted from scratch.
 
 ---
 
 **Terms of Service**
-*Effective: `[date]` · Operated by CryptoZing LLC*
+*Effective: September 6, 2026 · Operated by CryptoZing LLC*
 
 *(intro — APPROVED)* Welcome to CryptoZing, a Bitcoin invoicing service run by CryptoZing LLC. CryptoZing ("the Service") is **beta software** — use it for low-stakes invoices first; it isn't built to be relied on for production-critical or high-value payment workflows. By creating an account or using the Service, you agree to these Terms. If you don't agree with them, please don't use the Service.
 

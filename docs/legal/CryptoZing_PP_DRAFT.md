@@ -1,13 +1,13 @@
 # CryptoZing — Privacy Policy (DRAFT / WORK IN PROGRESS)
 
-Status: Draft complete — intro, §1–§12, and the attribution footer all **approved**. Remaining before publication: the MS21 placeholder swap.
+Status: Published (M21.2). Mirrors `resources/markdown/privacy.md`.
 Self-drafted, not legal advice (per the "no lawyer for RC1" decision in [`../strategies/x19.5_LEGAL_LAYER.md`](../strategies/x19.5_LEGAL_LAYER.md)).
 Placeholders in `[brackets]` resolve at MS21 deploy. Structure adapted from the Automattic privacy policy base (CC BY-SA 4.0); the wallet/blockchain sections are drafted from scratch.
 
 ---
 
 **Privacy Policy**
-*Effective: `[date]` · Operated by CryptoZing LLC*
+*Effective: September 6, 2026 · Operated by CryptoZing LLC*
 
 *(intro — APPROVED)* CryptoZing is a Bitcoin invoicing service run by CryptoZing LLC. This policy explains what information the Service collects, why, and what happens to it. The short version: we collect what we need to run the Service, we don't sell your information, and we don't run ads or track you across the web.
 
