@@ -16,8 +16,8 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 
 ## Current
 - Active milestone:
-  - **MS21 - CryptoZing.app Deployment (Open Beta)** — strategy drafts ready for review; content-publish gate cleared, execution not started.
-- Status: `MS20 closed — live on mainnet privately, cutover runbook and halt procedure both proven by execution. M21's three phase strategies are drafted and awaiting review.`
+  - **MS21 - CryptoZing.app Deployment (Open Beta)** — replacement strategy drafts ready for review; content-publish gate cleared, execution not started.
+- Status: `MS20 closed — the existing mainnet deployment is the accepted baseline. M21's three phase strategies have been rebuilt for the in-place transition and await review.`
 - Next action: Review M21's deployment plan in [`docs/milestones/21_OB_DEPLOYMENT.md`](milestones/21_OB_DEPLOYMENT.md) before beginning execution.
 - Most recently completed milestone doc: [`docs/milestones/x20_MAINNET_CUTOVER_ALPHA_GATE.md`](milestones/x20_MAINNET_CUTOVER_ALPHA_GATE.md)
 
@@ -27,7 +27,7 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 ## Active and Upcoming Milestones
 | Status | ID | Milestone | Short intent | Target | Primary doc |
 |---|---|---|---|---|---|
-| [ ] | 21 | CryptoZing.app Deployment (Open Beta) | Deploy the open beta under `cryptozing.app`, replace the GitHub Pages placeholder at `/` with the live app landing page without breaking the SEO baseline established in MS15, remove temporary mail aliasing, and complete rollout verification. | 2026-09-16 | [`docs/milestones/21_OB_DEPLOYMENT.md`](milestones/21_OB_DEPLOYMENT.md) |
+| [ ] | 21 | CryptoZing.app Deployment (Open Beta) | Open the existing mainnet deployment at `cryptozing.app`, retire the alpha hostname, replace the Pages placeholder while preserving content/SEO, publish the legal layer, and complete rollout sign-off. | 2026-09-16 | [`docs/milestones/21_OB_DEPLOYMENT.md`](milestones/21_OB_DEPLOYMENT.md) |
 | [ ] | 22 | Thorough SEO & Marketing Strategies | Post-deploy discovery investment: thorough SEO pass across live app + site surfaces and an ongoing SEO strategy with scheduled tasks in the .ics; marketing strategy. Scope at kickoff. | 2026-10-06 | [`docs/milestones/22_SEO_MARKETING.md`](milestones/22_SEO_MARKETING.md) |
 
 ## Completed Milestones
