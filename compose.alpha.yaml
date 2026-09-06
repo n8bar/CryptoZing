@@ -7,8 +7,10 @@
 # Host .env additions the overlay reads (M21.1 §1.2/§1.3):
 #   CZ_SITE_TAG            content-repo commit sha to serve (required; no latest)
 #   CZ_NGINX_TEMPLATES     templates-alpha (default) | templates-transition | templates-apex
-#   CZ_PUBLIC_SERVER_NAME  the public apex (transition + apex templates)
+#   CZ_PUBLIC_SERVER_NAME  the public apex; also names the stats host and the certificate lineage
 #   CZ_LEGACY_SERVER_NAME  the retiring private hostname (transition template only)
+#   UMAMI_DB_PASSWORD, UMAMI_APP_SECRET, UMAMI_2FA_KEY
+#                          self-hosted analytics secrets (M21.1 §2.2); generate on the box
 
 services:
   web:
@@ -36,3 +38,54 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+
+  # Self-hosted analytics (M21.1 §2.2): Umami with its own database, reachable
+  # only through the front nginx at stats.${CZ_PUBLIC_SERVER_NAME}. Nothing
+  # here touches the app's database or network exposure.
+  umami:
+    image: ghcr.io/umami-software/umami:3.3.1
+    restart: unless-stopped
+    init: true
+    environment:
+      DATABASE_URL: postgresql://umami:${UMAMI_DB_PASSWORD:?set UMAMI_DB_PASSWORD in .env}@umami-db:5432/umami
+      APP_SECRET: ${UMAMI_APP_SECRET:?set UMAMI_APP_SECRET in .env}
+      TWO_FACTOR_ENCRYPTION_KEY: ${UMAMI_2FA_KEY:?set UMAMI_2FA_KEY in .env (openssl rand -hex 32)}
+      DISABLE_TELEMETRY: "1"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    depends_on:
+      umami-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:3000/api/heartbeat"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+
+  umami-db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: umami
+      POSTGRES_USER: umami
+      POSTGRES_PASSWORD: ${UMAMI_DB_PASSWORD:?set UMAMI_DB_PASSWORD in .env}
+    volumes:
+      - umami-db:/var/lib/postgresql/data
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U umami -d umami"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  umami-db:

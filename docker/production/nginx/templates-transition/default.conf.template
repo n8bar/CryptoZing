@@ -11,7 +11,7 @@
 # canonical redirect. www collapses straight to the apex in one hop.
 server {
     listen 80;
-    server_name ${CZ_PUBLIC_SERVER_NAME} ${CZ_LEGACY_SERVER_NAME};
+    server_name ${CZ_PUBLIC_SERVER_NAME} ${CZ_LEGACY_SERVER_NAME} stats.${CZ_PUBLIC_SERVER_NAME};
 
     location /.well-known/acme-challenge/ {
         root /var/www/certbot;
@@ -188,5 +188,40 @@ server {
 
     location ~ /\.(?!well-known) {
         deny all;
+    }
+}
+# Self-hosted analytics (M21.1 §2.2): the Umami container behind its own
+# hostname on the apex certificate. Never indexed; only the tracker script
+# and its collection endpoint are meant for the public.
+server {
+    listen 443 ssl;
+    http2 on;
+    server_name stats.${CZ_PUBLIC_SERVER_NAME};
+
+    ssl_certificate     /etc/letsencrypt/live/${CZ_PUBLIC_SERVER_NAME}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/${CZ_PUBLIC_SERVER_NAME}/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+
+    resolver 127.0.0.11 valid=10s;
+    client_max_body_size 1m;
+
+    add_header X-Content-Type-Options nosniff always;
+    add_header X-Frame-Options SAMEORIGIN always;
+    add_header Referrer-Policy strict-origin-when-cross-origin always;
+    add_header X-Robots-Tag "noindex, nofollow" always;
+
+    location = /robots.txt {
+        add_header X-Robots-Tag "noindex, nofollow" always;
+        add_header Content-Type text/plain;
+        return 200 "User-agent: *\nDisallow: /\n";
+    }
+
+    location / {
+        set $umami_upstream http://umami:3000;
+        proxy_pass $umami_upstream;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto https;
     }
 }

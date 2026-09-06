@@ -59,9 +59,42 @@ class DeploymentOverlayTest extends TestCase
         $template = $this->file('docker/production/nginx/templates-apex/default.conf.template');
 
         $this->assertStringNotContainsString('CZ_LEGACY_SERVER_NAME', $template);
-        $this->assertStringNotContainsString('add_header X-Robots-Tag', $template);
+        preg_match('/server_name \$\{CZ_PUBLIC_SERVER_NAME\};(?<block>.*?)\n}/s', $template, $public);
+        $this->assertStringNotContainsString('add_header X-Robots-Tag', $public['block']);
         $this->assertSame(2, preg_match_all('/listen (80|443 ssl) default_server;\n\s+(http2 on;\n\s+)?server_name _;/', $template));
         $this->assertSame(2, substr_count($template, 'return 444;'));
+    }
+
+    public function test_the_analytics_services_need_their_secrets_and_publish_no_ports(): void
+    {
+        $overlay = $this->file('compose.alpha.yaml');
+
+        foreach (['UMAMI_DB_PASSWORD', 'UMAMI_APP_SECRET', 'UMAMI_2FA_KEY'] as $secret) {
+            $this->assertMatchesRegularExpression('/\$\{'.$secret.':\?/', $overlay);
+        }
+        $this->assertStringNotContainsString('ports:', $overlay);
+        $this->assertStringContainsString('umami-db:/var/lib/postgresql/data', $overlay);
+    }
+
+    #[DataProvider('allTemplates')]
+    public function test_every_template_set_serves_the_stats_host_noindexed(string $set): void
+    {
+        $template = $this->file("docker/production/nginx/{$set}/default.conf.template");
+
+        $this->assertStringContainsString('server_name stats.${CZ_PUBLIC_SERVER_NAME};', $template);
+        $this->assertStringContainsString('set $umami_upstream http://umami:3000;', $template);
+        $this->assertMatchesRegularExpression('/listen 80;\n\s+server_name [^;]*stats\.\$\{CZ_PUBLIC_SERVER_NAME\}/', $template);
+        preg_match('/server_name stats\.\$\{CZ_PUBLIC_SERVER_NAME\};(?<block>.*?)\n}/s', $template, $stats);
+        $this->assertStringContainsString('add_header X-Robots-Tag "noindex, nofollow" always;', $stats['block']);
+    }
+
+    public static function allTemplates(): array
+    {
+        return [
+            'alpha' => ['templates-alpha'],
+            'transition' => ['templates-transition'],
+            'apex' => ['templates-apex'],
+        ];
     }
 
     public static function publicTemplates(): array
