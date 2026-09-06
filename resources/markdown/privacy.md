@@ -15,7 +15,7 @@ CryptoZing is a Bitcoin invoicing service run by CryptoZing LLC. This policy exp
 
 - *Log and session data*: signing in records your IP address and browser details with your session. Our operational logs record events like email deliveries (recipient address and outcome) and views of public invoice pages (viewer IP address).
 - *Cookies*: we set first-party cookies for sign-in sessions and security. There are no advertising, analytics, or cross-site tracking cookies.
-- *Website analytics*: some of our sites count page views and record the page address, referrer, browser details, and a country derived from your IP but not the IP. Signed-in app pages and invoice pages carry no analytics.
+- *Website analytics*: some of our sites count page views and record the page address, referrer, browser details, and a country derived from your IP but not the IP. Signed-in app pages and invoice pages aren't included.
 - *Blockchain activity*: payment activity at the Bitcoin addresses derived from your xpub, observed from the public blockchain.
 
 **3. What your xpub lets us see.**
