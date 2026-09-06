@@ -107,6 +107,8 @@
 17. Every delivery must reach a truthful terminal state on its own.
    1. A delivery's recorded status must reflect the provider's actual handling: `sent` only if the provider accepted the message, `failed` if it did not.
    2. No delivery may remain indefinitely in a non-terminal state (`queued`/`sending`); it must resolve to `sent` or `failed` without operator intervention, including after a process crash or interruption mid-send.
+18. An already-sent invoice can be sent again on purpose from the invoice page. The control reads as a resend, the message goes out like a first send, and the delivery history records it as its own delivery.
+   1. A short cooldown, minutes rather than hours, holds off accidental repeats, and the delivery history says so when it does.
 
 ## Coverage & Status
 
