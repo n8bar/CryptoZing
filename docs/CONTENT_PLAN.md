@@ -11,7 +11,7 @@ Content and doc changes go straight to `main`. Branches and PRs are reserved for
 1. **Research** — investigate the topic; document findings in `docs/research/<slug>.md` (not published)
 2. **Author** — in [`n8bar/cryptozing-site`](https://github.com/n8bar/cryptozing-site), create `staging/<slug>.md` with front matter: `layout: article.njk`, `title`, `description`, `author`, `date`, `canonical: https://cryptozing.app/learn/<slug>/`
 3. **Build** — `npx @11ty/eleventy` (or `--watch`) in the site repo; output lands in `_site/`
-4. **Stage** — review the `_site/` build locally; push to the site repo's `main` for a shareable noindexed staging URL
+4. **Stage** — review the `_site/` build locally; push to the site repo's `main` and run `scripts/publish-vps.sh <sha>` for a shareable noindexed staging URL
 5. **Review** — revise until satisfied; update [`CONTENT_PROMISES.md`](CONTENT_PROMISES.md) with any new promises
 6. **Publish** — copy `staging/<slug>.md` to `learn/<slug>.md`; push to the site repo's `main`, then run `scripts/publish-vps.sh <sha>` there to roll the production box onto the built image. Staging copy stays as the working copy for future edits.
 7. **Verify** — confirm HTTP 200 at `https://cryptozing.app/learn/<slug>/`
