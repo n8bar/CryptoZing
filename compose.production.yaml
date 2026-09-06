@@ -16,6 +16,10 @@ x-logging: &logging
 x-app: &app
   image: ghcr.io/n8bar/cryptozing-app:${CZ_TAG:-latest}
   restart: unless-stopped
+  # A real init as PID 1. schedule:work and queue:work are not inits: children
+  # that finish get reparented to them and are never reaped, and the zombies
+  # count against the container user's process limit on the host.
+  init: true
   env_file: .env
   logging: *logging
   volumes:
