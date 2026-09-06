@@ -544,7 +544,9 @@ class InvoiceDeliveryTest extends TestCase
 
         $this->actingAs($owner)->get(route('invoices.show', $invoice))
             ->assertOk()
-            ->assertSee('Resend invoice');
+            ->assertSee('Resend invoice email')
+            ->assertSee('Resend invoice')
+            ->assertDontSee('Send invoice email');
     }
 
     public function test_manual_send_cooldown_matches_recipient_case_insensitively(): void

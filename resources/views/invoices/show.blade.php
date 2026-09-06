@@ -201,6 +201,13 @@
 
             @php
                 $canDeliver = $invoice->client && !empty($invoice->client->email) && $invoice->public_enabled;
+                $clientEmail = strtolower(trim((string) ($invoice->client->email ?? '')));
+                $hasSentToClient = $clientEmail !== '' && $invoice->deliveries->contains(
+                    fn ($delivery) => $delivery->type === 'send'
+                        && $delivery->status === 'sent'
+                        && strtolower(trim((string) $delivery->recipient)) === $clientEmail
+                );
+                $sendLabel = $hasSentToClient ? 'Resend invoice' : 'Send invoice';
                 $onboardingGlow = 'ring-2 ring-indigo-300 ring-offset-2 ring-offset-white dark:ring-indigo-400/70 dark:ring-offset-slate-900';
                 $gettingStartedMarker = '👉';
             @endphp
@@ -247,7 +254,7 @@
                     </a>
                     <a href="#send-invoice-email-card"
                        class="inline-flex items-center rounded-md border border-indigo-300 bg-white px-1.5 py-1.5 font-semibold text-indigo-700 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:border-indigo-400/40 dark:bg-slate-900/70 dark:text-indigo-200 dark:hover:bg-indigo-950/50 dark:focus:ring-offset-slate-900">
-                        Jump to Send invoice email
+                        Jump to {{ $sendLabel }} email
                     </a>
                 </div>
             </div>
@@ -1509,20 +1516,11 @@
             <div id="send-invoice-email-card" class="invoice-anchor-target rounded-lg bg-white p-6 shadow">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h3 class="text-sm font-semibold text-gray-700">Send invoice email</h3>
+                        <h3 class="text-sm font-semibold text-gray-700">{{ $sendLabel }} email</h3>
                         <p class="text-xs text-gray-500">Emails include the public share link, summary, and optional note.</p>
                         <p class="mt-1 text-xs font-medium text-gray-700">To: {{ $invoice->client->email ?? '—' }}</p>
                     </div>
                 </div>
-                @php
-                    $clientEmail = strtolower(trim((string) ($invoice->client->email ?? '')));
-                    $hasSentToClient = $clientEmail !== '' && $invoice->deliveries->contains(
-                        fn ($delivery) => $delivery->type === 'send'
-                            && $delivery->status === 'sent'
-                            && strtolower(trim((string) $delivery->recipient)) === $clientEmail
-                    );
-                    $sendLabel = $hasSentToClient ? 'Resend invoice' : 'Send invoice';
-                @endphp
                 <form method="POST" action="{{ route('invoices.deliver', $invoice) }}" class="mt-3 space-y-3"
                       data-delivery-message-form
                       data-delivery-draft-url="{{ route('invoices.deliver.draft', $invoice) }}">
