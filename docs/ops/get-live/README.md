@@ -80,6 +80,8 @@ MAIL_ALIAS_ENABLED=false
 
 SUPPORT_AGENT_EMAILS=you@example.com
 DONATION_WALLET_XPUB=             # blank = no /donate page; Taproot needs tr(xpub.../0/*)
+ANALYTICS_SCRIPT_URL=             # both blank = the landing page loads no analytics
+ANALYTICS_WEBSITE_ID=
 
 # compose-level settings
 CZ_SERVER_NAME=your.domain
