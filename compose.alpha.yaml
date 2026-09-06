@@ -1,15 +1,24 @@
-# Overlay for OUR alpha deployment only (M20.2 §3.3) — the published recipe
-# is compose.production.yaml by itself. This adds the article-site container
-# and swaps the front nginx to the /learn-proxying, noindexing alpha config:
+# Overlay for OUR deployment only (M20.2 §3.3) — the published recipe is
+# compose.production.yaml by itself. This adds the article-site container and
+# swaps the front nginx to a /learn-proxying config:
 #
 #   docker compose -f compose.production.yaml -f compose.alpha.yaml up -d
+#
+# Host .env additions the overlay reads (M21.1 §1.2/§1.3):
+#   CZ_SITE_TAG            content-repo commit sha to serve (required; no latest)
+#   CZ_NGINX_TEMPLATES     templates-alpha (default) | templates-transition | templates-apex
+#   CZ_PUBLIC_SERVER_NAME  the public apex (transition + apex templates)
+#   CZ_LEGACY_SERVER_NAME  the retiring private hostname (transition template only)
 
 services:
   web:
     # Fixed name so the certbot deploy hook can reload it by name (§2.8).
     container_name: cz-nginx
+    environment:
+      CZ_PUBLIC_SERVER_NAME: ${CZ_PUBLIC_SERVER_NAME:-}
+      CZ_LEGACY_SERVER_NAME: ${CZ_LEGACY_SERVER_NAME:-}
     volumes:
-      - ./docker/production/nginx/templates-alpha:/etc/nginx/templates:ro
+      - ./docker/production/nginx/${CZ_NGINX_TEMPLATES:-templates-alpha}:/etc/nginx/templates:ro
       - app-public:/var/www/html/public:ro
       - /etc/letsencrypt:/etc/letsencrypt:ro
       - ./certbot-webroot:/var/www/certbot:ro
@@ -18,7 +27,9 @@ services:
       - site
 
   site:
-    image: ghcr.io/n8bar/cryptozing-site:latest
+    # Pinned to a content-repo commit, like CZ_TAG pins the app; publish-site.sh
+    # moves it and the previous value is the rollback target.
+    image: ghcr.io/n8bar/cryptozing-site:${CZ_SITE_TAG:?set CZ_SITE_TAG in .env to the content-repo commit sha to serve}
     restart: unless-stopped
     logging:
       driver: json-file

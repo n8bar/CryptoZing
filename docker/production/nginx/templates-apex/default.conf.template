@@ -1,0 +1,149 @@
+# Front nginx for OUR deployment after the M21.2 cutover — selected with
+# CZ_NGINX_TEMPLATES=templates-apex. The published recipe still uses
+# templates/default.conf.template; this adds the content container behind
+# /learn/ and the content-owned root files, and rejects every other hostname
+# (the retired alpha name included, even from clients on cached DNS).
+
+# Port 80: ACME webroot for the names we hold, canonical redirects, and a
+# connection drop for anything else.
+server {
+    listen 80;
+    server_name ${CZ_PUBLIC_SERVER_NAME};
+
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+
+server {
+    listen 80;
+    server_name www.${CZ_PUBLIC_SERVER_NAME};
+
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+
+    location / {
+        return 301 https://${CZ_PUBLIC_SERVER_NAME}$request_uri;
+    }
+}
+
+server {
+    listen 80 default_server;
+    server_name _;
+    return 444;
+}
+
+# Public apex: Laravel at / and the policy URLs; the content container behind
+# /learn/, /staging/, and the content-owned root files (M21.1 §1.2.1–§1.2.2).
+server {
+    listen 443 ssl;
+    http2 on;
+    server_name ${CZ_PUBLIC_SERVER_NAME};
+
+    ssl_certificate     /etc/letsencrypt/live/${CZ_PUBLIC_SERVER_NAME}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/${CZ_PUBLIC_SERVER_NAME}/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+
+    # Docker's embedded DNS; variable upstreams below force per-request
+    # resolution so container replacement never leaves nginx on a dead IP.
+    resolver 127.0.0.11 valid=10s;
+
+    root /var/www/html/public;
+    index index.php;
+    client_max_body_size 12m;
+
+    add_header X-Content-Type-Options nosniff always;
+    add_header X-Frame-Options SAMEORIGIN always;
+    add_header Referrer-Policy strict-origin-when-cross-origin always;
+    # No X-Robots-Tag: the apex is indexable. Invoice views set their own
+    # noindex header in the app; staging drafts carry an in-page noindex meta.
+
+    set $site_upstream http://site:80;
+
+    # Slashless entry points behave as Pages did: one hop to the directory.
+    location = /learn   { return 301 /learn/; }
+    location = /staging { return 301 /staging/; }
+
+    # Published guides and their review copies. ^~ keeps the static-file regex
+    # below from capturing article assets. Slashless article URLs get the site
+    # container's relative 301 (absolute_redirect off there).
+    location ^~ /learn/ {
+        proxy_pass $site_upstream;
+        proxy_set_header Host $host;
+    }
+    location ^~ /staging/ {
+        proxy_pass $site_upstream;
+        proxy_set_header Host $host;
+    }
+
+    # Content-owned root files: robots (with the Sitemap line), the sitemap,
+    # and the IndexNow key file all come from the site build, never the app.
+    location = /robots.txt {
+        proxy_pass $site_upstream;
+        proxy_set_header Host $host;
+    }
+    location = /sitemap.xml {
+        proxy_pass $site_upstream;
+        proxy_set_header Host $host;
+    }
+    location ~ "^/[0-9a-f]{32}\.txt$" {
+        proxy_pass $site_upstream;
+        proxy_set_header Host $host;
+    }
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        try_files $uri =404;
+        include fastcgi_params;
+        set $app_upstream app:9000;
+        fastcgi_pass $app_upstream;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param HTTPS on;
+    }
+
+    location ~* \.(css|js|png|jpg|jpeg|gif|svg|ico|woff2?)$ {
+        expires 7d;
+        access_log off;
+        try_files $uri =404;
+    }
+
+    location ~ /\.(?!well-known) {
+        deny all;
+    }
+}
+
+# www → apex, over TLS (the apex certificate carries the www SAN).
+server {
+    listen 443 ssl;
+    http2 on;
+    server_name www.${CZ_PUBLIC_SERVER_NAME};
+
+    ssl_certificate     /etc/letsencrypt/live/${CZ_PUBLIC_SERVER_NAME}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/${CZ_PUBLIC_SERVER_NAME}/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+
+    return 301 https://${CZ_PUBLIC_SERVER_NAME}$request_uri;
+}
+
+# Any other hostname (retired alpha, raw IP, stray SNI): drop the connection.
+# nginx needs a certificate to complete the handshake first; the apex one
+# serves, and the name mismatch is the client's first signal.
+server {
+    listen 443 ssl default_server;
+    http2 on;
+    server_name _;
+
+    ssl_certificate     /etc/letsencrypt/live/${CZ_PUBLIC_SERVER_NAME}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/${CZ_PUBLIC_SERVER_NAME}/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+
+    return 444;
+}
