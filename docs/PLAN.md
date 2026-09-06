@@ -16,9 +16,9 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 
 ## Current
 - Active milestone:
-  - **MS21 - CryptoZing.app Deployment (Open Beta)** — Phase 1 complete; Phase 2 (cutover) next.
-- Status: `MS20 closed — the existing mainnet deployment is the accepted baseline. M21 Phase 1 is complete: apex routing, pinned site image, landing baseline, self-hosted analytics, the apex certificate, and the privacy delta are prepared and tested on the existing stack.`
-- Next action: Cut over per [M21.2](strategies/21.2_DEPLOY_AND_CUTOVER.md).
+  - **MS21 - CryptoZing.app Deployment (Open Beta)** — Phase 2 complete: cryptozing.app is public; Phase 3 (verify and sign off) next.
+- Status: `MS20 closed — the existing mainnet deployment is the accepted baseline. M21 Phases 1–2 are complete: the existing stack serves https://cryptozing.app publicly with alpha retired, Pages off the DNS path, self-hosted analytics, and the dated policies live.`
+- Next action: Verify the public result and sign off per [M21.3](strategies/21.3_ROLLOUT_VERIFICATION_SIGNOFF.md).
 - Most recently completed milestone doc: [`docs/milestones/x20_MAINNET_CUTOVER_ALPHA_GATE.md`](milestones/x20_MAINNET_CUTOVER_ALPHA_GATE.md)
 
 ## Published Release Target

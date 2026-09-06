@@ -1,6 +1,6 @@
 # MS21 — CryptoZing.app Open Beta
 
-Status: Phase 1 complete; Phase 2 next.
+Status: Phase 2 complete; Phase 3 next.
 Drafted: 2026-09-05.
 Parent: [PLAN.md](../PLAN.md)
 
@@ -8,7 +8,7 @@ Parent: [PLAN.md](../PLAN.md)
 
 The existing alpha deployment becomes beta at `https://cryptozing.app`. It keeps the same VPS, database, accounts, wallets, and mail service; `alpha.cryptozing.app` is retired. The apex moves from GitHub Pages to the existing production stack, with Laravel serving `/` and the content container retaining the published `/learn/*` URLs.
 
-The [content-publish gate](../CONTENT_PLAN.md) was met on 2026-09-04. Next: [M21.2](../strategies/21.2_DEPLOY_AND_CUTOVER.md).
+The [content-publish gate](../CONTENT_PLAN.md) was met on 2026-09-04. Next: [M21.3](../strategies/21.3_ROLLOUT_VERIFICATION_SIGNOFF.md).
 
 ## Accepted baseline
 
@@ -39,11 +39,11 @@ Prepare apex routing, the landing/content changes, analytics/legal publication, 
 
 Strategy: [M21.1](../strategies/x21.1_PRE_DEPLOY_VERIFICATION.md).
 
-### [ ] Phase 2 — Switch to the apex and open beta
+### [x] Phase 2 — Switch to the apex and open beta
 
 Move public traffic to the existing stack, switch generated links and callbacks, retire the alpha hostname, and remove the approval gate.
 
-Strategy: [M21.2](../strategies/21.2_DEPLOY_AND_CUTOVER.md).
+Strategy: [M21.2](../strategies/x21.2_DEPLOY_AND_CUTOVER.md).
 
 ### [ ] Phase 3 — Verify the public result and sign off
 

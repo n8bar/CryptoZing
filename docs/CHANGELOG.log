@@ -1107,3 +1107,6 @@ Analytics now run on our own Umami instance at stats.cryptozing.app (own Postgre
 
 2026-09-06 | M21 Phase 1 complete
 The in-place release is prepared and tested on the existing stack: transition and apex-only nginx sets, pinned site image with publish/rollback, the landing page at the publication baseline with deployment-configured analytics, self-hosted Umami, the apex certificate (apex, www, stats), and the reviewed privacy delta (§2 states the counting and its exclusions, §7 loses its analytics bullet, §9 reserves investigation logging). Strategy renamed to x21.1; M21.2 is next.
+
+2026-09-06 | M21 Phase 2 complete: cryptozing.app is public
+The existing stack now serves the apex: DNS moved from GitHub Pages to the VPS, the apex certificate renews by webroot, Mailgun callbacks and generated links use the apex, the alpha hostname is retired (no DNS, no certificate, refused by nginx), and the approval gate is off as of 2026-09-06T10:34:40Z. The policies carry their September 6, 2026 effective date, the sitemap root is dated, and content publishing runs through the VPS with Pages kept only for recovery. Two smoke findings were fixed and deployed before access opened: deliberate resends of sent invoices (#182) and the invoice email's hardcoded status (#185). Strategy renamed to x21.2; M21.3 is next.
