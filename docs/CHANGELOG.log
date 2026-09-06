@@ -1098,3 +1098,6 @@ M21.1 §3 now runs wallet:check-config and compares the candidate's wallet code/
 
 2026-09-05 | M21 strategies rebuilt from the pre-draft milestone
 Rebuilt from the milestone at 997a532, reconciled with completed M19/M20 work and the app/content deployment sources. Supersedes the earlier drafts and their incremental edits: alpha becomes beta on the same stack, with explicit hostname retirement and no routine replay of wallet, payment, or mail-provider proof. Preparation covers actual landing/SEO/legal gaps, site-image selection, VPS content publishing, hostname routing, and the analytics carry, including continuity on the replacement landing; self-host evidence is reused except where shared installation paths change. Normal processing continues through DNS preparation, without using the mail circuit breaker as a pause. PLAN, README, and AGENTS now point to the replacement drafts. Execution and milestone dates are unchanged.
+
+2026-09-05 | M21 phase strategies approved
+M21.1, M21.2, and M21.3 move from draft to approved execution direction; AGENTS no longer flags them as awaiting review. Execution and milestone dates are unchanged.
