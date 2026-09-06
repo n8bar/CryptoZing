@@ -46,7 +46,7 @@ Fast path to run the app locally with Laravel Sail.
 | MAILGUN_DOMAIN / MAILGUN_SECRET / MAILGUN_ENDPOINT | Mailgun HTTP API settings | sandbox domain / key / api.mailgun.net |
 | MAIL_FROM_ADDRESS / MAIL_FROM_NAME | Default sender | no-reply@cryptozing.app / CryptoZing |
 | MAIL_OUTBOUND_ENABLED | Emergency outbound-mail circuit breaker | true |
-| MAIL_MANUAL_SEND_COOLDOWN_MINUTES | Manual invoice-send cooldown | 60 |
+| MAIL_MANUAL_SEND_COOLDOWN_MINUTES | Manual invoice-send cooldown | 5 |
 | MAIL_ALERT_COOLDOWN_MINUTES | Automated alert cooldown | 1440 |
 | MAIL_ALIAS_ENABLED / MAIL_ALIAS_DOMAIN | Catch-all rewrite during pre-prod | true / mailer.cryptozing.app |
 | DB_DATABASE / DB_USERNAME / DB_PASSWORD | Sail MySQL | from .env defaults |

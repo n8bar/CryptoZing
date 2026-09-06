@@ -137,7 +137,7 @@ return [
 
     'safety' => [
         'outbound_enabled' => env('MAIL_OUTBOUND_ENABLED', true),
-        'manual_send_cooldown_minutes' => env('MAIL_MANUAL_SEND_COOLDOWN_MINUTES', 60),
+        'manual_send_cooldown_minutes' => env('MAIL_MANUAL_SEND_COOLDOWN_MINUTES', 5),
         'alert_cooldown_minutes' => env('MAIL_ALERT_COOLDOWN_MINUTES', 1440),
     ],
 

@@ -410,6 +410,152 @@ class InvoiceDeliveryTest extends TestCase
         $this->assertSame(2, InvoiceDelivery::where('invoice_id', $invoice->id)->where('type', 'send')->count());
     }
 
+    public function test_sending_an_already_sent_invoice_days_later_queues_a_resend(): void
+    {
+        Queue::fake();
+
+        $owner = User::factory()->create();
+        $client = Client::create([
+            'user_id' => $owner->id,
+            'name' => 'Repeat Client',
+            'email' => 'repeat@example.com',
+        ]);
+
+        $invoice = Invoice::create([
+            'user_id' => $owner->id,
+            'client_id' => $client->id,
+            'number' => 'INV-1002-RESEND',
+            'amount_usd' => 200,
+            'btc_rate' => 40_000,
+            'amount_btc' => 0.005,
+            'payment_address' => 'tb1qq0exampleresend',
+            'status' => 'sent',
+            'invoice_date' => now()->toDateString(),
+        ]);
+        $invoice->enablePublicShare();
+
+        InvoiceDelivery::create([
+            'invoice_id' => $invoice->id,
+            'user_id' => $owner->id,
+            'type' => 'send',
+            'status' => 'sent',
+            'recipient' => $client->email,
+            'dispatched_at' => now()->subDays(3),
+            'sent_at' => now()->subDays(3),
+        ])->forceFill(['created_at' => now()->subDays(3)])->save();
+
+        $response = $this->actingAs($owner)->post(route('invoices.deliver', $invoice), [
+            'message' => 'Sending this one again',
+            'cc_self' => true,
+        ]);
+
+        $response->assertRedirect();
+        $response->assertSessionHas('status', 'Invoice email queued.');
+
+        $resend = InvoiceDelivery::where('invoice_id', $invoice->id)->where('type', 'send')->latest('id')->first();
+        $this->assertSame('queued', $resend->status);
+        $this->assertStringStartsWith('resend_', (string) $resend->context_key);
+        $this->assertSame($owner->email, $resend->cc);
+        $this->assertSame('Sending this one again', $resend->message);
+
+        Queue::assertPushed(DeliverInvoiceMail::class, fn ($job) => $job->delivery->is($resend));
+    }
+
+    public function test_a_deliberate_resend_is_delivered_despite_the_earlier_send(): void
+    {
+        Mail::fake();
+
+        $owner = User::factory()->create();
+        $client = Client::create([
+            'user_id' => $owner->id,
+            'name' => 'Repeat Client Delivered',
+            'email' => 'repeat-delivered@example.com',
+        ]);
+
+        $invoice = Invoice::create([
+            'user_id' => $owner->id,
+            'client_id' => $client->id,
+            'number' => 'INV-1003-RESEND-DELIVERED',
+            'amount_usd' => 200,
+            'btc_rate' => 40_000,
+            'amount_btc' => 0.005,
+            'payment_address' => 'tb1qq0exampleresenddelivered',
+            'status' => 'sent',
+            'invoice_date' => now()->toDateString(),
+        ]);
+        $invoice->enablePublicShare();
+
+        InvoiceDelivery::create([
+            'invoice_id' => $invoice->id,
+            'user_id' => $owner->id,
+            'type' => 'send',
+            'status' => 'sent',
+            'recipient' => $client->email,
+            'dispatched_at' => now()->subDays(3),
+            'sent_at' => now()->subDays(3),
+        ])->forceFill(['created_at' => now()->subDays(3)])->save();
+
+        $resend = app(InvoiceDeliveryService::class)->queueResend($invoice, 'send', $client->email);
+        $this->assertNotNull($resend);
+
+        $job = new DeliverInvoiceMail($resend);
+        $job->handle(app(InvoiceDeliveryService::class));
+
+        $this->assertDatabaseHas('invoice_deliveries', ['id' => $resend->id, 'status' => 'sent']);
+        Mail::assertSent(InvoiceReadyMail::class, fn (InvoiceReadyMail $mail) => $mail->hasTo($client->email));
+    }
+
+    public function test_invoice_page_offers_resend_once_the_invoice_was_sent(): void
+    {
+        $owner = User::factory()->create();
+        $client = Client::create([
+            'user_id' => $owner->id,
+            'name' => 'Label Client',
+            'email' => 'label@example.com',
+        ]);
+
+        $invoice = Invoice::create([
+            'user_id' => $owner->id,
+            'client_id' => $client->id,
+            'number' => 'INV-1004-LABEL',
+            'amount_usd' => 50,
+            'btc_rate' => 40_000,
+            'amount_btc' => 0.00125,
+            'payment_address' => 'tb1qq0examplelabel',
+            'status' => 'draft',
+            'invoice_date' => now()->toDateString(),
+        ]);
+        $invoice->enablePublicShare();
+
+        $this->actingAs($owner)->get(route('invoices.show', $invoice))
+            ->assertOk()
+            ->assertSee('Send invoice')
+            ->assertDontSee('Resend invoice');
+
+        InvoiceDelivery::create([
+            'invoice_id' => $invoice->id,
+            'user_id' => $owner->id,
+            'type' => 'send',
+            'status' => 'sent',
+            'recipient' => 'Label@Example.com',
+            'dispatched_at' => now()->subDay(),
+            'sent_at' => now()->subDay(),
+        ]);
+
+        $this->actingAs($owner)->get(route('invoices.show', $invoice))
+            ->assertOk()
+            ->assertSee('Resend invoice email')
+            ->assertSee('Resend invoice')
+            ->assertDontSee('Send invoice email');
+
+        // The client's address changed since; it was still sent, so it is still a resend.
+        $client->update(['email' => 'new-address@example.com']);
+
+        $this->actingAs($owner)->get(route('invoices.show', $invoice))
+            ->assertOk()
+            ->assertSee('Resend invoice email');
+    }
+
     public function test_manual_send_cooldown_matches_recipient_case_insensitively(): void
     {
         Queue::fake();
