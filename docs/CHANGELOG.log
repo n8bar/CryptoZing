@@ -1104,3 +1104,6 @@ M21.1, M21.2, and M21.3 move from draft to approved execution direction; AGENTS 
 
 2026-09-06 | Self-hosted Umami live; Phase 1 overlay on the box
 Analytics now run on our own Umami instance at stats.cryptozing.app (own Postgres, apex certificate, noindexed, backed up nightly), closing the 2026-08-25 carried item before the policy publishes; the content site loads only that script and Cloud collection has ended. The same rollout put the M21.1 overlay on the box: pinned site image with publish/rollback, template sets selected by env, and docker-init in front of the app services after the scheduler's unreaped children exhausted the deploy user's process limit. The apex certificate (apex, www, stats) is issued; unattended renewal switches to webroot at cutover.
+
+2026-09-06 | M21 Phase 1 complete
+The in-place release is prepared and tested on the existing stack: transition and apex-only nginx sets, pinned site image with publish/rollback, the landing page at the publication baseline with deployment-configured analytics, self-hosted Umami, the apex certificate (apex, www, stats), and the reviewed privacy delta (§2 states the counting and its exclusions, §7 loses its analytics bullet, §9 reserves investigation logging). Strategy renamed to x21.1; M21.2 is next.
