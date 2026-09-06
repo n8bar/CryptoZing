@@ -36,6 +36,10 @@
     <meta name="twitter:description" content="{{ $description }}">
     <meta name="twitter:image" content="{{ $ogImage }}">
     <script type="application/ld+json">{!! $structuredData !!}</script>
+    @if (config('analytics.script_url') && config('analytics.website_id'))
+        {{-- Cookieless page counts for the marketing landing only (Privacy Policy §§2/7). --}}
+        <script defer src="{{ config('analytics.script_url') }}" data-website-id="{{ config('analytics.website_id') }}"></script>
+    @endif
 
     <x-favicon />
 
