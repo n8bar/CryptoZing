@@ -16,9 +16,9 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 
 ## Current
 - Active milestone:
-  - **MS21 - CryptoZing.app Deployment (Open Beta)** — replacement strategy drafts ready for review; content-publish gate cleared, execution not started.
-- Status: `MS20 closed — the existing mainnet deployment is the accepted baseline. M21's three phase strategies have been rebuilt for the in-place transition and await review.`
-- Next action: Review M21's deployment plan in [`docs/milestones/21_OB_DEPLOYMENT.md`](milestones/21_OB_DEPLOYMENT.md) before beginning execution.
+  - **MS21 - CryptoZing.app Deployment (Open Beta)** — Phase 1 in progress; content-publish gate cleared.
+- Status: `MS20 closed — the existing mainnet deployment is the accepted baseline. M21's phase strategies are approved; Phase 1 (prepare the in-place release) is executing.`
+- Next action: Finish [M21.1](strategies/21.1_PRE_DEPLOY_VERIFICATION.md), then cut over per [M21.2](strategies/21.2_DEPLOY_AND_CUTOVER.md).
 - Most recently completed milestone doc: [`docs/milestones/x20_MAINNET_CUTOVER_ALPHA_GATE.md`](milestones/x20_MAINNET_CUTOVER_ALPHA_GATE.md)
 
 ## Published Release Target
