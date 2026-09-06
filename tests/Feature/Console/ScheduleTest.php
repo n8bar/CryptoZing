@@ -22,6 +22,8 @@ class ScheduleTest extends TestCase
         $this->assertNotNull($event, 'wallet:watch-payments should be scheduled.');
         $this->assertSame('* * * * *', $event->expression);
         $this->assertTrue($event->withoutOverlapping);
+        // #188: a stranded mutex must clear within one interval plus a margin, not the 24 h default.
+        $this->assertSame(10, $event->expiresAt);
         $this->assertTrue($event->runInBackground);
     }
 }
