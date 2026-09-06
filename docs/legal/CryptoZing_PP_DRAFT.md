@@ -41,7 +41,6 @@ We share information with service providers that help us run CryptoZing — each
 - An email delivery provider (like Mailgun) processes recipient addresses and message content.
 - A blockchain data service (like mempool.space) answers payment-watching queries about individual invoice addresses; those queries come from our servers and carry no account identity and no xpub.
 - An exchange-rate source (like Coinbase) provides the BTC–USD rate we display; those requests carry no user data at all.
-- Some of our sites count page views and record the page address, referrer, browser details, and a country derived from your IP without storing it.
 - Hosting and infrastructure providers store and transmit Service data as part of running it.
 - Other providers as the Service grows — the same rule applies: each gets only what it needs to provide its service.
 
