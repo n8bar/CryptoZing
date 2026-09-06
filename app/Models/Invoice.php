@@ -183,6 +183,18 @@ class Invoice extends Model
         return $query->where('user_id', $userId);
     }
 
+    public function statusLabel(): string
+    {
+        return match ($this->status) {
+            'paid' => 'Paid',
+            'partial' => 'Partially paid',
+            'pending' => 'Payment pending',
+            'void' => 'Void',
+            'draft' => 'Draft',
+            default => 'Open',
+        };
+    }
+
     public function scopeOpen(Builder $query): Builder
     {
         return $query->whereIn('status', ['draft', 'sent', 'partial']);
