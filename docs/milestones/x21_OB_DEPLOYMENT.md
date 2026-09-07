@@ -1,6 +1,6 @@
 # MS21 — CryptoZing.app Open Beta
 
-Status: Phase 2 complete; Phase 3 next.
+Status: Complete.
 Drafted: 2026-09-05.
 Parent: [PLAN.md](../PLAN.md)
 
@@ -8,7 +8,7 @@ Parent: [PLAN.md](../PLAN.md)
 
 The existing alpha deployment becomes beta at `https://cryptozing.app`. It keeps the same VPS, database, accounts, wallets, and mail service; `alpha.cryptozing.app` is retired. The apex moves from GitHub Pages to the existing production stack, with Laravel serving `/` and the content container retaining the published `/learn/*` URLs.
 
-The [content-publish gate](../CONTENT_PLAN.md) was met on 2026-09-04. Next: [M21.3](../strategies/21.3_ROLLOUT_VERIFICATION_SIGNOFF.md).
+The [content-publish gate](../CONTENT_PLAN.md) was met on 2026-09-04. Closed 2026-09-06; discovery observations and accepted follow-ups are in [M22](22_SEO_MARKETING.md#handoff-from-m21).
 
 ## Accepted baseline
 
@@ -45,14 +45,14 @@ Move public traffic to the existing stack, switch generated links and callbacks,
 
 Strategy: [M21.2](../strategies/x21.2_DEPLOY_AND_CUTOVER.md).
 
-### [ ] Phase 3 — Verify the public result and sign off
+### [x] Phase 3 — Verify the public result and sign off
 
 Check the changed public entry points and operating state, resolve cutover findings, and obtain acceptance.
 
-Strategy: [M21.3](../strategies/21.3_ROLLOUT_VERIFICATION_SIGNOFF.md).
+Strategy: [M21.3](../strategies/x21.3_ROLLOUT_VERIFICATION_SIGNOFF.md).
 
 ## Exit Criteria
 
 Detailed phase acceptance belongs to the strategies and rolls up above.
 
-- [ ] Check the [content promises catalog](../CONTENT_PROMISES.md) against M21's changes; resolve any introduced or violated promise before closure.
+- [x] Check the [content promises catalog](../CONTENT_PROMISES.md) against M21's changes; resolve any introduced or violated promise before closure. The landing page moved from the content repo to the app with the same claims; Minor 7–11 re-sourced. Policies publish dates and first-party analytics wording only; nothing introduced or violated.

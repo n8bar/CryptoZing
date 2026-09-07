@@ -1110,3 +1110,6 @@ The in-place release is prepared and tested on the existing stack: transition an
 
 2026-09-06 | M21 Phase 2 complete: cryptozing.app is public
 The existing stack now serves the apex: DNS moved from GitHub Pages to the VPS, the apex certificate renews by webroot, Mailgun callbacks and generated links use the apex, the alpha hostname is retired (no DNS, no certificate, refused by nginx), and the approval gate is off as of 2026-09-06T10:34:40Z. The policies carry their September 6, 2026 effective date, the sitemap root is dated, and content publishing runs through the VPS with Pages kept only for recovery. Two smoke findings were fixed and deployed before access opened: deliberate resends of sent invoices (#182) and the invoice email's hardcoded status (#185). Strategy renamed to x21.2; M21.3 is next.
+
+2026-09-06 | M21 Phase 3 complete; M21 closed
+Public access, the share link, alpha retirement, the URL inventory, landing/policy publication, and self-hosted analytics verified on the apex; services healthy with the watcher advancing after a stranded scheduler mutex was cleared and fixed durably (#187, #188, PR #189). Deferred with acceptance: the site manifest MIME type (cryptozing-site#4). Milestone and Phase 3 docs renamed with the `x` prefix; PLAN, README, AGENTS, and the content promises catalog retargeted; M22 carries the discovery handoff.
