@@ -16,13 +16,13 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 
 ## Current
 - Active milestone:
-  - **MS22 - Thorough SEO & Marketing Strategies** — not started; scope at kickoff; needs its content-publish gate cleared (an article published since MS21 started on 2026-09-05).
+  - **MS22 - Thorough SEO & Marketing Strategies** — starts 2026-09-07; phases scoped at kickoff. Content-publish gate waived by n8 on the custody article shipped the weekend M21 closed.
 - Status: `MS21 closed — the open beta is public at https://cryptozing.app on the existing stack, verified and accepted. MS22 is a stub awaiting kickoff.`
-- Next action: Clear MS22's content-publish gate, then scope its phases from the M21 handoff in [`docs/milestones/22_SEO_MARKETING.md`](milestones/22_SEO_MARKETING.md).
+- Next action: Scope MS22's phases from the M21 handoff in [`docs/milestones/22_SEO_MARKETING.md`](milestones/22_SEO_MARKETING.md).
 - Most recently completed milestone doc: [`docs/milestones/x21_OB_DEPLOYMENT.md`](milestones/x21_OB_DEPLOYMENT.md)
 
 ## Published Release Target
-- **First public release: mid-to-late 2027.** The open beta milestone timeline (MS21, targeting 2026-09-16) covers the open beta. The published release target accounts for post-open-beta work needed before an official first release.
+- **First public release: mid-to-late 2027.** The open beta milestone (MS21, closed 2026-09-06) covers the open beta. The published release target accounts for post-open-beta work needed before an official first release.
 
 ## Active and Upcoming Milestones
 | Status | ID | Milestone | Short intent | Target | Primary doc |
