@@ -1,5 +1,5 @@
 # PLAN
-_Last updated: 2026-09-05_
+_Last updated: 2026-09-09_
 
 This is the human-facing execution dashboard for open-beta work.
 
@@ -16,9 +16,9 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 
 ## Current
 - Active milestone:
-  - **MS22 - Thorough SEO & Marketing Strategies** — starts 2026-09-07; phases scoped at kickoff. Content-publish gate waived by n8 on the custody article shipped the weekend M21 closed.
-- Status: `MS21 closed — the open beta is public at https://cryptozing.app on the existing stack, verified and accepted. MS22 is a stub awaiting kickoff.`
-- Next action: Scope MS22's phases from the M21 handoff in [`docs/milestones/22_SEO_MARKETING.md`](milestones/22_SEO_MARKETING.md).
+  - **MS22 - Thorough SEO & Marketing Strategies** — started 2026-09-07; milestone scope drafted for review. Content-publish gate waived by n8 on the custody article shipped the weekend M21 closed.
+- Status: `M22 milestone scope drafted; no phase is active until the scope is reviewed and approved.`
+- Next action: Review [`docs/milestones/22_SEO_MARKETING.md`](milestones/22_SEO_MARKETING.md); after approval, draft the M22.1 strategy for the post-launch baseline and full-surface audit.
 - Most recently completed milestone doc: [`docs/milestones/x21_OB_DEPLOYMENT.md`](milestones/x21_OB_DEPLOYMENT.md)
 
 ## Published Release Target
@@ -27,7 +27,7 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 ## Active and Upcoming Milestones
 | Status | ID | Milestone | Short intent | Target | Primary doc |
 |---|---|---|---|---|---|
-| [ ] | 22 | Thorough SEO & Marketing Strategies | Post-deploy discovery investment: thorough SEO pass across live app + site surfaces and an ongoing SEO strategy with scheduled tasks in the .ics; marketing strategy. Scope at kickoff. | 2026-10-06 | [`docs/milestones/22_SEO_MARKETING.md`](milestones/22_SEO_MARKETING.md) |
+| [ ] | 22 | Thorough SEO & Marketing Strategies | Establish a measured post-launch baseline, remediate public-surface SEO gaps, define audience and channel strategy, and begin a durable discovery cadence. | 2026-10-06 | [`docs/milestones/22_SEO_MARKETING.md`](milestones/22_SEO_MARKETING.md) |
 
 ## Completed Milestones
 | Status | ID | Milestone | Short intent | Primary doc |

@@ -44,9 +44,9 @@ BEGIN:VEVENT
 DTSTART;VALUE=DATE:20260907
 DTEND;VALUE=DATE:20261006
 SUMMARY:MS22 — Thorough SEO & Marketing Strategies
-DESCRIPTION:Post-deploy discovery investment: thorough SEO pass across live app and site surfaces; marketing strategy. Scope at kickoff.
+DESCRIPTION:Measured post-launch baseline; public-surface SEO remediation; audience and channel strategy; recurring discovery practice.
 UID:cz-ms22@cryptozing.app
-DTSTAMP:20260907T020726Z
-SEQUENCE:3
+DTSTAMP:20260909T145106Z
+SEQUENCE:4
 END:VEVENT
 END:VCALENDAR

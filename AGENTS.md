@@ -53,7 +53,7 @@
 ```
 
 ## Environment Notes (Do these without having to be reminded)
-- [`docs/milestones/x21_OB_DEPLOYMENT.md`](docs/milestones/x21_OB_DEPLOYMENT.md) is the closed record of the open-beta transition; [`docs/milestones/22_SEO_MARKETING.md`](docs/milestones/22_SEO_MARKETING.md) is next and is scoped at kickoff.
+- [`docs/milestones/x21_OB_DEPLOYMENT.md`](docs/milestones/x21_OB_DEPLOYMENT.md) is the closed record of the open-beta transition; [`docs/milestones/22_SEO_MARKETING.md`](docs/milestones/22_SEO_MARKETING.md) is active with its milestone scope drafted for review.
 - Wallet xpub onboarding lives at `/wallet/settings`; invoices expect a configured wallet or redirect there.
 - **Data hygiene:** As of 2025-11-16 the app only holds seed/test data—no real customers yet. Remove this note (and treat production emails accordingly) once live customer data exists.
 - CryptoZing must remain watch-only: never put private keys or seed phrases into tracked repo files, app config, database seeders, fixtures, tests, or normal application flows. If local testnet funding keys are needed for developer-only scenario setup, keep them only in untracked local storage (for example under `.cybercreek/`) and outside the product boundary.
