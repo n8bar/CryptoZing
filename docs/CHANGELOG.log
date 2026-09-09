@@ -1119,3 +1119,6 @@ M22 now proposes four phases: a post-launch discovery baseline and full-surface 
 
 2026-09-09 | M22 expanded to an open-beta product and growth iteration
 The milestone is no longer limited to SEO and marketing. The first four phases retain the discovery baseline, growth strategy, remediation, and recurring practice; late Phase 5 locks invoice line items into a bounded product bundle, selects any additional backlog features, approves their specs, and rechecks schedule capacity before code. Phases 6 and 7 enforce dev-first implementation with migrations, Sail/browser/regression verification, followed only after approval by controlled production rollout and live validation. The milestone doc and calendar event are renamed to Open Beta Product & Growth Iteration, inbound links and dashboard text are synchronized, the event's sequence metadata is refreshed, exact revised phase scope remains pending review, and milestone dates are unchanged.
+
+2026-09-09 | M22 target moved out one year
+The canonical M22 calendar end and PLAN target move from 2026-10-06 to 2027-10-06, giving the open-beta product and growth iteration a full additional year. The existing calendar event keeps its UID, increments to SEQUENCE 6, and carries a refreshed DTSTAMP so subscribed calendars receive the change; milestone scope is unchanged.

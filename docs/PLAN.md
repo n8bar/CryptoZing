@@ -27,7 +27,7 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 ## Active and Upcoming Milestones
 | Status | ID | Milestone | Short intent | Target | Primary doc |
 |---|---|---|---|---|---|
-| [ ] | 22 | Open Beta Product & Growth Iteration | Establish the post-launch discovery and marketing practice, then specify, build, test, and release invoice line items plus a bounded late-selected set of backlog features. | 2026-10-06 | [`docs/milestones/22_OPEN_BETA_PRODUCT_GROWTH.md`](milestones/22_OPEN_BETA_PRODUCT_GROWTH.md) |
+| [ ] | 22 | Open Beta Product & Growth Iteration | Establish the post-launch discovery and marketing practice, then specify, build, test, and release invoice line items plus a bounded late-selected set of backlog features. | 2027-10-06 | [`docs/milestones/22_OPEN_BETA_PRODUCT_GROWTH.md`](milestones/22_OPEN_BETA_PRODUCT_GROWTH.md) |
 
 ## Completed Milestones
 | Status | ID | Milestone | Short intent | Primary doc |
