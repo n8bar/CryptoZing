@@ -8,7 +8,7 @@ Parent: [PLAN.md](../PLAN.md)
 
 The existing alpha deployment becomes beta at `https://cryptozing.app`. It keeps the same VPS, database, accounts, wallets, and mail service; `alpha.cryptozing.app` is retired. The apex moves from GitHub Pages to the existing production stack, with Laravel serving `/` and the content container retaining the published `/learn/*` URLs.
 
-The [content-publish gate](../CONTENT_PLAN.md) was met on 2026-09-04. Closed 2026-09-06; discovery observations and accepted follow-ups are in [M22](22_SEO_MARKETING.md#handoff-from-m21).
+The [content-publish gate](../CONTENT_PLAN.md) was met on 2026-09-04. Closed 2026-09-06; discovery observations and accepted follow-ups are in [M22](22_OPEN_BETA_PRODUCT_GROWTH.md#handoff-from-m21).
 
 ## Accepted baseline
 
