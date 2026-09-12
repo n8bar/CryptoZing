@@ -15,49 +15,49 @@ PLAN defined the observability and safety pass in `05dde78` and added wallet val
 
 ## Phase 1. [x] Define the operational signal boundary.
 
-   1. [x] Identify payment detection, BTC-rate retrieval, queued/delivered mail, and public-link access as the first structured-log surfaces.
-   2. [x] Require invoice, delivery, transaction, status, and request context where appropriate.
-   3. [x] Avoid logging raw public tokens by recording a one-way token hash.
-   4. [x] Define database and cache checks for the health endpoint.
-   5. [x] Add wallet-key validation and derivation failure handling to the milestone before implementation.
+   1. [x] Identify payment detection, BTC-rate retrieval, queued/delivered mail, and public-link access as the first structured-log surfaces. %<7938>
+   2. [x] Require invoice, delivery, transaction, status, and request context where appropriate. %<7939>
+   3. [x] Avoid logging raw public tokens by recording a one-way token hash. %<7940>
+   4. [x] Define database and cache checks for the health endpoint. %<7941>
+   5. [x] Add wallet-key validation and derivation failure handling to the milestone before implementation. %<7942>
 
 ## Phase 2. [x] Instrument core payment, rate, delivery, and public flows.
 
-   1. [x] Log detected payment identity, sats, invoice status, and outstanding sats.
-   2. [x] Log failed BTC-rate responses and exceptions.
-   3. [x] Log successful rate-cache refreshes with source and value context.
-   4. [x] Log queued and sent invoice deliveries with invoice, delivery, type, and recipient context.
-   5. [x] Log public-print access with invoice ID, hashed token, active state, and request IP.
+   1. [x] Log detected payment identity, sats, invoice status, and outstanding sats. %<7951>
+   2. [x] Log failed BTC-rate responses and exceptions. %<7952>
+   3. [x] Log successful rate-cache refreshes with source and value context. %<7953>
+   4. [x] Log queued and sent invoice deliveries with invoice, delivery, type, and recipient context. %<7954>
+   5. [x] Log public-print access with invoice ID, hashed token, active state, and request IP. %<7955>
 
 ## Phase 3. [x] Replace the static health response with dependency checks.
 
-   1. [x] Add an invokable health controller.
-   2. [x] Probe the database with a lightweight query.
-   3. [x] Probe cache by writing and reading a short-lived key.
-   4. [x] Return `200` only when both checks pass; return `500` with per-check booleans otherwise.
-   5. [x] Log dependency-check failures without returning exception details to the caller.
+   1. [x] Add an invokable health controller. %<8336>
+   2. [x] Probe the database with a lightweight query. %<8337>
+   3. [x] Probe cache by writing and reading a short-lived key. %<8338>
+   4. [x] Return `200` only when both checks pass; return `500` with per-check booleans otherwise. %<8339>
+   5. [x] Log dependency-check failures without returning exception details to the caller. %<8340>
 
 ## Phase 4. [x] Guard wallet derivation failures.
 
-   1. [x] Keep syntactic public-key validation in the wallet request.
-   2. [x] Derive an address before accepting a saved wallet key so invalid inputs fail early.
-   3. [x] Preserve submitted input and return a field-level wallet error on derivation failure.
-   4. [x] Catch invoice-creation derivation failures around the transaction.
-   5. [x] Redirect to Wallet Settings with a friendly corrective message instead of surfacing an exception.
+   1. [x] Keep syntactic public-key validation in the wallet request. %<8342>
+   2. [x] Derive an address before accepting a saved wallet key so invalid inputs fail early. %<8343>
+   3. [x] Preserve submitted input and return a field-level wallet error on derivation failure. %<8344>
+   4. [x] Catch invoice-creation derivation failures around the transaction. %<8345>
+   5. [x] Redirect to Wallet Settings with a friendly corrective message instead of surfacing an exception. %<8346>
 
 ## Phase 5. [x] Close the milestone.
 
-   1. [x] Record structured logging, health checks, public/error safeguards, and xpub validation in completed PLAN.
-   2. [x] Leave richer metrics, dashboards, and wallet guidance to later milestones.
-   3. [x] Preserve existing external-service timeout and mail-alias safeguards while adding the new signals.
+   1. [x] Record structured logging, health checks, public/error safeguards, and xpub validation in completed PLAN. %<8348>
+   2. [x] Leave richer metrics, dashboards, and wallet guidance to later milestones. %<8349>
+   3. [x] Preserve existing external-service timeout and mail-alias safeguards while adding the new signals. %<8350>
 
 ## Exit Criteria
 
-- [x] Core payment, rate, delivery, and public-access paths emit structured operational logs.
-- [x] Public access logs do not contain the raw share token.
-- [x] `/health` reflects database and cache availability with an appropriate HTTP status.
-- [x] Invalid public wallet keys are rejected by a real derivation attempt before save.
-- [x] Invoice derivation failures return the user to Wallet Settings with recoverable input and guidance.
+- [x] Core payment, rate, delivery, and public-access paths emit structured operational logs. %<8352>
+- [x] Public access logs do not contain the raw share token. %<8353>
+- [x] `/health` reflects database and cache availability with an appropriate HTTP status. %<8354>
+- [x] Invalid public wallet keys are rejected by a real derivation attempt before save. %<8355>
+- [x] Invoice derivation failures return the user to Wallet Settings with recoverable input and guidance. %<8356>
 
 ## Historical boundary
 

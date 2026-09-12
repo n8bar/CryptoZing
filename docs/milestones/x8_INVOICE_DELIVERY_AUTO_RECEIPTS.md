@@ -30,12 +30,12 @@ Use an explicit public URL in recipient-facing links, rewrite recipients through
 
 ## Exit Criteria
 
-- [x] An authorized owner can queue an invoice email when the client email and public share are available.
-- [x] Manual sends and receipts create delivery-history rows with recipient, type, status, timing, and error fields.
-- [x] Queue jobs render the appropriate invoice or receipt mailable and update delivery outcome.
-- [x] The original paid transition can queue one client receipt when the user preference is enabled.
-- [x] Public links in email use the explicitly configured recipient-facing host.
-- [x] Pre-production aliasing can redirect both To and CC recipients without changing the disabled path.
+- [x] An authorized owner can queue an invoice email when the client email and public share are available. %<8106>
+- [x] Manual sends and receipts create delivery-history rows with recipient, type, status, timing, and error fields. %<8107>
+- [x] Queue jobs render the appropriate invoice or receipt mailable and update delivery outcome. %<8108>
+- [x] The original paid transition can queue one client receipt when the user preference is enabled. %<8109>
+- [x] Public links in email use the explicitly configured recipient-facing host. %<8110>
+- [x] Pre-production aliasing can redirect both To and CC recipients without changing the disabled path. %<8111>
 
 ## Historical boundary
 

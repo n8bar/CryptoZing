@@ -30,12 +30,12 @@ Backfill legacy invoice-level transaction metadata into the ledger, add owner no
 
 ## Exit Criteria
 
-- [x] Every detected invoice transaction can be represented by a distinct `invoice_payments` row.
-- [x] Payment rows preserve sats, transaction identity, detection/confirmation metadata, and the detection-time USD snapshot.
-- [x] Invoice state and outstanding totals refresh after payment detection.
-- [x] Show, print, and public output expose payment history and the remaining balance.
-- [x] BIP21 and QR output target the remaining balance instead of the original total.
-- [x] Legacy invoice-level payment metadata can be migrated without duplicating existing ledger rows.
+- [x] Every detected invoice transaction can be represented by a distinct `invoice_payments` row. %<8234>
+- [x] Payment rows preserve sats, transaction identity, detection/confirmation metadata, and the detection-time USD snapshot. %<8235>
+- [x] Invoice state and outstanding totals refresh after payment detection. %<8236>
+- [x] Show, print, and public output expose payment history and the remaining balance. %<8237>
+- [x] BIP21 and QR output target the remaining balance instead of the original total. %<8238>
+- [x] Legacy invoice-level payment metadata can be migrated without duplicating existing ledger rows. %<8239>
 
 ## Historical boundary
 

@@ -30,12 +30,12 @@ Add the customizable heading, place branding fields in a collapsible create/edit
 
 ## Exit Criteria
 
-- [x] Owners can define billing identity and footer defaults.
-- [x] Individual invoices can override those defaults without changing the owner profile.
-- [x] Print and active public output render the same effective billing details.
-- [x] Disabled or expired public shares reveal no payment details and provide a friendly contact path.
-- [x] Payment state, outstanding context, rate timing, and QR presentation remain legible.
-- [x] Feature tests cover customizable fields and public unavailable-state behavior.
+- [x] Owners can define billing identity and footer defaults. %<8330>
+- [x] Individual invoices can override those defaults without changing the owner profile. %<8331>
+- [x] Print and active public output render the same effective billing details. %<8332>
+- [x] Disabled or expired public shares reveal no payment details and provide a friendly contact path. %<8333>
+- [x] Payment state, outstanding context, rate timing, and QR presentation remain legible. %<8334>
+- [x] Feature tests cover customizable fields and public unavailable-state behavior. %<8335>
 
 ## Historical boundary
 
