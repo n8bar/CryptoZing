@@ -62,16 +62,16 @@ This is the milestone execution doc for MS13. It preserves the detailed checklis
     - Revisit invoice show/edit behavior (Edit button on show, return to show after save), billing/payment summary layout, and alerts for public/print/share states.
     - Check related utilities: trash/restore/force-delete flows, share enable/disable/rotate, and delivery send/receipt toggles retain UX polish and authorization cues.
     - Human-eyes QA checklist (2026-02-19 working set):
-      - [x] Status pills on invoice show are readable in light/dark (`SENT` light-blue with dark text; `PARTIAL` cyan with dark text; `VOID` remains readable in dark mode).
-      - [x] Colored cards use matching border/text color treatment (`border-color: currentColor`) on invoice/client/settings surfaces.
-      - [x] Draft warning logic only appears for draft invoices with real on-chain payments (not manual-adjustment-only cases).
-      - [x] Draft warning CTA uses text-link `Mark sent` and successfully updates status.
-      - [x] Invoice show section order is: Payment QR -> Delivery log -> Payment history -> Public link.
-      - [x] Public link `Open`/copy actions use the configured host for dev (`http://192.168.68.25/...` when `APP_PUBLIC_URL` is set accordingly).
-      - [x] Edit-page public notice copy/link pattern: `Or open invoice details.` with only `open invoice details` linked.
-      - [x] Delete cards have visible red borders in light mode on both invoice edit and client edit screens.
-      - [x] Mobile sanity sweep: no horizontal overflow and action bars/buttons wrap cleanly across invoice/client pages.
-      - [x] Dark-mode readability sweep: spot-check all major invoice/client states and notices after recent style changes.
+      - [x] Status pills on invoice show are readable in light/dark (`SENT` light-blue with dark text; `PARTIAL` cyan with dark text; `VOID` remains readable in dark mode). %<8558>
+      - [x] Colored cards use matching border/text color treatment (`border-color: currentColor`) on invoice/client/settings surfaces. %<8559>
+      - [x] Draft warning logic only appears for draft invoices with real on-chain payments (not manual-adjustment-only cases). %<8560>
+      - [x] Draft warning CTA uses text-link `Mark sent` and successfully updates status. %<8561>
+      - [x] Invoice show section order is: Payment QR -> Delivery log -> Payment history -> Public link. %<8562>
+      - [x] Public link `Open`/copy actions use the configured host for dev (`http://192.168.68.25/...` when `APP_PUBLIC_URL` is set accordingly). %<8563>
+      - [x] Edit-page public notice copy/link pattern: `Or open invoice details.` with only `open invoice details` linked. %<8564>
+      - [x] Delete cards have visible red borders in light mode on both invoice edit and client edit screens. %<8565>
+      - [x] Mobile sanity sweep: no horizontal overflow and action bars/buttons wrap cleanly across invoice/client pages. %<8566>
+      - [x] Dark-mode readability sweep: spot-check all major invoice/client states and notices after recent style changes. %<8567>
     - Follow-up closure (2026-02-21): authenticated invoice/client narrower-screen action-row sweep complete; temporary Task 9 ToDo split merged back into this completed task.
 10. Public/share refresh (Completed)
     - Public and print views now share a single template entrypoint and common partial blocks to keep wording/layout in sync.
@@ -93,38 +93,38 @@ This is the milestone execution doc for MS13. It preserves the detailed checklis
    - Scope remained implementation-light for settings/auth consistency (Account, Invoice Settings, Login/Logout) without introducing auth-flow redesign.
 13. Invoice settings and invoice UX finish-up (Completed, 2026-03-07)
    - Phase A — Pre-implementation Browser QA (baseline, lightweight)
-     1. [x] Invoice create (`/invoices/create`): capture current Branding & footer behavior, including how defaults/overrides are currently shown.
-     2. [x] Invoice Settings (`/settings/invoice`): capture current placeholder/default behavior for branding heading and related helper text.
-     3. [x] Over/underpayment alerts (gratuity note ON/OFF): capture current public/print copy wording and biller-name references.
-     4. [x] Confirmed Task13 quality priorities during baseline review: heading/footer/address microcopy clarity, focus/error parity, and save-state consistency.
+     1. [x] Invoice create (`/invoices/create`): capture current Branding & footer behavior, including how defaults/overrides are currently shown. %<8595>
+     2. [x] Invoice Settings (`/settings/invoice`): capture current placeholder/default behavior for branding heading and related helper text. %<8596>
+     3. [x] Over/underpayment alerts (gratuity note ON/OFF): capture current public/print copy wording and biller-name references. %<8597>
+     4. [x] Confirmed Task13 quality priorities during baseline review: heading/footer/address microcopy clarity, focus/error parity, and save-state consistency. %<8598>
    - Phase B — Implementation
-     1. [x] Invoice create flow simplification: remove the status dropdown from create and always create new invoices as `draft` by default. Users can change status after creation on invoice show/edit actions.
-     2. [x] Preserve existing per-invoice override behavior; no structural redesign.
-     3. [x] Require client email on client create/edit and enforce it at the database layer (`clients.email` non-null) with a safe migration/backfill path for any existing null rows.
-     4. [x] Paid-invoice print polish: render a prominent, translucent diagonal `PAID` watermark on paid print views (owner print and active public print) so payment state is unmistakable in exported/printed copies.
-     5. [x] Client-facing over/underpayment wording polish: replace generic “invoice sender” phrasing with biller/brand-facing wording (use invoice billing name with a safe fallback) so public/print copy reads as authored by the invoice owner.
-     6. [x] Paid-invoice payment-action safety: hide payment QR + BIP21/copy payment action surfaces once an invoice is paid across owner and client views (including owner invoice show, owner print, and active public print) to reduce accidental extra payments from rescanning old invoices.
-     7. [x] Branding & footer reset affordance: add a clear “Reset to my custom defaults” action near the top of the create/edit Branding & footer section so users can quickly revert per-invoice overrides back to Invoice Settings defaults.
-     8. [x] Hide the editable invoice-level `TXID` field from owner invoice edit UI (keep backend/internal compatibility for legacy/manual/recovery workflows).
-     9. [x] Move the owner invoice “Footer note” card so it renders immediately before “Payment Details” instead of near the top action/status area.
-     10. [x] IA correction implementation: move the overpayment gratuity note toggle and QR refresh reminder toggle from Profile UI into Invoice Settings UI, keeping persistence/default behavior user-level for now.
-     11. [x] Settings IA shell: add a unified Settings surface with tabs for `Account`, `Wallet`, `Invoice`, and `Notifications` (initial pass can reuse existing forms/routes behind the new tab shell), and keep settings navigation visible while content scrolls.
-     12. [x] Keep `Show invoice IDs in list` as an Account preference (under `Settings > Account`), not under invoice-specific settings.
-     13. [x] Move `Auto email paid receipts` from Account into `Settings > Notifications` as outbound communication behavior.
-     14. [x] Account-menu cleanup: collapse `Account`, `Wallet`, and `Invoice Settings` into one `Settings` entry (default tab: `Account`) so account menu items are only `Settings`, `Getting Started`, and `Logout`.
+     1. [x] Invoice create flow simplification: remove the status dropdown from create and always create new invoices as `draft` by default. Users can change status after creation on invoice show/edit actions. %<8600>
+     2. [x] Preserve existing per-invoice override behavior; no structural redesign. %<8601>
+     3. [x] Require client email on client create/edit and enforce it at the database layer (`clients.email` non-null) with a safe migration/backfill path for any existing null rows. %<8602>
+     4. [x] Paid-invoice print polish: render a prominent, translucent diagonal `PAID` watermark on paid print views (owner print and active public print) so payment state is unmistakable in exported/printed copies. %<8603>
+     5. [x] Client-facing over/underpayment wording polish: replace generic “invoice sender” phrasing with biller/brand-facing wording (use invoice billing name with a safe fallback) so public/print copy reads as authored by the invoice owner. %<8604>
+     6. [x] Paid-invoice payment-action safety: hide payment QR + BIP21/copy payment action surfaces once an invoice is paid across owner and client views (including owner invoice show, owner print, and active public print) to reduce accidental extra payments from rescanning old invoices. %<8605>
+     7. [x] Branding & footer reset affordance: add a clear “Reset to my custom defaults” action near the top of the create/edit Branding & footer section so users can quickly revert per-invoice overrides back to Invoice Settings defaults. %<8606>
+     8. [x] Hide the editable invoice-level `TXID` field from owner invoice edit UI (keep backend/internal compatibility for legacy/manual/recovery workflows). %<8607>
+     9. [x] Move the owner invoice “Footer note” card so it renders immediately before “Payment Details” instead of near the top action/status area. %<8608>
+     10. [x] IA correction implementation: move the overpayment gratuity note toggle and QR refresh reminder toggle from Profile UI into Invoice Settings UI, keeping persistence/default behavior user-level for now. %<8609>
+     11. [x] Settings IA shell: add a unified Settings surface with tabs for `Account`, `Wallet`, `Invoice`, and `Notifications` (initial pass can reuse existing forms/routes behind the new tab shell), and keep settings navigation visible while content scrolls. %<8610>
+     12. [x] Keep `Show invoice IDs in list` as an Account preference (under `Settings > Account`), not under invoice-specific settings. %<8611>
+     13. [x] Move `Auto email paid receipts` from Account into `Settings > Notifications` as outbound communication behavior. %<8612>
+     14. [x] Account-menu cleanup: collapse `Account`, `Wallet`, and `Invoice Settings` into one `Settings` entry (default tab: `Account`) so account menu items are only `Settings`, `Getting Started`, and `Logout`. %<8613>
    - Phase C — Post-implementation Browser QA (acceptance + regression)
-     1. [x] Re-run Phase A checks and confirm intended behavior changes shipped without regressions.
-     2. [x] Verify invoice create now always starts as `draft` and no create-time status selector is shown.
-     3. [x] Verify client email is required in create/edit with clear validation copy and schema-backed enforcement.
-     4. [x] Verify paid invoice surfaces (owner show + owner print + public print) match scope: payment-action surfaces hidden where specified and `PAID` watermark behavior matches implementation.
-     5. [x] Verify over/underpayment client-facing copy (gratuity ON/OFF paths) is actionable and biller-branded.
-     6. [x] Verify Branding & footer reset-to-defaults control works on create/edit without breaking existing per-invoice override behavior.
-     7. [x] Verify the owner invoice Footer note now renders immediately above Payment Details and no longer appears in the top status/action area.
-     8. [x] Verify both communication toggles now live in Invoice Settings and are no longer shown on Profile.
-     9. [x] Verify Settings shell exposes `Account`, `Wallet`, `Invoice`, and `Notifications` tabs with stable navigation/active-state cues and persistent top-shell placement while settings content scrolls.
-     10. [x] Verify `Show invoice IDs in list` appears only in `Settings > Account` and still controls invoice-list column visibility.
-     11. [x] Verify `Auto email paid receipts` appears in `Settings > Notifications`, persists correctly, and is absent from `Settings > Account`.
-     12. [x] Verify account menu contains only `Settings`, `Getting Started`, and `Logout`; `Settings` opens the unified Settings surface on the `Account` tab.
+     1. [x] Re-run Phase A checks and confirm intended behavior changes shipped without regressions. %<8615>
+     2. [x] Verify invoice create now always starts as `draft` and no create-time status selector is shown. %<8616>
+     3. [x] Verify client email is required in create/edit with clear validation copy and schema-backed enforcement. %<8617>
+     4. [x] Verify paid invoice surfaces (owner show + owner print + public print) match scope: payment-action surfaces hidden where specified and `PAID` watermark behavior matches implementation. %<8618>
+     5. [x] Verify over/underpayment client-facing copy (gratuity ON/OFF paths) is actionable and biller-branded. %<8619>
+     6. [x] Verify Branding & footer reset-to-defaults control works on create/edit without breaking existing per-invoice override behavior. %<8620>
+     7. [x] Verify the owner invoice Footer note now renders immediately above Payment Details and no longer appears in the top status/action area. %<8621>
+     8. [x] Verify both communication toggles now live in Invoice Settings and are no longer shown on Profile. %<8622>
+     9. [x] Verify Settings shell exposes `Account`, `Wallet`, `Invoice`, and `Notifications` tabs with stable navigation/active-state cues and persistent top-shell placement while settings content scrolls. %<8623>
+     10. [x] Verify `Show invoice IDs in list` appears only in `Settings > Account` and still controls invoice-list column visibility. %<8624>
+     11. [x] Verify `Auto email paid receipts` appears in `Settings > Notifications`, persists correctly, and is absent from `Settings > Account`. %<8625>
+     12. [x] Verify account menu contains only `Settings`, `Getting Started`, and `Logout`; `Settings` opens the unified Settings surface on the `Account` tab. %<8626>
 
 ## Definition of Done
 - All MS13 outputs above implemented or explicitly deferred with clear pointers.
