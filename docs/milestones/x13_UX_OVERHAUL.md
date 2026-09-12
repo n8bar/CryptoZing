@@ -50,6 +50,13 @@ This is the milestone execution doc for MS13. It preserves the detailed checklis
       - Public view preserves Print + noindex/noarchive behavior and mirrors print/show section language for active links.
       - Task 10 acceptance checklist is fully complete, including narrower-screen public/share sanity verification (2026-02-23).
       - Coverage includes `PublicShareTest` (active/disabled states, noindex, owner-control exclusions) and `InvoicePaymentDisplayTest` parity checks.
+      1. [x] Acceptance checklist %<8633>
+         1. [x] Active public link mirrors print/show section language (header, summary, amounts, payment, history, footer) with no contradictory copy. %<8634>
+         2. [x] Disabled/expired public link renders a friendly unavailable state with owner contact details and invoice number. %<8635>
+         3. [x] Disabled/expired public link does not show payment details (amount breakdown, QR, URI, tx/payment history). %<8636>
+         4. [x] Public view never renders owner-only controls (edit/delete/share rotate/disable/delivery/manual adjustments). %<8637>
+         5. [x] Public view keeps Print action and retains noindex/noarchive metadata/headers. %<8638>
+         6. [x] Mobile sanity for public/share on narrower screens: no horizontal overflow and action row wraps cleanly. %<8639>
 
 ## Phase 3. [x] Wallet and onboarding
 
@@ -98,14 +105,60 @@ This is the milestone execution doc for MS13. It preserves the detailed checklis
       9. [x] Mobile sanity sweep: no horizontal overflow and action bars/buttons wrap cleanly across invoice/client pages. %<8566>
       10. [x] Dark-mode readability sweep: spot-check all major invoice/client states and notices after recent style changes. %<8567>
 
-## Phase 5. [x] Invoice settings and invoice UX finish-up (Completed, 2026-03-07)
+## Phase 5. [ ] Invoice settings and invoice UX finish-up (Completed, 2026-03-07)
 
-   1. [x] User settings & auth UX (Completed, 2026-03-05) %<8592>
+   1. [ ] User settings & auth UX (Completed, 2026-03-05) %<8592>
       - Initial implementation shipped communication toggles on Profile and persisted them per user (default on): `show_overpayment_gratuity_note` and `show_qr_refresh_reminder`.
       - Invoice show/public/print copy gating shipped for overpayment gratuity messaging and QR refresh/staleness reminders.
       - Guardrail upheld: owner reconciliation/operational guidance remains visible when client-facing note toggles are off.
       - Browser QA checklist completed (items 1-15).
       - Scope remained implementation-light for settings/auth consistency (Account, Invoice Settings, Login/Logout) without introducing auth-flow redesign.
+      1. [x] Required implementation %<8640>
+         1. [x] Add two Profile toggles (reuse existing profile toggle pattern): %<8641>
+            - `show_overpayment_gratuity_note`
+            - `show_qr_refresh_reminder`
+         2. [x] Persist per user (default `true` for existing and new users). %<8642>
+         3. [x] Drive conditional copy on invoice show/public/print: %<8643>
+            - Overpayment gratuity note.
+            - QR refresh/staleness reminder near payment QR surfaces.
+      2. [ ] Polish pass scope stays implementation-light %<8644>
+         1. [ ] Profile and Invoice Settings: grouping clarity, helper text, validation/error handling, visible focus, and consistent action buttons. %<8645>
+         2. [ ] Login/Logout UX: branded + accessible consistency only (error/success wording and focus behavior), not a new auth flow. %<8646>
+      3. [x] Browser QA checklist (human-eyes) %<8647>
+         1. [x] Open `/profile` and confirm both toggles exist: %<8648>
+            - `Show overpayment gratuity note to clients`
+            - `Show QR refresh reminder to clients`
+         2. [x] Confirm both toggles default to ON for existing accounts after migration. %<8649>
+         3. [x] Save with both ON, hard refresh `/profile`, and confirm both remain ON. %<8650>
+         4. [x] Open owner invoice show (`/invoices/{id}`) and verify visible: %<8651>
+            - `Overpayments are treated as gratuities by default`
+            - `Need to reconcile an over/under payment?`
+            - `refresh right before sending payment; printed copies may be stale.`
+         5. [x] Open print view (`/invoices/{id}/print`) and verify visible: %<8652>
+            - `Payment QR`
+            - `Overpayments are treated as gratuities by default`
+            - `refresh right before sending payment; printed copies may be stale.`
+         6. [x] Open public view (`/p/{token}`) and verify the same two client-facing notes appear. %<8653>
+         7. [x] Set `Show overpayment gratuity note to clients` OFF and keep QR reminder ON; save. %<8654>
+         8. [x] Re-check owner show: %<8655>
+            - `Overpayments are treated as gratuities by default` is hidden.
+            - `Need to reconcile an over/under payment?` remains visible.
+         9. [x] Re-check print and public: %<8656>
+            - `Overpayments are treated as gratuities by default` is hidden.
+            - QR refresh reminder remains visible.
+         10. [x] Set gratuity ON and `Show QR refresh reminder to clients` OFF; save. %<8657>
+         11. [x] Re-check owner show, print, and public: %<8658>
+            - `refresh right before sending payment; printed copies may be stale.` is hidden.
+            - `Payment QR` remains visible and functional.
+         12. [x] Set both toggles OFF; save. %<8659>
+         13. [x] Re-check owner show, print, and public: %<8660>
+            - Both client-facing notes are hidden.
+            - Owner reconciliation guidance remains visible on owner show.
+         14. [x] Logout/login, return to `/profile`, and confirm persisted toggle state. %<8661>
+         15. [x] Keyboard/accessibility quick pass: %<8662>
+            - Tab focus ring is visible on each toggle.
+            - Space toggles each checkbox.
+            - Save still works from keyboard flow.
    2. [x] Phase A — Pre-implementation Browser QA (baseline, lightweight) %<8594>
       1. [x] Invoice create (`/invoices/create`): capture current Branding & footer behavior, including how defaults/overrides are currently shown. %<8595>
       2. [x] Invoice Settings (`/settings/invoice`): capture current placeholder/default behavior for branding heading and related helper text. %<8596>
