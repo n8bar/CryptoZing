@@ -16,33 +16,33 @@ The primary evidence is commits `97ce5ba` and `984f664` (PRs #12 and #13), the 2
 
 ## Phase 1. [x] Establish policy boundaries.
 
-   1. [x] Add `ClientPolicy` and `InvoicePolicy`.
-   2. [x] Permit authenticated creation/listing while restricting view, update, delete, restore, and force-delete to the owning user.
-   3. [x] Register both policies with Laravel's authorization layer.
-   4. [x] Apply resource authorization to normal controller actions.
-   5. [x] Keep index and trash queries scoped to the authenticated user.
-   6. [x] Explicitly authorize restore and force-delete after loading trashed records by ID.
+   1. [x] Add `ClientPolicy` and `InvoicePolicy`. %<7492>
+   2. [x] Permit authenticated creation/listing while restricting view, update, delete, restore, and force-delete to the owning user. %<7493>
+   3. [x] Register both policies with Laravel's authorization layer. %<7494>
+   4. [x] Apply resource authorization to normal controller actions. %<7495>
+   5. [x] Keep index and trash queries scoped to the authenticated user. %<7496>
+   6. [x] Explicitly authorize restore and force-delete after loading trashed records by ID. %<7497>
 
 ## Phase 2. [x] Standardize denied-state handling.
 
-   1. [x] Route authorization failures through shared exception handling.
-   2. [x] Add a shared `403` view that does not expose the protected resource.
-   3. [x] Align its visible message with the literal copy asserted by the feature test.
-   4. [x] Follow the initial PR #12 policy pass with the PR #13 controller cleanup and denial-copy correction.
+   1. [x] Route authorization failures through shared exception handling. %<7501>
+   2. [x] Add a shared `403` view that does not expose the protected resource. %<7502>
+   3. [x] Align its visible message with the literal copy asserted by the feature test. %<7503>
+   4. [x] Follow the initial PR #12 policy pass with the PR #13 controller cleanup and denial-copy correction. %<7504>
 
 ## Phase 3. [x] Verify the milestone.
 
-   1. [x] Prove one user cannot view another user's client.
-   2. [x] Prove one user cannot view another user's invoice.
-   3. [x] Assert both requests return `403` and render the friendly denial copy.
-   4. [x] Record Ownership & Access as complete in PLAN.
+   1. [x] Prove one user cannot view another user's client. %<7506>
+   2. [x] Prove one user cannot view another user's invoice. %<7507>
+   3. [x] Assert both requests return `403` and render the friendly denial copy. %<7508>
+   4. [x] Record Ownership & Access as complete in PLAN. %<7509>
 
 ## Exit Criteria
 
-- [x] Client and invoice policies enforce owner-only resource access.
-- [x] Trash restore and permanent-delete paths authorize the loaded record.
-- [x] Cross-user client and invoice requests return the shared safe `403` response.
-- [x] The shipped behavior is represented by regression tests.
+- [x] Client and invoice policies enforce owner-only resource access. %<7511>
+- [x] Trash restore and permanent-delete paths authorize the loaded record. %<7512>
+- [x] Cross-user client and invoice requests return the shared safe `403` response. %<7513>
+- [x] The shipped behavior is represented by regression tests. %<7514>
 
 ## Historical boundary
 

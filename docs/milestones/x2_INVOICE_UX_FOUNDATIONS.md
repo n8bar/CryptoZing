@@ -35,11 +35,11 @@ Add expiring public-share links and stabilize cached/refresh rate presentation a
 
 ## Exit Criteria
 
-- [x] Authenticated users can manage clients and invoices through complete CRUD/trash flows.
-- [x] Invoices support the initial lifecycle statuses, numbering, dates, and USD/BTC presentation.
-- [x] Show and print surfaces provide BIP21 and QR payment instructions.
-- [x] Public invoice links support enable, disable, rotate, and expiry controls with noindex handling.
-- [x] Rate refresh and cached display behavior are usable enough for the subsequent correctness pass.
+- [x] Authenticated users can manage clients and invoices through complete CRUD/trash flows. %<7640>
+- [x] Invoices support the initial lifecycle statuses, numbering, dates, and USD/BTC presentation. %<7641>
+- [x] Show and print surfaces provide BIP21 and QR payment instructions. %<7642>
+- [x] Public invoice links support enable, disable, rotate, and expiry controls with noindex handling. %<7643>
+- [x] Rate refresh and cached display behavior are usable enough for the subsequent correctness pass. %<7644>
 
 ## Historical boundary
 

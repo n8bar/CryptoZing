@@ -26,11 +26,11 @@ Add dry-run-capable tooling and public-key-only fixtures to assign derived addre
 
 ## Exit Criteria
 
-- [x] Users can configure a watch-only public extended key and network.
-- [x] Invoice creation requires wallet onboarding and assigns a unique derived receive address/index.
-- [x] Runtime derivation and cursor advancement occur transactionally.
-- [x] Legacy invoices can be previewed and backfilled in stable order.
-- [x] No private key or seed-phrase path is introduced into the tracked product.
+- [x] Users can configure a watch-only public extended key and network. %<7782>
+- [x] Invoice creation requires wallet onboarding and assigns a unique derived receive address/index. %<7783>
+- [x] Runtime derivation and cursor advancement occur transactionally. %<7784>
+- [x] Legacy invoices can be previewed and backfilled in stable order. %<7785>
+- [x] No private key or seed-phrase path is introduced into the tracked product. %<7786>
 
 ## Historical boundary
 

@@ -29,11 +29,11 @@ Register the command and schedule it every minute with overlap protection, backg
 
 ## Exit Criteria
 
-- [x] Invoice addresses can be checked through a public blockchain API without signing material.
-- [x] Matching transactions record sats, txid, confirmation metadata, and detection timestamps.
-- [x] The watcher supports all eligible invoices plus an optional single-invoice filter.
-- [x] Command and scheduler behavior have feature coverage.
-- [x] The every-minute schedule prevents overlap and runs in the background.
+- [x] Invoice addresses can be checked through a public blockchain API without signing material. %<7899>
+- [x] Matching transactions record sats, txid, confirmation metadata, and detection timestamps. %<7900>
+- [x] The watcher supports all eligible invoices plus an optional single-invoice filter. %<7901>
+- [x] Command and scheduler behavior have feature coverage. %<7902>
+- [x] The every-minute schedule prevents overlap and runs in the background. %<7903>
 
 ## Historical boundary and later correction
 

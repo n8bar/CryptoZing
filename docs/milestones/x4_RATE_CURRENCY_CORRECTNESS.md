@@ -16,41 +16,41 @@ The primary evidence is commit `754a955` (PR #21), which introduced the original
 
 ## Phase 1. [x] Lock source-of-truth and formatting rules.
 
-   1. [x] Treat entered USD as canonical.
-   2. [x] Derive displayed BTC from USD divided by the applicable rate.
-   3. [x] Round BTC to no more than eight decimal places.
-   4. [x] Format USD with two decimal places.
-   5. [x] Keep BIP21 and QR output aligned with the displayed BTC amount.
+   1. [x] Treat entered USD as canonical. %<7676>
+   2. [x] Derive displayed BTC from USD divided by the applicable rate. %<7677>
+   3. [x] Round BTC to no more than eight decimal places. %<7678>
+   4. [x] Format USD with two decimal places. %<7679>
+   5. [x] Keep BIP21 and QR output aligned with the displayed BTC amount. %<7680>
 
 ## Phase 2. [x] Normalize rate caching and refresh.
 
-   1. [x] Normalize cached payloads to `rate_usd`, `as_of`, and `source`.
-   2. [x] Reuse cached entries only inside the one-hour TTL.
-   3. [x] Refresh stale or missing entries through the live-rate path.
-   4. [x] Keep invoice output usable when both cache and live fetch fail.
-   5. [x] Keep explicit refresh display-only rather than replacing stored USD.
+   1. [x] Normalize cached payloads to `rate_usd`, `as_of`, and `source`. %<7682>
+   2. [x] Reuse cached entries only inside the one-hour TTL. %<7683>
+   3. [x] Refresh stale or missing entries through the live-rate path. %<7684>
+   4. [x] Keep invoice output usable when both cache and live fetch fail. %<7685>
+   5. [x] Keep explicit refresh display-only rather than replacing stored USD. %<7686>
 
 ## Phase 3. [x] Share formatting across surfaces.
 
-   1. [x] Extract a common invoice-display formatter.
-   2. [x] Use it for authenticated show, private print, and public print.
-   3. [x] Expose the model BTC formatter for shared use.
-   4. [x] Keep public output fresh-rate-first with cached fallback.
+   1. [x] Extract a common invoice-display formatter. %<7688>
+   2. [x] Use it for authenticated show, private print, and public print. %<7689>
+   3. [x] Expose the model BTC formatter for shared use. %<7690>
+   4. [x] Keep public output fresh-rate-first with cached fallback. %<7691>
 
 ## Phase 4. [x] Verify and document the rules.
 
-   1. [x] Extend rate tests for cache freshness, refresh, and fetch failure.
-   2. [x] Assert eight-decimal BTC behavior and matching BIP21 output.
-   3. [x] Add tracked rate/currency documentation and link it from PLAN/README.
-   4. [x] Record Rate & Currency Correctness complete in PLAN and the changelog.
+   1. [x] Extend rate tests for cache freshness, refresh, and fetch failure. %<7693>
+   2. [x] Assert eight-decimal BTC behavior and matching BIP21 output. %<7694>
+   3. [x] Add tracked rate/currency documentation and link it from PLAN/README. %<7695>
+   4. [x] Record Rate & Currency Correctness complete in PLAN and the changelog. %<7696>
 
 ## Exit Criteria
 
-- [x] USD remains canonical across invoice display surfaces.
-- [x] BTC formatting never exceeds satoshi precision.
-- [x] Cached and refreshed rates follow one documented lifecycle.
-- [x] Show, print, public, BIP21, and QR values use shared display rules.
-- [x] Regression tests cover the correctness and failure paths.
+- [x] USD remains canonical across invoice display surfaces. %<7698>
+- [x] BTC formatting never exceeds satoshi precision. %<7699>
+- [x] Cached and refreshed rates follow one documented lifecycle. %<7700>
+- [x] Show, print, public, BIP21, and QR values use shared display rules. %<7701>
+- [x] Regression tests cover the correctness and failure paths. %<7702>
 
 ## Historical boundary
 
