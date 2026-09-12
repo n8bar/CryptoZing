@@ -34,14 +34,14 @@ Verify corrected derivations against stored public keys, run targeted watcher ch
 
 ## Exit Criteria
 
-- [x] BIP84 external-chain derivation is locked by known testnet and mainnet vectors and rejects a network mismatch.
-- [x] A dry-run-first command can inspect and selectively repair existing invoice addresses.
-- [x] Paid/partial invoices require explicit options before their addresses or payment history can be reset.
-- [x] Unconfirmed payments produce pending state and cannot settle an invoice.
-- [x] Confirmed per-payment USD totals drive partial and paid state.
-- [x] Missing unconfirmed transactions are removed before totals and state are recomputed.
-- [x] Eligible small balances require explicit owner action and leave an adjustment-ledger record.
-- [x] Corrected testnet invoices pass derivation comparison and targeted watcher sanity checks.
+- [x] BIP84 external-chain derivation is locked by known testnet and mainnet vectors and rejects a network mismatch. %<8539>
+- [x] A dry-run-first command can inspect and selectively repair existing invoice addresses. %<8540>
+- [x] Paid/partial invoices require explicit options before their addresses or payment history can be reset. %<8541>
+- [x] Unconfirmed payments produce pending state and cannot settle an invoice. %<8542>
+- [x] Confirmed per-payment USD totals drive partial and paid state. %<8543>
+- [x] Missing unconfirmed transactions are removed before totals and state are recomputed. %<8544>
+- [x] Eligible small balances require explicit owner action and leave an adjustment-ledger record. %<8545>
+- [x] Corrected testnet invoices pass derivation comparison and targeted watcher sanity checks. %<8546>
 
 ## Historical boundary
 
