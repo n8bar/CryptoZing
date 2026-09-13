@@ -17,18 +17,18 @@ This is the milestone execution doc for MS16. It tracks milestone-level objectiv
 - All four phases complete. Milestone closed 2026-04-02.
 
 ## Phase Rollup
-1. [x] Phase 1 - [Delivery Baseline Audit](../strategies/x16.1_DELIVERY_BASELINE_AUDIT.md)
+1. [x] Phase 1 - [Delivery Baseline Audit](../strategies/x16.1_DELIVERY_BASELINE_AUDIT.md) %<9036>
    Completed. The live outbound inventory, current guardrail matrix, and the concrete Phase 2 / Phase 3 inputs are now documented, including the current lack of a shared send-intent gate, the unbounded manual-send path, the live partial-warning drift, and the missing skip path for queued overpayment alerts.
-2. [x] Phase 2 - [Safeguards + Provider Recovery](../strategies/x16.2_SAFEGUARDS_PROVIDER_RECOVERY.md)
+2. [x] Phase 2 - [Safeguards + Provider Recovery](../strategies/x16.2_SAFEGUARDS_PROVIDER_RECOVERY.md) %<9037>
    Completed. Shared outbound safeguards now run through a provider-backed Mailgun HTTP API path, the nested mailable queue bug was identified and removed so `DeliverInvoiceMail` is the real send boundary, controlled alias-off proof sends succeeded end-to-end, and Phase 3 can now focus on truthful payment communication semantics instead of delivery trust.
-3. [x] Phase 3 - [Payment Communication Truthfulness + Notification UX](../strategies/x16.3_PAYMENT_COMMUNICATION_TRUTHFULNESS.md)
+3. [x] Phase 3 - [Payment Communication Truthfulness + Notification UX](../strategies/x16.3_PAYMENT_COMMUNICATION_TRUTHFULNESS.md) %<9038>
    Completed. Acknowledgment-versus-receipt split shipped, txid-scoped acknowledgments live, paired delivery-history labels accurate, branded mail chrome in place, receipt-review UX verified, past-due alert scheduling fixed with sequence-keyed idempotency, alert idempotency hardened, persistent queue worker added, and Browser QA passed across all six verification scenarios.
-4. [x] Phase 4 - [RC Mail Readiness](../strategies/x16.4_RC_MAIL_READINESS.md)
+4. [x] Phase 4 - [RC Mail Readiness](../strategies/x16.4_RC_MAIL_READINESS.md) %<9039>
    Completed. Mailgun webhook integration shipped (provider_message_id tracking, HMAC signature verification, delivered/failed/bounced event handling, 5 feature tests). RC rollout checklist updated with webhook signing key and Mailgun dashboard registration steps. Alias-off posture confirmed via Phase 2 proof; transport and outbound settings documented and ready.
 
 ## Exit Criteria
-- [x] The runaway/spam-prone outbound-mail bug is understood and fixed.
-- [x] App-side delivery safeguards are in place and documented.
-- [x] Mailgun sendability is restored or an explicit alternate path is chosen.
-- [x] Mailgun HTTP API is documented as the chosen MS16 transport and implemented unless a concrete blocking constraint forces a temporary fallback.
-- [x] The remaining notifications/alerts/RC-readiness work ships on top of a trustworthy delivery path.
+- [x] The runaway/spam-prone outbound-mail bug is understood and fixed. %<9203>
+- [x] App-side delivery safeguards are in place and documented. %<9204>
+- [x] Mailgun sendability is restored or an explicit alternate path is chosen. %<9205>
+- [x] Mailgun HTTP API is documented as the chosen MS16 transport and implemented unless a concrete blocking constraint forces a temporary fallback. %<9206>
+- [x] The remaining notifications/alerts/RC-readiness work ships on top of a trustworthy delivery path. %<9207>
