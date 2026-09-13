@@ -22,19 +22,19 @@ This is the milestone execution doc for MS17. It tracks milestone-level objectiv
 
 ## Phase Rollup
 
-### Phase 1 — "owner" → "issuer" sweep ✓
+### Phase 1 — "owner" → "issuer" sweep ✓ %<9212>
 Full rename across UI copy, URLs, route names, code variables and method names, mail classes, mail templates, delivery type strings, database columns, and tests. See [`docs/strategies/x17.1_ISSUER_SWEEP.md`](../strategies/x17.1_ISSUER_SWEEP.md) for the ordered checklist.
 
-### Phase 2 — Test suite rationalization ✓
+### Phase 2 — Test suite rationalization ✓ %<9213>
 The suite has grown large and was written opportunistically. This phase audits every test file, produces a written recommendation table, gets approval, and executes agreed changes so the suite is intentional going into RC. See [`docs/strategies/x17.2_TEST_RATIONALIZATION.md`](../strategies/x17.2_TEST_RATIONALIZATION.md).
 
-### Phase 3 — Support UI + monitoring ✓
+### Phase 3 — Support UI + monitoring ✓ %<9214>
 The support UI is already complete. This phase adds a service health monitoring panel to the support dashboard so a support agent can triage operational issues — queue depth, recent delivery failures, watcher health — without raw log access. See [`docs/strategies/x17.3_SUPPORT_UI_AND_MONITORING.md`](../strategies/x17.3_SUPPORT_UI_AND_MONITORING.md).
 
-### Phase 4 — Post-payment onboarding ✓
+### Phase 4 — Post-payment onboarding ✓ %<9215>
 Extends the getting-started flow (MS13 task 11) with a Part 2 receipt step that activates once a paid invoice is receipt-eligible and completes when the issuer sends the first reviewed client receipt. See [`docs/strategies/x17.4_POST_PAYMENT_ONBOARDING.md`](../strategies/x17.4_POST_PAYMENT_ONBOARDING.md).
 
-### Phase 5 — Mail audit and hardening ✓
+### Phase 5 — Mail audit and hardening ✓ %<9216>
 Six RC-blocking findings surfaced during Phase 4 BQA, plus additional findings discovered during implementation. All resolved. Root cause analysis and full fix details are in [`docs/strategies/x17.5_MAIL_AUDIT.md`](../strategies/x17.5_MAIL_AUDIT.md) (see the "Root causes" section at the top).
 
 **Finding 1 — Receipt TXID wraps poorly on narrow screens.** ✓
@@ -59,8 +59,8 @@ Fixed: `{{ strtoupper($invoice->status ?? 'draft') }}` replaced with the literal
 Discovered during implementation. Underpayment and overpayment alert services had the same runaway-skipped-row pattern as Finding 3/4. Fixed with matching `deliveryExists()` guards. 65,747 accumulated noise rows purged via cleanup migration. Delivery log display now filters out skipped rows.
 
 ## Exit Criteria
-- [x] No "owner" copy remains in UI, mail templates, or docs where "issuer" is the correct term.
-- [x] Test suite is intentional and passes cleanly.
-- [x] Support UI and service health monitoring are usable by a support agent.
-- [x] Paid invoices have a clear issuer path to receipt delivery and ledger review.
-- [x] All Phase 5 mail audit findings resolved: template defects corrected, delivery log bloat eliminated (65,873 noise rows purged), skipped rows filtered from the delivery log display, Browser QA passed.
+- [x] No "owner" copy remains in UI, mail templates, or docs where "issuer" is the correct term. %<9454>
+- [x] Test suite is intentional and passes cleanly. %<9455>
+- [x] Support UI and service health monitoring are usable by a support agent. %<9456>
+- [x] Paid invoices have a clear issuer path to receipt delivery and ledger review. %<9457>
+- [x] All Phase 5 mail audit findings resolved: template defects corrected, delivery log bloat eliminated (65,873 noise rows purged), skipped rows filtered from the delivery log display, Browser QA passed. %<9458>
