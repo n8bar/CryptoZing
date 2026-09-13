@@ -21,20 +21,20 @@ Parent execution doc: [`docs/PLAN.md`](../PLAN.md)
 
 ## Phase Rollup
 
-### [x] Phase 1 — CMS Selection & Staging Setup
+### [x] Phase 1 — CMS Selection & Staging Setup %<9463>
 Select a CMS and staging workflow as joint decisions — staging requirements may influence the CMS choice and vice versa. Set both up and confirm the full publish pipeline works end-to-end before any content is written.
 
-### [x] Phase 2 — Content Audit & Production
+### [x] Phase 2 — Content Audit & Production %<9464>
 Audit the existing Helpful Notes, make Adapt/Inspire/Skip decisions, and produce all planned content. Move directly from audit decision to writing for each piece.
 
-### [x] Phase 3 — Site Architecture, Publishing & SEO Hygiene
+### [x] Phase 3 — Site Architecture, Publishing & SEO Hygiene %<9465>
 Wire up the full multi-page structure, internal linking, and navigation around the Phase 2 content. Publish everything live. Update `sitemap.xml` and run a final signal check against the MS15 baseline.
 
 ## Exit Criteria
-- [x] CMS and staging workflow selected, set up, and verified end-to-end (Phase 1).
-- [x] Content plan approved before Phase 2 writing begins.
-- [x] At least 4 articles or adapted Helpful Notes published on the live site, targeting stable educational queries.
-- [x] `site/` supports multiple pages with a working staging path.
-- [x] `sitemap.xml` reflects all published content with accurate `lastmod`.
-- [x] MS15 SEO baseline intact and extended — no regressions in indexing, canonical, robots, or sitemap signals.
-- [x] Video: shipped — published to YouTube.
+- [x] CMS and staging workflow selected, set up, and verified end-to-end (Phase 1). %<9551>
+- [x] Content plan approved before Phase 2 writing begins. %<9552>
+- [x] At least 4 articles or adapted Helpful Notes published on the live site, targeting stable educational queries. %<9553>
+- [x] `site/` supports multiple pages with a working staging path. %<9554>
+- [x] `sitemap.xml` reflects all published content with accurate `lastmod`. %<9555>
+- [x] MS15 SEO baseline intact and extended — no regressions in indexing, canonical, robots, or sitemap signals. %<9556>
+- [x] Video: shipped — published to YouTube. %<9557>
