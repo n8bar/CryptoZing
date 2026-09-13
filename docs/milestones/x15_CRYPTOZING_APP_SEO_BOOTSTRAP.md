@@ -19,16 +19,16 @@ SEO-oriented content work has already had a couple passes; MS15 should refine on
 - Primary surfaces: [`site/index.html`](https://github.com/n8bar/cryptozing-site/blob/main/index.html), [`site/sitemap.xml`](https://github.com/n8bar/cryptozing-site/blob/main/sitemap.xml), [`site/robots.txt`](https://github.com/n8bar/cryptozing-site/blob/main/robots.txt)
 
 ## Phase Rollup
-1. [x] Phase 1 - Discovery + Indexing Baseline
+1. [x] Phase 1 - Discovery + Indexing Baseline %<8955>
    Verified crawlability, sitemap/robots correctness, domain ownership, initial search-engine submission, and the initial controlled-link baseline; current decision is that the one-page placeholder plus public Helpful Notes mix is good enough for now.
-2. [x] Phase 2 - Verification + Monitoring
+2. [x] Phase 2 - Verification + Monitoring %<8956>
    Captured the monitoring baseline, re-verified the live placeholder against the repo-controlled `site/` surface, and documented the short post-milestone watch list.
-3. [x] Phase 3 - Metadata + Search-Signal Hygiene (only if the existing placeholder content is deemed too thin)
+3. [x] Phase 3 - Metadata + Search-Signal Hygiene (only if the existing placeholder content is deemed too thin) %<8957>
    Not triggered. Phase 1 and Phase 2 did not produce evidence that the current placeholder plus public Helpful Notes mix is too thin or otherwise needs immediate metadata/content tightening, so no standalone Phase 3 strategy doc was kept.
 
 ## Exit Criteria
-- [x] `cryptozing.app` is verified in the intended webmaster/search-console tooling and its sitemap has been submitted.
-- [x] The placeholder/landing page is crawlable and exposes the intended robots, canonical, sitemap, and metadata signals.
-- [x] The placeholder exposes accurate, consistent search signals and does not make unsupported claims about the live product.
-- [x] The milestone leaves a clear SEO baseline for later deployment work to preserve at go-live.
-- [x] A lightweight monitoring baseline exists for indexing status, sitemap health, and early search visibility after launch.
+- [x] `cryptozing.app` is verified in the intended webmaster/search-console tooling and its sitemap has been submitted. %<9025>
+- [x] The placeholder/landing page is crawlable and exposes the intended robots, canonical, sitemap, and metadata signals. %<9026>
+- [x] The placeholder exposes accurate, consistent search signals and does not make unsupported claims about the live product. %<9027>
+- [x] The milestone leaves a clear SEO baseline for later deployment work to preserve at go-live. %<9028>
+- [x] A lightweight monitoring baseline exists for indexing status, sitemap health, and early search visibility after launch. %<9029>
