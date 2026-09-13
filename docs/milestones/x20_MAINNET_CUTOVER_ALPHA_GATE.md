@@ -13,20 +13,20 @@ Supporting ops doc: [`docs/ops/RUNNING_THE_SERVER.md`](../ops/RUNNING_THE_SERVER
 
 ## Phase Rollup
 
-### [x] Phase 1 — Alpha Access Gate
+### [x] Phase 1 — Alpha Access Gate %<10067>
 New registrations land pending and cannot log in until approved from the support dashboard. Registration stays open and unchanged. Independent of mainnet, so it can lead. Also carries the gate-independent account ban (§8) so the abuse lever exists before open beta. Strategy: [`x20.1_ALPHA_ACCESS_GATE.md`](../strategies/x20.1_ALPHA_ACCESS_GATE.md).
 
-### [x] Phase 2 — Production Hosting
+### [x] Phase 2 — Production Hosting %<10068>
 Provision the production server and deploy the app to it, running private, on the same Docker recipe published for self-hosters. The article site moves off GitHub Pages into its own repo and container, so the app image carries no CryptoZing public content. Strategy: [`x20.2_PRODUCTION_HOSTING.md`](../strategies/x20.2_PRODUCTION_HOSTING.md).
 
-### [x] Phase 3 — Taproot Wallet Support
+### [x] Phase 3 — Taproot Wallet Support %<10069>
 The watch-only wallet layer gains Taproot (BIP86) receive support — script-type-aware key onboarding and bech32m derivation — so the operator wallets and merchant onboarding are Taproot-capable at cutover, not retrofitted after. Spec-first; code rides a PR. Strategy: [`x20.3_TAPROOT_WALLET_SUPPORT.md`](../strategies/x20.3_TAPROOT_WALLET_SUPPORT.md).
 
-### [x] Phase 4 — Mainnet Environment & Wallets
+### [x] Phase 4 — Mainnet Environment & Wallets %<10070>
 Clean mainnet baseline on the deployed box, with separate watch-only invoice and donation xpubs (never one shared key — MS14) verified before any funds move. Needs a mainnet donation wallet from the operator before it can start. Carries the mainnet donation-xpub swap from [`x19.8_MICRO_MONETIZE.md`](../strategies/x19.8_MICRO_MONETIZE.md) §1. Strategy: [`x20.4_MAINNET_ENVIRONMENT_WALLETS.md`](../strategies/x20.4_MAINNET_ENVIRONMENT_WALLETS.md).
 
-### [x] Phase 5 — Live Mainnet Validation & Backout
+### [x] Phase 5 — Live Mainnet Validation & Backout %<10071>
 Real self-sent mainnet payments end to end, correction tooling against live data, and mail sanity on mainnet. Leaves behind the cutover runbook and halt procedure MS21 executes. Strategy: [`x20.5_LIVE_MAINNET_VALIDATION_BACKOUT.md`](../strategies/x20.5_LIVE_MAINNET_VALIDATION_BACKOUT.md).
 
 ## Exit Criteria
-- [x] Content promises catalog checked — no work in this milestone introduced or violated a [`docs/CONTENT_PROMISES.md`](../CONTENT_PROMISES.md) entry. Majors 1–4 and all 19 minors hold. Phase 4 §5's watch-only audit and Phase 5's live validation strengthen minors 5, 6, 8–12, 18, and 19 rather than straining any. Donations are voluntary and customer-visible, so major 2's fee-free claim is untouched; Taproot and tiered confirmations add nothing on major 3's stated-limitations list. No customer-facing content shipped, so no new entries.
+- [x] Content promises catalog checked — no work in this milestone introduced or violated a [`docs/CONTENT_PROMISES.md`](../CONTENT_PROMISES.md) entry. Majors 1–4 and all 19 minors hold. Phase 4 §5's watch-only audit and Phase 5's live validation strengthen minors 5, 6, 8–12, 18, and 19 rather than straining any. Donations are voluntary and customer-visible, so major 2's fee-free claim is untouched; Taproot and tiered confirmations add nothing on major 3's stated-limitations list. No customer-facing content shipped, so no new entries. %<10430>
