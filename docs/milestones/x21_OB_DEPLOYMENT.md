@@ -33,19 +33,19 @@ Our existing stack runs from `/opt/cryptozing` with `compose.production.yaml` pl
 
 ## Phase Rollup
 
-### [x] Phase 1 — Prepare the in-place release
+### [x] Phase 1 — Prepare the in-place release %<10432>
 
 Prepare apex routing, the landing/content changes, analytics/legal publication, and a tested cutover path.
 
 Strategy: [M21.1](../strategies/x21.1_PRE_DEPLOY_VERIFICATION.md).
 
-### [x] Phase 2 — Switch to the apex and open beta
+### [x] Phase 2 — Switch to the apex and open beta %<10433>
 
 Move public traffic to the existing stack, switch generated links and callbacks, retire the alpha hostname, and remove the approval gate.
 
 Strategy: [M21.2](../strategies/x21.2_DEPLOY_AND_CUTOVER.md).
 
-### [x] Phase 3 — Verify the public result and sign off
+### [x] Phase 3 — Verify the public result and sign off %<10434>
 
 Check the changed public entry points and operating state, resolve cutover findings, and obtain acceptance.
 
@@ -55,4 +55,4 @@ Strategy: [M21.3](../strategies/x21.3_ROLLOUT_VERIFICATION_SIGNOFF.md).
 
 Detailed phase acceptance belongs to the strategies and rolls up above.
 
-- [x] Check the [content promises catalog](../CONTENT_PROMISES.md) against M21's changes; resolve any introduced or violated promise before closure. The landing page moved from the content repo to the app with the same claims; Minor 7–11 re-sourced. Policies publish dates and first-party analytics wording only; nothing introduced or violated.
+- [x] Check the [content promises catalog](../CONTENT_PROMISES.md) against M21's changes; resolve any introduced or violated promise before closure. The landing page moved from the content repo to the app with the same claims; Minor 7–11 re-sourced. Policies publish dates and first-party analytics wording only; nothing introduced or violated. %<10545>

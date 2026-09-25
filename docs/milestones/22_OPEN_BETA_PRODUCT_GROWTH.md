@@ -49,35 +49,35 @@ CryptoZing leaves M22 with an evidence-backed post-launch discovery baseline, co
 
 ## Phase Rollup
 
-### [ ] Phase 1 — Post-launch discovery baseline and full-surface audit
+### [ ] Phase 1 — Post-launch discovery baseline and full-surface audit %<10547>
 
 Reconcile live crawl/index behavior with Search Console, Bing, Umami, referrer, branded-search, and repository evidence; inventory the active and legacy/recovery public surfaces plus intentional exclusions; approve a concrete audit rubric; verify the apex was re-crawled after the M21 cutover; and turn confirmed gaps into a prioritized finding register with accountable dispositions.
 
-### [ ] Phase 2 — Audience, positioning, and channel strategy
+### [ ] Phase 2 — Audience, positioning, and channel strategy %<10548>
 
 Choose the primary audience and hosted/self-hosted message hierarchy, map its problems and search intent to the right destination pages and calls to action, establish consistent branded identity where disambiguation is needed, and approve a ranked set of measurable channel experiments with owners, time/cost bounds, and stop/continue rules.
 
-### [ ] Phase 3 — SEO remediation and content alignment
+### [ ] Phase 3 — SEO remediation and content alignment %<10549>
 
 Resolve the prioritized technical, on-page, structured-data, internal-link, page-experience, crawl/index, and publication-notification findings across the app and content repositories; align affected content with the approved positioning; update content priorities when evidence supports it; and re-run the audit to verify the result.
 
 After Phase 1, Phase 2 and the technical-only portion of Phase 3 may proceed in parallel. Audience-sensitive metadata, copy, or destination-page changes in Phase 3 wait for Phase 2 approval.
 
-### [ ] Phase 4 — Recurring practice and activation handoff
+### [ ] Phase 4 — Recurring practice and activation handoff %<10550>
 
 Run the first internal measurement/discovery review, document the repeatable operating playbook, add genuinely time-triggered measurement, content, engagement, and legitimate outreach reviews to [`milestones.ics`](../milestones.ics) with owners, expected outputs, and decision thresholds, and prepare the first low-cost marketing experiment as a ready-to-run brief. Spending, public posting, or contacting third parties remains outside the milestone unless separately authorized.
 
-### [ ] Phase 5 — Product backlog selection and feature specifications
+### [ ] Phase 5 — Product backlog selection and feature specifications %<10551>
 
 Lock invoice line items into the implementation bundle, select only the additional backlog features justified by open-beta evidence and remaining capacity, approve the canonical feature requirements and acceptance boundaries, identify dependencies and rollout risk, and reforecast the milestone before code begins if the selected bundle cannot fit the current schedule.
 
-### [ ] Phase 6 — Dev implementation and thorough verification
+### [ ] Phase 6 — Dev implementation and thorough verification %<10552>
 
 Implement each selected feature on dev from its approved spec and strategy, including migrations and cross-surface behavior; run targeted, regression, full Sail, browser, mobile, accessibility, and applicable operational tests; and resolve or explicitly disposition every finding before proposing a production release.
 
 Independent selected features may use separate path-scoped workstreams after their specs are approved. Invoice line items remain on the primary integration path because they affect invoice creation/editing, totals, settlement presentation, public/print output, mail, and future receipt behavior.
 
-### [ ] Phase 7 — Controlled production rollout and live validation
+### [ ] Phase 7 — Controlled production rollout and live validation %<10553>
 
 Release only the dev-verified feature set through the approved production procedure, apply and verify migrations safely, smoke the affected issuer/client/public flows, recheck any discovery or content-promise surface changed by the release, confirm service health and background processing, and record the live verdict plus any backout or follow-up disposition.
 
@@ -85,24 +85,24 @@ Release only the dev-verified feature set through the approved production proced
 
 Detailed ordered work belongs to the phase strategies and rolls up here.
 
-- [ ] A dated baseline records the available Google, Bing, Umami, referrer, and conversion-proxy evidence without credentials, personal data, or tokenized URLs; the M21 apex re-crawl question has a clear verdict or an explicit external-wait owner and recheck date.
-- [ ] A surface matrix accounts for each canonical ordinary public URL and each dynamic/private route pattern, including `/help`, the configured donation surface, and retained legacy/recovery hosts, and records the applicable ownership, intended index state, sitemap/canonical treatment, analytics boundary, audience, call to action, and disposition without storing live tokens or client identifiers.
-- [ ] Phase 1 approves a repeatable audit rubric covering status and redirect behavior, canonical and sitemap inclusion/exclusion, metadata and applicable structured-data validation, representative mobile/accessibility checks, and explicit performance thresholds or a documented baseline-only treatment.
-- [ ] Every intended index surface on `cryptozing.app` passes the approved rubric at its preferred HTTPS apex URL; private, authenticated, staging, and tokenized invoice route classes remain excluded as intended, while third-party profiles and legacy/recovery hosts pass their separately recorded redirect/canonical/noindex disposition.
-- [ ] Navigation from a tokenized invoice route cannot place its token, client data, or full private URL into analytics or referrer records on a measured public page.
-- [ ] The inherited [`cryptozing-site#4`](https://github.com/n8bar/cryptozing-site/issues/4) manifest MIME defect is fixed and verified. `/index.html` remains absent unless crawl or referrer evidence justifies a different disposition.
-- [ ] Every finding is verified fixed or assigned to named future exit criteria with an accepted rationale; no issue is treated as complete merely because it was filed.
-- [ ] Publishing maintains an accurate canonical sitemap and sends added, meaningfully updated, redirected, and removed URL states through IndexNow with recorded outcomes and failure redelivery; unchanged URLs are not bulk-resubmitted on a schedule.
-- [ ] The audience, positioning, query/destination map, channel priorities, measurement definitions, and bounded experiment plan are approved without contradicting product behavior or content promises.
-- [ ] [`CONTENT_PLAN.md`](../CONTENT_PLAN.md) priorities and relevant public copy/internal links reflect the approved evidence where a change is warranted; time-sensitive claims have been revalidated, and no date/content change is made merely to manufacture freshness or keyword variants.
-- [ ] At least one low-cost marketing experiment has an approved, ready-to-run brief with its audience, message, channel, owner, time/cost bound, measurement, and stop/continue rule; any separately authorized execution result is recorded without exposing credentials, personal data, or tokenized URLs.
-- [ ] A durable operating playbook and at least a 90-day recurring cadence exist for measurement, crawl/index review, content decisions, engagement, and legitimate outreach; the first internal review is complete, and calendar behavior plus milestone schedule consistency are verified locally.
-- [ ] Phase 5 names the complete M22 product bundle: invoice line items are included, every additional feature is explicitly selected or left in the backlog, dependencies and risks are recorded, and the milestone schedule is confirmed or updated before implementation.
-- [ ] Invoice line items and every additional selected feature have approved canonical requirements and phase strategies before their code work starts.
-- [ ] Invoice line items satisfy their approved behavior across data storage and migration, calculation, create/edit, issuer, public/print, mail, manual/in-person settlement, and regression surfaces while preserving USD as the canonical invoice total.
-- [ ] Every selected feature passes its targeted and regression tests, the full Sail suite, applicable browser/mobile/accessibility review, and a recorded dev acceptance verdict with no unresolved release-blocking finding.
-- [ ] The selected feature set is deployed only after rollout approval, then passes migration verification, live functional smoke coverage, public/content-promises regression checks where affected, service-health checks, and a recorded production verdict with an exercised or still-valid backout path.
-- [ ] The [content promises catalog](../CONTENT_PROMISES.md) has been checked against every public claim changed or introduced by M22, with any new promise recorded and reconciled before closure.
+- [ ] A dated baseline records the available Google, Bing, Umami, referrer, and conversion-proxy evidence without credentials, personal data, or tokenized URLs; the M21 apex re-crawl question has a clear verdict or an explicit external-wait owner and recheck date. %<10555>
+- [ ] A surface matrix accounts for each canonical ordinary public URL and each dynamic/private route pattern, including `/help`, the configured donation surface, and retained legacy/recovery hosts, and records the applicable ownership, intended index state, sitemap/canonical treatment, analytics boundary, audience, call to action, and disposition without storing live tokens or client identifiers. %<10556>
+- [ ] Phase 1 approves a repeatable audit rubric covering status and redirect behavior, canonical and sitemap inclusion/exclusion, metadata and applicable structured-data validation, representative mobile/accessibility checks, and explicit performance thresholds or a documented baseline-only treatment. %<10557>
+- [ ] Every intended index surface on `cryptozing.app` passes the approved rubric at its preferred HTTPS apex URL; private, authenticated, staging, and tokenized invoice route classes remain excluded as intended, while third-party profiles and legacy/recovery hosts pass their separately recorded redirect/canonical/noindex disposition. %<10558>
+- [ ] Navigation from a tokenized invoice route cannot place its token, client data, or full private URL into analytics or referrer records on a measured public page. %<10559>
+- [ ] The inherited [`cryptozing-site#4`](https://github.com/n8bar/cryptozing-site/issues/4) manifest MIME defect is fixed and verified. `/index.html` remains absent unless crawl or referrer evidence justifies a different disposition. %<10560>
+- [ ] Every finding is verified fixed or assigned to named future exit criteria with an accepted rationale; no issue is treated as complete merely because it was filed. %<10561>
+- [ ] Publishing maintains an accurate canonical sitemap and sends added, meaningfully updated, redirected, and removed URL states through IndexNow with recorded outcomes and failure redelivery; unchanged URLs are not bulk-resubmitted on a schedule. %<10562>
+- [ ] The audience, positioning, query/destination map, channel priorities, measurement definitions, and bounded experiment plan are approved without contradicting product behavior or content promises. %<10563>
+- [ ] [`CONTENT_PLAN.md`](../CONTENT_PLAN.md) priorities and relevant public copy/internal links reflect the approved evidence where a change is warranted; time-sensitive claims have been revalidated, and no date/content change is made merely to manufacture freshness or keyword variants. %<10564>
+- [ ] At least one low-cost marketing experiment has an approved, ready-to-run brief with its audience, message, channel, owner, time/cost bound, measurement, and stop/continue rule; any separately authorized execution result is recorded without exposing credentials, personal data, or tokenized URLs. %<10565>
+- [ ] A durable operating playbook and at least a 90-day recurring cadence exist for measurement, crawl/index review, content decisions, engagement, and legitimate outreach; the first internal review is complete, and calendar behavior plus milestone schedule consistency are verified locally. %<10566>
+- [ ] Phase 5 names the complete M22 product bundle: invoice line items are included, every additional feature is explicitly selected or left in the backlog, dependencies and risks are recorded, and the milestone schedule is confirmed or updated before implementation. %<10567>
+- [ ] Invoice line items and every additional selected feature have approved canonical requirements and phase strategies before their code work starts. %<10568>
+- [ ] Invoice line items satisfy their approved behavior across data storage and migration, calculation, create/edit, issuer, public/print, mail, manual/in-person settlement, and regression surfaces while preserving USD as the canonical invoice total. %<10569>
+- [ ] Every selected feature passes its targeted and regression tests, the full Sail suite, applicable browser/mobile/accessibility review, and a recorded dev acceptance verdict with no unresolved release-blocking finding. %<10570>
+- [ ] The selected feature set is deployed only after rollout approval, then passes migration verification, live functional smoke coverage, public/content-promises regression checks where affected, service-health checks, and a recorded production verdict with an exercised or still-valid backout path. %<10571>
+- [ ] The [content promises catalog](../CONTENT_PROMISES.md) has been checked against every public claim changed or introduced by M22, with any new promise recorded and reconciled before closure. %<10572>
 
 ## Handoff from M21
 
