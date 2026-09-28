@@ -41,12 +41,21 @@ DTSTAMP:20260907T020726Z
 SEQUENCE:4
 END:VEVENT
 BEGIN:VEVENT
-DTSTART;VALUE=DATE:20260907
-DTEND;VALUE=DATE:20271006
-SUMMARY:MS22 — Open Beta Product & Growth Iteration
-DESCRIPTION:Post-launch discovery and marketing practice followed by spec-first dev implementation, verification, and production rollout of a bounded backlog feature set including invoice line items.
+DTSTART;VALUE=DATE:20260928
+DTEND;VALUE=DATE:20270328
+SUMMARY:MS22 — Invoice Line Items and Developer API
+DESCRIPTION:Build itemized invoices first, then a developer API for owner-scoped create, optional send, and polling-based status reads.
 UID:cz-ms22@cryptozing.app
-DTSTAMP:20260909T231642Z
-SEQUENCE:6
+DTSTAMP:20260928T193955Z
+SEQUENCE:7
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20270329
+DTEND;VALUE=DATE:20280329
+SUMMARY:MS23 — Open Beta Product & Growth Iteration
+DESCRIPTION:Post-launch discovery and marketing practice followed by a bounded product bundle; consider signed payment-event webhooks after the M22 API release.
+UID:cz-ms23@cryptozing.app
+DTSTAMP:20260928T193955Z
+SEQUENCE:0
 END:VEVENT
 END:VCALENDAR

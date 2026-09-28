@@ -1,5 +1,5 @@
 # PLAN
-_Last updated: 2026-09-09_
+_Last updated: 2026-09-28_
 
 This is the human-facing execution dashboard for open-beta work.
 
@@ -16,18 +16,19 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 
 ## Current
 - Active milestone:
-  - **MS22 - Open Beta Product & Growth Iteration** — started 2026-09-07; product-and-growth direction confirmed, revised milestone scope drafted for review. Content-publish gate waived by n8 on the custody article shipped the weekend M21 closed.
-- Status: `M22 now covers growth first and late-milestone product expansion; no phase is active until the revised phase scope is reviewed and approved.`
-- Next action: Review [`docs/milestones/22_OPEN_BETA_PRODUCT_GROWTH.md`](milestones/22_OPEN_BETA_PRODUCT_GROWTH.md); after approval, draft the M22.1 strategy for the post-launch baseline and full-surface audit.
+  - **MS22 - Invoice Line Items and Developer API** — starts 2026-09-28; line items first, then a polling-based API for developers. Content-publish gate waived by n8 on the custody article shipped the weekend M21 closed.
+- Status: `M22 and M23 are drafted with the agreed sequence and dates; detailed scope awaits review. No phase is active.`
+- Next action: Review [`docs/milestones/22_LINE_ITEMS_DEVELOPER_API.md`](milestones/22_LINE_ITEMS_DEVELOPER_API.md) and [`docs/milestones/23_OPEN_BETA_PRODUCT_GROWTH.md`](milestones/23_OPEN_BETA_PRODUCT_GROWTH.md); after M22 approval, draft the line-item spec and M22.1 strategy.
 - Most recently completed milestone doc: [`docs/milestones/x21_OB_DEPLOYMENT.md`](milestones/x21_OB_DEPLOYMENT.md)
 
 ## Published Release Target
-- **First public release: mid-to-late 2027.** The open beta milestone (MS21, closed 2026-09-06) covers the open beta. The published release target accounts for post-open-beta work needed before an official first release.
+- **First public release: mid-to-late 2027 (reforecast needed).** The open beta milestone (MS21, closed 2026-09-06) covers the open beta. M23 now runs through 2028-03-29, so the earlier published release target needs explicit reassessment before it is treated as a committed date.
 
 ## Active and Upcoming Milestones
 | Status | ID | Milestone | Short intent | Target | Primary doc |
 |---|---|---|---|---|---|
-| [ ] | 22 | Open Beta Product & Growth Iteration | Establish the post-launch discovery and marketing practice, then specify, build, test, and release invoice line items plus a bounded late-selected set of backlog features. | 2027-10-06 | [`docs/milestones/22_OPEN_BETA_PRODUCT_GROWTH.md`](milestones/22_OPEN_BETA_PRODUCT_GROWTH.md) |
+| [ ] | 22 | Invoice Line Items and Developer API | Deliver itemized invoices, then a developer API to create, optionally send, and poll invoice state. | 2027-03-28 | [`docs/milestones/22_LINE_ITEMS_DEVELOPER_API.md`](milestones/22_LINE_ITEMS_DEVELOPER_API.md) |
+| [ ] | 23 | Open Beta Product & Growth Iteration | Establish discovery and marketing practice, then select and release a bounded product bundle; consider payment-event webhooks. | 2028-03-29 | [`docs/milestones/23_OPEN_BETA_PRODUCT_GROWTH.md`](milestones/23_OPEN_BETA_PRODUCT_GROWTH.md) |
 
 ## Completed Milestones
 | Status | ID | Milestone | Short intent | Primary doc |

@@ -1122,3 +1122,6 @@ The milestone is no longer limited to SEO and marketing. The first four phases r
 
 2026-09-09 | M22 target moved out one year
 The canonical M22 calendar end and PLAN target move from 2026-10-06 to 2027-10-06, giving the open-beta product and growth iteration a full additional year. The existing calendar event keeps its UID, increments to SEQUENCE 6, and carries a refreshed DTSTAMP so subscribed calendars receive the change; milestone scope is unchanged.
+
+2026-09-28 | M22 line items and polling API draft; growth scope moved to M23
+M22 now drafts itemized invoices as Phase 1 and an owner-scoped create, optional send, and status-read API for coded consumers in later phases. Polling is the first integration path; outbound payment-event webhooks become a candidate for M23 rather than committed scope. The previous growth draft moves to M23 without its line-item requirement, and the M21 discovery handoff links follow it. PLAN, README, AGENTS, and the backlog are synchronized. M22 runs 2026-09-28 to 2027-03-28; M23 runs 2027-03-29 to 2028-03-29. The existing M22 calendar event retains its UID with refreshed DTSTAMP and SEQUENCE 7; M23 gains a new event. Both drafts await scope review, and the published first-release target needs reforecasting.

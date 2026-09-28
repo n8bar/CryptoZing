@@ -1,20 +1,20 @@
-# MS22 - Open Beta Product & Growth Iteration
+# MS23 - Open Beta Product & Growth Iteration
 
-Status: Revised draft for review; product-and-growth direction confirmed, exact phase scope not approved for implementation.
-Drafted: 2026-09-09.
+Status: Rescheduled draft for review; growth direction confirmed, exact phase scope not approved for implementation.
+Drafted: 2026-09-09; moved to M23 on 2026-09-28.
 Parent: [PLAN.md](../PLAN.md)
 
 ## Outcome
 
-CryptoZing leaves M22 with an evidence-backed post-launch discovery baseline, corrected public-surface SEO gaps, an approved audience/positioning/channel strategy, and a repeatable operating cadence whose first internal review has run. It then uses the later portion of the milestone for deliberate product expansion: invoice line items plus a bounded set of other backlog features are specified, built on dev, thoroughly verified, and released to production with live validation. The first bounded marketing experiment is ready for separate activation approval. Growth work measures controllable activity and observed results without promising rankings, traffic, backlinks, or adoption that depend on outside systems and people.
+CryptoZing leaves M23 with an evidence-backed post-launch discovery baseline, corrected public-surface SEO gaps, an approved audience/positioning/channel strategy, and a repeatable operating cadence whose first internal review has run. It then uses the later portion of the milestone for deliberate product expansion: a bounded, evidence-selected set of backlog features is specified, built on dev, thoroughly verified, and released to production with live validation. The first bounded marketing experiment is ready for separate activation approval. Growth work measures controllable activity and observed results without promising rankings, traffic, backlinks, or adoption that depend on outside systems and people.
 
 ## Accepted Baseline
 
-- [M15](x15_CRYPTOZING_APP_SEO_BOOTSTRAP.md) established the DNS-verified Google Search Console domain property, independent Bing verification, sitemap submission, root indexing, canonical/redirect behavior, and the first monitoring baseline. M22 revalidates that state after launch; it does not repeat property ownership or initial submission work.
+- [M15](x15_CRYPTOZING_APP_SEO_BOOTSTRAP.md) established the DNS-verified Google Search Console domain property, independent Bing verification, sitemap submission, root indexing, canonical/redirect behavior, and the first monitoring baseline. M23 revalidates that state after M22; it does not repeat property ownership or initial submission work.
 - [M18](x18_PRERELEASE_CONTENT_SEO.md) established Eleventy, staging and publishing, the Learn hub, the initial article/video set, and multi-page SEO hygiene. [`CONTENT_PLAN.md`](../CONTENT_PLAN.md) remains the canonical article workflow and queue.
 - [M21](x21_OB_DEPLOYMENT.md) moved the apex onto the live app without changing the published `/learn/*` URLs. Laravel owns the landing, help, policy, and configured donation surfaces; the content container owns `/learn/*`, `/staging/*`, the sitemap, robots, and the IndexNow key.
 - Self-hosted Umami measures the landing and published article pages. Signed-in pages, staging pages, public invoice pages, and generic self-hosted installations remain outside CryptoZing's production analytics configuration.
-- [`PRODUCT_SPEC.md`](../PRODUCT_SPEC.md) remains authoritative for global product behavior; feature specs own detailed requirements. [`BACKLOG.md`](../BACKLOG.md) is the candidate pool, not blanket authorization to pull every deferred feature into M22.
+- [`PRODUCT_SPEC.md`](../PRODUCT_SPEC.md) remains authoritative for global product behavior; feature specs own detailed requirements. [`BACKLOG.md`](../BACKLOG.md) is the candidate pool, not blanket authorization to pull every deferred feature into M23.
 
 ## Scope Decisions
 
@@ -26,13 +26,12 @@ CryptoZing leaves M22 with an evidence-backed post-launch discovery baseline, co
 - Keep content people-first and original. Earn links through useful material, credible participation, and direct outreach; do not buy ranking links, automate placement, set backlink quotas, or mass-produce query variants.
 - Preserve the privacy boundary. Any newly collected analytics event or field — including a first-party aggregate event — requires explicit privacy review and any needed spec/policy update before implementation. Default conversion proxies to already disclosed pageview/referrer evidence and privacy-safe aggregate business counts. Public invoice URLs and identifiers must not enter acquisition analytics, referrer records, outreach material, baselines, crawl exports, finding registers, or surface matrices; audit dynamic/private surfaces by route pattern, never by retaining live tokens or client data.
 - Keep publication convergence push-driven. The sitemap remains the complete canonical inventory; IndexNow should react to added, meaningfully updated, redirected, or removed URLs, record outcomes, and redeliver failures rather than bulk-resubmitting unchanged URLs on a schedule.
-- Keep article production in the parallel [`CONTENT_PLAN.md`](../CONTENT_PLAN.md) track. M22 may reprioritize that queue, improve internal linking, or identify evidence-backed page work; it does not recreate the CMS/staging decision or impose an arbitrary article quota.
-- Keep the CMS-style Help Center in [`BACKLOG.md`](../BACKLOG.md). M22 may audit and improve the current `/help` page's content and discovery signals, but does not absorb the editor, revision history, or data-driven guide build.
+- Keep article production in the parallel [`CONTENT_PLAN.md`](../CONTENT_PLAN.md) track. M23 may reprioritize that queue, improve internal linking, or identify evidence-backed page work; it does not recreate the CMS/staging decision or impose an arbitrary article quota.
+- Keep the CMS-style Help Center in [`BACKLOG.md`](../BACKLOG.md). M23 may audit and improve the current `/help` page's content and discovery signals, but does not absorb the editor, revision history, or data-driven guide build.
 - Do not assume paid media, paid placement, testimonials, a mailing list, partnerships, or outbound campaigns. A phase strategy may recommend a bounded experiment, but spending, public posting, or contacting third parties requires explicit approval and any applicable disclosure/consent work.
-- File newly discovered defects as GitHub Issues. Filing does not discharge them: each issue must be fixed in M22 or named as exit criteria in a specific future phase or milestone before M22 closes.
-- Keep product expansion late in the milestone. Phases 1–4 establish and operationalize the growth baseline before Phase 5 selects the implementation bundle.
-- Treat invoice line items as required M22 scope. The current backlog entry supplies the starting intent — multiple description/quantity/rate rows, optional subtotal/tax/discount lines, USD-canonical totals, in-person cash use, and consistent invoice/public/print/mail surfaces — but it does not replace an approved feature spec.
-- Select any additional backlog features in Phase 5 from observed open-beta needs, dependencies, risk, user value, and remaining capacity. Record the exact bundle before implementation; unselected backlog items remain deferred.
+- File newly discovered defects as GitHub Issues. Filing does not discharge them: each issue must be fixed in M23 or named as exit criteria in a specific future phase or milestone before M23 closes.
+- Keep product expansion late in the milestone. Phases 1–4 establish and operationalize the growth baseline before Phase 5 selects the implementation bundle. Consider outbound signed payment-event webhooks and reliable redelivery as a candidate, based on M22 API-consumer feedback; do not treat them as preselected scope.
+- Select backlog features in Phase 5 from observed open-beta needs, dependencies, risk, user value, and remaining capacity. Record the exact bundle before implementation; unselected backlog items remain deferred.
 - Follow the spec-first boundary for every selected feature: approve the canonical requirement or spec delta, then write its implementation strategy, then change code. Discovery from current code may inform a spec only when explicitly agreed.
 - Implement selected features on dev through their normal code branches and PRs. Migrations, automated tests, browser/UX verification, regression coverage, and the full Sail suite must pass before a production release is proposed.
 - Release to production only after the dev verdict is recorded and the user approves the rollout. Each release must follow the one-shot production access and environment-readback rules, include an applicable migration/backout plan, preserve watch-only and data boundaries, and finish with live functional and service-health verification.
@@ -45,7 +44,7 @@ CryptoZing leaves M22 with an evidence-backed post-launch discovery baseline, co
 ## Current Focus
 
 - Active phase: **None — milestone scope is awaiting review.**
-- Next action after approval: draft the detailed M22.1 strategy from the approved phase boundary and baseline requirements.
+- Next action after approval: draft the detailed M23.1 strategy from the approved phase boundary and baseline requirements.
 
 ## Phase Rollup
 
@@ -69,13 +68,13 @@ Run the first internal measurement/discovery review, document the repeatable ope
 
 ### [ ] Phase 5 — Product backlog selection and feature specifications %<10551>
 
-Lock invoice line items into the implementation bundle, select only the additional backlog features justified by open-beta evidence and remaining capacity, approve the canonical feature requirements and acceptance boundaries, identify dependencies and rollout risk, and reforecast the milestone before code begins if the selected bundle cannot fit the current schedule.
+Select only the backlog features justified by open-beta evidence and remaining capacity, approve the canonical feature requirements and acceptance boundaries, identify dependencies and rollout risk, and reforecast the milestone before code begins if the selected bundle cannot fit the current schedule.
 
 ### [ ] Phase 6 — Dev implementation and thorough verification %<10552>
 
 Implement each selected feature on dev from its approved spec and strategy, including migrations and cross-surface behavior; run targeted, regression, full Sail, browser, mobile, accessibility, and applicable operational tests; and resolve or explicitly disposition every finding before proposing a production release.
 
-Independent selected features may use separate path-scoped workstreams after their specs are approved. Invoice line items remain on the primary integration path because they affect invoice creation/editing, totals, settlement presentation, public/print output, mail, and future receipt behavior.
+Independent selected features may use separate path-scoped workstreams after their specs are approved. If payment-event webhooks are selected, define signed events, consumer replay handling, delivery retries, and operational verification in their approved spec and strategy.
 
 ### [ ] Phase 7 — Controlled production rollout and live validation %<10553>
 
@@ -97,12 +96,11 @@ Detailed ordered work belongs to the phase strategies and rolls up here.
 - [ ] [`CONTENT_PLAN.md`](../CONTENT_PLAN.md) priorities and relevant public copy/internal links reflect the approved evidence where a change is warranted; time-sensitive claims have been revalidated, and no date/content change is made merely to manufacture freshness or keyword variants. %<10564>
 - [ ] At least one low-cost marketing experiment has an approved, ready-to-run brief with its audience, message, channel, owner, time/cost bound, measurement, and stop/continue rule; any separately authorized execution result is recorded without exposing credentials, personal data, or tokenized URLs. %<10565>
 - [ ] A durable operating playbook and at least a 90-day recurring cadence exist for measurement, crawl/index review, content decisions, engagement, and legitimate outreach; the first internal review is complete, and calendar behavior plus milestone schedule consistency are verified locally. %<10566>
-- [ ] Phase 5 names the complete M22 product bundle: invoice line items are included, every additional feature is explicitly selected or left in the backlog, dependencies and risks are recorded, and the milestone schedule is confirmed or updated before implementation. %<10567>
-- [ ] Invoice line items and every additional selected feature have approved canonical requirements and phase strategies before their code work starts. %<10568>
-- [ ] Invoice line items satisfy their approved behavior across data storage and migration, calculation, create/edit, issuer, public/print, mail, manual/in-person settlement, and regression surfaces while preserving USD as the canonical invoice total. %<10569>
-- [ ] Every selected feature passes its targeted and regression tests, the full Sail suite, applicable browser/mobile/accessibility review, and a recorded dev acceptance verdict with no unresolved release-blocking finding. %<10570>
+- [ ] Phase 5 names the complete M23 product bundle: each candidate feature is explicitly selected or left in the backlog, dependencies and risks are recorded, and the milestone schedule is confirmed or updated before implementation. %<10567>
+- [ ] Every selected feature has approved canonical requirements and phase strategies before their code work starts. %<10568>
+- [ ] Every selected feature, including payment-event webhooks if selected, passes its targeted and regression tests, the full Sail suite, applicable browser/mobile/accessibility review, and a recorded dev acceptance verdict with no unresolved release-blocking finding. %<10570>
 - [ ] The selected feature set is deployed only after rollout approval, then passes migration verification, live functional smoke coverage, public/content-promises regression checks where affected, service-health checks, and a recorded production verdict with an exercised or still-valid backout path. %<10571>
-- [ ] The [content promises catalog](../CONTENT_PROMISES.md) has been checked against every public claim changed or introduced by M22, with any new promise recorded and reconciled before closure. %<10572>
+- [ ] The [content promises catalog](../CONTENT_PROMISES.md) has been checked against every public claim changed or introduced by M23, with any new promise recorded and reconciled before closure. %<10572>
 
 ## Handoff from M21
 

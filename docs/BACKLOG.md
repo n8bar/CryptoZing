@@ -1,5 +1,5 @@
 # Backlog (Post-MVP)
-_Last updated: 2026-07-26_
+_Last updated: 2026-09-28_
 
 This is the canonical post-MVP backlog.
 
@@ -41,6 +41,7 @@ _Carry-forward guardrail from active roadmap scope: suppress duplicate sends for
 6. **Notification Hub**
    - Slack/webhook integrations for payment events, delivery failures, etc.
    - Reuse `InvoicePaid` events and delivery log updates to emit notifications without polling.
+   - M23 may select developer payment-event webhooks for M22 API consumers. If selected, define signed event truth, endpoint management, retry/replay behavior, and failure visibility in an approved spec; selection depends on consumer evidence.
 
 6. **Notification Preference Expansion**
    - Consider allowing issuers to configure alert thresholds per profile instead of keeping the open-beta-wide default threshold.
@@ -126,13 +127,6 @@ _Carry-forward guardrail from active roadmap scope: suppress duplicate sends for
    - Show the connected account's on-chain balance on the wallet settings page, derived from the watched xpub.
    - Evaluate other surfaces where the balance is worth showing (dashboard, elsewhere) — keep the watch-only framing clear wherever it appears.
    - At implementation, decide where/whether to place a pointer to the `/help#gap-limit` note near balance displays — a balance readout is where gap-limit confusion becomes visible.
-
-24. **Invoice line items**
-   - Multiple description/quantity/rate rows per invoice summing to the invoice total, replacing today's single description + USD amount pair.
-   - Complete implementation includes optional configurable special lines: subtotals, taxes, discounts, etc.
-   - Must make the product usable for in-person cash payments — an itemized sale recorded and settled on the spot, building on the existing off-chain/manual payment recording.
-   - USD stays the entry denomination; BTC conversion keeps applying at the invoice level.
-   - Ripple surfaces: create/edit form, issuer and public/print views, mail templates, and receipt PDFs once those exist.
 
 ## Authentication & Security
 26. **Passkey (WebAuthn) authentication**
