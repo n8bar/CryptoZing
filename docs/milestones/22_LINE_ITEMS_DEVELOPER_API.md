@@ -25,28 +25,28 @@ An issuer can create an itemized, USD-denominated invoice through the app. A dev
 
 ## Phase Rollup
 
-### [ ] Phase 1 — Itemized invoice foundation
+### [ ] Phase 1 — Itemized invoice foundation %<2963>
 
 Approve the line-item spec, implement the data and total model plus all affected invoice surfaces, and verify migration, payment presentation, mail, accessibility, and regression behavior on dev.
 
-### [ ] Phase 2 — Developer API contract and access
+### [ ] Phase 2 — Developer API contract and access %<2964>
 
 Approve the API feature spec: credential lifecycle and scopes, request/response contract, idempotency, ownership, error and rate-limit behavior, status semantics, and polling guidance. Implement and verify the access boundary and contract.
 
-### [ ] Phase 3 — Create, send, read, and integration verification
+### [ ] Phase 3 — Create, send, read, and integration verification %<2965>
 
 Implement the documented endpoints using the same invoice and delivery rules as the app. Verify safe retries, queued-send outcomes, payment-state reads, an external order polling scenario, documentation examples, and the full Sail and applicable browser/UX suite.
 
-### [ ] Phase 4 — Controlled release and live validation
+### [ ] Phase 4 — Controlled release and live validation %<2966>
 
 Record a dev verdict and migration/backout plan; obtain rollout approval; release and verify itemized invoices, API access, create/send/read behavior, service health, and the content-promises catalog on production.
 
 ## Exit Criteria
 
-- [ ] Approved line-item and API specs define the release behavior before code work starts.
-- [ ] Itemized invoices preserve USD-canonical totals and behave consistently across app, public, print, mail, and payment surfaces.
-- [ ] A credential limited to one issuer can create and optionally queue-send an itemized invoice, retrieve its public link and current state, and cannot access another issuer's data.
-- [ ] Retrying an API create request cannot duplicate an invoice; API responses and documentation distinguish queued mail, delivery outcome, detected payment, and confirmed settlement.
-- [ ] A documented consumer can reconcile an external order by polling, including partial or uncertain payment states, without requiring outbound webhooks.
-- [ ] Targeted, regression, full Sail, and applicable browser/mobile/accessibility checks pass; dev and production verdicts are recorded after approved rollout.
-- [ ] The [content promises catalog](../CONTENT_PROMISES.md) is checked against all M22 public claims before closure.
+- [ ] Approved line-item and API specs define the release behavior before code work starts. %<2968>
+- [ ] Itemized invoices preserve USD-canonical totals and behave consistently across app, public, print, mail, and payment surfaces. %<2969>
+- [ ] A credential limited to one issuer can create and optionally queue-send an itemized invoice, retrieve its public link and current state, and cannot access another issuer's data. %<2970>
+- [ ] Retrying an API create request cannot duplicate an invoice; API responses and documentation distinguish queued mail, delivery outcome, detected payment, and confirmed settlement. %<2971>
+- [ ] A documented consumer can reconcile an external order by polling, including partial or uncertain payment states, without requiring outbound webhooks. %<2972>
+- [ ] Targeted, regression, full Sail, and applicable browser/mobile/accessibility checks pass; dev and production verdicts are recorded after approved rollout. %<2973>
+- [ ] The [content promises catalog](../CONTENT_PROMISES.md) is checked against all M22 public claims before closure. %<2974>
