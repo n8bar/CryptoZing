@@ -20,14 +20,14 @@ class DeploymentOverlayTest extends TestCase
         $this->assertStringNotContainsString('cryptozing-site:latest', $overlay);
     }
 
-    public function test_the_overlay_selects_the_nginx_template_set_by_env_with_alpha_as_the_default(): void
+    public function test_the_overlay_selects_the_nginx_template_set_by_env_with_frontdoor_as_the_default(): void
     {
         $this->assertStringContainsString(
-            '${CZ_NGINX_TEMPLATES:-templates-alpha}:/etc/nginx/templates:ro',
+            '${CZ_NGINX_TEMPLATES:-templates-frontdoor}:/etc/nginx/templates:ro',
             $this->file('compose.alpha.yaml'),
         );
 
-        foreach (['templates-alpha', 'templates-transition', 'templates-apex'] as $set) {
+        foreach (['templates-alpha', 'templates-transition', 'templates-apex', 'templates-frontdoor'] as $set) {
             $this->assertFileExists(base_path("docker/production/nginx/{$set}/default.conf.template"));
         }
     }
@@ -72,8 +72,34 @@ class DeploymentOverlayTest extends TestCase
         foreach (['UMAMI_DB_PASSWORD', 'UMAMI_APP_SECRET', 'UMAMI_2FA_KEY'] as $secret) {
             $this->assertMatchesRegularExpression('/\$\{'.$secret.':\?/', $overlay);
         }
-        $this->assertStringNotContainsString('ports:', $overlay);
+        // The only ports line is cz-nginx giving up the recipe's public ports.
+        $this->assertSame(1, substr_count($overlay, 'ports:'));
+        $this->assertStringContainsString('ports: !reset []', $overlay);
         $this->assertStringContainsString('umami-db:/var/lib/postgresql/data', $overlay);
+    }
+
+    public function test_cz_nginx_serves_only_behind_the_shared_front_door(): void
+    {
+        $overlay = $this->file('compose.alpha.yaml');
+        $this->assertStringNotContainsString('/etc/letsencrypt', $overlay);
+        $this->assertMatchesRegularExpression('/networks:\n  frontdoor:\n    external: true/', $overlay);
+
+        $template = $this->file('docker/production/nginx/templates-frontdoor/default.conf.template');
+        $this->assertStringNotContainsString('ssl', $template);
+        $this->assertSame(2, substr_count($template, 'set_real_ip_from 172.30.0.0/24;'));
+        $this->assertSame(2, substr_count($template, 'absolute_redirect off;'));
+        $this->assertSame(1, substr_count($template, 'return 444;'));
+
+        $blocks = $this->file('docker/production/frontdoor/cryptozing.conf.template');
+        $this->assertStringContainsString('server_name ${CZ_PUBLIC_SERVER_NAME} stats.${CZ_PUBLIC_SERVER_NAME};', $blocks);
+        $this->assertStringContainsString('server_name www.${CZ_PUBLIC_SERVER_NAME};', $blocks);
+        $this->assertStringContainsString('location /.well-known/acme-challenge/', $blocks);
+        $this->assertStringContainsString('set $cryptozing_upstream http://cz-nginx:80;', $blocks);
+        $this->assertStringContainsString('proxy_set_header X-Real-IP $remote_addr;', $blocks);
+
+        $deploy = $this->file('scripts/deploy.sh');
+        $this->assertStringContainsString('docker network create --subnet 172.30.0.0/24 frontdoor', $deploy);
+        $this->assertStringContainsString('90-sites-guard.sh --strict cryptozing', $deploy);
     }
 
     #[DataProvider('allTemplates')]
@@ -94,6 +120,7 @@ class DeploymentOverlayTest extends TestCase
             'alpha' => ['templates-alpha'],
             'transition' => ['templates-transition'],
             'apex' => ['templates-apex'],
+            'frontdoor' => ['templates-frontdoor'],
         ];
     }
 

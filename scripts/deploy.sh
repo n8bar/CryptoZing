@@ -16,10 +16,12 @@ FILES=(-f compose.production.yaml)
 # Our deployment layers the site container in; self-hosters won't have it.
 [ -f compose.alpha.yaml ] && FILES+=(-f compose.alpha.yaml)
 
-# Do It List shares our front nginx over doitlist_edge. Neither stack owns the
-# network; make sure it exists so a missing one can't stop our proxy starting.
-if [ -f compose.alpha.yaml ] && ! docker network inspect doitlist_edge > /dev/null 2>&1; then
-    docker network create doitlist_edge > /dev/null
+# Our deployment sits behind the shared front door (its own stack). Neither
+# stack owns the frontdoor network; make sure it exists so a missing one can't
+# stop cz-nginx starting. The subnet is fixed: cz-nginx trusts forwarded
+# client addresses only from it.
+if [ -f compose.alpha.yaml ] && ! docker network inspect frontdoor > /dev/null 2>&1; then
+    docker network create --subnet 172.30.0.0/24 frontdoor > /dev/null
 fi
 
 # Persist the tag so later compose invocations keep serving it.
@@ -35,6 +37,20 @@ docker compose "${FILES[@]}" pull
 docker compose "${FILES[@]}" run --rm app php artisan migrate --force
 
 docker compose "${FILES[@]}" up -d --remove-orphans
+
+# Hand the front door our blocks for the public names. Its guard loads them
+# only if nginx accepts them, and keeps the last good ones otherwise.
+if [ -f compose.alpha.yaml ]; then
+    public=$(grep '^CZ_PUBLIC_SERVER_NAME=' .env | cut -d= -f2-)
+    mkdir -p frontdoor
+    sed "s|\${CZ_PUBLIC_SERVER_NAME}|${public:?set CZ_PUBLIC_SERVER_NAME in .env}|g" \
+        docker/production/frontdoor/cryptozing.conf.template > frontdoor/cryptozing.conf.new
+    mv frontdoor/cryptozing.conf.new frontdoor/cryptozing.conf
+    if docker ps --format '{{.Names}}' | grep -qx frontdoor; then
+        docker exec frontdoor /docker-entrypoint.d/90-sites-guard.sh --strict cryptozing \
+            || echo "WARN: the front door turned our new blocks away; see docker logs frontdoor" >&2
+    fi
+fi
 
 # Recreating the scheduler mid-run strands its withoutOverlapping mutex (#188).
 docker compose "${FILES[@]}" exec -T app php artisan schedule:clear-cache \
