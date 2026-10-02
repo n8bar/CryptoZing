@@ -83,11 +83,18 @@ class Invoice extends Model
      */
     public function recalculateTotalFromLines(): void
     {
-        $lines = $this->lines()->get();
-        if ($lines->isEmpty()) {
+        $amounts = $this->lineAmounts();
+        if ($amounts->isEmpty()) {
             return;
         }
 
+        $this->forceFill(['amount_usd' => round($amounts->sum(), 2)])->save();
+    }
+
+    /** Each line's USD amount keyed by line id, percentage lines resolved. */
+    public function lineAmounts(): \Illuminate\Support\Collection
+    {
+        $lines = $this->lines()->get();
         $amounts = collect();
         foreach ($lines->where('is_percentage', false) as $line) {
             $amounts[$line->id] = $line->amountUsd($amounts);
@@ -96,7 +103,7 @@ class Invoice extends Model
             $amounts[$line->id] = $line->amountUsd($amounts);
         }
 
-        $this->forceFill(['amount_usd' => round($amounts->sum(), 2)])->save();
+        return $amounts;
     }
 
     public function paymentHistory(): Collection

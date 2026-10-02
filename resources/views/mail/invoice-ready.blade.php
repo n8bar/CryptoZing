@@ -5,6 +5,8 @@ Hi {{ $client->name ?? 'there' }},
 
 Your invoice for **${{ number_format($invoice->amount_usd, 2) }}** is ready. Follow the link below to review the live share view with QR code and payment instructions.
 
+@include('mail.partials.lines', ['invoice' => $invoice])
+
 @if (!empty($delivery->message))
 > {{ $delivery->message }}
 @endif

@@ -3,7 +3,12 @@
 namespace Tests\Feature;
 
 use App\Models\InvoiceLine;
+use App\Mail\InvoiceIssuerPaidNoticeMail;
+use App\Mail\InvoicePaidReceiptMail;
+use App\Mail\InvoiceReadyMail;
+use App\Models\InvoiceDelivery;
 use App\Services\BackfillInvoiceLines;
+use App\Services\InvoiceLines;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 use Tests\Traits\CreatesTestInvoices;
@@ -93,5 +98,33 @@ class InvoiceLineItemsTest extends TestCase
         $invoice->lines()->delete();
 
         return $invoice->fresh();
+    }
+
+    public function test_lines_show_on_every_invoice_surface(): void
+    {
+        $invoice = $this->makeInvoice();
+        InvoiceLines::replaceFor($invoice, [
+            ['description' => 'Gutter cleaning', 'quantity' => 2, 'rate_usd' => 75],
+            ['description' => 'Roof patch', 'quantity' => 1, 'rate_usd' => 120.5],
+            ['description' => 'Sales tax', 'quantity' => 1, 'rate_usd' => 8, 'is_percentage' => 1, 'applies_to' => [1]],
+        ]);
+        $invoice = $invoice->fresh();
+        $invoice->enablePublicShare();
+        $delivery = InvoiceDelivery::create([
+            'invoice_id' => $invoice->id, 'user_id' => $invoice->user_id, 'type' => 'send',
+            'status' => 'queued', 'recipient' => 'billing@example.com', 'dispatched_at' => now(),
+        ]);
+        $expected = ['Gutter cleaning', '150.00', 'Roof patch', '120.50', 'Sales tax', '8%', '9.64', '280.14'];
+
+        $this->actingAs($invoice->user)->get(route('invoices.show', $invoice))->assertOk()->assertSeeInOrder($expected);
+        $this->actingAs($invoice->user)->get(route('invoices.print', $invoice))->assertOk()->assertSeeInOrder($expected);
+        $this->get(route('invoices.public-print', ['token' => $invoice->fresh()->public_token]))->assertOk()->assertSeeInOrder($expected);
+
+        foreach ([InvoiceReadyMail::class, InvoicePaidReceiptMail::class, InvoiceIssuerPaidNoticeMail::class] as $mail) {
+            $html = (new $mail($invoice->fresh(), $delivery))->render();
+            foreach (['Gutter cleaning', 'Roof patch', 'Sales tax', '280.14'] as $needle) {
+                $this->assertStringContainsString($needle, $html, "{$mail} lacks {$needle}");
+            }
+        }
     }
 }

@@ -63,6 +63,11 @@
 </section>
 
 <section class="box section-gap">
+    <h3 style="margin:0 0 8px; font-size: 18.67px;">Lines</h3>
+    @include('invoices.partials.lines-table', ['invoice' => $invoice])
+</section>
+
+<section class="box section-gap">
     <h3 style="margin:0 0 8px; font-size: 18.67px;">Amounts</h3>
     <table>
         <tr><th>USD</th><td class="total">${{ number_format($invoice->amount_usd, 2) }}</td></tr>
