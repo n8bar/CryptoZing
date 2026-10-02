@@ -17,8 +17,8 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 ## Current
 - Active milestone:
   - **MS22 - Invoice Line Items and Developer API** — starts 2026-09-28; line items first, then a polling-based API for developers. Content-publish gate waived by n8 on the custody article shipped the weekend M21 closed.
-- Status: `M22 and M23 are drafted with the agreed sequence and dates; detailed scope awaits review. No phase is active.`
-- Next action: Review [`docs/milestones/22_LINE_ITEMS_DEVELOPER_API.md`](milestones/22_LINE_ITEMS_DEVELOPER_API.md) and [`docs/milestones/23_OPEN_BETA_PRODUCT_GROWTH.md`](milestones/23_OPEN_BETA_PRODUCT_GROWTH.md); after M22 approval, draft the line-item spec and M22.1 strategy.
+- Status: `M22 approved; Phase 1 active. M23 drafted, scope awaits review.`
+- Next action: Draft the line-item spec and M22.1 strategy under [`docs/milestones/22_LINE_ITEMS_DEVELOPER_API.md`](milestones/22_LINE_ITEMS_DEVELOPER_API.md).
 - Most recently completed milestone doc: [`docs/milestones/x21_OB_DEPLOYMENT.md`](milestones/x21_OB_DEPLOYMENT.md)
 
 ## Published Release Target

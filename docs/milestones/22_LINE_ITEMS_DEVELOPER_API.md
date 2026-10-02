@@ -1,7 +1,6 @@
 # MS22 — Invoice Line Items and Developer API
 
-Status: Draft for review; milestone direction agreed, detailed feature requirements and phases not approved for implementation.
-Drafted: 2026-09-28.
+Status: Approved; Phase 1 active.
 Parent: [PLAN.md](../PLAN.md)
 
 ## Outcome
@@ -16,8 +15,8 @@ An issuer can build a USD invoice from line items in the app. A developer can cr
 
 ## Current Focus
 
-- Active phase: **None — this draft awaits review.**
-- Next action after approval: write and approve the line-item feature spec, then the M22.1 implementation strategy.
+- Active phase: **Phase 1 — Itemized invoice foundation.**
+- Next action: write and approve the line-item feature spec, then the M22.1 strategy.
 
 ## Phase Rollup
 
