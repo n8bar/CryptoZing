@@ -25,6 +25,17 @@ class InvoiceLines
         ];
     }
 
+    /** Field names for validation messages, so an error reads "rate (USD)" rather than "lines.0.rate_usd". */
+    public static function attributes(): array
+    {
+        return [
+            'lines.*.description' => 'description',
+            'lines.*.quantity'    => 'quantity',
+            'lines.*.rate_usd'    => 'rate (USD)',
+            'lines.*.applies_to'  => 'applies to',
+        ];
+    }
+
     /** Each percentage line must pick at least one other submitted line. */
     public static function validateTargets(Validator $validator): void
     {

@@ -69,9 +69,9 @@
                 Percentage of other lines
             </label>
             <span class="ml-auto inline-flex gap-1">
-                <button type="button" data-action="up" class="rounded border border-gray-300 px-2 py-1 text-xs hover:bg-gray-50" aria-label="Move line up">↑</button>
-                <button type="button" data-action="down" class="rounded border border-gray-300 px-2 py-1 text-xs hover:bg-gray-50" aria-label="Move line down">↓</button>
-                <button type="button" data-action="remove" class="rounded border border-gray-300 px-2 py-1 text-xs text-red-700 hover:bg-red-50">Remove</button>
+                <button type="button" data-action="up" class="h-10 min-w-10 rounded border border-gray-300 px-3 text-xs hover:bg-gray-50" aria-label="Move line up">↑</button>
+                <button type="button" data-action="down" class="h-10 min-w-10 rounded border border-gray-300 px-3 text-xs hover:bg-gray-50" aria-label="Move line down">↓</button>
+                <button type="button" data-action="remove" class="h-10 min-w-10 rounded border border-gray-300 px-3 text-xs text-red-700 hover:bg-red-50">Remove</button>
             </span>
         </div>
         <fieldset class="mt-2 hidden" data-targets>
@@ -186,12 +186,17 @@
             document.getElementById(`line_${Math.min(i, lines.length - 1)}_description`)?.focus();
         } else if (btn.dataset.action === 'up' && i > 0) {
             [lines[i - 1], lines[i]] = [lines[i], lines[i - 1]]; remap(i, i - 1); render();
-            rowsEl.children[i - 1].querySelector('[data-action="up"]').focus();
+            focusMover(rowsEl.children[i - 1], 'up');
         } else if (btn.dataset.action === 'down' && i < lines.length - 1) {
             [lines[i + 1], lines[i]] = [lines[i], lines[i + 1]]; remap(i, i + 1); render();
-            rowsEl.children[i + 1].querySelector('[data-action="down"]').focus();
+            focusMover(rowsEl.children[i + 1], 'down');
         }
     });
+    // Keep focus on the row just moved; fall back when the preferred arrow is disabled at the edge.
+    const focusMover = (row, pref) => {
+        const b = row.querySelector(`[data-action="${pref}"]`);
+        (b.disabled ? row.querySelector(`[data-action="${pref === 'up' ? 'down' : 'up'}"]`) : b).focus();
+    };
     document.getElementById('addLine').addEventListener('click', () => {
         lines.push({ description: '', quantity: 1, rate_usd: '', is_percentage: false, applies_to: [] });
         errors = {};
@@ -200,5 +205,7 @@
     });
 
     render();
+    // The page's BTC recalc listens later in the document; fire once more when it is wired.
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', updateTotals);
 })();
 </script>

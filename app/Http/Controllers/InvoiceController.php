@@ -88,7 +88,7 @@ class InvoiceController extends Controller
             'billing_address_override' => ['nullable','string','max:2000'],
             'invoice_footer_note_override' => ['nullable','string','max:1000'],
             'branding_heading_override' => ['nullable','string','max:255'],
-        ] + InvoiceLines::rules())->after(fn ($v) => InvoiceLines::validateTargets($v))->validate();
+        ] + InvoiceLines::rules(), [], InvoiceLines::attributes())->after(fn ($v) => InvoiceLines::validateTargets($v))->validate();
 
         $lines = $data['lines'];
         unset($data['lines']);
@@ -287,7 +287,7 @@ class InvoiceController extends Controller
             'billing_address_override' => ['nullable','string','max:2000'],
             'invoice_footer_note_override' => ['nullable','string','max:1000'],
             'branding_heading_override' => ['nullable','string','max:255'],
-        ] + InvoiceLines::rules())->after(fn ($v) => InvoiceLines::validateTargets($v))->validate();
+        ] + InvoiceLines::rules(), [], InvoiceLines::attributes())->after(fn ($v) => InvoiceLines::validateTargets($v))->validate();
 
         $lines = $data['lines'];
         unset($data['lines']);

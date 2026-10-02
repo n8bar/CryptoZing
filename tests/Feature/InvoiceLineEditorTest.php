@@ -88,6 +88,15 @@ class InvoiceLineEditorTest extends TestCase
             ->assertSessionHasErrors(['lines']);
     }
 
+    public function test_line_errors_name_the_field_not_its_key(): void
+    {
+        [$owner, $client] = $this->ownerWithWallet();
+
+        $this->actingAs($owner)->from(route('invoices.create'))->post(route('invoices.store'), $this->payload($client, [
+            ['description' => 'Design', 'quantity' => 2, 'rate_usd' => ''],
+        ]))->assertSessionHasErrors(['lines.0.rate_usd' => 'The rate (USD) field is required.']);
+    }
+
     public function test_store_rejects_a_percentage_line_that_picks_nothing_or_itself(): void
     {
         [$owner, $client] = $this->ownerWithWallet();
