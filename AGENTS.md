@@ -31,6 +31,11 @@
 - Doc-only changes may be committed directly to `main` — no branch or PR required. "Doc-only" is the same carve-out as the PR gate: Markdown anywhere + `docs/**`, including `milestones.ics`. Anything touching code still goes through a `codex/<task>` (Claude: `claude/<task>`) branch + PR. Direct `.ics` commits bypass the PR entirely, so run milestone-date checks locally after any such change.
 - Small copy-only view tweaks don't need a PR — commit straight to `main` or let them ride another PR.
 
+## Do It List
+- The [CryptoZing Initiative](https://doitlist.dev.n8bar.online/initiatives/23e5731e-590e-4502-9f86-eadfabcfcfa1) is the to-do list. The docs copy it. Rules: [`docs/DOC_ROLES.md`](docs/DOC_ROLES.md#do-it-list-mirror).
+- Use the skill's CLI, not the MCP server: `python3 .claude/skills/doitlist/scripts/doitlist.py <verb>`. Source `~/.config/doitlist/cli.env` and `~/.config/doitlist/mcp.env` first.
+- The skill is a copy of `/opt/DoItList/skills/doitlist/`. Re-copy it; don't edit it here.
+
 ## Multi-Agent Coordination
 - Primary and secondary agents are role-based, not capability-limited: secondaries can work docs, code, tests, or modules within their stated task.
 - Use subagents when the work can be split into independent, path-scoped tasks that materially reduce cycle time, especially for parallel code/doc/test updates or targeted read-only investigation.

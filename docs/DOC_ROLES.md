@@ -4,7 +4,7 @@ Canonical reference for what each tracked doc is for, and the rules about how th
 
 ## Canonical docs (top-level scope authority)
 
-- [`docs/PLAN.md`](PLAN.md) — open-beta milestone order, status, current focus, and the primary next doc.
+- [`docs/PLAN.md`](PLAN.md) — open-beta milestone order, status, current focus, and the primary next doc. Copies the [Do It List](#do-it-list-mirror).
 - [`docs/PRODUCT_SPEC.md`](PRODUCT_SPEC.md) — global product behavior and invariants.
 - [`docs/BACKLOG.md`](BACKLOG.md) — post-MVP and deferred work only.
 - [`docs/UX_GUARDRAILS.md`](UX_GUARDRAILS.md) — global UX, accessibility, and interaction rules.
@@ -47,6 +47,17 @@ Keep these in sync with every merge or scope change.
 - Higher-level docs roll up lower-level completion with a single checkoff instead of duplicating items.
 - For any active workstream, keep one obvious checklist owner. If a milestone doc and a strategy doc both exist, the milestone doc summarizes status/objectives while the strategy doc owns the detailed ordered checklist (unless docs explicitly say otherwise).
 - Any doc with numbered tasks/milestones/todos is assumed to be done in order unless that doc explicitly says otherwise — flag intentional deviations.
+
+## Do It List mirror
+
+1. The [CryptoZing Initiative](https://doitlist.dev.n8bar.online/initiatives/23e5731e-590e-4502-9f86-eadfabcfcfa1) is the to-do list. `PLAN.md`, milestone docs, and strategy docs copy it.
+2. Change the Initiative first, then the doc, in the same session. Read the docs freely; check the Initiative before changing it.
+3. Shape: milestone, then phase, then action group, then item. Exit Criteria sit under their milestone or phase.
+4. Each checklist line ends with its Task's `%<number>`. Old stamps from before 2026-09-29 are Task ids: read `%<412>` as `%<i412>`.
+5. Finish an item with `done %<number> --mirror <doc> --section "<heading>"`. Tick headings by hand.
+6. Add or rename an item in the Initiative, then make the doc match word for word.
+7. Keep items under 200 characters. Put extra notes on an indented line below; it becomes the description.
+8. Write notes inside a checklist as plain text, not bullets. Bullets become Tasks.
 
 ## Reference notation
 
