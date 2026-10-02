@@ -25,8 +25,10 @@ services:
       - /etc/letsencrypt:/etc/letsencrypt:ro
       - ./certbot-webroot:/var/www/certbot:ro
       # Do It List shares this box and this proxy; its server block lives
-      # in its own folder, and its containers join doitlist_edge.
-      - /opt/doitlist/proxy/doitlist.conf:/etc/nginx/conf.d/doitlist.conf:ro
+      # in its own folder, and its containers join doitlist_edge. The guard
+      # loads that block only when nginx accepts it.
+      - /opt/doitlist/proxy:/etc/nginx/doitlist:ro
+      - ./docker/production/nginx/doitlist-guard.sh:/docker-entrypoint.d/90-doitlist-guard.sh:ro
     networks:
       - default
       - doitlist_edge
