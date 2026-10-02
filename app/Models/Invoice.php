@@ -74,6 +74,30 @@ class Invoice extends Model
     public function payments(): HasMany { return $this->hasMany(InvoicePayment::class, 'accounting_invoice_id'); }
     public function sourcePayments(): HasMany { return $this->hasMany(InvoicePayment::class, 'invoice_id'); }
     public function deliveries(): HasMany { return $this->hasMany(InvoiceDelivery::class); }
+    public function lines(): HasMany      { return $this->hasMany(InvoiceLine::class)->orderBy('position'); }
+
+    /**
+     * Set amount_usd to the sum of the lines, rounded to cents. Percentage
+     * lines apply to the amounts of the lines they pick. Invoices without
+     * lines keep their amount.
+     */
+    public function recalculateTotalFromLines(): void
+    {
+        $lines = $this->lines()->get();
+        if ($lines->isEmpty()) {
+            return;
+        }
+
+        $amounts = collect();
+        foreach ($lines->where('is_percentage', false) as $line) {
+            $amounts[$line->id] = $line->amountUsd($amounts);
+        }
+        foreach ($lines->where('is_percentage', true) as $line) {
+            $amounts[$line->id] = $line->amountUsd($amounts);
+        }
+
+        $this->forceFill(['amount_usd' => round($amounts->sum(), 2)])->save();
+    }
 
     public function paymentHistory(): Collection
     {
