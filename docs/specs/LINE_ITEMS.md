@@ -39,7 +39,8 @@ Parent: [MS22](../milestones/22_LINE_ITEMS_DEVELOPER_API.md), Phase 1.
 
 ## 6. Existing invoices
 
-_Decision: how does an invoice made before line items read afterward?_
+1. An invoice made before line items becomes one line: its description, quantity 1, and a rate equal to its amount.
+2. Its total, status, payments, and public link do not change.
 
 ## 7. In-person settlement
 
