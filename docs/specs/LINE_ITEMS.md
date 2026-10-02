@@ -20,7 +20,8 @@ Parent: [MS22](../milestones/22_LINE_ITEMS_DEVELOPER_API.md), Phase 1.
 
 1. Lines alone make the total. There is no separate discount or tax field.
 2. A discount is a line with a negative amount.
-3. A line can be a percentage of the lines above it. That covers tax and percent discounts.
+3. A line can be a percentage of other lines the issuer picks. That covers tax and percent discounts, each applied only to the lines it should.
+4. A percentage line can include another percentage line, so tax can apply after a discount. A line cannot include itself, directly or through another line.
 
 ## 4. Total and settlement
 
