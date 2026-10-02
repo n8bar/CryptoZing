@@ -15,6 +15,14 @@ src=/etc/nginx/doitlist/doitlist.conf
 live=/etc/nginx/conf.d/doitlist.conf
 prev=/tmp/doitlist.conf.prev
 
+# At start, stderr is already the container log. Under docker exec it is only
+# the caller's console, so --strict also writes to the container log.
+log() {
+    echo "doitlist-guard: $*" >&2
+    [ "$status" = 1 ] && echo "doitlist-guard: $*" > /proc/1/fd/2 2>/dev/null
+    return 0
+}
+
 rm -f "$prev"
 [ -f "$live" ] && cp "$live" "$prev"
 
@@ -24,15 +32,16 @@ else
     rm -f "$live"
 fi
 
-if nginx -t -q 2>/dev/null; then
+if err=$(nginx -t -q 2>&1); then
     exit 0
 fi
 
-echo "doitlist-guard: Do It List's server block failed nginx -t; keeping the last good one" >&2
+log "Do It List's server block failed nginx -t; keeping the last good one"
+log "$err"
 if [ -f "$prev" ]; then
     cp "$prev" "$live"
     nginx -t -q 2>/dev/null && exit "$status"
 fi
 rm -f "$live"
-echo "doitlist-guard: serving without Do It List" >&2
+log "serving without Do It List"
 exit "$status"
