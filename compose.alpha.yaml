@@ -24,6 +24,12 @@ services:
       - app-public:/var/www/html/public:ro
       - /etc/letsencrypt:/etc/letsencrypt:ro
       - ./certbot-webroot:/var/www/certbot:ro
+      # Do It List shares this box and this proxy; its server block lives
+      # in its own folder, and its containers join doitlist_edge.
+      - /opt/doitlist/proxy/doitlist.conf:/etc/nginx/conf.d/doitlist.conf:ro
+    networks:
+      - default
+      - doitlist_edge
     depends_on:
       - app
       - site
@@ -89,3 +95,7 @@ services:
 
 volumes:
   umami-db:
+
+networks:
+  doitlist_edge:
+    external: true
