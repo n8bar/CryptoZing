@@ -6,7 +6,7 @@
 #
 # Host .env additions the overlay reads (M21.1 §1.2/§1.3):
 #   CZ_SITE_TAG            content-repo commit sha to serve (required; no latest)
-#   CZ_NGINX_TEMPLATES     templates-alpha (default) | templates-transition | templates-apex
+#   CZ_NGINX_TEMPLATES     templates-frontdoor (default); the others predate the front door
 #   CZ_PUBLIC_SERVER_NAME  the public apex; also names the stats host and the certificate lineage
 #   CZ_LEGACY_SERVER_NAME  the retiring private hostname (transition template only)
 #   UMAMI_DB_PASSWORD, UMAMI_APP_SECRET, UMAMI_2FA_KEY
@@ -19,19 +19,17 @@ services:
     environment:
       CZ_PUBLIC_SERVER_NAME: ${CZ_PUBLIC_SERVER_NAME:-}
       CZ_LEGACY_SERVER_NAME: ${CZ_LEGACY_SERVER_NAME:-}
-    volumes:
-      - ./docker/production/nginx/${CZ_NGINX_TEMPLATES:-templates-alpha}:/etc/nginx/templates:ro
+    # The shared front door holds ports 80/443, TLS, and the ACME webroot
+    # (its own stack, not this repo's); cz-nginx serves only behind it, over
+    # the frontdoor network. !reset and !override drop what compose.production.yaml gives
+    # a standalone web container.
+    ports: !reset []
+    volumes: !override
+      - ./docker/production/nginx/${CZ_NGINX_TEMPLATES:-templates-frontdoor}:/etc/nginx/templates:ro
       - app-public:/var/www/html/public:ro
-      - /etc/letsencrypt:/etc/letsencrypt:ro
-      - ./certbot-webroot:/var/www/certbot:ro
-      # Do It List shares this box and this proxy; its server block lives
-      # in its own folder, and its containers join doitlist_edge. The guard
-      # loads that block only when nginx accepts it.
-      - /opt/doitlist/proxy:/etc/nginx/doitlist:ro
-      - ./docker/production/nginx/doitlist-guard.sh:/docker-entrypoint.d/90-doitlist-guard.sh:ro
     networks:
       - default
-      - doitlist_edge
+      - frontdoor
     depends_on:
       - app
       - site
@@ -99,5 +97,5 @@ volumes:
   umami-db:
 
 networks:
-  doitlist_edge:
+  frontdoor:
     external: true
