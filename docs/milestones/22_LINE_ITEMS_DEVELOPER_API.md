@@ -16,7 +16,7 @@ An issuer can build a USD invoice from line items in the app. A developer can cr
 ## Current Focus
 
 - Active phase: **Phase 1 — Itemized invoice foundation.**
-- Next action: write and approve the line-item feature spec, then the M22.1 strategy.
+- Strategy: [M22.1](../strategies/22.1_ITEMIZED_INVOICES.md).
 
 ## Phase Rollup
 
