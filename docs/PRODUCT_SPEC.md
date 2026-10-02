@@ -57,7 +57,7 @@ Issuers create invoices in USD, derive a unique Bitcoin receive address per invo
 - Denied or missing-resource states must avoid leaking issuer data and should preserve a clear, friendly recovery path.
 
 ### Currency and invoice model
-- `amount_usd` is canonical for invoice settlement.
+- `amount_usd` is canonical for invoice settlement. It is the sum of the invoice's lines per [`docs/specs/LINE_ITEMS.md`](specs/LINE_ITEMS.md).
 - BTC values are derived display and payment-request values, not the source of truth for settlement.
 - New invoices start as `draft`.
 - The active invoice lifecycle is `draft`, `sent`, `pending`, `partial`, `paid`, `void`.
@@ -105,6 +105,7 @@ Issuers create invoices in USD, derive a unique Bitcoin receive address per invo
 
 ## Canonical Spec Map
 - Rates and BTC/USD behavior: [`docs/specs/RATES.md`](specs/RATES.md)
+- Invoice line items and totals: [`docs/specs/LINE_ITEMS.md`](specs/LINE_ITEMS.md)
 - Partial payments, confirmations, adjustments, and outstanding summaries: [`docs/specs/PARTIAL_PAYMENTS+CONFIRMATIONS.md`](specs/PARTIAL_PAYMENTS+CONFIRMATIONS.md)
 - Payment correction / ignore-restore behavior: [`docs/specs/PAYMENT_CORRECTIONS.md`](specs/PAYMENT_CORRECTIONS.md)
 - Outbound invoice communication, receipts, and alerts: [`docs/specs/NOTIFICATIONS.md`](specs/NOTIFICATIONS.md)
