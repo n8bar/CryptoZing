@@ -150,21 +150,21 @@
             <div class="grid gap-4"
                  style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));">
                 <div class="bg-white shadow-sm sm:rounded-lg p-2 border border-gray-100">
-                    <div class="flex items-center justify-between">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
                         <div>
                             <p class="text-sm text-gray-500">Outstanding (USD)</p>
                             <div class="text-3xl font-bold text-gray-900">${{ number_format($totals['outstanding_usd'] ?? 0, 2) }}</div>
                         </div>
                         <div class="flex items-center gap-2">
                             <span aria-hidden="true" class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-indigo-50 text-indigo-700">💰</span>
-                            <span class="text-xs font-semibold text-gray-900">Open total</span>
+                            <span class="whitespace-nowrap text-xs font-semibold text-gray-900">Open total</span>
                         </div>
                     </div>
                     <p class="mt-2 text-sm text-gray-500">BTC: {{ ($totals['outstanding_btc'] ?? 0) > 0 ? ($totals['outstanding_btc'] ?? 0) . ' BTC' : '—' }}</p>
                 </div>
 
                 <div class="bg-white shadow-sm sm:rounded-lg p-2 border border-gray-100">
-                    <div class="flex items-center justify-between">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
                         <div>
                             <p class="text-sm text-gray-500">Open invoices</p>
                             <div class="text-3xl font-bold text-gray-900">{{ $counts['open'] ?? 0 }}</div>
@@ -191,7 +191,7 @@
                 </div>
 
                 <div class="bg-white shadow-sm sm:rounded-lg p-2 border border-gray-100">
-                    <div class="flex items-center justify-between">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
                         <div>
                             <p class="text-sm text-gray-500">Past due</p>
                             <div class="text-3xl font-bold text-gray-900">{{ $counts['past_due'] ?? 0 }}</div>
@@ -208,7 +208,7 @@
                 </div>
 
                 <div class="bg-white shadow-sm sm:rounded-lg p-2 border border-gray-100">
-                    <div class="flex items-center justify-between">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
                         <div>
                             <p class="text-sm text-gray-500">Upcoming (7 days)</p>
                             <div class="text-3xl font-bold text-gray-900">{{ $counts['upcoming_due'] ?? 0 }}</div>
@@ -223,7 +223,7 @@
                 </div>
 
                 <div class="bg-white shadow-sm sm:rounded-lg p-2 border border-gray-100">
-                    <div class="flex items-center justify-between">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
                         <div>
                             <p class="text-sm text-gray-500">Payments (last 7 days)</p>
                             <div class="text-3xl font-bold text-gray-900">${{ number_format($totals['payments_last_7d_usd'] ?? 0, 2) }}</div>
