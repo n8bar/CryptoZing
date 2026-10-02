@@ -1,6 +1,6 @@
 # Invoice Line Items
 
-Status: Draft skeleton for structural review.
+Status: Draft for review.
 Parent: [MS22](../milestones/22_LINE_ITEMS_DEVELOPER_API.md), Phase 1.
 
 ## 1. Goals
@@ -44,7 +44,8 @@ Parent: [MS22](../milestones/22_LINE_ITEMS_DEVELOPER_API.md), Phase 1.
 
 ## 7. In-person settlement
 
-_Decision: does recording a manual payment change with line items, or stay a whole-invoice amount?_
+1. Recording a manual payment stays as [MANUAL_PAYMENTS.md](MANUAL_PAYMENTS.md) describes: one USD amount against the whole invoice.
+2. Lines never carry their own paid state.
 
 ## 8. Out of scope
 
