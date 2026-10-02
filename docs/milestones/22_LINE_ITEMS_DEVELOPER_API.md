@@ -10,13 +10,9 @@ An issuer can create an itemized, USD-denominated invoice through the app. A dev
 
 ## Scope Boundary
 
-- Preserve the watch-only wallet model, dedicated invoice addresses, USD-canonical totals, and existing payment-attribution caveats in [PRODUCT_SPEC.md](../PRODUCT_SPEC.md).
-- Phase 1 delivers line items across create/edit, issuer, public, print, and mail surfaces. Multiple description, quantity, and USD rate rows determine the total; the approved line-item spec must settle tax, discount, subtotal, migration, and manual/in-person settlement behavior before code work.
-- The API serves developers building their own consumer. It supplies authenticated invoice creation, optional queued email delivery, an invoice/public link response, and a read endpoint with payment and delivery state. A client may poll the read endpoint until payment reaches its required state.
-- The API must support safe creation retries, owner isolation, credential revocation, bounded request rates, stable documented errors, and explicit distinction between queued mail, provider delivery, detected payment, and confirmed settlement. Exact contracts belong in an approved feature spec.
-- Do not imply that a detected unconfirmed payment is safe to fulfill. The consumer decides fulfillment policy from the documented confirmed state and handles partial, late, overpaid, corrected, or uncertain payment states.
-- Outbound payment-event webhooks are a candidate for [M23](23_OPEN_BETA_PRODUCT_GROWTH.md). They are not required for the first API release. No payment custody, Lightning, conversion, refund automation, or hosted storefront is promised here.
-- Approve canonical feature requirements before implementation. This draft sets the milestone boundary, not the final API schema or behavior spec.
+- Keep the watch-only wallet, dedicated invoice addresses, USD-canonical totals, and the payment-attribution caveats in [PRODUCT_SPEC.md](../PRODUCT_SPEC.md).
+- Approve each feature spec before code. This draft sets the boundary, not the design.
+- Out of scope: payment-event webhooks (an [M23](23_OPEN_BETA_PRODUCT_GROWTH.md) candidate), custody, Lightning, conversion, refund automation, and a hosted storefront.
 
 ## Current Focus
 
@@ -27,15 +23,15 @@ An issuer can create an itemized, USD-denominated invoice through the app. A dev
 
 ### [ ] Phase 1 — Itemized invoice foundation %<2963>
 
-Approve the line-item spec, implement the data and total model plus all affected invoice surfaces, and verify migration, payment presentation, mail, accessibility, and regression behavior on dev.
+Approve the line-item spec, then build the data and total model and every invoice surface: create/edit, issuer view, public page, print, and mail. Each row is a description, quantity, and USD rate; rows sum to the total. The spec settles tax, discount, subtotal, migration of existing invoices, and manual/in-person settlement before code starts. Verify migration, payment presentation, mail, accessibility, and regression on dev.
 
 ### [ ] Phase 2 — Developer API contract and access %<2964>
 
-Approve the API feature spec: credential lifecycle and scopes, request/response contract, idempotency, ownership, error and rate-limit behavior, status semantics, and polling guidance. Implement and verify the access boundary and contract.
+Approve the API spec, then build and verify the access boundary and contract. The API serves developers building their own consumer. The spec covers credential lifecycle and scopes, request/response shapes, safe retries, owner isolation, revocation, rate limits, stable documented errors, status meanings, and polling guidance. Status must tell apart queued mail, delivered mail, detected payment, and confirmed settlement. A detected but unconfirmed payment is not safe to fulfill; the consumer decides from the confirmed state and handles partial, late, overpaid, corrected, or uncertain payments.
 
 ### [ ] Phase 3 — Create, send, read, and integration verification %<2965>
 
-Implement the documented endpoints using the same invoice and delivery rules as the app. Verify safe retries, queued-send outcomes, payment-state reads, an external order polling scenario, documentation examples, and the full Sail and applicable browser/UX suite.
+Build the documented endpoints on the same invoice and delivery rules as the app: create an invoice, optionally queue its email, return its public link, and read its payment and delivery state. A consumer polls the read endpoint until payment reaches the state it needs. Verify safe retries, queued-send outcomes, payment-state reads, an external-order polling scenario, documentation examples, and the full Sail and applicable browser/UX suite.
 
 ### [ ] Phase 4 — Controlled release and live validation %<2966>
 
