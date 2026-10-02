@@ -6,7 +6,7 @@ Parent: [PLAN.md](../PLAN.md)
 
 ## Outcome
 
-An issuer can create an itemized, USD-denominated invoice through the app. A developer can then use an owner-scoped API to create and optionally send those invoices, obtain their public payment links, and read current payment state for an external order. The first API release uses polling: the external system periodically requests invoice status. It does not require a CryptoZing payment-event webhook consumer.
+An issuer can build a USD invoice from line items in the app. A developer can create and send those invoices through an API, get each one's public payment link, and poll its payment state. This release needs no webhooks.
 
 ## Scope Boundary
 
