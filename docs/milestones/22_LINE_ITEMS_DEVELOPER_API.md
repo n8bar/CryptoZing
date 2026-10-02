@@ -23,19 +23,19 @@ An issuer can build a USD invoice from line items in the app. A developer can cr
 
 ### [ ] Phase 1 — Itemized invoice foundation %<2963>
 
-Approve the line-item spec, then build the data and total model and every invoice surface: create/edit, issuer view, public page, print, and mail. Each row is a description, quantity, and USD rate; rows sum to the total. The spec settles tax, discount, subtotal, migration of existing invoices, and manual/in-person settlement before code starts. Verify migration, payment presentation, mail, accessibility, and regression on dev.
+Approve the line-item spec, then build it. A line is a description, a quantity, and a USD rate. Lines add up to the total. The spec settles tax, discounts, subtotals, old invoices, and in-person payment first. Line items show everywhere an invoice does: edit, issuer view, public page, print, and mail. Check it all on dev.
 
 ### [ ] Phase 2 — Developer API contract and access %<2964>
 
-Approve the API spec, then build and verify the access boundary and contract. The API serves developers building their own consumer. The spec covers credential lifecycle and scopes, request/response shapes, safe retries, owner isolation, revocation, rate limits, stable documented errors, status meanings, and polling guidance. Status must tell apart queued mail, delivered mail, detected payment, and confirmed settlement. A detected but unconfirmed payment is not safe to fulfill; the consumer decides from the confirmed state and handles partial, late, overpaid, corrected, or uncertain payments.
+Approve the API spec, then build the keys and the contract. A key belongs to one issuer, can be revoked, and is rate limited. Retrying a request never makes a second invoice. Errors are documented and stable. Status tells apart mail queued, mail delivered, payment seen, and payment confirmed. Only confirmed is safe to fulfill; the developer handles partial, late, overpaid, corrected, or unclear payments.
 
 ### [ ] Phase 3 — Create, send, read, and integration verification %<2965>
 
-Build the documented endpoints on the same invoice and delivery rules as the app: create an invoice, optionally queue its email, return its public link, and read its payment and delivery state. A consumer polls the read endpoint until payment reaches the state it needs. Verify safe retries, queued-send outcomes, payment-state reads, an external-order polling scenario, documentation examples, and the full Sail and applicable browser/UX suite.
+Build the endpoints on the same rules as the app: create an invoice, send it by email if asked, return its public link, and read its mail and payment state. The developer polls that read until they get the state they need. Test retries, sending, reads, a full order-by-polling run, the doc examples, and the whole suite.
 
 ### [ ] Phase 4 — Controlled release and live validation %<2966>
 
-Record a dev verdict and migration/backout plan; obtain rollout approval; release and verify itemized invoices, API access, create/send/read behavior, service health, and the content-promises catalog on production.
+Record the dev verdict and a backout plan. Get the go for rollout. Release, then check line items, API keys, create/send/read, service health, and the content promises on prod.
 
 ## Exit Criteria
 
