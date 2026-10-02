@@ -18,7 +18,9 @@ Parent: [MS22](../milestones/22_LINE_ITEMS_DEVELOPER_API.md), Phase 1.
 
 ## 3. Subtotal, discounts, and tax
 
-_Decision: do lines alone make the total, or can an invoice also carry a discount and a tax line?_
+1. Lines alone make the total. There is no separate discount or tax field.
+2. A discount is a line with a negative amount.
+3. A line can be a percentage of the lines above it. That covers tax and percent discounts.
 
 ## 4. Total and settlement
 
