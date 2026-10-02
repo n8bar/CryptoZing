@@ -16,6 +16,12 @@ FILES=(-f compose.production.yaml)
 # Our deployment layers the site container in; self-hosters won't have it.
 [ -f compose.alpha.yaml ] && FILES+=(-f compose.alpha.yaml)
 
+# Do It List shares our front nginx over doitlist_edge. Neither stack owns the
+# network; make sure it exists so a missing one can't stop our proxy starting.
+if [ -f compose.alpha.yaml ] && ! docker network inspect doitlist_edge > /dev/null 2>&1; then
+    docker network create doitlist_edge > /dev/null
+fi
+
 # Persist the tag so later compose invocations keep serving it.
 if grep -q '^CZ_TAG=' .env; then
     sed -i "s|^CZ_TAG=.*|CZ_TAG=${TAG}|" .env
