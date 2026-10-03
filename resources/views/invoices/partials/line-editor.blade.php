@@ -56,14 +56,22 @@
                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"/>
                 <p class="mt-1 text-sm text-red-600" data-error="rate_usd"></p>
             </div>
-            <div class="sm:col-span-3 sm:text-right">
-                <span class="block text-xs font-medium text-gray-700">Line total</span>
-                <output class="mt-1 block py-2 text-sm font-semibold" data-line-total>0.00</output>
+            <div class="flex items-center justify-between sm:col-span-3 sm:block sm:text-right">
+                <div>
+                    <span class="block text-xs font-medium text-gray-700">Line total</span>
+                    <output class="mt-1 block py-2 text-sm font-semibold" data-line-total>0.00</output>
+                </div>
+                <span class="inline-flex gap-1 sm:hidden">
+                    <button type="button" data-action="up" class="h-10 min-w-10 rounded border border-gray-300 px-3 text-xs hover:bg-gray-50" aria-label="Move line up">↑</button>
+                    <button type="button" data-action="down" class="h-10 min-w-10 rounded border border-gray-300 px-3 text-xs hover:bg-gray-50" aria-label="Move line down">↓</button>
+                </span>
             </div>
         </div>
         <div class="mt-2 flex flex-wrap items-center gap-3 text-sm">
-            <button type="button" data-action="add" title="Add line" aria-label="Add line"
-                    class="inline-flex h-10 min-w-10 items-center justify-center rounded border border-green-300 px-3 text-2xl font-bold leading-none text-green-700 hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">+</button>
+            <button type="button" data-action="add"
+                    class="inline-flex h-10 items-center gap-2 rounded border border-green-300 px-3 text-sm font-semibold text-green-700 hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+                <span class="text-2xl font-bold leading-none" aria-hidden="true">+</span> Add line
+            </button>
             <label class="inline-flex items-center gap-2">
                 <input type="checkbox" data-kind="percentage" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"/>
                 Percentage
@@ -73,10 +81,12 @@
                 Subtotal
             </label>
             <span class="ml-auto inline-flex gap-1">
-                <button type="button" data-action="up" class="h-10 min-w-10 rounded border border-gray-300 px-3 text-xs hover:bg-gray-50" aria-label="Move line up">↑</button>
-                <button type="button" data-action="down" class="h-10 min-w-10 rounded border border-gray-300 px-3 text-xs hover:bg-gray-50" aria-label="Move line down">↓</button>
-                <button type="button" data-action="remove" title="Remove line" aria-label="Remove line"
-                        class="inline-flex h-10 min-w-10 items-center justify-center rounded border border-red-300 px-3 text-2xl font-bold leading-none text-red-700 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">&times;</button>
+                <button type="button" data-action="up" class="hidden h-10 min-w-10 rounded border border-gray-300 px-3 text-xs hover:bg-gray-50 sm:inline-flex sm:items-center sm:justify-center" aria-label="Move line up">↑</button>
+                <button type="button" data-action="down" class="hidden h-10 min-w-10 rounded border border-gray-300 px-3 text-xs hover:bg-gray-50 sm:inline-flex sm:items-center sm:justify-center" aria-label="Move line down">↓</button>
+                <button type="button" data-action="remove"
+                        class="inline-flex h-10 items-center gap-2 rounded border border-red-300 px-3 text-sm font-semibold text-red-700 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                    <span class="text-2xl font-bold leading-none" aria-hidden="true">&times;</span> Remove
+                </button>
             </span>
         </div>
         <fieldset class="mt-2 hidden" data-targets>
@@ -173,8 +183,8 @@
                 const el = row.querySelector(`[data-error="${f}"]`);
                 if (msg) el.textContent = msg; else el.remove();
             });
-            row.querySelector('[data-action="up"]').disabled = i === 0;
-            row.querySelector('[data-action="down"]').disabled = i === lines.length - 1;
+            row.querySelectorAll('[data-action="up"]').forEach(b => { b.disabled = i === 0; });
+            row.querySelectorAll('[data-action="down"]').forEach(b => { b.disabled = i === lines.length - 1; });
             row.querySelector('[data-action="remove"]').disabled = lines.length === 1;
             rowsEl.append(row);
         });
@@ -189,9 +199,10 @@
         lines[i].applies_to = kind === 'percentage' ? defaultTargets(i) : [];
     };
     // Keep focus on the row just moved; fall back when the preferred arrow is disabled at the edge.
+    const visible = (row, action) => [...row.querySelectorAll(`[data-action="${action}"]`)].find(b => b.offsetParent !== null);
     const focusMover = (row, pref) => {
-        const b = row.querySelector(`[data-action="${pref}"]`);
-        (b.disabled ? row.querySelector(`[data-action="${pref === 'up' ? 'down' : 'up'}"]`) : b).focus();
+        const b = visible(row, pref);
+        (b.disabled ? visible(row, pref === 'up' ? 'down' : 'up') : b)?.focus();
     };
 
     rowsEl.addEventListener('input', e => {
