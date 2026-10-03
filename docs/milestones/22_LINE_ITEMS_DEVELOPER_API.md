@@ -1,6 +1,6 @@
 # MS22 — Invoice Line Items and Developer API
 
-Status: Approved; Phase 1 active.
+Status: Approved; Phase 2 active.
 Parent: [PLAN.md](../PLAN.md)
 
 ## Outcome
@@ -15,14 +15,16 @@ An issuer can build a USD invoice from line items in the app. A developer can cr
 
 ## Current Focus
 
-- Active phase: **Phase 1 — Itemized invoice foundation.**
-- Strategy: [M22.1](../strategies/22.1_ITEMIZED_INVOICES.md).
+- Active phase: **Phase 2 — Developer API contract and access.**
+- Strategy: M22.2, to be drafted.
 
 ## Phase Rollup
 
-### [ ] Phase 1 — Itemized invoice foundation %<2963>
+### [x] Phase 1 — Itemized invoice foundation %<2963>
 
-Approve the line-item spec, then build it. A line is a description, a quantity, and a USD rate. Lines add up to the total. The spec settles tax, discounts, subtotals, old invoices, and in-person payment first. Line items show everywhere an invoice does: edit, issuer view, public page, print, and mail. Check it all on dev.
+Dev verdict: pass. Strategy: [x22.1](../strategies/x22.1_ITEMIZED_INVOICES.md).
+
+Approve the line-item spec, then build it. A line is a description, a quantity, and a USD rate. Lines add up to the total. The spec settles tax, discounts, subtotals, old invoices, and in-person payment first. Line items show everywhere an invoice does: edit, issuer view, public page, and print; mail carries the total. Check it all on dev.
 
 ### [ ] Phase 2 — Developer API contract and access %<2964>
 
@@ -36,7 +38,7 @@ Build the endpoints on the same rules as the app: create an invoice, send it by 
 
 Record the dev verdict and a backout plan. Get the go for rollout. Release, then check line items, API keys, create/send/read, service health, and the content promises on prod.
 
-## Exit Criteria
+### [ ] Exit Criteria
 
 - [ ] Approved line-item and API specs define the release behavior before code work starts. %<2968>
 - [ ] Itemized invoices preserve USD-canonical totals and behave consistently across app, public, print, mail, and payment surfaces. %<2969>

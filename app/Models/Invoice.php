@@ -74,6 +74,37 @@ class Invoice extends Model
     public function payments(): HasMany { return $this->hasMany(InvoicePayment::class, 'accounting_invoice_id'); }
     public function sourcePayments(): HasMany { return $this->hasMany(InvoicePayment::class, 'invoice_id'); }
     public function deliveries(): HasMany { return $this->hasMany(InvoiceDelivery::class); }
+    public function lines(): HasMany      { return $this->hasMany(InvoiceLine::class)->orderBy('position'); }
+
+    /**
+     * Set amount_usd to the sum of the lines, rounded to cents. Percentage
+     * lines apply to the amounts of the lines they pick. Invoices without
+     * lines keep their amount.
+     */
+    public function recalculateTotalFromLines(): void
+    {
+        $amounts = $this->lineAmounts();
+        if ($amounts->isEmpty()) {
+            return;
+        }
+
+        $counted = $this->lines()->where('kind', '!=', 'subtotal')->pluck('id');
+        $this->forceFill(['amount_usd' => round($amounts->only($counted->all())->sum(), 2)])->save();
+    }
+
+    /** Each line's USD amount keyed by line id, in order; subtotal and percentage lines resolved. */
+    public function lineAmounts(): \Illuminate\Support\Collection
+    {
+        $amounts = collect();
+        $running = 0.0;
+        foreach ($this->lines()->get() as $line) {
+            $amount = $line->amountUsd($amounts, $running);
+            $amounts[$line->id] = $amount;
+            $running = $line->kind === 'subtotal' ? 0.0 : $running + $amount;
+        }
+
+        return $amounts;
+    }
 
     public function paymentHistory(): Collection
     {
