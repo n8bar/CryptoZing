@@ -293,7 +293,7 @@
                 <tbody>
                     @foreach ($invoice->payments as $payment)
                         <tr>
-                            <td>{{ optional($payment->detected_at)->toDayDateTimeString() ?? '—' }}</td>
+                            <td>{{ $payment->detected_at?->format('D, Y-m-d H:i') ?? '—' }}</td>
                             <td class="mono"><span style="display:inline-block; max-width:16ch; word-break:break-all;">{{ $payment->txid ?: '—' }}</span></td>
                             <td class="mono" style="text-align:right; font-size:15px; line-height:1.05rem;">{{ number_format($payment->sats_received / \App\Models\Invoice::SATS_PER_BTC, 8, '.', '') }}</td>
                             <td style="text-align:right;">
