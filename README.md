@@ -221,6 +221,7 @@ docker/      Container setup
 - Partial payments audit & test plan: [`docs/qa/AUDIT_PARTIAL_PAYMENTS+CONFIRMATIONS.md`](docs/qa/AUDIT_PARTIAL_PAYMENTS+CONFIRMATIONS.md)
 - Donations spec: [`docs/specs/DONATIONS.md`](docs/specs/DONATIONS.md)
 - Line items spec: [`docs/specs/LINE_ITEMS.md`](docs/specs/LINE_ITEMS.md)
+- Developer API spec: [`docs/specs/DEVELOPER_API.md`](docs/specs/DEVELOPER_API.md)
 
 For coding conventions, workflow expectations, and environment reminders, see [`AGENTS.md`](AGENTS.md).
 
