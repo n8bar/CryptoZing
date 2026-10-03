@@ -68,12 +68,12 @@ class InvoiceLineEditorTest extends TestCase
         $this->actingAs($owner)->post(route('invoices.store'), $this->payload($client, [
             ['description' => 'Parts', 'quantity' => 1, 'rate_usd' => 100],
             ['description' => 'Labor', 'quantity' => 1, 'rate_usd' => 200],
-            ['description' => 'Tax', 'quantity' => 1, 'rate_usd' => 10, 'is_percentage' => 1, 'applies_to' => [0]],
+            ['description' => 'Tax', 'quantity' => 1, 'rate_usd' => 10, 'kind' => 'percentage', 'applies_to' => [0]],
         ]))->assertSessionHasNoErrors();
 
         $invoice = $owner->invoices()->latest('id')->first();
         $tax = $invoice->lines->last();
-        $this->assertTrue($tax->is_percentage);
+        $this->assertSame('percentage', $tax->kind);
         $this->assertSame([$invoice->lines->first()->id], $tax->applies_to);
         $this->assertSame('310.00', $invoice->amount_usd);
     }
@@ -97,17 +97,35 @@ class InvoiceLineEditorTest extends TestCase
         ]))->assertSessionHasErrors(['lines.0.rate_usd' => 'The rate (USD) field is required.']);
     }
 
-    public function test_store_rejects_a_percentage_line_that_picks_nothing_or_itself(): void
+    public function test_store_rejects_a_percentage_line_that_picks_nothing_itself_or_a_line_below(): void
     {
         [$owner, $client] = $this->ownerWithWallet();
 
         $this->actingAs($owner)->from(route('invoices.create'))
             ->post(route('invoices.store'), $this->payload($client, [
                 ['description' => 'Parts', 'quantity' => 1, 'rate_usd' => 100],
-                ['description' => 'Tax', 'quantity' => 1, 'rate_usd' => 10, 'is_percentage' => 1],
-                ['description' => 'Fee', 'quantity' => 1, 'rate_usd' => 5, 'is_percentage' => 1, 'applies_to' => [2]],
+                ['description' => 'Tax', 'quantity' => 1, 'rate_usd' => 10, 'kind' => 'percentage'],
+                ['description' => 'Fee', 'quantity' => 1, 'rate_usd' => 5, 'kind' => 'percentage', 'applies_to' => [2]],
+                ['description' => 'Levy', 'quantity' => 1, 'rate_usd' => 5, 'kind' => 'percentage', 'applies_to' => [4]],
+                ['description' => 'Shipping', 'quantity' => 1, 'rate_usd' => 20],
             ]))
-            ->assertSessionHasErrors(['lines.1.applies_to', 'lines.2.applies_to']);
+            ->assertSessionHasErrors(['lines.1.applies_to', 'lines.2.applies_to', 'lines.3.applies_to']);
+    }
+
+    public function test_store_builds_a_subtotal_and_a_percentage_of_it(): void
+    {
+        [$owner, $client] = $this->ownerWithWallet();
+
+        $this->actingAs($owner)->post(route('invoices.store'), $this->payload($client, [
+            ['description' => 'Parts', 'quantity' => 1, 'rate_usd' => 100],
+            ['description' => 'Labor', 'quantity' => 1, 'rate_usd' => 200],
+            ['description' => 'Subtotal', 'kind' => 'subtotal'],
+            ['description' => 'Tax', 'rate_usd' => 10, 'kind' => 'percentage', 'applies_to' => [2]],
+        ]))->assertSessionHasNoErrors();
+
+        $invoice = $owner->invoices()->latest('id')->first();
+        $this->assertSame(['item', 'item', 'subtotal', 'percentage'], $invoice->lines->pluck('kind')->all());
+        $this->assertSame('330.00', $invoice->amount_usd);
     }
 
     public function test_update_replaces_the_lines_and_recalculates(): void

@@ -7,21 +7,30 @@ use App\Models\InvoiceLine;
 use Illuminate\Validation\Validator;
 
 /**
- * Lines as the invoice forms submit them: `lines[<key>][description|quantity|rate_usd|is_percentage|applies_to[]]`,
- * where applies_to names other lines by their submitted key.
+ * Lines as the invoice forms submit them: `lines[<key>][description|kind|quantity|rate_usd|applies_to[]]`.
+ * Kind is item (the default), percentage, or subtotal. A percentage line's applies_to names lines above it
+ * by their submitted key. A subtotal line sums the lines since the previous subtotal and stays out of the total.
  */
 class InvoiceLines
 {
     public static function rules(): array
     {
         return [
-            'lines'                  => ['required', 'array', 'min:1'],
-            'lines.*.description'    => ['required', 'string', 'max:255'],
-            'lines.*.quantity'       => ['required', 'numeric'],
-            'lines.*.rate_usd'       => ['required', 'numeric'],
-            'lines.*.is_percentage'  => ['nullable', 'boolean'],
-            'lines.*.applies_to'     => ['nullable', 'array'],
-            'lines.*.applies_to.*'   => ['integer'],
+            'lines'                => ['required', 'array', 'min:1'],
+            'lines.*.description'  => ['required', 'string', 'max:255'],
+            'lines.*.kind'         => ['nullable', 'in:' . implode(',', InvoiceLine::KINDS)],
+            'lines.*.quantity'     => ['required_unless:lines.*.kind,percentage,subtotal', 'nullable', 'numeric'],
+            'lines.*.rate_usd'     => ['required_unless:lines.*.kind,subtotal', 'nullable', 'numeric'],
+            'lines.*.applies_to'   => ['nullable', 'array'],
+            'lines.*.applies_to.*' => ['integer'],
+        ];
+    }
+
+    public static function messages(): array
+    {
+        return [
+            'lines.*.quantity.required_unless' => 'The quantity field is required.',
+            'lines.*.rate_usd.required_unless' => 'The rate (USD) field is required.',
         ];
     }
 
@@ -36,7 +45,7 @@ class InvoiceLines
         ];
     }
 
-    /** Each percentage line must pick at least one other submitted line. */
+    /** Each percentage line must pick at least one line above it. */
     public static function validateTargets(Validator $validator): void
     {
         $lines = $validator->getData()['lines'] ?? [];
@@ -45,11 +54,8 @@ class InvoiceLines
         }
 
         foreach ($lines as $key => $line) {
-            if (empty($line['is_percentage'])) {
-                continue;
-            }
-            if (self::targets($lines, $key, $line) === []) {
-                $validator->errors()->add("lines.{$key}.applies_to", 'Pick at least one other line this percentage applies to.');
+            if (self::kind($line) === 'percentage' && self::targets($lines, $key, $line) === []) {
+                $validator->errors()->add("lines.{$key}.applies_to", 'Pick at least one line above this percentage applies to.');
             }
         }
     }
@@ -57,20 +63,7 @@ class InvoiceLines
     /** The submitted total, rounded to cents. */
     public static function total(array $lines): float
     {
-        $amounts = [];
-        foreach ($lines as $key => $line) {
-            if (empty($line['is_percentage'])) {
-                $amounts[$key] = (float) $line['quantity'] * (float) $line['rate_usd'];
-            }
-        }
-        foreach ($lines as $key => $line) {
-            if (! empty($line['is_percentage'])) {
-                $base = array_sum(array_map(fn ($t) => $amounts[$t] ?? 0, self::targets($lines, $key, $line)));
-                $amounts[$key] = $base * (float) $line['rate_usd'] / 100;
-            }
-        }
-
-        return round(array_sum($amounts), 2);
+        return round(array_sum(self::amounts($lines, counted: true)), 2);
     }
 
     /** Replace the invoice's lines with the submitted ones and recalculate its total. */
@@ -82,17 +75,18 @@ class InvoiceLines
             $ids = [];
             $position = 0;
             foreach ($lines as $key => $line) {
+                $kind = self::kind($line);
                 $ids[$key] = $invoice->lines()->create([
-                    'position'      => ++$position,
-                    'description'   => $line['description'],
-                    'quantity'      => ! empty($line['is_percentage']) ? 1 : $line['quantity'],
-                    'rate_usd'      => $line['rate_usd'],
-                    'is_percentage' => ! empty($line['is_percentage']),
+                    'position'    => ++$position,
+                    'description' => $line['description'],
+                    'kind'        => $kind,
+                    'quantity'    => $kind === 'item' ? $line['quantity'] : 1,
+                    'rate_usd'    => $kind === 'subtotal' ? 0 : $line['rate_usd'],
                 ])->id;
             }
 
             foreach ($lines as $key => $line) {
-                if (! empty($line['is_percentage'])) {
+                if (self::kind($line) === 'percentage') {
                     $targetIds = array_values(array_map(fn ($t) => $ids[$t], self::targets($lines, $key, $line)));
                     InvoiceLine::whereKey($ids[$key])->update(['applies_to' => json_encode($targetIds)]);
                 }
@@ -106,20 +100,50 @@ class InvoiceLines
     public static function changed(Invoice $invoice, array $lines): bool
     {
         $current = $invoice->lines->map(fn (InvoiceLine $l) => [
-            $l->description, round((float) $l->quantity, 4), round((float) $l->rate_usd, 4), $l->is_percentage,
+            $l->description, $l->kind, round((float) $l->quantity, 4), round((float) $l->rate_usd, 4),
         ])->values()->all();
-        $submitted = array_values(array_map(fn ($l) => [
-            $l['description'], round((float) (! empty($l['is_percentage']) ? 1 : $l['quantity']), 4), round((float) $l['rate_usd'], 4), ! empty($l['is_percentage']),
-        ], $lines));
+        $submitted = array_values(array_map(function ($l) {
+            $kind = self::kind($l);
+
+            return [
+                $l['description'], $kind,
+                round((float) ($kind === 'item' ? $l['quantity'] : 1), 4),
+                round((float) ($kind === 'subtotal' ? 0 : $l['rate_usd']), 4),
+            ];
+        }, $lines));
 
         return $current !== $submitted;
     }
 
-    /** Submitted keys this percentage line applies to: other lines that exist. */
+    private static function kind(array $line): string
+    {
+        return in_array($line['kind'] ?? null, InvoiceLine::KINDS, true) ? $line['kind'] : 'item';
+    }
+
+    /** Submitted keys this percentage line applies to: lines above it that exist. */
     private static function targets(array $lines, $key, array $line): array
     {
+        $above = array_map('strval', array_slice(array_keys($lines), 0, array_search($key, array_keys($lines), false)));
         $targets = array_map('intval', (array) ($line['applies_to'] ?? []));
 
-        return array_values(array_filter($targets, fn ($t) => (string) $t !== (string) $key && array_key_exists($t, $lines)));
+        return array_values(array_filter($targets, fn ($t) => in_array((string) $t, $above, true)));
+    }
+
+    /** Each submitted line's amount by key, in order; with $counted, subtotal lines are left out. */
+    private static function amounts(array $lines, bool $counted = false): array
+    {
+        $amounts = [];
+        $running = 0.0;
+        foreach ($lines as $key => $line) {
+            $kind = self::kind($line);
+            $amounts[$key] = match ($kind) {
+                'subtotal'   => $running,
+                'percentage' => array_sum(array_map(fn ($t) => $amounts[$t] ?? 0, self::targets($lines, $key, $line))) * (float) $line['rate_usd'] / 100,
+                default      => (float) $line['quantity'] * (float) $line['rate_usd'],
+            };
+            $running = $kind === 'subtotal' ? 0.0 : $running + $amounts[$key];
+        }
+
+        return $counted ? array_filter($amounts, fn ($a, $k) => self::kind($lines[$k]) !== 'subtotal', ARRAY_FILTER_USE_BOTH) : $amounts;
     }
 }

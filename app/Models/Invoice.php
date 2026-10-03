@@ -88,19 +88,19 @@ class Invoice extends Model
             return;
         }
 
-        $this->forceFill(['amount_usd' => round($amounts->sum(), 2)])->save();
+        $counted = $this->lines()->where('kind', '!=', 'subtotal')->pluck('id');
+        $this->forceFill(['amount_usd' => round($amounts->only($counted->all())->sum(), 2)])->save();
     }
 
-    /** Each line's USD amount keyed by line id, percentage lines resolved. */
+    /** Each line's USD amount keyed by line id, in order; subtotal and percentage lines resolved. */
     public function lineAmounts(): \Illuminate\Support\Collection
     {
-        $lines = $this->lines()->get();
         $amounts = collect();
-        foreach ($lines->where('is_percentage', false) as $line) {
-            $amounts[$line->id] = $line->amountUsd($amounts);
-        }
-        foreach ($lines->where('is_percentage', true) as $line) {
-            $amounts[$line->id] = $line->amountUsd($amounts);
+        $running = 0.0;
+        foreach ($this->lines()->get() as $line) {
+            $amount = $line->amountUsd($amounts, $running);
+            $amounts[$line->id] = $amount;
+            $running = $line->kind === 'subtotal' ? 0.0 : $running + $amount;
         }
 
         return $amounts;

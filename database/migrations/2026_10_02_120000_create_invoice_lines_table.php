@@ -14,8 +14,8 @@ return new class extends Migration
             $table->unsignedInteger('position');
             $table->string('description');
             $table->decimal('quantity', 12, 4)->default(1);
-            $table->decimal('rate_usd', 14, 4);
-            $table->boolean('is_percentage')->default(false);
+            $table->decimal('rate_usd', 14, 4)->default(0);
+            $table->string('kind', 16)->default('item');
             $table->json('applies_to')->nullable();
             $table->timestamps();
 

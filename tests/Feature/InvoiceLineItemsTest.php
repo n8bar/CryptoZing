@@ -46,10 +46,26 @@ class InvoiceLineItemsTest extends TestCase
         $invoice->lines()->create(['position' => 2, 'description' => 'Labor', 'quantity' => 1, 'rate_usd' => 200]);
         $invoice->lines()->create([
             'position' => 3, 'description' => 'Sales tax', 'quantity' => 1, 'rate_usd' => 8.5,
-            'is_percentage' => true, 'applies_to' => [$taxable->id],
+            'kind' => 'percentage', 'applies_to' => [$taxable->id],
         ]);
 
         $this->assertSame('308.50', $invoice->fresh()->amount_usd);
+    }
+
+    public function test_subtotal_sums_the_lines_since_the_previous_subtotal_and_stays_out_of_the_total(): void
+    {
+        $invoice = $this->bareInvoice();
+
+        $invoice->lines()->create(['position' => 1, 'description' => 'Parts', 'quantity' => 2, 'rate_usd' => 50]);
+        $first = $invoice->lines()->create(['position' => 2, 'description' => 'Subtotal', 'kind' => 'subtotal']);
+        $invoice->lines()->create(['position' => 3, 'description' => 'Labor', 'quantity' => 1, 'rate_usd' => 200]);
+        $invoice->lines()->create(['position' => 4, 'description' => 'Rush fee', 'rate_usd' => 10, 'kind' => 'percentage', 'applies_to' => [$first->id]]);
+        $second = $invoice->lines()->create(['position' => 5, 'description' => 'Subtotal', 'kind' => 'subtotal']);
+
+        $amounts = $invoice->fresh()->lineAmounts();
+        $this->assertSame(100.0, $amounts[$first->id]);
+        $this->assertSame(210.0, $amounts[$second->id]);
+        $this->assertSame('310.00', $invoice->fresh()->amount_usd);
     }
 
     public function test_removing_a_line_updates_the_total(): void
@@ -106,7 +122,8 @@ class InvoiceLineItemsTest extends TestCase
         InvoiceLines::replaceFor($invoice, [
             ['description' => 'Gutter cleaning', 'quantity' => 2, 'rate_usd' => 75],
             ['description' => 'Roof patch', 'quantity' => 1, 'rate_usd' => 120.5],
-            ['description' => 'Sales tax', 'quantity' => 1, 'rate_usd' => 8, 'is_percentage' => 1, 'applies_to' => [1]],
+            ['description' => 'Subtotal', 'kind' => 'subtotal'],
+            ['description' => 'Sales tax', 'quantity' => 1, 'rate_usd' => 8, 'kind' => 'percentage', 'applies_to' => [1]],
         ]);
         $invoice = $invoice->fresh();
         $invoice->enablePublicShare();
@@ -114,7 +131,7 @@ class InvoiceLineItemsTest extends TestCase
             'invoice_id' => $invoice->id, 'user_id' => $invoice->user_id, 'type' => 'send',
             'status' => 'queued', 'recipient' => 'billing@example.com', 'dispatched_at' => now(),
         ]);
-        $expected = ['Gutter cleaning', '150.00', 'Roof patch', '120.50', 'Sales tax', '8%', '9.64', '280.14'];
+        $expected = ['Gutter cleaning', '150.00', 'Roof patch', '120.50', 'Subtotal', '270.50', 'Sales tax', '8%', '9.64', '280.14'];
 
         $this->actingAs($invoice->user)->get(route('invoices.show', $invoice))->assertOk()->assertSeeInOrder($expected);
         $this->actingAs($invoice->user)->get(route('invoices.print', $invoice))->assertOk()->assertSeeInOrder($expected);
