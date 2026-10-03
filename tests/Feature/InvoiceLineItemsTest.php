@@ -139,8 +139,9 @@ class InvoiceLineItemsTest extends TestCase
 
         foreach ([InvoiceReadyMail::class, InvoicePaidReceiptMail::class, InvoiceIssuerPaidNoticeMail::class] as $mail) {
             $html = (new $mail($invoice->fresh(), $delivery))->render();
-            foreach (['Gutter cleaning', 'Roof patch', 'Sales tax', '280.14'] as $needle) {
-                $this->assertStringContainsString($needle, $html, "{$mail} lacks {$needle}");
+            $this->assertStringContainsString('280.14', $html, "{$mail} lacks the total");
+            foreach (['Gutter cleaning', 'Roof patch', 'Sales tax'] as $needle) {
+                $this->assertStringNotContainsString($needle, $html, "{$mail} itemizes");
             }
         }
     }

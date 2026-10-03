@@ -10,8 +10,6 @@ Hi {{ $client->name ?? 'there' }},
 
 Your payment is confirmed. **${{ number_format((float) $invoice->amount_usd, 2) }} USD** received{{ $multiplePayments ? ' across ' . $settlementPayments->count() . ' on-chain payments' : '' }}.
 
-@include('mail.partials.lines', ['invoice' => $invoice])
-
 @if ($settlementPayments->isNotEmpty())
 <x-mail::panel>
 @foreach ($settlementPayments as $payment)

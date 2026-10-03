@@ -34,8 +34,7 @@ Parent: [MS22](../milestones/22_LINE_ITEMS_DEVELOPER_API.md), Phase 1.
 2. Issuer invoice view.
 3. Public page.
 4. Print.
-5. Mail: invoice-ready, paid, and receipt messages.
-6. Lists and dashboard show the total only.
+5. Mail, lists, and the dashboard show the total only.
 
 ## 6. Existing invoices
 
