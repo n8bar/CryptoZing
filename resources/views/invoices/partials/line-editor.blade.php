@@ -69,7 +69,7 @@
         </div>
         <div class="mt-2 flex flex-wrap items-center gap-3 text-sm">
             <button type="button" data-action="add"
-                    class="inline-flex h-10 items-center gap-2 rounded border border-green-300 px-3 text-sm font-semibold text-green-700 hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+                    class="inline-flex h-10 items-center gap-1 rounded border border-green-300 px-1 text-sm font-semibold text-green-700 hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
                 <span class="text-2xl font-bold leading-none" aria-hidden="true">+</span> Add line
             </button>
             <label class="inline-flex items-center gap-2">
@@ -84,7 +84,7 @@
                 <button type="button" data-action="up" class="hidden h-10 min-w-10 rounded border border-gray-300 px-3 text-xs hover:bg-gray-50 sm:inline-flex sm:items-center sm:justify-center" aria-label="Move line up">↑</button>
                 <button type="button" data-action="down" class="hidden h-10 min-w-10 rounded border border-gray-300 px-3 text-xs hover:bg-gray-50 sm:inline-flex sm:items-center sm:justify-center" aria-label="Move line down">↓</button>
                 <button type="button" data-action="remove"
-                        class="inline-flex h-10 items-center gap-2 rounded border border-red-300 px-3 text-sm font-semibold text-red-700 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                        class="inline-flex h-10 items-center gap-1 rounded border border-red-300 px-1 text-sm font-semibold text-red-700 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
                     <span class="text-2xl font-bold leading-none" aria-hidden="true">&times;</span> Remove
                 </button>
             </span>
