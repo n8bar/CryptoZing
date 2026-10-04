@@ -20,11 +20,12 @@ Parent: [MS22](../milestones/22_LINE_ITEMS_DEVELOPER_API.md), Phases 2 and 3.
 1. A request carries the client, the lines, and whether to send the invoice.
 2. The invoice follows the same rules as one made in the app.
 3. Retrying a request never makes a second invoice.
-4. The response carries the invoice, its public link, and its state.
+4. The response carries the invoice, its public link, its payment details, and its state.
+5. Payment details are the address, the BTC amount, the payment URI a wallet scans, and the rate used. CryptoZing sets the rate; the request cannot.
 
 ## 4. Reading an invoice
 
-1. A read returns the invoice, its public link, and its state.
+1. A read returns the invoice, its public link, its payment details, and its state.
 2. Mail state: not sent, queued, delivered, or failed.
 3. Payment state: none, seen, confirmed, partial, overpaid, or corrected.
 4. Only confirmed is safe to fulfill. The developer decides what to do with every other state.
