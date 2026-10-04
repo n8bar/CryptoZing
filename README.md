@@ -222,6 +222,7 @@ docker/      Container setup
 - Donations spec: [`docs/specs/DONATIONS.md`](docs/specs/DONATIONS.md)
 - Line items spec: [`docs/specs/LINE_ITEMS.md`](docs/specs/LINE_ITEMS.md)
 - Developer API spec: [`docs/specs/DEVELOPER_API.md`](docs/specs/DEVELOPER_API.md)
+- API reference (draft): [`docs/API.md`](docs/API.md)
 
 For coding conventions, workflow expectations, and environment reminders, see [`AGENTS.md`](AGENTS.md).
 
