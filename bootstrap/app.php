@@ -45,6 +45,8 @@ return Application::configure(basePath: dirname(__DIR__))
         ReassignInvoiceAddresses::class,
     ])
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->alias(['api.key' => \App\Http\Middleware\AuthenticateApiKey::class]);
+
         // A session whose account lost approval (gate on) or was banned is
         // dropped on its next request, not at its next login.
         $middleware->web(append: [

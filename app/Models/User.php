@@ -270,6 +270,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(\App\Models\Invoice::class);
     }
+    public function apiKeys()
+    {
+        return $this->hasMany(ApiKey::class);
+    }
+
     public function walletSetting()
     {
         return $this->hasOne(WalletSetting::class);
