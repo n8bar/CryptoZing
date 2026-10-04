@@ -1,6 +1,6 @@
 # CryptoZing API
 
-Status: Draft.
+Status: Approved.
 Spec: [DEVELOPER_API.md](specs/DEVELOPER_API.md).
 
 Base URL: `https://cryptozing.app/api/v1`. Every request carries `Authorization: Bearer <key>` and `Accept: application/json`. Bodies are JSON. Times are ISO 8601 in UTC. Money is a string with two decimals for USD and eight for BTC.
