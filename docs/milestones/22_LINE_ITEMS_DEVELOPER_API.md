@@ -16,7 +16,7 @@ An issuer can build a USD invoice from line items in the app. A developer can cr
 ## Current Focus
 
 - Active phase: **Phase 2 — Developer API contract and access.**
-- Spec: [DEVELOPER_API.md](../specs/DEVELOPER_API.md). Strategy: M22.2, to be drafted.
+- Spec: [DEVELOPER_API.md](../specs/DEVELOPER_API.md). Strategy: [M22.2](../strategies/22.2_API_KEYS_AND_CONTRACT.md), draft.
 
 ## Phase Rollup
 
