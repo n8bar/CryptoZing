@@ -1,6 +1,6 @@
 # Developer API
 
-Status: Draft.
+Status: Approved.
 Parent: [MS22](../milestones/22_LINE_ITEMS_DEVELOPER_API.md), Phases 2 and 3.
 
 ## 1. Goals
@@ -26,9 +26,8 @@ Parent: [MS22](../milestones/22_LINE_ITEMS_DEVELOPER_API.md), Phases 2 and 3.
 ## 4. Reading an invoice
 
 1. A read returns the invoice, its public link, its payment details, and its state.
-2. Mail state: not sent, queued, delivered, or failed.
-3. Payment state: none, seen, confirmed, partial, overpaid, or corrected.
-4. Only confirmed is safe to fulfill. The developer decides what to do with every other state.
+2. State tells apart mail queued, mail delivered, payment seen, and payment confirmed.
+3. Only confirmed is safe to fulfill. The developer decides what to do with every other state.
 
 ## 5. Changing an invoice
 
