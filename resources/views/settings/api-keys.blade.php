@@ -32,14 +32,16 @@
                         </p>
                     </div>
 
-                    <form method="POST" action="{{ route('settings.api-keys.store') }}" class="flex flex-wrap items-end gap-3">
+                    <form method="POST" action="{{ route('settings.api-keys.store') }}">
                         @csrf
-                        <div>
-                            <x-input-label for="name" value="Key name" />
-                            <x-text-input id="name" name="name" type="text" class="mt-1 block w-64" :value="old('name')" required maxlength="100" placeholder="Shop website" />
-                            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+                        <div class="flex flex-wrap items-end gap-3">
+                            <div>
+                                <x-input-label for="name" value="Key name" />
+                                <x-text-input id="name" name="name" type="text" class="mt-1 block w-64" :value="old('name')" required maxlength="100" placeholder="Shop website" />
+                            </div>
+                            <x-primary-button>Make key</x-primary-button>
                         </div>
-                        <x-primary-button>Make key</x-primary-button>
+                        <x-input-error :messages="$errors->get('name')" class="mt-2" />
                     </form>
 
                     @if ($keys->isEmpty())
