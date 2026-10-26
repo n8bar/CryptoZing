@@ -25,7 +25,8 @@ COPY package.json package-lock.json ./
 RUN npm ci --omit=dev
 
 # ---- Runtime ----------------------------------------------------------------
-FROM php:8.4-fpm-alpine
+# Pinned to the PHP2Shell fix (CVE-2026-109618, CVE-2026-109619).
+FROM php:8.4.27-fpm-alpine
 
 # nodejs: HdWallet shells out to node_scripts/derive-address.cjs
 # fcgi: FPM ping healthcheck
