@@ -34,7 +34,7 @@ Approve the API spec, then build the keys and write the reference. A key belongs
 
 ### [ ] Phase 3 — Create, send, read, and integration verification %<2965>
 
-Build the endpoints on the same rules as the app: create an invoice, send it by email if asked, return its public link, and read its mail and payment state. The developer polls that read until they get the state they need. Test retries, sending, reads, a full order-by-polling run, the doc examples, and the whole suite.
+Build the endpoints on the same rules as the app: create an invoice, send it by email if asked, return its public link, and read its mail and payment state. The developer polls that read until they get the state they need. Test retries, sending, reads, a live key and a revoked key on dev, a full order-by-polling run, the doc examples, and the whole suite.
 
 ### [ ] Phase 4 — Controlled release and live validation %<2966>
 
