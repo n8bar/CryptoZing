@@ -28,6 +28,8 @@ Approve the line-item spec, then build it. A line is a description, a quantity, 
 
 ### [ ] Phase 2 — Developer API reference and access %<2964>
 
+Dev verdict: pass.
+
 Approve the API spec, then build the keys and write the reference. A key belongs to one issuer, can be revoked, and is rate limited. Retrying a request never makes a second invoice. Errors are documented and stable. Status tells apart mail queued, mail delivered, payment seen, and payment confirmed. Only confirmed is safe to fulfill; the developer handles partial, late, overpaid, corrected, or unclear payments.
 
 ### [ ] Phase 3 — Create, send, read, and integration verification %<2965>
