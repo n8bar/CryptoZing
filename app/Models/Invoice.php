@@ -69,6 +69,23 @@ class Invoice extends Model
     public const SMALL_BALANCE_RESOLUTION_PERCENT = 0.01; // 1% of expected USD
     public const SMALL_BALANCE_RESOLUTION_CAP_USD = 50.0;
 
+    protected static function booted(): void
+    {
+        static::creating(function (Invoice $invoice): void {
+            $invoice->api_id ??= static::generateApiId();
+        });
+    }
+
+    /** The invoice's id in the developer API: inv_ plus 12 random characters. */
+    public static function generateApiId(): string
+    {
+        do {
+            $id = 'inv_' . Str::lower(Str::random(12));
+        } while (static::withTrashed()->where('api_id', $id)->exists());
+
+        return $id;
+    }
+
     public function user(): BelongsTo   { return $this->belongsTo(User::class); }
     public function client(): BelongsTo { return $this->belongsTo(Client::class); }
     public function payments(): HasMany { return $this->hasMany(InvoicePayment::class, 'accounting_invoice_id'); }
@@ -246,6 +263,27 @@ class Invoice extends Model
         return $query->whereIn('status', ['sent', 'partial'])
             ->whereDate('due_date', '>=', $today)
             ->whereDate('due_date', '<=', $end);
+    }
+
+    /** The invoice email's state for the API: none, queued, delivered, or failed. */
+    public function mailState(): string
+    {
+        return match ($this->latestDeliveryOfType('send')?->status) {
+            null => 'none',
+            'queued', 'sending' => 'queued',
+            'sent' => 'delivered',
+            default => 'failed',
+        };
+    }
+
+    /** Payment state for the API: none, seen (any payment unconfirmed), or confirmed. */
+    public function paymentState(): string
+    {
+        if (! $this->hasPaymentActivity()) {
+            return 'none';
+        }
+
+        return $this->hasUnconfirmedPayments() ? 'seen' : 'confirmed';
     }
 
     private function hasDeliveryOfTypeWithStatuses(string $type, array $statuses): bool

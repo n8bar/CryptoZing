@@ -8,12 +8,16 @@ use App\Console\Commands\WatchInvoicePayments;
 use App\Support\WorkerHeartbeat;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
+use App\Support\ApiError;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -73,6 +77,20 @@ return Application::configure(basePath: dirname(__DIR__))
         });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
+        // Developer API errors use the format in docs/API.md §7.
+        $exceptions->render(function (ValidationException $exception, Request $request) {
+            if (! $request->is('api/*')) {
+                return null;
+            }
+            $field = array_key_first($exception->errors());
+
+            return ApiError::response('validation', $exception->validator->errors()->first($field), 422, $field);
+        });
+
+        $renderApiNotFound = fn (Request $request) => $request->is('api/*') ? ApiError::response('not_found', 'No such invoice.', 404) : null;
+        $exceptions->render(fn (ModelNotFoundException $exception, Request $request) => $renderApiNotFound($request));
+        $exceptions->render(fn (NotFoundHttpException $exception, Request $request) => $renderApiNotFound($request));
+
         $renderForbidden = function (Request $request, ?string $details = null) {
             $fallback = "Sorry, you don't have permission.";
 
