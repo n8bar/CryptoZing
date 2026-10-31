@@ -1,6 +1,6 @@
 # MS22 — Invoice Line Items and Developer API
 
-Status: Approved; Phase 2 active.
+Status: Approved; Phase 3 next.
 Parent: [PLAN.md](../PLAN.md)
 
 ## Outcome
@@ -15,8 +15,8 @@ An issuer can build a USD invoice from line items in the app. A developer can cr
 
 ## Current Focus
 
-- Active phase: **Phase 2 — Developer API reference and access.**
-- Spec: [DEVELOPER_API.md](../specs/DEVELOPER_API.md). Strategy: [M22.2](../strategies/22.2_API_KEYS_AND_REFERENCE.md), draft.
+- Active phase: **Phase 3 — Create, send, read, and integration verification.**
+- Spec: [DEVELOPER_API.md](../specs/DEVELOPER_API.md). Strategy: M22.3, draft in review.
 
 ## Phase Rollup
 
@@ -26,9 +26,9 @@ Dev verdict: pass. Strategy: [x22.1](../strategies/x22.1_ITEMIZED_INVOICES.md).
 
 Approve the line-item spec, then build it. A line is a description, a quantity, and a USD rate. Lines add up to the total. The spec settles tax, discounts, subtotals, old invoices, and in-person payment first. Line items show everywhere an invoice does: edit, issuer view, public page, and print; mail carries the total. Check it all on dev.
 
-### [ ] Phase 2 — Developer API reference and access %<2964>
+### [x] Phase 2 — Developer API reference and access %<2964>
 
-Dev verdict: pass.
+Dev verdict: pass. Strategy: [x22.2](../strategies/x22.2_API_KEYS_AND_REFERENCE.md).
 
 Approve the API spec, then build the keys and write the reference. A key belongs to one issuer, can be revoked, and is rate limited. Retrying a request never makes a second invoice. Errors are documented and stable. Status tells apart mail queued, mail delivered, payment seen, and payment confirmed. Only confirmed is safe to fulfill; the developer handles partial, late, overpaid, corrected, or unclear payments.
 
