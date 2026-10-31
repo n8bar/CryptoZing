@@ -13,6 +13,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
 use App\Services\BtcRate;
 use App\Services\GettingStartedFlow;
+use App\Services\InvoiceCreator;
 use App\Services\InvoiceForceDeleteGuard;
 use App\Services\InvoiceLines;
 use App\Services\WalletKeyLineage;
@@ -114,7 +115,7 @@ class InvoiceController extends Controller
                 ->with('status', 'Connect a wallet before creating invoices.');
         }
 
-        $data = $this->applyInvoiceDefaults($request->user(), $data);
+        $data = app(InvoiceCreator::class)->applyDefaults($request->user(), $data);
 
         $preparedLineage = null;
         try {
@@ -128,7 +129,7 @@ class InvoiceController extends Controller
         }
 
         try {
-            $invoice = $this->createInvoiceRecord($data, $wallet, $userId, $preparedLineage, $lines);
+            $invoice = app(InvoiceCreator::class)->create($data, $wallet, $userId, $preparedLineage, $lines);
             $invoiceCreatedMessage = 'Invoice created.';
         } catch (QueryException $e) {
             if ($this->isInvoiceNumberUniqueViolation($e)) {
@@ -142,7 +143,7 @@ class InvoiceController extends Controller
                 $data['number'] = Invoice::nextNumberForUser($userId);
 
                 try {
-                    $invoice = $this->createInvoiceRecord($data, $wallet, $userId, $preparedLineage, $lines);
+                    $invoice = app(InvoiceCreator::class)->create($data, $wallet, $userId, $preparedLineage, $lines);
                     $invoiceCreatedMessage = "Invoice created. Number adjusted to {$data['number']} due to a collision.";
                 } catch (QueryException $retryException) {
                     if ($this->isInvoiceNumberUniqueViolation($retryException)) {
@@ -775,39 +776,6 @@ class InvoiceController extends Controller
             'due_date' => $dueDate,
             'terms_days' => $termsDays,
         ];
-    }
-
-    private function applyInvoiceDefaults($user, array $data): array
-    {
-        if (empty($data['description']) && !empty($user->invoice_default_description)) {
-            $data['description'] = $user->invoice_default_description;
-        }
-
-        if (empty($data['due_date']) && $user->invoice_default_terms_days !== null) {
-            $referenceDate = !empty($data['invoice_date'])
-                ? Carbon::parse($data['invoice_date'])
-                : now();
-            $data['due_date'] = $referenceDate->copy()
-                ->addDays($user->invoice_default_terms_days)
-                ->toDateString();
-        }
-
-        return $data;
-    }
-
-    private function createInvoiceRecord(array $data, $wallet, int $userId, ?array $preparedLineage = null, array $lines = []): Invoice
-    {
-        $invoice = app(WalletKeyLineage::class)->withPreparedAssignment($wallet, $preparedLineage, function (array $lineage) use ($data, $userId, $wallet) {
-            return Invoice::create($data + [
-                'user_id' => $userId,
-            ] + $lineage + $wallet->invoiceUnsupportedConfigurationSnapshot());
-        });
-
-        if ($lines !== []) {
-            InvoiceLines::replaceFor($invoice, $lines);
-        }
-
-        return $invoice;
     }
 
     private function isInvoiceNumberUniqueViolation(QueryException $e): bool
