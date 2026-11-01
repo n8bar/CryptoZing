@@ -370,6 +370,21 @@ class Invoice extends Model
         return round(max($expected - $this->sumPaymentsUsd(true), 0.0), 2);
     }
 
+    /**
+     * What stays due once every active payment, confirmed or not, settles.
+     * Payment mail names this figure, never outstanding_usd: a payment in
+     * flight is not a shortfall (#200).
+     */
+    public function getRemainingUsdAttribute(): ?float
+    {
+        $expected = $this->amount_usd !== null ? (float) $this->amount_usd : null;
+        if ($expected === null) {
+            return null;
+        }
+
+        return round(max($expected - $this->sumPaymentsUsd(), 0.0), 2);
+    }
+
     public function getOutstandingSatsAttribute(): ?int
     {
         $expected = $this->expectedPaymentSats();
