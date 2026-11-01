@@ -6,6 +6,7 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\WalletSettingsController;
 use App\Http\Controllers\InvoiceSettingsController;
+use App\Http\Controllers\ApiKeySettingsController;
 use App\Http\Controllers\NotificationSettingsController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\LegalController;
@@ -104,6 +105,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/settings/notifications', [NotificationSettingsController::class, 'edit'])->name('settings.notifications.edit');
     Route::patch('/settings/notifications', [NotificationSettingsController::class, 'update'])->name('settings.notifications.update');
     Route::post('/settings/notifications/test-email', [NotificationSettingsController::class, 'sendPreview'])->name('settings.notifications.preview');
+    Route::get('/settings/api-keys', [ApiKeySettingsController::class, 'edit'])->name('settings.api-keys.edit');
+    Route::post('/settings/api-keys', [ApiKeySettingsController::class, 'store'])->name('settings.api-keys.store');
+    Route::delete('/settings/api-keys/{apiKey}', [ApiKeySettingsController::class, 'revoke'])->name('settings.api-keys.revoke');
     Route::get('/wallet/settings', [WalletSettingsController::class, 'edit'])->name('wallet.settings.edit');
     Route::post('/wallet/settings', [WalletSettingsController::class, 'update'])
         ->middleware('throttle:10,1')

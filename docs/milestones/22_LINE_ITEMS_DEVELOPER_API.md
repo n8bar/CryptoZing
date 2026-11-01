@@ -1,6 +1,6 @@
 # MS22 — Invoice Line Items and Developer API
 
-Status: Approved; Phase 2 active.
+Status: Approved; Phase 3 active.
 Parent: [PLAN.md](../PLAN.md)
 
 ## Outcome
@@ -15,8 +15,8 @@ An issuer can build a USD invoice from line items in the app. A developer can cr
 
 ## Current Focus
 
-- Active phase: **Phase 2 — Developer API contract and access.**
-- Spec: [DEVELOPER_API.md](../specs/DEVELOPER_API.md). Strategy: [M22.2](../strategies/22.2_API_KEYS_AND_CONTRACT.md), draft.
+- Active phase: **Phase 3 — API endpoints and release.**
+- Spec: [DEVELOPER_API.md](../specs/DEVELOPER_API.md). Strategy: [M22.3](../strategies/22.3_API_ENDPOINTS_AND_RELEASE.md).
 
 ## Phase Rollup
 
@@ -26,17 +26,15 @@ Dev verdict: pass. Strategy: [x22.1](../strategies/x22.1_ITEMIZED_INVOICES.md).
 
 Approve the line-item spec, then build it. A line is a description, a quantity, and a USD rate. Lines add up to the total. The spec settles tax, discounts, subtotals, old invoices, and in-person payment first. Line items show everywhere an invoice does: edit, issuer view, public page, and print; mail carries the total. Check it all on dev.
 
-### [ ] Phase 2 — Developer API contract and access %<2964>
+### [x] Phase 2 — Developer API reference and access %<2964>
 
-Approve the API spec, then build the keys and the contract. A key belongs to one issuer, can be revoked, and is rate limited. Retrying a request never makes a second invoice. Errors are documented and stable. Status tells apart mail queued, mail delivered, payment seen, and payment confirmed. Only confirmed is safe to fulfill; the developer handles partial, late, overpaid, corrected, or unclear payments.
+Dev verdict: pass. Strategy: [x22.2](../strategies/x22.2_API_KEYS_AND_REFERENCE.md).
 
-### [ ] Phase 3 — Create, send, read, and integration verification %<2965>
+Approve the API spec, then build the keys and write the reference. A key belongs to one issuer, can be revoked, and is rate limited. Retrying a request never makes a second invoice. Errors are documented and stable. Status tells apart mail queued, mail delivered, payment seen, and payment confirmed. Only confirmed is safe to fulfill; the developer handles partial, late, overpaid, corrected, or unclear payments.
 
-Build the endpoints on the same rules as the app: create an invoice, send it by email if asked, return its public link, and read its mail and payment state. The developer polls that read until they get the state they need. Test retries, sending, reads, a full order-by-polling run, the doc examples, and the whole suite.
+### [ ] Phase 3 — API endpoints and release %<2965>
 
-### [ ] Phase 4 — Controlled release and live validation %<2966>
-
-Record the dev verdict and a backout plan. Get the go for rollout. Release, then check line items, API keys, create/send/read, service health, and the content promises on prod.
+Build the endpoints on the same rules as the app: create an invoice, send it by email if asked, return its public link, and read its mail and payment state. The developer polls that read until they get the state they need. Test retries, sending, reads, a live key and a revoked key on dev, a full order-by-polling run, the doc examples, and the whole suite. Record the dev verdict and a backout plan. Get the go for rollout. Release, then check line items, API keys, create/send/read, service health, and the content promises on prod.
 
 ### [ ] Exit Criteria
 

@@ -21,6 +21,11 @@
             'href' => route('settings.notifications.edit'),
             'active' => request()->routeIs('settings.notifications.*'),
         ],
+        [
+            'label' => 'API keys',
+            'href' => route('settings.api-keys.edit'),
+            'active' => request()->routeIs('settings.api-keys.*'),
+        ],
     ];
 @endphp
 
