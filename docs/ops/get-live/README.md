@@ -115,7 +115,7 @@ docker compose -f compose.production.yaml run --rm app php artisan migrate --for
 docker compose -f compose.production.yaml up -d
 ```
 
-Pin `CZ_TAG` to a commit-sha tag instead of `latest` if you want explicit, rollback-able releases.
+`latest` is the newest release. Pin `CZ_TAG` to a commit-sha tag instead if you want explicit, rollback-able releases.
 
 ## Backups
 

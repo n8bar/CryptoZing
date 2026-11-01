@@ -1,10 +1,11 @@
 # M20.2 §4.1: build and publish the production app image in CI, never on the
-# box. Same mechanism as cryptozing-site's container workflow.
+# box. Same mechanism as cryptozing-site's container workflow. Prod deploys
+# release-branch images only; `latest` follows the release branch.
 name: App Image
 
 on:
   push:
-    branches: [main]
+    branches: [main, release]
     paths-ignore:
       - '**.md'
       - 'docs/**'
@@ -35,6 +36,6 @@ jobs:
           push: true
           tags: |
             ghcr.io/n8bar/cryptozing-app:${{ github.sha }}
-            ghcr.io/n8bar/cryptozing-app:latest
+            ${{ github.ref == 'refs/heads/release' && 'ghcr.io/n8bar/cryptozing-app:latest' || '' }}
           cache-from: type=gha
           cache-to: type=gha,mode=max

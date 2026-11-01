@@ -27,6 +27,7 @@
       4. If the payment state is ambiguous, the acknowledgment should stay limited to what the system can safely say and should avoid any certainty about how the payment applies.
       5. When an acknowledgment is tied to a specific detected payment identity, repeated detection of that same payment must not create a second acknowledgment for the same notice class.
       6. The open beta uses paired owner/client delivery classes for this flow so the client acknowledgment and owner follow-through remain distinct in delivery history.
+      7. Call a payment partial, or name a balance still due, only when every detected payment, confirmed or not, falls short of the invoice total by more than the tolerance.
    2. **Later Payment Ambiguity**
       1. After an invoice has already received detected on-chain payment activity, later payments to that invoice’s address may still be semantically ambiguous even when the wallet configuration remains supported.
       2. Examples include stale-address reuse and payers intentionally using an older valid invoice address for a newer invoice.
