@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Donations;
 
+use App\Models\Donation;
 use App\Services\DonationAddressAllocator;
 use App\Services\HdWallet;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -114,5 +115,31 @@ class DonationAllocationTest extends TestCase
         $this->assertSame('tb1qnet0', $donation->address);
         $this->assertSame(0, $donation->derivation_index);
         $this->assertSame('testnet4', $donation->network);
+    }
+
+    public function test_signet_can_reuse_an_address_string_already_held_on_testnet(): void
+    {
+        $this->mock(HdWallet::class, function ($mock) {
+            $mock->shouldReceive('deriveAddress')
+                ->with('tpubDonationTest', 0, 'signet', 'bip84')
+                ->once()
+                ->andReturn('tb1qdonation0');
+        });
+
+        Donation::query()->create([
+            'derivation_index' => 0,
+            'address' => 'tb1qdonation0',
+            'network' => 'testnet4',
+            'status' => 'pending',
+            'allocated_at' => now(),
+        ]);
+
+        config(['wallet.default_network' => 'signet']);
+
+        $donation = app(DonationAddressAllocator::class)->allocate(null, 'usd', 25.00);
+
+        $this->assertSame('tb1qdonation0', $donation->address);
+        $this->assertSame('signet', $donation->network);
+        $this->assertSame(0, $donation->derivation_index);
     }
 }

@@ -12,7 +12,7 @@ This is not the end-user onboarding wizard spec (see `docs/specs/ONBOARD_SPEC.md
 ## 2) Connect a Wallet
 - Current behavior: logging in without a wallet redirects to `/wallet/settings` so setup happens before creating invoices.
 - Visit `/wallet/settings`.
-- Paste a BIP84 xpub for the configured network (e.g., `WALLET_NETWORK=testnet4`); use the derive test to confirm the sample address.
+- Paste a BIP84 xpub for the configured network (e.g., `WALLET_NETWORK=signet`); use the derive test to confirm the sample address.
 - Note the testnet helper (if shown) and fix errors inline before saving.
 - (Screenshot: wallet settings with network badge + derive test.)
 
