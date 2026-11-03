@@ -549,6 +549,44 @@ class GettingStartedFlowTest extends TestCase
         $this->assertFalse($owner->getting_started_dismissed);
     }
 
+    public function test_start_syncs_each_draft_invoice_on_its_own_recorded_network(): void
+    {
+        config()->set('blockchain.getting_started_sync.enabled', true);
+        config()->set('blockchain.getting_started_sync.throttle_seconds', 0);
+
+        $owner = User::factory()->create();
+        $this->createWallet($owner)->update(['network' => 'signet']);
+        $client = $this->createClient($owner);
+        $invoice = $this->createInvoice($owner, $client, ['status' => 'draft', 'wallet_network' => 'testnet4']);
+        $invoice->enablePublicShare();
+
+        InvoiceDelivery::create([
+            'invoice_id' => $invoice->id,
+            'user_id' => $owner->id,
+            'type' => 'send',
+            'status' => 'queued',
+            'recipient' => $client->email,
+            'dispatched_at' => now(),
+        ]);
+
+        $this->mock(InvoicePaymentSyncService::class, function (MockInterface $mock) use ($invoice): void {
+            $mock->shouldReceive('syncInvoice')
+                ->once()
+                ->withArgs(fn (Invoice $candidate, ?string $network = null) => $candidate->is($invoice) && $network === 'testnet4')
+                ->andReturn([
+                    'processed' => true,
+                    'updated' => 0,
+                    'dropped' => 0,
+                    'payments' => [],
+                    'status' => 'draft',
+                    'paid_sats' => 0,
+                    'outstanding_sats' => null,
+                ]);
+        });
+
+        $this->actingAs($owner)->get(route('getting-started.start'));
+    }
+
     public function test_done_users_are_redirected_away_from_getting_started(): void
     {
         $owner = User::factory()->create([

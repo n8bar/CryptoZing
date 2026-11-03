@@ -48,4 +48,17 @@ class MempoolClientTest extends TestCase
                     && str_contains((string) $context['error'], 'cURL error 28');
             });
     }
+
+    public function test_signet_reads_from_the_signet_explorer(): void
+    {
+        Http::fake([
+            'https://mempool.example/signet/api/blocks/tip/height' => Http::response('329183', 200),
+        ]);
+
+        $client = new MempoolClient([
+            'mempool' => ['signet_base' => 'https://mempool.example/signet/api', 'timeout' => 1.0],
+        ]);
+
+        $this->assertSame(329183, $client->tipHeight('signet'));
+    }
 }

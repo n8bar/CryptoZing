@@ -57,6 +57,8 @@ const NETWORK_ALIASES = {
   testnet: 'testnet',
   testnet3: 'testnet',
   testnet4: 'testnet',
+  // Signet shares testnet's address and key formats.
+  signet: 'testnet',
 };
 
 const normalizeNetwork = (requested, derived) => {
