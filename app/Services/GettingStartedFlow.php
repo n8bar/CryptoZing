@@ -434,7 +434,7 @@ class GettingStartedFlow
             try {
                 $this->paymentSyncService->syncInvoice(
                     $invoice,
-                    network: $wallet->network,
+                    network: $invoice->wallet_network ?: $wallet->network,
                     checkAlerts: false
                 );
             } catch (\Throwable $e) {
