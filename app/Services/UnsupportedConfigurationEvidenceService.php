@@ -35,6 +35,7 @@ class UnsupportedConfigurationEvidenceService
                 'wallet_key_fingerprint',
                 'wallet_network',
                 'unsupported_configuration_flagged',
+                'unsupported_configuration_reason',
             ]);
 
         if ($implicatedInvoices->count() <= 1) {
@@ -45,6 +46,7 @@ class UnsupportedConfigurationEvidenceService
         $txid = (string) (collect($payments)->pluck('txid')->filter()->first() ?? 'unknown');
         $invoiceReferences = $implicatedInvoices
             ->mapWithKeys(fn (Invoice $candidate) => [$candidate->id => $this->invoiceReference($candidate)]);
+        $newlyFlagged = false;
 
         foreach ($implicatedInvoices as $implicatedInvoice) {
             $otherInvoiceReferences = $invoiceReferences
@@ -58,14 +60,26 @@ class UnsupportedConfigurationEvidenceService
                 (string) $invoice->payment_address,
             );
 
-            $implicatedInvoice->markUnsupportedConfiguration(
-                source: 'evidence',
-                reason: 'payment_collision',
-                details: $details,
-                flaggedAt: $flaggedAt,
-            );
+            $alreadyFlagged = $implicatedInvoice->unsupported_configuration_flagged
+                && $implicatedInvoice->unsupported_configuration_reason === 'payment_collision';
 
-            $this->flagCurrentWalletIfLineageMatches($implicatedInvoice, $details, $flaggedAt);
+            if (! $alreadyFlagged) {
+                $implicatedInvoice->markUnsupportedConfiguration(
+                    source: 'evidence',
+                    reason: 'payment_collision',
+                    details: $details,
+                    flaggedAt: $flaggedAt,
+                );
+                $newlyFlagged = true;
+            }
+
+            if ($this->flagCurrentWalletIfLineageMatches($implicatedInvoice, $details, $flaggedAt)) {
+                $newlyFlagged = true;
+            }
+        }
+
+        if (! $newlyFlagged) {
+            return;
         }
 
         Log::warning('invoice.unsupported_configuration.payment_collision', [
@@ -91,10 +105,10 @@ class UnsupportedConfigurationEvidenceService
         return "Detected payment tx {$txid} on address {$address} for {$currentReference}, which is also assigned to {$references}.";
     }
 
-    private function flagCurrentWalletIfLineageMatches(Invoice $invoice, string $details, Carbon $flaggedAt): void
+    private function flagCurrentWalletIfLineageMatches(Invoice $invoice, string $details, Carbon $flaggedAt): bool
     {
         if (! $invoice->wallet_key_fingerprint || ! $invoice->wallet_network) {
-            return;
+            return false;
         }
 
         $wallet = WalletSetting::query()
@@ -102,14 +116,18 @@ class UnsupportedConfigurationEvidenceService
             ->first();
 
         if (! $wallet?->bip84_xpub) {
-            return;
+            return false;
+        }
+
+        if ($wallet->unsupported_configuration_active && $wallet->unsupported_configuration_reason === 'payment_collision') {
+            return false;
         }
 
         $currentNetwork = $this->lineage->normalizeNetwork((string) $wallet->network);
         $currentFingerprint = $this->lineage->fingerprint($currentNetwork, (string) $wallet->bip84_xpub, (string) ($wallet->script_type ?? 'bip84'));
 
         if ($currentNetwork !== $invoice->wallet_network || $currentFingerprint !== $invoice->wallet_key_fingerprint) {
-            return;
+            return false;
         }
 
         $wallet->markUnsupportedConfiguration(
@@ -118,6 +136,8 @@ class UnsupportedConfigurationEvidenceService
             details: $details,
             flaggedAt: $flaggedAt,
         );
+
+        return true;
     }
 
     private function invoiceReference(Invoice $invoice): string
