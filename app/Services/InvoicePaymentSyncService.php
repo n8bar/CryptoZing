@@ -106,7 +106,8 @@ class InvoicePaymentSyncService
     private function recordPayments(Invoice $invoice, array $results, bool $checkAlerts): array
     {
         $droppedCount = 0;
-        $logs = DB::transaction(function () use (&$droppedCount, $invoice, $results) {
+        $newTxids = [];
+        $logs = DB::transaction(function () use (&$droppedCount, &$newTxids, $invoice, $results) {
             $logs = [];
             $latestReference = null;
             $rate = BtcRate::current();
@@ -165,6 +166,7 @@ class InvoicePaymentSyncService
 
                 if ($isNewPayment) {
                     $this->alerts->sendDetectedPaymentAcknowledgments($invoice, $payment);
+                    $newTxids[] = $result['txid'];
                 }
 
                 $reference = $result['confirmed_at'] ?? $result['detected_at'];
@@ -199,6 +201,10 @@ class InvoicePaymentSyncService
         }
 
         foreach ($logs as $log) {
+            if (! in_array($log['txid'], $newTxids, true)) {
+                continue;
+            }
+
             Log::info('invoice.payment.detected', [
                 'invoice_id' => $invoice->id,
                 'status' => $invoice->status,
