@@ -13,6 +13,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 use Tests\Traits\CreatesTestInvoices;
@@ -613,6 +614,56 @@ class WatchPaymentsCommandTest extends TestCase
             ->where('type', 'payment_acknowledgment_issuer')
             ->where('context_key', 'ack-tx-2')
             ->count());
+    }
+
+    public function test_watcher_logs_each_payment_as_detected_only_the_first_time_it_is_seen(): void
+    {
+        Queue::fake();
+        Log::spy();
+        Carbon::setTestNow(Carbon::parse('2025-01-06 09:00:00', 'UTC'));
+
+        $invoice = $this->makeInvoice();
+
+        $base = config('blockchain.mempool.testnet_base');
+
+        Cache::put(BtcRate::CACHE_KEY, [
+            'rate_usd' => 46_000,
+            'as_of' => Carbon::now(),
+            'source' => 'test',
+        ], BtcRate::TTL);
+
+        $tx = fn (string $txid, int $sats) => [
+            'txid' => $txid,
+            'status' => [
+                'confirmed' => false,
+                'block_height' => null,
+                'block_time' => null,
+            ],
+            'vout' => [
+                [
+                    'scriptpubkey_address' => $invoice->payment_address,
+                    'value' => $sats,
+                ],
+            ],
+        ];
+
+        Http::fake([
+            "{$base}/address/{$invoice->payment_address}/txs" => Http::sequence()
+                ->push([$tx('log-tx-1', 300_000)], 200)
+                ->push([$tx('log-tx-1', 300_000), $tx('log-tx-2', 200_000)], 200)
+                ->push([$tx('log-tx-1', 300_000), $tx('log-tx-2', 200_000)], 200),
+        ]);
+
+        $this->artisan('wallet:watch-payments')->assertExitCode(0);
+        $this->artisan('wallet:watch-payments')->assertExitCode(0);
+        $this->artisan('wallet:watch-payments')->assertExitCode(0);
+
+        foreach (['log-tx-1', 'log-tx-2'] as $txid) {
+            Log::shouldHaveReceived('info')
+                ->withArgs(fn ($message, $context = []) => $message === 'invoice.payment.detected'
+                    && ($context['txid'] ?? null) === $txid)
+                ->once();
+        }
     }
 
     public function test_watcher_queues_payment_acknowledgment_and_owner_paid_notice_when_payment_marks_invoice_paid(): void
