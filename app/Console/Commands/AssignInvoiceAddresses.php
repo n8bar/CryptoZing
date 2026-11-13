@@ -29,6 +29,7 @@ class AssignInvoiceAddresses extends Command
 
             $invoices = Invoice::where('user_id', $user->id)
                 ->whereNull('payment_address')
+                ->where(fn ($q) => $q->whereNull('amount_usd')->orWhere('amount_usd', '>', 0))
                 ->orderBy('id')
                 ->get();
 

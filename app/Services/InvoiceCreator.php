@@ -33,19 +33,40 @@ class InvoiceCreator
         return $data;
     }
 
-    /** Create the invoice on the wallet's next address and store its lines. */
+    /** Create the invoice and store its lines; it takes the wallet's next address only if it has something to pay. */
     public function create(array $data, WalletSetting $wallet, int $userId, ?array $preparedLineage = null, array $lines = []): Invoice
     {
-        $invoice = $this->lineage->withPreparedAssignment($wallet, $preparedLineage, function (array $lineage) use ($data, $userId, $wallet) {
-            return Invoice::create($data + [
-                'user_id' => $userId,
-            ] + $lineage + $wallet->invoiceUnsupportedConfigurationSnapshot());
-        });
+        $make = fn (array $lineage) => Invoice::create($data + [
+            'user_id' => $userId,
+        ] + $lineage + $wallet->invoiceUnsupportedConfigurationSnapshot());
+
+        $invoice = isset($data['amount_usd']) && (float) $data['amount_usd'] <= 0
+            ? $make([])
+            : $this->lineage->withPreparedAssignment($wallet, $preparedLineage, $make);
 
         if ($lines !== []) {
             InvoiceLines::replaceFor($invoice, $lines);
         }
 
         return $invoice;
+    }
+
+    /**
+     * After an edit: an invoice with something to pay gets an address, and one at
+     * $0 or less gives back an address no payment has touched (LINE_ITEMS.md §4).
+     */
+    public function syncAddress(Invoice $invoice, ?WalletSetting $wallet): void
+    {
+        if ($invoice->hasNothingToPay()) {
+            if ($invoice->payment_address && ! $invoice->sourcePayments()->exists() && ! $invoice->payments()->exists()) {
+                $invoice->forceFill(['payment_address' => null, 'derivation_index' => null, 'wallet_key_fingerprint' => null, 'wallet_network' => null])->save();
+            }
+
+            return;
+        }
+
+        if (! $invoice->payment_address && $wallet) {
+            $this->lineage->withNextAssignment($wallet, fn (array $lineage) => $invoice->forceFill($lineage)->save());
+        }
     }
 }

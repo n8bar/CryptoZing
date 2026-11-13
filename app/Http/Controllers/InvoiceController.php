@@ -106,7 +106,7 @@ class InvoiceController extends Controller
 
         // If rate is provided and BTC amount omitted, compute it.
         if (empty($data['amount_btc']) && !empty($data['btc_rate']) && $data['btc_rate'] > 0) {
-            $data['amount_btc'] = round($data['amount_usd'] / $data['btc_rate'], 8);
+            $data['amount_btc'] = max(0, round($data['amount_usd'] / $data['btc_rate'], 8));
         }
 
         $wallet = $request->user()->walletSetting;
@@ -324,13 +324,17 @@ class InvoiceController extends Controller
         }
         // allowed to change even when public: status/paid_at/txid/etc.
 
+        if ($data['amount_usd'] < 0 && ($data['status'] ?? $invoice->status) !== 'draft') {
+            return back()->withErrors(['lines' => 'Only a draft can total below $0.'])->withInput();
+        }
 
         if (empty($data['amount_btc']) && !empty($data['btc_rate']) && $data['btc_rate'] > 0) {
-            $data['amount_btc'] = round($data['amount_usd'] / $data['btc_rate'], 8);
+            $data['amount_btc'] = max(0, round($data['amount_usd'] / $data['btc_rate'], 8));
         }
 
         $invoice->update($data);
         InvoiceLines::replaceFor($invoice, $lines);
+        app(InvoiceCreator::class)->syncAddress($invoice->refresh(), $request->user()->walletSetting);
 
         if ($request->wantsJson()) return response()->json($invoice->fresh('client'));
         return redirect()->route('invoices.show', $invoice)->with('status','Invoice updated.');
@@ -471,6 +475,14 @@ class InvoiceController extends Controller
             }
 
             return back()->with('error', $message);
+        }
+
+        if ($action === 'sent' && ! $invoice->canBeSent()) {
+            if ($request->wantsJson()) {
+                return response()->json(['message' => Invoice::SEND_NEEDS_ZERO_OR_MORE], 422);
+            }
+
+            return back()->with('error', Invoice::SEND_NEEDS_ZERO_OR_MORE);
         }
 
         $updates = [

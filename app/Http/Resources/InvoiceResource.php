@@ -27,7 +27,7 @@ class InvoiceResource extends JsonResource
             'total_usd'  => self::usd($this->amount_usd),
             'paid_usd'   => self::usd($this->sumPaymentsUsd()),
             'public_url' => $this->public_url,
-            'payment'    => [
+            'payment'    => $this->hasNothingToPay() ? null : [
                 'address'          => $this->payment_address,
                 'amount_btc'       => $this->amount_btc === null ? null : number_format((float) $this->amount_btc, 8, '.', ''),
                 'uri'              => $this->bitcoin_uri,

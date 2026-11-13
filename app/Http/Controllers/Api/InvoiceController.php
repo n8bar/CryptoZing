@@ -61,6 +61,10 @@ class InvoiceController extends Controller
             throw ValidationException::withMessages(['wallet' => 'Connect a working wallet in the app before creating invoices.']);
         }
 
+        if ($request->boolean('send') && InvoiceLines::total($data['lines']) < 0) {
+            throw ValidationException::withMessages(['lines' => Invoice::SEND_NEEDS_ZERO_OR_MORE]);
+        }
+
         $rate = BtcRate::current()['rate_usd'] ?? null;
         if (! $rate) {
             return ApiError::unavailable('No BTC rate is available right now. Try again shortly.');
@@ -136,6 +140,7 @@ class InvoiceController extends Controller
             if (isset($data['lines'])) {
                 InvoiceLines::replaceFor($invoice, $data['lines']);
                 $this->priceBtc($invoice->refresh());
+                $this->creator->syncAddress($invoice, $request->user()->walletSetting);
             }
         });
 
@@ -161,7 +166,7 @@ class InvoiceController extends Controller
     private function priceBtc(Invoice $invoice): void
     {
         if ((float) $invoice->btc_rate > 0) {
-            $invoice->forceFill(['amount_btc' => round((float) $invoice->amount_usd / (float) $invoice->btc_rate, 8)])->save();
+            $invoice->forceFill(['amount_btc' => max(0, round((float) $invoice->amount_usd / (float) $invoice->btc_rate, 8))])->save();
         }
     }
 
@@ -170,6 +175,9 @@ class InvoiceController extends Controller
     {
         if (empty($invoice->client?->email)) {
             throw ValidationException::withMessages(['client' => 'Add a client email before sending.']);
+        }
+        if (! $invoice->canBeSent()) {
+            throw ValidationException::withMessages(['lines' => Invoice::SEND_NEEDS_ZERO_OR_MORE]);
         }
 
         if (! $invoice->public_enabled) {

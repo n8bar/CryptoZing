@@ -53,6 +53,10 @@ class InvoiceDeliveryController extends Controller
             return back()->with('status', 'Add a client email before sending.');
         }
 
+        if (! $invoice->canBeSent()) {
+            return back()->with('status', Invoice::SEND_NEEDS_ZERO_OR_MORE);
+        }
+
         if (!$invoice->public_enabled || !$invoice->public_token) {
             return back()->with('status', 'Enable the public share link before sending.');
         }

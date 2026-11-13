@@ -74,7 +74,30 @@ class Invoice extends Model
         static::creating(function (Invoice $invoice): void {
             $invoice->api_id ??= static::generateApiId();
         });
+
+        // A $0 invoice stays a draft until sent, then reads paid (LINE_ITEMS.md §4).
+        static::saving(function (Invoice $invoice): void {
+            if ($invoice->amount_usd !== null && (float) $invoice->amount_usd == 0.0
+                && in_array($invoice->status, ['sent', 'partial', 'pending'], true)) {
+                $invoice->status = 'paid';
+                $invoice->paid_at ??= now();
+            }
+        });
     }
+
+    /** A total of $0 or less: no address, no payment request (LINE_ITEMS.md §4). */
+    public function hasNothingToPay(): bool
+    {
+        return $this->amount_usd !== null && (float) $this->amount_usd <= 0;
+    }
+
+    /** Sending needs a total of $0 or more (LINE_ITEMS.md §4). */
+    public function canBeSent(): bool
+    {
+        return $this->amount_usd === null || (float) $this->amount_usd >= 0;
+    }
+
+    public const SEND_NEEDS_ZERO_OR_MORE = 'Sending needs a total of $0 or more.';
 
     /** The invoice's id in the developer API: inv_ plus 12 random characters. */
     public static function generateApiId(): string
@@ -688,7 +711,7 @@ class Invoice extends Model
      */
     public function bitcoinUriForAmount(?float $amountBtc, bool $allowFallback = true): ?string
     {
-        if (!$this->payment_address) {
+        if (!$this->payment_address || $this->hasNothingToPay()) {
             return null;
         }
 
