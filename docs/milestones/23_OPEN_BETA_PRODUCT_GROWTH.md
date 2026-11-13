@@ -68,7 +68,7 @@ Run the first internal measurement/discovery review, document the repeatable ope
 
 ### [ ] Phase 5 — Product backlog selection and feature specifications %<10551>
 
-Select only the backlog features justified by open-beta evidence and remaining capacity, approve the canonical feature requirements and acceptance boundaries, identify dependencies and rollout risk, and reforecast the milestone before code begins if the selected bundle cannot fit the current schedule.
+Select only the backlog features justified by open-beta evidence and remaining capacity, approve the canonical feature requirements and acceptance boundaries, identify dependencies and rollout risk, and reforecast the milestone before code begins if the selected bundle cannot fit the current schedule. Candidates for the bundle include watching the addresses of deleted invoices ([#198](https://github.com/n8bar/CryptoZing/issues/198)).
 
 ### [ ] Phase 6 — Dev implementation and thorough verification %<10552>
 

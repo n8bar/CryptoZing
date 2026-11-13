@@ -101,6 +101,7 @@
             word-break: break-all;
         }
         .history-table { min-width: 620px; }
+        .history-table td { vertical-align: middle; }
         .payment-qr-wrap {
             display:flex;
             align-items:center;

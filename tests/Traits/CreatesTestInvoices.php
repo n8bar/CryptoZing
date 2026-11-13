@@ -48,6 +48,13 @@ trait CreatesTestInvoices
             $invoice->forceFill($overrides)->save();
         }
 
+        $invoice->lines()->create([
+            'position'    => 1,
+            'description' => $invoice->description ?: $invoice->number,
+            'quantity'    => 1,
+            'rate_usd'    => $invoice->amount_usd,
+        ]);
+
         return $invoice->refresh();
     }
 

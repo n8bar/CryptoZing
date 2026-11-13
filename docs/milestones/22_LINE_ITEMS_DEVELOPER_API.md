@@ -1,52 +1,49 @@
 # MS22 — Invoice Line Items and Developer API
 
-Status: Draft for review; milestone direction agreed, detailed feature requirements and phases not approved for implementation.
-Drafted: 2026-09-28.
+Status: Approved; Phase 3 active.
 Parent: [PLAN.md](../PLAN.md)
 
 ## Outcome
 
-An issuer can create an itemized, USD-denominated invoice through the app. A developer can then use an owner-scoped API to create and optionally send those invoices, obtain their public payment links, and read current payment state for an external order. The first API release uses polling: the external system periodically requests invoice status. It does not require a CryptoZing payment-event webhook consumer.
+An issuer can build a USD invoice from line items in the app. A developer can create and send those invoices through an API, get each one's public payment link, and poll its payment state. This release needs no webhooks.
 
 ## Scope Boundary
 
-- Preserve the watch-only wallet model, dedicated invoice addresses, USD-canonical totals, and existing payment-attribution caveats in [PRODUCT_SPEC.md](../PRODUCT_SPEC.md).
-- Phase 1 delivers line items across create/edit, issuer, public, print, and mail surfaces. Multiple description, quantity, and USD rate rows determine the total; the approved line-item spec must settle tax, discount, subtotal, migration, and manual/in-person settlement behavior before code work.
-- The API serves developers building their own consumer. It supplies authenticated invoice creation, optional queued email delivery, an invoice/public link response, and a read endpoint with payment and delivery state. A client may poll the read endpoint until payment reaches its required state.
-- The API must support safe creation retries, owner isolation, credential revocation, bounded request rates, stable documented errors, and explicit distinction between queued mail, provider delivery, detected payment, and confirmed settlement. Exact contracts belong in an approved feature spec.
-- Do not imply that a detected unconfirmed payment is safe to fulfill. The consumer decides fulfillment policy from the documented confirmed state and handles partial, late, overpaid, corrected, or uncertain payment states.
-- Outbound payment-event webhooks are a candidate for [M23](23_OPEN_BETA_PRODUCT_GROWTH.md). They are not required for the first API release. No payment custody, Lightning, conversion, refund automation, or hosted storefront is promised here.
-- Approve canonical feature requirements before implementation. This draft sets the milestone boundary, not the final API schema or behavior spec.
+- Keep the watch-only wallet, dedicated invoice addresses, USD-canonical totals, and the payment-attribution caveats in [PRODUCT_SPEC.md](../PRODUCT_SPEC.md).
+- Approve each feature spec before code. This draft sets the boundary, not the design.
+- Out of scope: payment-event webhooks (an [M23](23_OPEN_BETA_PRODUCT_GROWTH.md) candidate), custody, Lightning, conversion, refund automation, and a hosted storefront.
 
 ## Current Focus
 
-- Active phase: **None — this draft awaits review.**
-- Next action after approval: write and approve the line-item feature spec, then the M22.1 implementation strategy.
+- Active phase: **Phase 3 — API endpoints and release.**
+- Spec: [DEVELOPER_API.md](../specs/DEVELOPER_API.md). Strategy: [M22.3](../strategies/22.3_API_ENDPOINTS_AND_RELEASE.md).
 
 ## Phase Rollup
 
-### [ ] Phase 1 — Itemized invoice foundation %<2963>
+### [x] Phase 1 — Itemized invoice foundation %<2963>
 
-Approve the line-item spec, implement the data and total model plus all affected invoice surfaces, and verify migration, payment presentation, mail, accessibility, and regression behavior on dev.
+Dev verdict: pass. Strategy: [x22.1](../strategies/x22.1_ITEMIZED_INVOICES.md).
 
-### [ ] Phase 2 — Developer API contract and access %<2964>
+Approve the line-item spec, then build it. A line is a description, a quantity, and a USD rate. Lines add up to the total. The spec settles tax, discounts, subtotals, old invoices, and in-person payment first. Line items show everywhere an invoice does: edit, issuer view, public page, and print; mail carries the total. Check it all on dev.
 
-Approve the API feature spec: credential lifecycle and scopes, request/response contract, idempotency, ownership, error and rate-limit behavior, status semantics, and polling guidance. Implement and verify the access boundary and contract.
+### [x] Phase 2 — Developer API reference and access %<2964>
 
-### [ ] Phase 3 — Create, send, read, and integration verification %<2965>
+Dev verdict: pass. Strategy: [x22.2](../strategies/x22.2_API_KEYS_AND_REFERENCE.md).
 
-Implement the documented endpoints using the same invoice and delivery rules as the app. Verify safe retries, queued-send outcomes, payment-state reads, an external order polling scenario, documentation examples, and the full Sail and applicable browser/UX suite.
+Approve the API spec, then build the keys and write the reference. A key belongs to one issuer, can be revoked, and is rate limited. Retrying a request never makes a second invoice. Errors are documented and stable. Status tells apart mail queued, mail delivered, payment seen, and payment confirmed. Only confirmed is safe to fulfill; the developer handles partial, late, overpaid, corrected, or unclear payments.
 
-### [ ] Phase 4 — Controlled release and live validation %<2966>
+### [ ] Phase 3 — API endpoints and release %<2965>
 
-Record a dev verdict and migration/backout plan; obtain rollout approval; release and verify itemized invoices, API access, create/send/read behavior, service health, and the content-promises catalog on production.
+Dev verdict: pass. Strategy: [M22.3](../strategies/22.3_API_ENDPOINTS_AND_RELEASE.md).
 
-## Exit Criteria
+Build the endpoints on the same rules as the app: create an invoice, send it by email if asked, return its public link, and read its mail and payment state. The developer polls that read until they get the state they need. Test retries, sending, reads, a live key and a revoked key on dev, a full order-by-polling run, the doc examples, and the whole suite. Record the dev verdict and a backout plan. Get the go for rollout. Release, then check line items, API keys, create/send/read, service health, and the content promises on prod.
 
-- [ ] Approved line-item and API specs define the release behavior before code work starts. %<2968>
-- [ ] Itemized invoices preserve USD-canonical totals and behave consistently across app, public, print, mail, and payment surfaces. %<2969>
-- [ ] A credential limited to one issuer can create and optionally queue-send an itemized invoice, retrieve its public link and current state, and cannot access another issuer's data. %<2970>
-- [ ] Retrying an API create request cannot duplicate an invoice; API responses and documentation distinguish queued mail, delivery outcome, detected payment, and confirmed settlement. %<2971>
+### [ ] Exit Criteria
+
+- [x] Approved line-item and API specs define the release behavior before code work starts. %<2968>
+- [x] Itemized invoices preserve USD-canonical totals and behave consistently across app, public, print, mail, and payment surfaces. %<2969>
+- [x] A credential limited to one issuer can create and optionally queue-send an itemized invoice, retrieve its public link and current state, and cannot access another issuer's data. %<2970>
+- [x] Retrying an API create request cannot duplicate an invoice; API responses and documentation distinguish queued mail, delivery outcome, detected payment, and confirmed settlement. %<2971>
 - [ ] A documented consumer can reconcile an external order by polling, including partial or uncertain payment states, without requiring outbound webhooks. %<2972>
 - [ ] Targeted, regression, full Sail, and applicable browser/mobile/accessibility checks pass; dev and production verdicts are recorded after approved rollout. %<2973>
 - [ ] The [content promises catalog](../CONTENT_PROMISES.md) is checked against all M22 public claims before closure. %<2974>

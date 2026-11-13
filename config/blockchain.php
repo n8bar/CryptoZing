@@ -21,5 +21,6 @@ return [
             'MEMPOOL_TESTNET4_URL',
             env('MEMPOOL_TESTNET_URL', 'https://mempool.space/testnet4/api')
         ),
+        'signet_base' => env('MEMPOOL_SIGNET_URL', 'https://mempool.space/signet/api'),
     ],
 ];

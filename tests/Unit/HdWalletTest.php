@@ -42,6 +42,14 @@ class HdWalletTest extends TestCase
         );
     }
 
+    public function test_signet_derives_testnet_addresses(): void
+    {
+        $this->assertSame(
+            'tb1qnj02g6mvfs8ttcra7v4ze03f98lj8qrxp7hl5s',
+            (new HdWallet())->deriveAddress(self::TESTNET_VPUB, 0, 'signet')
+        );
+    }
+
     public function test_derives_mainnet_zpub_on_external_chain(): void
     {
         $wallet = new HdWallet();
