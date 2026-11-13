@@ -38,7 +38,7 @@ Build the endpoints on the same rules as the app: create an invoice, send it by 
 
 ### [ ] Exit Criteria
 
-- [ ] Approved line-item and API specs define the release behavior before code work starts. %<2968>
+- [x] Approved line-item and API specs define the release behavior before code work starts. %<2968>
 - [ ] Itemized invoices preserve USD-canonical totals and behave consistently across app, public, print, mail, and payment surfaces. %<2969>
 - [ ] A credential limited to one issuer can create and optionally queue-send an itemized invoice, retrieve its public link and current state, and cannot access another issuer's data. %<2970>
 - [ ] Retrying an API create request cannot duplicate an invoice; API responses and documentation distinguish queued mail, delivery outcome, detected payment, and confirmed settlement. %<2971>
