@@ -7,7 +7,6 @@ use App\Models\InvoiceDelivery;
 use App\Services\InvoiceDeliveryService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class InvoiceDeliveryController extends Controller
@@ -54,6 +53,10 @@ class InvoiceDeliveryController extends Controller
             return back()->with('status', 'Add a client email before sending.');
         }
 
+        if (! $invoice->canBeSent()) {
+            return back()->with('status', Invoice::SEND_NEEDS_ZERO_OR_MORE);
+        }
+
         if (!$invoice->public_enabled || !$invoice->public_token) {
             return back()->with('status', 'Enable the public share link before sending.');
         }
@@ -63,32 +66,7 @@ class InvoiceDeliveryController extends Controller
 
         $message = $validated['message'] ?? null;
 
-        // A second send of an already-sent invoice is deliberate, whoever it
-        // went to before: it goes out as its own delivery, and only the short
-        // manual cooldown holds it off (#182). A refusal is recorded so the
-        // delivery log stays truthful.
-        if ($this->deliveries->hasCompletedSend($invoice, 'send')) {
-            $delivery = $this->deliveries->queueResend($invoice, 'send', $recipient, $cc, $message)
-                ?? $this->deliveries->skip(
-                    $invoice,
-                    'send',
-                    $recipient,
-                    'Invoice email skipped because the same notice was already queued or sent recently.',
-                    $cc,
-                    $message,
-                    'resend_cooldown_' . Str::uuid(),
-                );
-        } else {
-            $delivery = $this->deliveries->queue($invoice, 'send', $recipient, $cc, $message);
-        }
-
-        if ($delivery->status === 'queued') {
-            $updates = ['delivery_message_draft' => null];
-            if ($invoice->status === 'draft') {
-                $updates['status'] = 'sent';
-            }
-            $invoice->forceFill($updates)->save();
-        }
+        $delivery = $this->deliveries->sendInvoice($invoice, $recipient, $cc, $message);
 
         $statusMessage = $delivery->status === 'queued'
             ? 'Invoice email queued.'

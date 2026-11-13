@@ -237,7 +237,24 @@
                 : null;
         @endphp
 
-        @if ($bitcoinUri && $showPaymentActions)
+        @if ($invoice->hasNothingToPay())
+            <tr>
+                <th><div>Payment QR</div></th>
+                <td>
+                    <div class="payment-qr-wrap">
+                        <div class="payment-qr-block">
+                            @include('invoices.partials.nothing-to-pay-qr', ['size' => 180])
+                        </div>
+
+                        <div class="thank-you-block">
+                            <div style="font-weight:800; font-size: 53.33px; line-height:1; letter-spacing:-0.02em; color:#4f46e5;">
+                                Thank you!
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        @elseif ($bitcoinUri && $showPaymentActions)
             <tr>
                 <th>
                     <div>Payment QR</div>
@@ -268,7 +285,7 @@
         </table>
     </div>
 
-    @if ($st !== 'paid')
+    @if ($st !== 'paid' && ! $invoice->hasNothingToPay())
         <div style="margin-top:12px; padding:10px; border-radius:10px; border:1px solid #fed7aa; background:#fff7ed; font-size: 17.33px; line-height:1.4;">
             <strong>Send one payment (if possible):</strong> To avoid extra miner fees and processing delays, please send the full outstanding balance in a single Bitcoin transaction. If you need to split between wallets, multiple payments are accepted, but costs may increase.
         </div>

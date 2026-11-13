@@ -34,14 +34,16 @@ Approve the API spec, then build the keys and write the reference. A key belongs
 
 ### [ ] Phase 3 — API endpoints and release %<2965>
 
+Dev verdict: pass. Strategy: [M22.3](../strategies/22.3_API_ENDPOINTS_AND_RELEASE.md).
+
 Build the endpoints on the same rules as the app: create an invoice, send it by email if asked, return its public link, and read its mail and payment state. The developer polls that read until they get the state they need. Test retries, sending, reads, a live key and a revoked key on dev, a full order-by-polling run, the doc examples, and the whole suite. Record the dev verdict and a backout plan. Get the go for rollout. Release, then check line items, API keys, create/send/read, service health, and the content promises on prod.
 
 ### [ ] Exit Criteria
 
-- [ ] Approved line-item and API specs define the release behavior before code work starts. %<2968>
-- [ ] Itemized invoices preserve USD-canonical totals and behave consistently across app, public, print, mail, and payment surfaces. %<2969>
-- [ ] A credential limited to one issuer can create and optionally queue-send an itemized invoice, retrieve its public link and current state, and cannot access another issuer's data. %<2970>
-- [ ] Retrying an API create request cannot duplicate an invoice; API responses and documentation distinguish queued mail, delivery outcome, detected payment, and confirmed settlement. %<2971>
+- [x] Approved line-item and API specs define the release behavior before code work starts. %<2968>
+- [x] Itemized invoices preserve USD-canonical totals and behave consistently across app, public, print, mail, and payment surfaces. %<2969>
+- [x] A credential limited to one issuer can create and optionally queue-send an itemized invoice, retrieve its public link and current state, and cannot access another issuer's data. %<2970>
+- [x] Retrying an API create request cannot duplicate an invoice; API responses and documentation distinguish queued mail, delivery outcome, detected payment, and confirmed settlement. %<2971>
 - [ ] A documented consumer can reconcile an external order by polling, including partial or uncertain payment states, without requiring outbound webhooks. %<2972>
 - [ ] Targeted, regression, full Sail, and applicable browser/mobile/accessibility checks pass; dev and production verdicts are recorded after approved rollout. %<2973>
 - [ ] The [content promises catalog](../CONTENT_PROMISES.md) is checked against all M22 public claims before closure. %<2974>

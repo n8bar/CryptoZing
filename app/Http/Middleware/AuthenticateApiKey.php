@@ -3,6 +3,8 @@
 namespace App\Http\Middleware;
 
 use App\Models\ApiKey;
+use App\Support\AlphaGate;
+use App\Support\ApiError;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
@@ -10,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Resolves the issuer from a bearer API key and rate limits per key.
- * Errors use the API's error format: {"error": {"code", "message"}}.
+ * A key is refused while its owner may not sign in.
  */
 class AuthenticateApiKey
 {
@@ -19,11 +21,9 @@ class AuthenticateApiKey
         $plain = $request->bearerToken();
         $key = $plain ? ApiKey::findByPlain($plain) : null;
 
-        if (! $key) {
-            return response()->json(['error' => [
-                'code'    => 'unauthorized',
-                'message' => 'Missing, unknown, or revoked API key.',
-            ]], 401);
+        // A key works only while its owner may hold a session: not banned, and through the alpha gate.
+        if (! $key || ! $key->user || AlphaGate::refusal($key->user) !== null) {
+            return ApiError::response('unauthorized', 'Missing, unknown, or revoked API key.', 401);
         }
 
         $bucket = 'api-key:' . $key->id;
@@ -31,10 +31,7 @@ class AuthenticateApiKey
         if (RateLimiter::tooManyAttempts($bucket, $limit)) {
             $retry = RateLimiter::availableIn($bucket);
 
-            return response()->json(['error' => [
-                'code'    => 'rate_limited',
-                'message' => "Too many requests. Retry in {$retry} seconds.",
-            ]], 429, ['Retry-After' => $retry]);
+            return ApiError::response('rate_limited', "Too many requests. Retry in {$retry} seconds.", 429, headers: ['Retry-After' => $retry]);
         }
         RateLimiter::hit($bucket, 60);
 

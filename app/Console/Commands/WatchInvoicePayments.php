@@ -26,6 +26,7 @@ class WatchInvoicePayments extends Command
     {
         $query = Invoice::query()
             ->whereNotNull('payment_address')
+            ->where('amount_usd', '>', 0) // nothing to pay, nothing to watch (LINE_ITEMS.md §4)
             ->where('status', '!=', 'void')
             ->orderBy('id');
 

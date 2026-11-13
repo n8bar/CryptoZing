@@ -621,6 +621,11 @@
                                     }
                                 });
                             </script>
+                        @elseif ($invoice->hasNothingToPay())
+                            <div class="mt-6">
+                                <h3 class="mb-2 text-sm font-semibold text-gray-700">Payment QR</h3>
+                                @include('invoices.partials.nothing-to-pay-qr', ['size' => 220])
+                            </div>
                         @endif
 
                     </dl>

@@ -14,6 +14,7 @@ use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Support\Facades\Auth;
+use App\Support\ApiError;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -34,6 +35,7 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
+        api: __DIR__.'/../routes/api.php',
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
@@ -73,6 +75,9 @@ return Application::configure(basePath: dirname(__DIR__))
         });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
+        // Developer API errors use the format in docs/API.md §7.
+        $exceptions->render(fn (\Throwable $exception, Request $request) => $request->is('api/*') ? ApiError::fromException($exception) : null);
+
         $renderForbidden = function (Request $request, ?string $details = null) {
             $fallback = "Sorry, you don't have permission.";
 
