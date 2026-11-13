@@ -36,7 +36,7 @@ services:
       - app-public:/shared/public
 
   web:
-    image: nginx:1.27-alpine
+    image: nginx:1.30-alpine
     restart: unless-stopped
     # Only the template variable — no app secrets in this container.
     environment:
