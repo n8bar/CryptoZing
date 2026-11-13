@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Models\ApiKey;
+use App\Support\AlphaGate;
 use App\Support\ApiError;
 use Closure;
 use Illuminate\Http\Request;
@@ -11,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Resolves the issuer from a bearer API key and rate limits per key.
+ * A key is refused while its owner may not sign in.
  */
 class AuthenticateApiKey
 {
@@ -19,7 +21,8 @@ class AuthenticateApiKey
         $plain = $request->bearerToken();
         $key = $plain ? ApiKey::findByPlain($plain) : null;
 
-        if (! $key) {
+        // A key works only while its owner may hold a session: not banned, and through the alpha gate.
+        if (! $key || ! $key->user || AlphaGate::refusal($key->user) !== null) {
             return ApiError::response('unauthorized', 'Missing, unknown, or revoked API key.', 401);
         }
 

@@ -94,7 +94,7 @@ Response `201` with the invoice (§6).
 
 | Status | Code | When |
 |---|---|---|
-| 401 | `unauthorized` | Missing, unknown, or revoked key |
+| 401 | `unauthorized` | Missing, unknown, or revoked key, or its account can't sign in |
 | 404 | `not_found` | No such invoice for this key's issuer, or no such endpoint |
 | 405 | `method_not_allowed` | The endpoint does not take that method |
 | 409 | `conflict` | Idempotency key reused with a different body |

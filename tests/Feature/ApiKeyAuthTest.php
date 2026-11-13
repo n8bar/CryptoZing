@@ -30,6 +30,22 @@ class ApiKeyAuthTest extends TestCase
         $this->withToken($plain)->getJson('/api/v1/_probe')->assertStatus(401);
     }
 
+    public function test_a_key_is_refused_while_its_owner_may_not_sign_in(): void
+    {
+        $issuer = User::factory()->create();
+        [, $plain] = ApiKey::issue($issuer, 'Shop');
+
+        $issuer->forceFill(['banned_at' => now()])->save();
+        $this->withToken($plain)->getJson('/api/v1/_probe')->assertStatus(401)->assertJsonPath('error.code', 'unauthorized');
+
+        $issuer->forceFill(['banned_at' => null, 'approved_at' => null])->save();
+        config(['alpha.gate_enabled' => true]);
+        $this->withToken($plain)->getJson('/api/v1/_probe')->assertStatus(401);
+
+        $issuer->forceFill(['approved_at' => now()])->save();
+        $this->withToken($plain)->getJson('/api/v1/_probe')->assertOk();
+    }
+
     public function test_a_live_key_resolves_its_issuer_and_stamps_last_used(): void
     {
         $issuer = User::factory()->create();
