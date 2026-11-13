@@ -27,6 +27,11 @@ Parent: [MS22](../milestones/22_LINE_ITEMS_DEVELOPER_API.md), Phase 1.
 1. The total is the sum of the lines, rounded to cents.
 2. The total is the canonical USD amount. Payment, partial payment, overpayment, and corrections keep their existing rules.
 3. The BTC request derives from the total per [RATES.md](RATES.md).
+4. A draft's total can be below $0. Sending needs a total of $0 or more.
+5. An invoice at $0 or less has nothing to pay.
+   1. It has no payment address.
+   2. Its QR code is crossed out in red: "Nothing to pay."
+6. A $0 invoice stays a draft until sent, then reads paid.
 
 ## 5. Surfaces
 
