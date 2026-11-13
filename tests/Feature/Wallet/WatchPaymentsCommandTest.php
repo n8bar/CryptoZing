@@ -13,6 +13,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 use Tests\Traits\CreatesTestInvoices;
@@ -615,6 +616,56 @@ class WatchPaymentsCommandTest extends TestCase
             ->count());
     }
 
+    public function test_watcher_logs_each_payment_as_detected_only_the_first_time_it_is_seen(): void
+    {
+        Queue::fake();
+        Log::spy();
+        Carbon::setTestNow(Carbon::parse('2025-01-06 09:00:00', 'UTC'));
+
+        $invoice = $this->makeInvoice();
+
+        $base = config('blockchain.mempool.testnet_base');
+
+        Cache::put(BtcRate::CACHE_KEY, [
+            'rate_usd' => 46_000,
+            'as_of' => Carbon::now(),
+            'source' => 'test',
+        ], BtcRate::TTL);
+
+        $tx = fn (string $txid, int $sats) => [
+            'txid' => $txid,
+            'status' => [
+                'confirmed' => false,
+                'block_height' => null,
+                'block_time' => null,
+            ],
+            'vout' => [
+                [
+                    'scriptpubkey_address' => $invoice->payment_address,
+                    'value' => $sats,
+                ],
+            ],
+        ];
+
+        Http::fake([
+            "{$base}/address/{$invoice->payment_address}/txs" => Http::sequence()
+                ->push([$tx('log-tx-1', 300_000)], 200)
+                ->push([$tx('log-tx-1', 300_000), $tx('log-tx-2', 200_000)], 200)
+                ->push([$tx('log-tx-1', 300_000), $tx('log-tx-2', 200_000)], 200),
+        ]);
+
+        $this->artisan('wallet:watch-payments')->assertExitCode(0);
+        $this->artisan('wallet:watch-payments')->assertExitCode(0);
+        $this->artisan('wallet:watch-payments')->assertExitCode(0);
+
+        foreach (['log-tx-1', 'log-tx-2'] as $txid) {
+            Log::shouldHaveReceived('info')
+                ->withArgs(fn ($message, $context = []) => $message === 'invoice.payment.detected'
+                    && ($context['txid'] ?? null) === $txid)
+                ->once();
+        }
+    }
+
     public function test_watcher_queues_payment_acknowledgment_and_owner_paid_notice_when_payment_marks_invoice_paid(): void
     {
         Queue::fake();
@@ -764,6 +815,70 @@ class WatchPaymentsCommandTest extends TestCase
         $this->assertTrue((bool) $ownerB->walletSetting->unsupported_configuration_active);
         $this->assertSame('evidence', $ownerB->walletSetting->unsupported_configuration_source);
         $this->assertSame('payment_collision', $ownerB->walletSetting->unsupported_configuration_reason);
+    }
+
+    public function test_watcher_flags_and_logs_payment_collision_evidence_only_once(): void
+    {
+        Log::spy();
+        Carbon::setTestNow(Carbon::parse('2025-01-06 12:00:00', 'UTC'));
+        $address = 'tb1qcollisiononce000000000000000000000';
+        $ownerA = User::factory()->create();
+        $ownerB = User::factory()->create();
+        $ownerA->walletSetting()->create([
+            'network' => 'testnet',
+            'bip84_xpub' => 'vpub-collision-once-a',
+        ]);
+        $ownerB->walletSetting()->create([
+            'network' => 'testnet',
+            'bip84_xpub' => 'vpub-collision-once-b',
+        ]);
+
+        $invoiceA = $this->createInvoiceForUser($ownerA, 'INV-2101', $address, 'vpub-collision-once-a');
+        $invoiceB = $this->createInvoiceForUser($ownerB, 'INV-2102', $address, 'vpub-collision-once-b');
+
+        $base = config('blockchain.mempool.testnet_base');
+
+        Cache::put(BtcRate::CACHE_KEY, [
+            'rate_usd' => 42_000,
+            'as_of' => Carbon::now(),
+            'source' => 'test',
+        ], BtcRate::TTL);
+
+        Http::fake([
+            "{$base}/address/{$address}/txs" => Http::response([
+                [
+                    'txid' => 'collision-once-1',
+                    'status' => [
+                        'confirmed' => false,
+                        'block_height' => null,
+                        'block_time' => null,
+                    ],
+                    'vout' => [
+                        [
+                            'scriptpubkey_address' => $address,
+                            'value' => 1_000_000,
+                        ],
+                    ],
+                ],
+            ], 200),
+        ]);
+
+        $flagTimes = fn () => collect([$invoiceA->fresh(), $invoiceB->fresh(), $ownerA->walletSetting->fresh(), $ownerB->walletSetting->fresh()])
+            ->map(fn ($record) => $record->unsupported_configuration_flagged_at?->toDateTimeString())
+            ->all();
+
+        $this->artisan('wallet:watch-payments')->assertExitCode(0);
+        $firstFlagTimes = $flagTimes();
+
+        Carbon::setTestNow(Carbon::parse('2025-01-06 12:05:00', 'UTC'));
+        $this->artisan('wallet:watch-payments')->assertExitCode(0);
+
+        $this->assertNotContains(null, $firstFlagTimes);
+        $this->assertSame($firstFlagTimes, $flagTimes());
+
+        Log::shouldHaveReceived('warning')
+            ->withArgs(fn ($message) => $message === 'invoice.unsupported_configuration.payment_collision')
+            ->once();
     }
 
     public function test_command_does_not_flag_current_wallet_when_collision_evidence_belongs_to_old_invoice_lineage(): void

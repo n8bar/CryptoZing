@@ -109,6 +109,7 @@ class MempoolClient
             'testnet' => 'testnet_base',
             'testnet3' => 'testnet3_base',
             'testnet4' => 'testnet4_base',
+            'signet' => 'signet_base',
             default => null,
         };
 

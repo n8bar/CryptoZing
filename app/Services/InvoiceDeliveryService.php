@@ -119,6 +119,41 @@ class InvoiceDeliveryService
         );
     }
 
+    /**
+     * Send the invoice email. A second send of an already-sent invoice is
+     * deliberate, whoever it went to before: it goes out as its own delivery,
+     * and only the short manual cooldown holds it off (#182). A refusal is
+     * recorded so the delivery log stays truthful. A queued send clears the
+     * draft note and moves a draft invoice to sent.
+     */
+    public function sendInvoice(Invoice $invoice, string $recipient, ?string $cc = null, ?string $message = null): InvoiceDelivery
+    {
+        if ($this->hasCompletedSend($invoice, 'send')) {
+            $delivery = $this->queueResend($invoice, 'send', $recipient, $cc, $message)
+                ?? $this->skip(
+                    $invoice,
+                    'send',
+                    $recipient,
+                    'Invoice email skipped because the same notice was already queued or sent recently.',
+                    $cc,
+                    $message,
+                    'resend_cooldown_' . Str::uuid(),
+                );
+        } else {
+            $delivery = $this->queue($invoice, 'send', $recipient, $cc, $message);
+        }
+
+        if ($delivery->status === 'queued') {
+            $updates = ['delivery_message_draft' => null];
+            if ($invoice->status === 'draft') {
+                $updates['status'] = 'sent';
+            }
+            $invoice->forceFill($updates)->save();
+        }
+
+        return $delivery;
+    }
+
     public function queueResend(
         Invoice $invoice,
         string $type,

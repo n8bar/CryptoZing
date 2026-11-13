@@ -298,6 +298,9 @@
                     </div>
 
                     <div class="p-6">
+                        <h3 class="mb-3 text-sm font-semibold text-gray-700">Lines</h3>
+                        <div class="mb-4">@include('invoices.partials.lines-table', ['invoice' => $invoice])</div>
+
                         <h3 class="mb-3 text-sm font-semibold text-gray-700">Amounts</h3>
                         @php
                             $rateInfo = $rate ?? null;
@@ -618,6 +621,11 @@
                                     }
                                 });
                             </script>
+                        @elseif ($invoice->hasNothingToPay())
+                            <div class="mt-6">
+                                <h3 class="mb-2 text-sm font-semibold text-gray-700">Payment QR</h3>
+                                @include('invoices.partials.nothing-to-pay-qr', ['size' => 220])
+                            </div>
                         @endif
 
                     </dl>

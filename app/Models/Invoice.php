@@ -69,11 +69,82 @@ class Invoice extends Model
     public const SMALL_BALANCE_RESOLUTION_PERCENT = 0.01; // 1% of expected USD
     public const SMALL_BALANCE_RESOLUTION_CAP_USD = 50.0;
 
+    protected static function booted(): void
+    {
+        static::creating(function (Invoice $invoice): void {
+            $invoice->api_id ??= static::generateApiId();
+        });
+
+        // A $0 invoice stays a draft until sent, then reads paid (LINE_ITEMS.md §4).
+        static::saving(function (Invoice $invoice): void {
+            if ($invoice->amount_usd !== null && (float) $invoice->amount_usd == 0.0
+                && in_array($invoice->status, ['sent', 'partial', 'pending'], true)) {
+                $invoice->status = 'paid';
+                $invoice->paid_at ??= now();
+            }
+        });
+    }
+
+    /** A total of $0 or less: no address, no payment request (LINE_ITEMS.md §4). */
+    public function hasNothingToPay(): bool
+    {
+        return $this->amount_usd !== null && (float) $this->amount_usd <= 0;
+    }
+
+    /** Sending needs a total of $0 or more (LINE_ITEMS.md §4). */
+    public function canBeSent(): bool
+    {
+        return $this->amount_usd === null || (float) $this->amount_usd >= 0;
+    }
+
+    public const SEND_NEEDS_ZERO_OR_MORE = 'Sending needs a total of $0 or more.';
+
+    /** The invoice's id in the developer API: inv_ plus 12 random characters. */
+    public static function generateApiId(): string
+    {
+        do {
+            $id = 'inv_' . Str::lower(Str::random(12));
+        } while (static::withTrashed()->where('api_id', $id)->exists());
+
+        return $id;
+    }
+
     public function user(): BelongsTo   { return $this->belongsTo(User::class); }
     public function client(): BelongsTo { return $this->belongsTo(Client::class); }
     public function payments(): HasMany { return $this->hasMany(InvoicePayment::class, 'accounting_invoice_id'); }
     public function sourcePayments(): HasMany { return $this->hasMany(InvoicePayment::class, 'invoice_id'); }
     public function deliveries(): HasMany { return $this->hasMany(InvoiceDelivery::class); }
+    public function lines(): HasMany      { return $this->hasMany(InvoiceLine::class)->orderBy('position'); }
+
+    /**
+     * Set amount_usd to the sum of the lines, rounded to cents. Percentage
+     * lines apply to the amounts of the lines they pick. Invoices without
+     * lines keep their amount.
+     */
+    public function recalculateTotalFromLines(): void
+    {
+        $amounts = $this->lineAmounts();
+        if ($amounts->isEmpty()) {
+            return;
+        }
+
+        $counted = $this->lines()->where('kind', '!=', 'subtotal')->pluck('id');
+        $this->forceFill(['amount_usd' => round($amounts->only($counted->all())->sum(), 2)])->save();
+    }
+
+    /** Each line's USD amount keyed by line id, in order; subtotal and percentage lines resolved. */
+    public function lineAmounts(): \Illuminate\Support\Collection
+    {
+        $amounts = collect();
+        $running = 0.0;
+        foreach ($this->lines()->get() as $line) {
+            $amount = $line->amountUsd($amounts, $running);
+            $amounts[$line->id] = $amount;
+            $running = $line->kind === 'subtotal' ? 0.0 : $running + $amount;
+        }
+
+        return $amounts;
+    }
 
     public function paymentHistory(): Collection
     {
@@ -217,6 +288,32 @@ class Invoice extends Model
             ->whereDate('due_date', '<=', $end);
     }
 
+    /** The invoice email's state for the API: none, queued, delivered, or failed. */
+    public function mailState(): string
+    {
+        $sends = $this->deliveries()->where('type', 'send')->latest('id')->get();
+        if ($sends->isEmpty()) {
+            return 'none';
+        }
+
+        // A send skipped by the resend cooldown says nothing about the email before it.
+        return match ($sends->first(fn (InvoiceDelivery $d) => $d->status !== 'skipped')?->status) {
+            'queued', 'sending' => 'queued',
+            'sent' => 'delivered',
+            default => 'failed',
+        };
+    }
+
+    /** Payment state for the API: none, seen (any payment unconfirmed), or confirmed. */
+    public function paymentState(): string
+    {
+        if (! $this->hasPaymentActivity()) {
+            return 'none';
+        }
+
+        return $this->hasUnconfirmedPayments() ? 'seen' : 'confirmed';
+    }
+
     private function hasDeliveryOfTypeWithStatuses(string $type, array $statuses): bool
     {
         if ($this->relationLoaded('deliveries')) {
@@ -283,6 +380,21 @@ class Invoice extends Model
         ];
     }
 
+    /** Whether a failed insert lost the race for this issuer's invoice number. */
+    public static function isNumberCollision(\Illuminate\Database\QueryException $e): bool
+    {
+        $sqlState = (string) ($e->errorInfo[0] ?? $e->getCode());
+        $message = strtolower($e->getMessage());
+
+        if (!in_array($sqlState, ['23000', '23505'], true)) {
+            return false;
+        }
+
+        return str_contains($message, 'invoices_number_unique')
+            || str_contains($message, 'invoices_user_id_number_unique')
+            || str_contains($message, 'unique constraint failed: invoices.number')
+            || str_contains($message, 'unique constraint failed: invoices.user_id, invoices.number');
+    }
 
     public static function nextNumberForUser(int $userId): string
     {
@@ -599,7 +711,7 @@ class Invoice extends Model
      */
     public function bitcoinUriForAmount(?float $amountBtc, bool $allowFallback = true): ?string
     {
-        if (!$this->payment_address) {
+        if (!$this->payment_address || $this->hasNothingToPay()) {
             return null;
         }
 

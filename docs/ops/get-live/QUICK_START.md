@@ -15,7 +15,7 @@ Fast path to run the app locally with Laravel Sail.
    - Mail: `MAIL_MAILER=mailgun`, `MAILGUN_DOMAIN`, `MAILGUN_SECRET`, optional `MAILGUN_ENDPOINT`, and `MAIL_FROM_*`.
    - Mail safety: `MAIL_OUTBOUND_ENABLED`, `MAIL_MANUAL_SEND_COOLDOWN_MINUTES`, `MAIL_ALERT_COOLDOWN_MINUTES`.
    - Aliasing for pre-prod safety: `MAIL_ALIAS_ENABLED=true`, `MAIL_ALIAS_DOMAIN=mailer.cryptozing.app`.
-   - Wallet network: `WALLET_NETWORK=mainnet` (real payments) or `testnet4`/`testnet3` (testing; matches the watcher’s mempool endpoint).
+   - Wallet network: `WALLET_NETWORK=mainnet` (real payments) or `signet`/`testnet4`/`testnet3` (testing; matches the watcher’s mempool endpoint).
 2. Start Sail and install dependencies (fresh clone with no `vendor/` yet? bootstrap Composer once first):
    ```bash
    docker run --rm -u "$(id -u):$(id -g)" -v "$(pwd):/var/www/html" -w /var/www/html laravelsail/php84-composer:latest composer install --ignore-platform-reqs
@@ -41,7 +41,7 @@ Fast path to run the app locally with Laravel Sail.
 | Key | Purpose | Typical dev value |
 | --- | --- | --- |
 | APP_URL / APP_PUBLIC_URL | Base URLs for app/public links | http://localhost |
-| WALLET_NETWORK | Derivation + mempool network | mainnet / testnet4 / testnet3 |
+| WALLET_NETWORK | Derivation + mempool network | mainnet / signet / testnet4 / testnet3 |
 | MAIL_MAILER | Default transport | mailgun |
 | MAILGUN_DOMAIN / MAILGUN_SECRET / MAILGUN_ENDPOINT | Mailgun HTTP API settings | sandbox domain / key / api.mailgun.net |
 | MAIL_FROM_ADDRESS / MAIL_FROM_NAME | Default sender | no-reply@cryptozing.app / CryptoZing |

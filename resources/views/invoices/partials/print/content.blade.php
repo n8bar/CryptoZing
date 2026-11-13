@@ -63,6 +63,11 @@
 </section>
 
 <section class="box section-gap">
+    <h3 style="margin:0 0 8px; font-size: 18.67px;">Lines</h3>
+    @include('invoices.partials.lines-table', ['invoice' => $invoice])
+</section>
+
+<section class="box section-gap">
     <h3 style="margin:0 0 8px; font-size: 18.67px;">Amounts</h3>
     <table>
         <tr><th>USD</th><td class="total">${{ number_format($invoice->amount_usd, 2) }}</td></tr>
@@ -232,7 +237,24 @@
                 : null;
         @endphp
 
-        @if ($bitcoinUri && $showPaymentActions)
+        @if ($invoice->hasNothingToPay())
+            <tr>
+                <th><div>Payment QR</div></th>
+                <td>
+                    <div class="payment-qr-wrap">
+                        <div class="payment-qr-block">
+                            @include('invoices.partials.nothing-to-pay-qr', ['size' => 180])
+                        </div>
+
+                        <div class="thank-you-block">
+                            <div style="font-weight:800; font-size: 53.33px; line-height:1; letter-spacing:-0.02em; color:#4f46e5;">
+                                Thank you!
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        @elseif ($bitcoinUri && $showPaymentActions)
             <tr>
                 <th>
                     <div>Payment QR</div>
@@ -263,7 +285,7 @@
         </table>
     </div>
 
-    @if ($st !== 'paid')
+    @if ($st !== 'paid' && ! $invoice->hasNothingToPay())
         <div style="margin-top:12px; padding:10px; border-radius:10px; border:1px solid #fed7aa; background:#fff7ed; font-size: 17.33px; line-height:1.4;">
             <strong>Send one payment (if possible):</strong> To avoid extra miner fees and processing delays, please send the full outstanding balance in a single Bitcoin transaction. If you need to split between wallets, multiple payments are accepted, but costs may increase.
         </div>
@@ -288,8 +310,8 @@
                 <tbody>
                     @foreach ($invoice->payments as $payment)
                         <tr>
-                            <td>{{ optional($payment->detected_at)->toDayDateTimeString() ?? '—' }}</td>
-                            <td class="mono" style="word-break: break-all;">{{ $payment->txid ?: '—' }}</td>
+                            <td>{{ $payment->detected_at?->format('D, Y-m-d H:i') ?? '—' }}</td>
+                            <td class="mono" style="font-size:15px; line-height:1.05rem;"><span style="display:inline-block; max-width:13ch; word-break:break-all;">{{ $payment->txid ?: '—' }}</span></td>
                             <td class="mono" style="text-align:right; font-size:15px; line-height:1.05rem;">{{ number_format($payment->sats_received / \App\Models\Invoice::SATS_PER_BTC, 8, '.', '') }}</td>
                             <td style="text-align:right;">
                                 @if ($payment->fiat_amount !== null)

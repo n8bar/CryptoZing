@@ -13,7 +13,9 @@ use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
 use App\Services\BtcRate;
 use App\Services\GettingStartedFlow;
+use App\Services\InvoiceCreator;
 use App\Services\InvoiceForceDeleteGuard;
+use App\Services\InvoiceLines;
 use App\Services\WalletKeyLineage;
 
 class InvoiceController extends Controller
@@ -67,7 +69,7 @@ class InvoiceController extends Controller
             $request->merge(['number' => \App\Models\Invoice::nextNumberForUser($userId)]);
         }
 
-        $data = $request->validate([
+        $data = validator($request->all(), [
             'client_id'   => [
                 'required','integer',
                 Rule::exists('clients','id')->where(fn($q) => $q->where('user_id', $userId)),
@@ -77,7 +79,6 @@ class InvoiceController extends Controller
                 Rule::unique('invoices','number')->where(fn($q) => $q->where('user_id', $userId)),
             ],
             'description' => ['nullable','string','max:2000'],
-            'amount_usd'  => ['required','numeric','min:0.01'],
             'btc_rate'    => ['nullable','numeric','min:0'],         // USD per BTC
             'amount_btc'  => ['nullable','numeric','min:0'],
             'due_date'    => ['nullable','date'],
@@ -88,7 +89,11 @@ class InvoiceController extends Controller
             'billing_address_override' => ['nullable','string','max:2000'],
             'invoice_footer_note_override' => ['nullable','string','max:1000'],
             'branding_heading_override' => ['nullable','string','max:255'],
-        ]);
+        ] + InvoiceLines::rules(), InvoiceLines::messages(), InvoiceLines::attributes())->after(fn ($v) => InvoiceLines::validateTargets($v))->validate();
+
+        $lines = $data['lines'];
+        unset($data['lines']);
+        $data['amount_usd'] = InvoiceLines::total($lines);
 
         foreach (['billing_name_override','billing_email_override','billing_phone_override','billing_address_override','invoice_footer_note_override','branding_heading_override'] as $field) {
             if (array_key_exists($field, $data) && $data[$field] !== null && trim((string) $data[$field]) === '') {
@@ -101,7 +106,7 @@ class InvoiceController extends Controller
 
         // If rate is provided and BTC amount omitted, compute it.
         if (empty($data['amount_btc']) && !empty($data['btc_rate']) && $data['btc_rate'] > 0) {
-            $data['amount_btc'] = round($data['amount_usd'] / $data['btc_rate'], 8);
+            $data['amount_btc'] = max(0, round($data['amount_usd'] / $data['btc_rate'], 8));
         }
 
         $wallet = $request->user()->walletSetting;
@@ -110,7 +115,7 @@ class InvoiceController extends Controller
                 ->with('status', 'Connect a wallet before creating invoices.');
         }
 
-        $data = $this->applyInvoiceDefaults($request->user(), $data);
+        $data = app(InvoiceCreator::class)->applyDefaults($request->user(), $data);
 
         $preparedLineage = null;
         try {
@@ -124,10 +129,10 @@ class InvoiceController extends Controller
         }
 
         try {
-            $invoice = $this->createInvoiceRecord($data, $wallet, $userId, $preparedLineage);
+            $invoice = app(InvoiceCreator::class)->create($data, $wallet, $userId, $preparedLineage, $lines);
             $invoiceCreatedMessage = 'Invoice created.';
         } catch (QueryException $e) {
-            if ($this->isInvoiceNumberUniqueViolation($e)) {
+            if (Invoice::isNumberCollision($e)) {
                 $submittedNumber = (string) ($data['number'] ?? '');
                 if (! preg_match('/^INV-\d{4,}$/', $submittedNumber)) {
                     return back()
@@ -138,10 +143,10 @@ class InvoiceController extends Controller
                 $data['number'] = Invoice::nextNumberForUser($userId);
 
                 try {
-                    $invoice = $this->createInvoiceRecord($data, $wallet, $userId, $preparedLineage);
+                    $invoice = app(InvoiceCreator::class)->create($data, $wallet, $userId, $preparedLineage, $lines);
                     $invoiceCreatedMessage = "Invoice created. Number adjusted to {$data['number']} due to a collision.";
                 } catch (QueryException $retryException) {
-                    if ($this->isInvoiceNumberUniqueViolation($retryException)) {
+                    if (Invoice::isNumberCollision($retryException)) {
                         return back()
                             ->withErrors(['number' => 'That invoice number is unavailable. Try a different number.'])
                             ->withInput();
@@ -266,11 +271,10 @@ class InvoiceController extends Controller
     {
         $userId = $request->user()->id;
 
-        $data = $request->validate([
+        $data = validator($request->all(), [
             'client_id'   => ['required','integer', Rule::exists('clients','id')->where(fn($q)=>$q->where('user_id',$userId))],
             'number'      => ['required','string','max:32', Rule::unique('invoices','number')->where(fn($q)=>$q->where('user_id',$userId))->ignore($invoice->id)],
             'description' => ['nullable','string','max:2000'],
-            'amount_usd'  => ['required','numeric','min:0.01'],
             'btc_rate'    => ['nullable','numeric','min:0'],
             'amount_btc'  => ['nullable','numeric','min:0'],
             'status'      => ['nullable','in:draft,sent,paid,void'],
@@ -284,12 +288,22 @@ class InvoiceController extends Controller
             'billing_address_override' => ['nullable','string','max:2000'],
             'invoice_footer_note_override' => ['nullable','string','max:1000'],
             'branding_heading_override' => ['nullable','string','max:255'],
-        ]);
+        ] + InvoiceLines::rules(), InvoiceLines::messages(), InvoiceLines::attributes())->after(fn ($v) => InvoiceLines::validateTargets($v))->validate();
+
+        $lines = $data['lines'];
+        unset($data['lines']);
+        $data['amount_usd'] = InvoiceLines::total($lines);
 
         foreach (['billing_name_override','billing_email_override','billing_phone_override','billing_address_override','invoice_footer_note_override','branding_heading_override'] as $field) {
             if (array_key_exists($field, $data) && $data[$field] !== null && trim((string) $data[$field]) === '') {
                 $data[$field] = null;
             }
+        }
+
+        if ($invoice->public_enabled && InvoiceLines::changed($invoice, $lines)) {
+            return back()
+                ->with('status', 'Disable the public link to edit invoice details.')
+                ->withInput();
         }
 
         if ($invoice->public_enabled) {
@@ -310,12 +324,17 @@ class InvoiceController extends Controller
         }
         // allowed to change even when public: status/paid_at/txid/etc.
 
+        if ($data['amount_usd'] < 0 && ($data['status'] ?? $invoice->status) !== 'draft') {
+            return back()->withErrors(['lines' => 'Only a draft can total below $0.'])->withInput();
+        }
 
         if (empty($data['amount_btc']) && !empty($data['btc_rate']) && $data['btc_rate'] > 0) {
-            $data['amount_btc'] = round($data['amount_usd'] / $data['btc_rate'], 8);
+            $data['amount_btc'] = max(0, round($data['amount_usd'] / $data['btc_rate'], 8));
         }
 
         $invoice->update($data);
+        InvoiceLines::replaceFor($invoice, $lines);
+        app(InvoiceCreator::class)->syncAddress($invoice->refresh(), $request->user()->walletSetting);
 
         if ($request->wantsJson()) return response()->json($invoice->fresh('client'));
         return redirect()->route('invoices.show', $invoice)->with('status','Invoice updated.');
@@ -456,6 +475,14 @@ class InvoiceController extends Controller
             }
 
             return back()->with('error', $message);
+        }
+
+        if ($action === 'sent' && ! $invoice->canBeSent()) {
+            if ($request->wantsJson()) {
+                return response()->json(['message' => Invoice::SEND_NEEDS_ZERO_OR_MORE], 422);
+            }
+
+            return back()->with('error', Invoice::SEND_NEEDS_ZERO_OR_MORE);
         }
 
         $updates = [
@@ -761,47 +788,5 @@ class InvoiceController extends Controller
             'due_date' => $dueDate,
             'terms_days' => $termsDays,
         ];
-    }
-
-    private function applyInvoiceDefaults($user, array $data): array
-    {
-        if (empty($data['description']) && !empty($user->invoice_default_description)) {
-            $data['description'] = $user->invoice_default_description;
-        }
-
-        if (empty($data['due_date']) && $user->invoice_default_terms_days !== null) {
-            $referenceDate = !empty($data['invoice_date'])
-                ? Carbon::parse($data['invoice_date'])
-                : now();
-            $data['due_date'] = $referenceDate->copy()
-                ->addDays($user->invoice_default_terms_days)
-                ->toDateString();
-        }
-
-        return $data;
-    }
-
-    private function createInvoiceRecord(array $data, $wallet, int $userId, ?array $preparedLineage = null): Invoice
-    {
-        return app(WalletKeyLineage::class)->withPreparedAssignment($wallet, $preparedLineage, function (array $lineage) use ($data, $userId, $wallet) {
-            return Invoice::create($data + [
-                'user_id' => $userId,
-            ] + $lineage + $wallet->invoiceUnsupportedConfigurationSnapshot());
-        });
-    }
-
-    private function isInvoiceNumberUniqueViolation(QueryException $e): bool
-    {
-        $sqlState = (string) ($e->errorInfo[0] ?? $e->getCode());
-        $message = strtolower($e->getMessage());
-
-        if (!in_array($sqlState, ['23000', '23505'], true)) {
-            return false;
-        }
-
-        return str_contains($message, 'invoices_number_unique')
-            || str_contains($message, 'invoices_user_id_number_unique')
-            || str_contains($message, 'unique constraint failed: invoices.number')
-            || str_contains($message, 'unique constraint failed: invoices.user_id, invoices.number');
     }
 }

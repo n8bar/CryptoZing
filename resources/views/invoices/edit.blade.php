@@ -59,13 +59,9 @@
                     @error('description')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
                 </div>
 
+                @include('invoices.partials.line-editor', ['lines' => $invoice->lines, 'invoice' => $invoice])
+
                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Amount (USD)</label>
-                        <input type="number" step="0.01" min="0" name="amount_usd" id="amount_usd" value="{{ old('amount_usd',$invoice->amount_usd) }}" required
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"/>
-                        @error('amount_usd')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
-                    </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">BTC rate (USD/BTC)</label>
                         <input type="number" step="0.01" min="0" name="btc_rate" id="btc_rate" value="{{ old('btc_rate',$invoice->btc_rate) }}"
@@ -74,7 +70,7 @@
                         <p class="mt-1 text-xs text-gray-500">This rate is just for display—each payment uses the USD/BTC rate captured at the moment funds arrive.</p>
                     </div>
                     <button type="button" id="useCurrentRate"
-                            class="mt-2 inline-flex items-center rounded-md border border-gray-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50">
+                            class="mt-2 inline-flex h-10 items-center justify-center rounded-md border border-gray-300 bg-white px-3 py-2 text-center text-sm font-semibold leading-5 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-60">
                         Refresh rate
                     </button>
                     <small id="rateStamp" class="ml-2 text-xs text-gray-500"></small>
