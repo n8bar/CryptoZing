@@ -78,6 +78,18 @@ class ApiInvoiceResourceTest extends TestCase
 
         $send('failed');
         $this->assertSame('failed', $this->render($invoice)['mail_state']);
+
+        $send('sent');
+        $send('skipped');
+        $this->assertSame('delivered', $this->render($invoice)['mail_state'], 'a resend skipped by the cooldown leaves the delivered email');
+    }
+
+    public function test_mail_state_is_failed_when_every_send_was_skipped(): void
+    {
+        $invoice = $this->makeInvoice();
+        $invoice->deliveries()->create(['user_id' => $invoice->user_id, 'type' => 'send', 'status' => 'skipped', 'recipient' => 'billing@example.com']);
+
+        $this->assertSame('failed', $this->render($invoice)['mail_state']);
     }
 
     public function test_payment_state_tells_seen_from_confirmed(): void

@@ -268,8 +268,13 @@ class Invoice extends Model
     /** The invoice email's state for the API: none, queued, delivered, or failed. */
     public function mailState(): string
     {
-        return match ($this->latestDeliveryOfType('send')?->status) {
-            null => 'none',
+        $sends = $this->deliveries()->where('type', 'send')->latest('id')->get();
+        if ($sends->isEmpty()) {
+            return 'none';
+        }
+
+        // A send skipped by the resend cooldown says nothing about the email before it.
+        return match ($sends->first(fn (InvoiceDelivery $d) => $d->status !== 'skipped')?->status) {
             'queued', 'sending' => 'queued',
             'sent' => 'delivered',
             default => 'failed',
@@ -352,6 +357,21 @@ class Invoice extends Model
         ];
     }
 
+    /** Whether a failed insert lost the race for this issuer's invoice number. */
+    public static function isNumberCollision(\Illuminate\Database\QueryException $e): bool
+    {
+        $sqlState = (string) ($e->errorInfo[0] ?? $e->getCode());
+        $message = strtolower($e->getMessage());
+
+        if (!in_array($sqlState, ['23000', '23505'], true)) {
+            return false;
+        }
+
+        return str_contains($message, 'invoices_number_unique')
+            || str_contains($message, 'invoices_user_id_number_unique')
+            || str_contains($message, 'unique constraint failed: invoices.number')
+            || str_contains($message, 'unique constraint failed: invoices.user_id, invoices.number');
+    }
 
     public static function nextNumberForUser(int $userId): string
     {

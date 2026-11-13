@@ -14,7 +14,7 @@ return new class extends Migration
             $table->string('api_id', 32)->nullable()->unique()->after('id');
         });
 
-        DB::table('invoices')->whereNull('api_id')->orderBy('id')->each(function ($invoice) {
+        DB::table('invoices')->whereNull('api_id')->eachById(function ($invoice) {
             DB::table('invoices')->where('id', $invoice->id)->update(['api_id' => 'inv_' . Str::lower(Str::random(12))]);
         });
     }

@@ -132,7 +132,7 @@ class InvoiceController extends Controller
             $invoice = app(InvoiceCreator::class)->create($data, $wallet, $userId, $preparedLineage, $lines);
             $invoiceCreatedMessage = 'Invoice created.';
         } catch (QueryException $e) {
-            if ($this->isInvoiceNumberUniqueViolation($e)) {
+            if (Invoice::isNumberCollision($e)) {
                 $submittedNumber = (string) ($data['number'] ?? '');
                 if (! preg_match('/^INV-\d{4,}$/', $submittedNumber)) {
                     return back()
@@ -146,7 +146,7 @@ class InvoiceController extends Controller
                     $invoice = app(InvoiceCreator::class)->create($data, $wallet, $userId, $preparedLineage, $lines);
                     $invoiceCreatedMessage = "Invoice created. Number adjusted to {$data['number']} due to a collision.";
                 } catch (QueryException $retryException) {
-                    if ($this->isInvoiceNumberUniqueViolation($retryException)) {
+                    if (Invoice::isNumberCollision($retryException)) {
                         return back()
                             ->withErrors(['number' => 'That invoice number is unavailable. Try a different number.'])
                             ->withInput();
@@ -776,20 +776,5 @@ class InvoiceController extends Controller
             'due_date' => $dueDate,
             'terms_days' => $termsDays,
         ];
-    }
-
-    private function isInvoiceNumberUniqueViolation(QueryException $e): bool
-    {
-        $sqlState = (string) ($e->errorInfo[0] ?? $e->getCode());
-        $message = strtolower($e->getMessage());
-
-        if (!in_array($sqlState, ['23000', '23505'], true)) {
-            return false;
-        }
-
-        return str_contains($message, 'invoices_number_unique')
-            || str_contains($message, 'invoices_user_id_number_unique')
-            || str_contains($message, 'unique constraint failed: invoices.number')
-            || str_contains($message, 'unique constraint failed: invoices.user_id, invoices.number');
     }
 }

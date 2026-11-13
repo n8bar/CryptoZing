@@ -61,29 +61,41 @@ class InvoiceController extends Controller
             throw ValidationException::withMessages(['wallet' => 'Connect a working wallet in the app before creating invoices.']);
         }
 
-        $total = InvoiceLines::total($data['lines']);
         $rate = BtcRate::current()['rate_usd'] ?? null;
+        if (! $rate) {
+            return ApiError::unavailable('No BTC rate is available right now. Try again shortly.');
+        }
+
         $fields = $this->creator->applyDefaults($user, [
             'client_id'    => $this->client($user, $data['client'])->id,
             'number'       => Invoice::nextNumberForUser($user->id),
             'status'       => 'draft',
             'invoice_date' => now()->toDateString(),
             'due_date'     => $data['due_date'] ?? null,
-            'amount_usd'   => $total,
+            'amount_usd'   => InvoiceLines::total($data['lines']),
             'btc_rate'     => $rate,
-            'amount_btc'   => $rate ? round($total / $rate, 8) : null,
         ]);
 
-        try {
-            $invoice = DB::transaction(function () use ($fields, $wallet, $user, $preparedLineage, $data, $key, $hash) {
-                $invoice = $this->creator->create($fields, $wallet, $user->id, $preparedLineage, $data['lines']);
-                ApiIdempotencyKey::create(['user_id' => $user->id, 'key' => $key, 'request_hash' => $hash, 'invoice_id' => $invoice->id]);
+        for ($attempt = 1; ; $attempt++) {
+            try {
+                $invoice = DB::transaction(function () use ($fields, $wallet, $user, $preparedLineage, $data, $key, $hash) {
+                    $invoice = $this->creator->create($fields, $wallet, $user->id, $preparedLineage, $data['lines']);
+                    $this->priceBtc($invoice);
+                    ApiIdempotencyKey::create(['user_id' => $user->id, 'key' => $key, 'request_hash' => $hash, 'invoice_id' => $invoice->id]);
 
-                return $invoice;
-            });
-        } catch (UniqueConstraintViolationException $e) {
-            // A simultaneous request with the same key won; answer as a repeat.
-            return $this->earlierRequest($user, $key, $hash) ?? throw $e;
+                    return $invoice;
+                });
+                break;
+            } catch (UniqueConstraintViolationException $e) {
+                // A simultaneous create took this number: take the next one, as the app's create screen does.
+                if ($attempt < 3 && Invoice::isNumberCollision($e)) {
+                    $fields['number'] = Invoice::nextNumberForUser($user->id);
+                    continue;
+                }
+
+                // A simultaneous request with the same key won; answer as a repeat.
+                return $this->earlierRequest($user, $key, $hash) ?? throw $e;
+            }
         }
 
         if ($request->boolean('send')) {
@@ -123,10 +135,7 @@ class InvoiceController extends Controller
 
             if (isset($data['lines'])) {
                 InvoiceLines::replaceFor($invoice, $data['lines']);
-                $invoice->refresh();
-                if ((float) $invoice->btc_rate > 0) {
-                    $invoice->forceFill(['amount_btc' => round((float) $invoice->amount_usd / (float) $invoice->btc_rate, 8)])->save();
-                }
+                $this->priceBtc($invoice->refresh());
             }
         });
 
@@ -148,9 +157,21 @@ class InvoiceController extends Controller
         return (new InvoiceResource($invoice->fresh()))->response()->setStatusCode(202);
     }
 
-    /** Turn the public link on, since the email carries it, and queue the invoice email. */
+    /** Price the BTC request from the stored total, which the lines set. */
+    private function priceBtc(Invoice $invoice): void
+    {
+        if ((float) $invoice->btc_rate > 0) {
+            $invoice->forceFill(['amount_btc' => round((float) $invoice->amount_usd / (float) $invoice->btc_rate, 8)])->save();
+        }
+    }
+
+    /** Turn the public link on, since the email carries it, and queue the invoice email. Nothing changes when it can't go. */
     private function send(Invoice $invoice): void
     {
+        if (empty($invoice->client?->email)) {
+            throw ValidationException::withMessages(['client' => 'Add a client email before sending.']);
+        }
+
         if (! $invoice->public_enabled) {
             $invoice->enablePublicShare();
         }

@@ -9,9 +9,11 @@ use App\Models\User;
 use App\Models\WalletSetting;
 use App\Services\BtcRate;
 use App\Services\HdWallet;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 
@@ -154,5 +156,55 @@ class ApiInvoiceEndpointsTest extends TestCase
 
         $this->assertSoftDeleted('invoices', ['api_id' => $id]);
         $this->withToken($this->plain)->getJson("/api/v1/invoices/{$id}")->assertStatus(404);
+    }
+
+    public function test_a_create_that_loses_its_number_to_a_simultaneous_one_takes_the_next(): void
+    {
+        $attempts = 0;
+        Invoice::creating(function () use (&$attempts) {
+            if (++$attempts === 1) {
+                $pdo = new \PDOException("SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry for key 'invoices_user_id_number_unique'");
+                $pdo->errorInfo = ['23000', 1062, 'Duplicate entry'];
+
+                throw new UniqueConstraintViolationException('mysql', 'insert into invoices', [], $pdo);
+            }
+        });
+
+        $this->create($this->body())->assertStatus(201);
+
+        $this->assertSame(2, $attempts);
+        $this->assertSame(1, Invoice::where('user_id', $this->issuer->id)->count());
+    }
+
+    public function test_create_is_refused_without_a_btc_rate(): void
+    {
+        Cache::forget(BtcRate::CACHE_KEY);
+        Http::fake(['*' => Http::response([], 500)]);
+
+        $this->create($this->body())->assertStatus(503)->assertJsonPath('error.code', 'unavailable');
+
+        $this->assertSame(0, Invoice::where('user_id', $this->issuer->id)->count());
+    }
+
+    public function test_the_btc_amount_is_priced_on_the_stored_total(): void
+    {
+        // The rate is stored at four decimals: 1000 x 0.0013 = 1.30, not the 1.26 submitted.
+        $this->create($this->body(['lines' => [['description' => 'Bolts', 'quantity' => 1000, 'rate_usd' => '0.00126']]]))
+            ->assertStatus(201)
+            ->assertJsonPath('total_usd', '1.30')
+            ->assertJsonPath('payment.amount_btc', '0.00002600');
+    }
+
+    public function test_sending_without_a_client_changes_nothing(): void
+    {
+        $id = $this->create($this->body())->json('id');
+        Invoice::where('api_id', $id)->first()->client->delete();
+
+        $this->withToken($this->plain)->postJson("/api/v1/invoices/{$id}/send")
+            ->assertStatus(422)->assertJsonPath('error.field', 'client');
+
+        $invoice = Invoice::where('api_id', $id)->first();
+        $this->assertFalse((bool) $invoice->public_enabled);
+        $this->assertSame('draft', $invoice->status);
     }
 }

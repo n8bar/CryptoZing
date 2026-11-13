@@ -50,7 +50,7 @@ Response `201` with the invoice (§6).
 
 ## 5. Send
 
-`POST /invoices/{id}/send` queues the email and returns `202` with the invoice. `mail_state` moves from `queued` to `delivered` or `failed`. A total below `0.00` is a `validation` error on `lines`.
+`POST /invoices/{id}/send` queues the email and returns `202` with the invoice. `mail_state` moves from `queued` to `delivered` or `failed`. A total below `0.00` (`lines`) or no client email (`client`) is a `validation` error, and nothing changes.
 
 ## 6. Invoice
 
@@ -58,7 +58,7 @@ Response `201` with the invoice (§6).
 {
   "id": "inv_8f3k2",
   "number": "INV-0007",
-  "status": "open",
+  "status": "sent",
   "client": { "name": "Acme Co", "email": "billing@acme.test" },
   "lines": [
     { "description": "Design", "kind": "item", "quantity": "2.0000", "rate_usd": "100.00", "amount_usd": "200.00" },
@@ -81,6 +81,7 @@ Response `201` with the invoice (§6).
 }
 ```
 
+`status`: `draft`, `sent`, `partial`, `pending`, `paid`, `void`.
 `mail_state`: `none`, `queued`, `delivered`, `failed`.
 `payment_state`: `none`, `seen`, `confirmed`. Only `confirmed` is safe to fulfill. Compare `paid_usd` with `total_usd` to see partial or over payment.
 `payment` is `null` when the total is `0.00` or less.
@@ -94,8 +95,11 @@ Response `201` with the invoice (§6).
 | Status | Code | When |
 |---|---|---|
 | 401 | `unauthorized` | Missing, unknown, or revoked key |
-| 404 | `not_found` | No such invoice for this key's issuer |
+| 404 | `not_found` | No such invoice for this key's issuer, or no such endpoint |
+| 405 | `method_not_allowed` | The endpoint does not take that method |
 | 409 | `conflict` | Idempotency key reused with a different body |
 | 409 | `not_draft` | Edit attempted after the public link went on |
 | 422 | `validation` | A field failed; `field` names it |
 | 429 | `rate_limited` | Too many requests; `Retry-After` says when |
+| 500 | `server_error` | Something failed on CryptoZing's side |
+| 503 | `unavailable` | No BTC rate is available, or CryptoZing is down for maintenance; try again shortly |

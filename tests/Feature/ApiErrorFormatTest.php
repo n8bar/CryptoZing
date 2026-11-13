@@ -22,6 +22,7 @@ class ApiErrorFormatTest extends TestCase
         Route::middleware(['api', 'api.key'])->group(function () {
             Route::post('/api/v1/_validate', fn (Request $request) => $request->validate(['lines.0.rate_usd' => 'required']));
             Route::get('/api/v1/_missing', fn () => Invoice::where('api_id', 'inv_nope')->firstOrFail());
+            Route::get('/api/v1/_boom', fn () => throw new \RuntimeException('boom'));
         });
         [, $this->plain] = ApiKey::issue(User::factory()->create(), 'Shop');
     }
@@ -41,7 +42,16 @@ class ApiErrorFormatTest extends TestCase
             ->assertStatus(404)->assertJsonPath('error.code', 'not_found');
 
         $this->withToken($this->plain)->getJson('/api/v1/nowhere')
-            ->assertStatus(404)->assertJsonPath('error.code', 'not_found');
+            ->assertStatus(404)->assertJsonPath('error.code', 'not_found')->assertJsonPath('error.message', 'No such endpoint.');
+    }
+
+    public function test_a_wrong_method_and_a_server_fault_keep_the_format(): void
+    {
+        $this->withToken($this->plain)->getJson('/api/v1/invoices')
+            ->assertStatus(405)->assertJsonPath('error.code', 'method_not_allowed');
+
+        $this->withToken($this->plain)->getJson('/api/v1/_boom')
+            ->assertStatus(500)->assertJsonPath('error.code', 'server_error')->assertDontSee('boom');
     }
 
     public function test_web_errors_keep_their_own_format(): void
