@@ -48,6 +48,12 @@ Whatever schedule you keep, two properties matter more than frequency.
 
 ---
 
+## Upgrading MySQL
+
+**Back up before you change the MySQL image in `compose.production.yaml`.** MySQL upgrades its data the first time the new version starts, and the upgraded data cannot go back to the older version. The backup is the way back.
+
+---
+
 ## Halt procedure
 
 Run this when something has gone wrong and the priority is to stop the bleeding, not to diagnose. Diagnose after the server is quiet.
