@@ -1,7 +1,7 @@
 # Invoice Line Items
 
 Status: Approved.
-Parent: [MS22](../milestones/22_LINE_ITEMS_DEVELOPER_API.md), Phase 1.
+Parent: [MS22](../milestones/x22_LINE_ITEMS_DEVELOPER_API.md), Phase 1.
 
 ## 1. Goals
 

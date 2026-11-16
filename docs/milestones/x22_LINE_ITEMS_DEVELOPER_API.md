@@ -1,6 +1,6 @@
 # MS22 — Invoice Line Items and Developer API
 
-Status: Approved; Phases 1–3 done, one exit criterion open.
+Status: Complete.
 Parent: [PLAN.md](../PLAN.md)
 
 ## Outcome
@@ -15,7 +15,7 @@ An issuer can build a USD invoice from line items in the app. A developer can cr
 
 ## Current Focus
 
-- All three phases done. Open: the exit criterion on polling through partial or uncertain payments.
+- Closed. All phases and exit criteria done.
 - Spec: [DEVELOPER_API.md](../specs/DEVELOPER_API.md).
 
 ## Phase Rollup
@@ -38,12 +38,13 @@ Dev verdict: pass. Prod verdict: pass, release `9bbeec6`. Strategy: [x22.3](../s
 
 Build the endpoints on the same rules as the app: create an invoice, send it by email if asked, return its public link, and read its mail and payment state. The developer polls that read until they get the state they need. Test retries, sending, reads, a live key and a revoked key on dev, a full order-by-polling run, the doc examples, and the whole suite. Record the dev verdict and a backout plan. Get the go for rollout. Release, then check line items, API keys, create/send/read, service health, and the content promises on prod.
 
-### [ ] Exit Criteria
+### [x] Exit Criteria
 
 - [x] Approved line-item and API specs define the release behavior before code work starts. %<2968>
 - [x] Itemized invoices preserve USD-canonical totals and behave consistently across app, public, print, mail, and payment surfaces. %<2969>
 - [x] A credential limited to one issuer can create and optionally queue-send an itemized invoice, retrieve its public link and current state, and cannot access another issuer's data. %<2970>
 - [x] Retrying an API create request cannot duplicate an invoice; API responses and documentation distinguish queued mail, delivery outcome, detected payment, and confirmed settlement. %<2971>
-- [ ] A documented consumer can reconcile an external order by polling, including partial or uncertain payment states, without requiring outbound webhooks. %<2972>
+- [x] A documented consumer can reconcile an external order by polling, including partial or uncertain payment states, without requiring outbound webhooks. %<2972>
+  Dev INV-0003, polled through the API: pending/seen $2.58 → partial/confirmed $2.58 → partial/seen $6.02 → paid/confirmed $6.02.
 - [x] Targeted, regression, full Sail, and applicable browser/mobile/accessibility checks pass; dev and production verdicts are recorded after approved rollout. %<2973>
 - [x] The [content promises catalog](../CONTENT_PROMISES.md) is checked against all M22 public claims before closure. %<2974>

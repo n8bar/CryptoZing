@@ -1,7 +1,7 @@
 # Developer API
 
 Status: Approved.
-Parent: [MS22](../milestones/22_LINE_ITEMS_DEVELOPER_API.md), Phases 2 and 3.
+Parent: [MS22](../milestones/x22_LINE_ITEMS_DEVELOPER_API.md), Phases 2 and 3.
 
 ## 1. Goals
 

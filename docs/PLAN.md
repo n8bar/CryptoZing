@@ -16,10 +16,10 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 
 ## Current
 - Active milestone:
-  - **MS22 - Invoice Line Items and Developer API** — starts 2026-09-28; line items first, then a polling-based API for developers. Content-publish gate waived by n8 on the custody article shipped the weekend M21 closed.
-- Status: `M22 approved; Phases 1–3 done, one exit criterion open. M23 drafted, scope awaits review.`
-- Next action: Meet the open exit criterion in [`docs/milestones/22_LINE_ITEMS_DEVELOPER_API.md`](milestones/22_LINE_ITEMS_DEVELOPER_API.md): polling through partial or uncertain payments.
-- Most recently completed milestone doc: [`docs/milestones/x21_OB_DEPLOYMENT.md`](milestones/x21_OB_DEPLOYMENT.md)
+  - **MS23 - Open Beta Product & Growth Iteration** — not started; draft scope awaits review; needs its content-publish gate cleared (an article published since MS22 started on 2026-09-28).
+- Status: `MS22 closed — line items and the polling developer API are live on prod. M23 drafted, scope awaits review.`
+- Next action: Review M23's draft scope in [`docs/milestones/23_OPEN_BETA_PRODUCT_GROWTH.md`](milestones/23_OPEN_BETA_PRODUCT_GROWTH.md) and clear its content-publish gate.
+- Most recently completed milestone doc: [`docs/milestones/x22_LINE_ITEMS_DEVELOPER_API.md`](milestones/x22_LINE_ITEMS_DEVELOPER_API.md)
 
 ## Published Release Target
 - **First public release: mid-to-late 2027 (reforecast needed).** The open beta milestone (MS21, closed 2026-09-06) covers the open beta. M23 now runs through 2028-03-29, so the earlier published release target needs explicit reassessment before it is treated as a committed date.
@@ -27,7 +27,6 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 ## Active and Upcoming Milestones
 | Status | ID | Milestone | Short intent | Target | Primary doc |
 |---|---|---|---|---|---|
-| [ ] | 22 | Invoice Line Items and Developer API | Deliver itemized invoices, then a developer API to create, optionally send, and poll invoice state. | 2027-03-28 | [`docs/milestones/22_LINE_ITEMS_DEVELOPER_API.md`](milestones/22_LINE_ITEMS_DEVELOPER_API.md) |
 | [ ] | 23 | Open Beta Product & Growth Iteration | Establish discovery and marketing practice, then select and release a bounded product bundle; consider payment-event webhooks. | 2028-03-29 | [`docs/milestones/23_OPEN_BETA_PRODUCT_GROWTH.md`](milestones/23_OPEN_BETA_PRODUCT_GROWTH.md) |
 
 ## Completed Milestones
@@ -54,3 +53,4 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 | [x] | 19 | Open Beta Hardening & Ops | Open-beta hardening before mainnet cutover: notification coverage, auth/session hardening, LLC formation, legal layer, content-promises reconciliation, contributor docs, micro-monetize (donations), and 2FA (email + TOTP). | [`docs/milestones/x19_OB_HARDENING_OPS.md`](milestones/x19_OB_HARDENING_OPS.md) |
 | [x] | 20 | Mainnet Cutover & Alpha Gate | Provision production hosting, go live on mainnet privately (real self-sent payment) with an invite-only alpha access gate, migrate the article site off GitHub Pages, and prove a cutover runbook with backout before the public open beta. | [`docs/milestones/x20_MAINNET_CUTOVER_ALPHA_GATE.md`](milestones/x20_MAINNET_CUTOVER_ALPHA_GATE.md) |
 | [x] | 21 | CryptoZing.app Deployment (Open Beta) | Open the existing mainnet deployment at `cryptozing.app`, retire the alpha hostname, replace the Pages placeholder while preserving content/SEO, publish the legal layer, and complete rollout sign-off. | [`docs/milestones/x21_OB_DEPLOYMENT.md`](milestones/x21_OB_DEPLOYMENT.md) |
+| [x] | 22 | Invoice Line Items and Developer API | Deliver itemized invoices, then a developer API to create, optionally send, and poll invoice state. | [`docs/milestones/x22_LINE_ITEMS_DEVELOPER_API.md`](milestones/x22_LINE_ITEMS_DEVELOPER_API.md) |
