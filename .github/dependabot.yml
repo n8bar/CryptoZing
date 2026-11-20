@@ -1,0 +1,19 @@
+# Opens a pull request when a new PHP patch release is out for the prod image,
+# so a PHP security fix reaches us the day it ships. The image pins an exact
+# PHP version (docker/production/Dockerfile); this is what moves the pin.
+#
+# Patch releases only: a new minor or major PHP is a planned upgrade, not a
+# daily bump. Only PHP is watched; the build-stage images are left alone.
+version: 2
+updates:
+  - package-ecosystem: "docker"
+    directory: "/docker/production"
+    schedule:
+      interval: "daily"
+    allow:
+      - dependency-name: "php"
+    ignore:
+      - dependency-name: "php"
+        update-types:
+          - "version-update:semver-major"
+          - "version-update:semver-minor"
