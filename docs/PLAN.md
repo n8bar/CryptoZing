@@ -16,9 +16,9 @@ Use [`docs/BACKLOG.md`](BACKLOG.md) for post-MVP work only.
 
 ## Current
 - Active milestone:
-  - **MS23 - Open Beta Product & Growth Iteration** — not started; draft scope awaits review; needs its content-publish gate cleared (an article published since MS22 started on 2026-09-28).
+  - **MS23 - Open Beta Product & Growth Iteration** — not started; draft scope awaits review. Content-publish gate cleared.
 - Status: `MS22 closed — line items and the polling developer API are live on prod. M23 drafted, scope awaits review.`
-- Next action: Review M23's draft scope in [`docs/milestones/23_OPEN_BETA_PRODUCT_GROWTH.md`](milestones/23_OPEN_BETA_PRODUCT_GROWTH.md) and clear its content-publish gate.
+- Next action: Review M23's draft scope in [`docs/milestones/23_OPEN_BETA_PRODUCT_GROWTH.md`](milestones/23_OPEN_BETA_PRODUCT_GROWTH.md).
 - Most recently completed milestone doc: [`docs/milestones/x22_LINE_ITEMS_DEVELOPER_API.md`](milestones/x22_LINE_ITEMS_DEVELOPER_API.md)
 
 ## Published Release Target
