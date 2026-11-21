@@ -32,7 +32,7 @@ _(Ordered by SEO and traffic potential. Pick from the top when starting a new ar
 4. [x] What is a Bitcoin invoice? — `/learn/what-is-a-bitcoin-invoice/`
 5. [x] Custodial vs noncustodial Bitcoin payments explained — `/learn/custodial-vs-noncustodial-bitcoin-payments/`
 6. ~~How Bitcoin payment confirmation works~~ — skip; well covered by #1
-7. [ ] On-chain vs Lightning: what merchants need to know
+7. [x] On-chain vs Lightning: what merchants need to know — `/learn/on-chain-vs-lightning/`
 8. [ ] USD-denominated Bitcoin invoices
 9. [ ] Why noncustodial matters for small businesses
 10. [ ] Wallet hygiene for business (cross-link from freelancer article's noncustodial section)
